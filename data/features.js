@@ -36,8 +36,8 @@ export const features = [
     icon: <Upload className="w-6 h-6 mb-4 text-gray-400" />,
     title: "Get Course Recommendations",
     description: "AI suggests the best courses to enhance your skills.",
-    button: { text: "Find Best Courses", link: "/course-recommendations" },
-  },  
+    button: { text: "Find Best Courses", link: "/course-recommendation" },
+  },
   {
     icon: <Mic className="w-6 h-6 mb-4 text-gray-400" />,
     title: "Mock Interviews",

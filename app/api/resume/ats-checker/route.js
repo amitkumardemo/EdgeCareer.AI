@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import pdfParse from "pdf-parse";
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
@@ -29,77 +30,61 @@ export async function POST(request) {
     }
 
     // Extract text from PDF
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const { PdfReader } = await import("pdfreader");
+    const buffer = await file.arrayBuffer();
+    const data = await pdfParse(Buffer.from(buffer));
+    const resumeText = data.text;
 
-    let resumeText = '';
-
-    const reader = new PdfReader();
-
-    await new Promise((resolve, reject) => {
-      reader.parseBuffer(buffer, (err, item) => {
-        if (err) reject(err);
-        else if (!item) resolve();
-        else if (item.text) {
-          resumeText += item.text + ' ';
-        }
-      });
-    });
-
-    if (!resumeText || resumeText.trim().length === 0) {
-      // Fallback: return mock data for testing
-      resumeText = "Sample resume content for testing ATS analysis.";
-    }
-
-    // Use AI to analyze ATS score
+    // Analyze with AI
     const prompt = `
-      Analyze the following resume for ATS (Applicant Tracking System) compatibility.
+      Analyze the following resume for ATS (Applicant Tracking System) compatibility. Provide:
+      1. An ATS score out of 100 (based on keyword optimization, format, structure, etc.)
+      2. Detailed feedback on what to improve to increase the ATS score.
 
-      Resume content:
+      Resume text:
       ${resumeText}
 
-      Provide an ATS score out of 100 and detailed feedback on improvements.
-
-      Respond ONLY with a valid JSON object in this exact format:
-      {"atsScore": 85, "feedback": "Your detailed feedback here..."}
+      Respond in JSON format: { "atsScore": number, "feedback": "string" }
     `;
 
     const result = await model.generateContent(prompt);
     const response = result.response;
-    const aiResponse = response.text().trim();
+    const analysisText = response.text().trim();
 
-    // Parse AI response (assuming it returns JSON)
-    let atsScore, feedback;
+    // Parse the JSON response
+    let analysis;
     try {
-      const parsed = JSON.parse(aiResponse);
-      atsScore = parsed.atsScore;
-      feedback = parsed.feedback;
-    } catch (error) {
-      // Fallback if AI doesn't return valid JSON
-      atsScore = 70; // Default score
-      feedback = "Unable to parse AI response. Please review your resume manually.";
+      analysis = JSON.parse(analysisText);
+    } catch (e) {
+      // If not JSON, extract score and feedback manually
+      const scoreMatch = analysisText.match(/atsScore["\s:]*(\d+)/i);
+      const feedbackMatch = analysisText.match(/feedback["\s:]*["']([^"']+)["']/i);
+      analysis = {
+        atsScore: scoreMatch ? parseFloat(scoreMatch[1]) : 50,
+        feedback: feedbackMatch ? feedbackMatch[1] : "Unable to parse feedback.",
+      };
     }
 
-    // Update user's resume with ATS score and feedback
+    // Save to DB
     await db.resume.upsert({
-      where: {
-        userId: user.id,
-      },
+      where: { userId: user.id },
       update: {
-        atsScore,
-        feedback,
+        atsScore: analysis.atsScore,
+        feedback: analysis.feedback,
       },
       create: {
         userId: user.id,
-        content: resumeText, // Save extracted text as content
-        atsScore,
-        feedback,
+        content: resumeText, // Save the text as content
+        atsScore: analysis.atsScore,
+        feedback: analysis.feedback,
       },
     });
 
-    return NextResponse.json({ atsScore, feedback });
+    return NextResponse.json({
+      atsScore: analysis.atsScore,
+      feedback: analysis.feedback,
+    });
   } catch (error) {
-    console.error("ATS Checker error:", error);
+    console.error("Error in ATS checker:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
