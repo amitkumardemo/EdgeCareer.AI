@@ -1,6 +1,7 @@
 import { getIndustryInsights } from "@/actions/dashboard";
 import DashboardView from "./_component/dashboard-view";
 import { getUserOnboardingStatus } from "@/actions/user";
+import { getUserGamification } from "@/actions/gamification";
 import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
@@ -13,10 +14,11 @@ export default async function DashboardPage() {
   }
 
   const insights = await getIndustryInsights();
+  const gamification = await getUserGamification();
 
   return (
     <div className="container mx-auto">
-      <DashboardView insights={insights} />
+      <DashboardView insights={insights} gamification={gamification} />
     </div>
   );
 }

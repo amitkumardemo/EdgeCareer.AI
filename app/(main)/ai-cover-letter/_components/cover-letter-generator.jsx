@@ -15,6 +15,7 @@ import { Loader2 } from "lucide-react";
 import useFetch from "@/hooks/use-fetch";
 import { generateCoverLetter } from "@/actions/cover-letter";
 import { coverLetterSchema } from "@/app/lib/schema";
+import { BarLoader } from "react-spinners";
 
 
 // TEMP INLINE schema (replace with import if needed)
@@ -58,7 +59,16 @@ export default function CoverLetterGenerator() {
     if (generatedLetter) {
       console.log("✅ Got letter:", generatedLetter);
       toast.success("Cover letter generated!");
-      router.push(`/ai-cover-letter/${generatedLetter.id}`);
+      // Show earned badges
+      if (generatedLetter.gamification?.earnedBadges?.length > 0) {
+        generatedLetter.gamification.earnedBadges.forEach((badge) => {
+          toast.success(`🎉 Badge Earned: ${badge.name}`, {
+            description: badge.description,
+            duration: 5000,
+          });
+        });
+      }
+      router.push(`/ai-cover-letter/${generatedLetter.coverLetter.id}`);
       reset();
     }
   }, [generatedLetter]);
@@ -71,6 +81,7 @@ export default function CoverLetterGenerator() {
           <CardDescription>Fill the fields and click submit</CardDescription>
         </CardHeader>
         <CardContent>
+          {generating && <BarLoader className="mb-4" width={"100%"} color="hsl(var(--primary))" />}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>

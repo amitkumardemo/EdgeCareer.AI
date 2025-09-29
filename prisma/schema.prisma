@@ -21,7 +21,14 @@ model User {
   // Profile fields
   bio           String?
   experience    Int?      // Years of experience
-  
+
+  // Gamification
+  points        Int       @default(0)
+  level         Int       @default(1)
+  badges        String[]  @default([])
+  streak        Int       @default(0)
+  lastActivity  DateTime?
+
   // Relations
   skills        String[]  // Array of skills
   assessments   Assessment[]

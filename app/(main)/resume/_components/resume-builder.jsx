@@ -499,6 +499,15 @@ export default function ResumeBuilder({ initialContent }) {
   useEffect(() => {
     if (saveResult && !isSaving) {
       toast.success("Resume saved successfully!");
+      // Show earned badges
+      if (saveResult.gamification?.earnedBadges?.length > 0) {
+        saveResult.gamification.earnedBadges.forEach((badge) => {
+          toast.success(`🎉 Badge Earned: ${badge.name}`, {
+            description: badge.description,
+            duration: 5000,
+          });
+        });
+      }
     }
     if (saveError) {
       toast.error(saveError.message || "Failed to save resume");

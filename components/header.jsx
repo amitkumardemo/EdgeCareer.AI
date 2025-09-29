@@ -10,6 +10,7 @@ import {
   StarsIcon,
   MoonIcon,
   SunIcon,
+  Route,
 } from "lucide-react";
 
 import Link from "next/link";
@@ -87,6 +88,12 @@ export default async function Header() {
                   <Link href="/interview" className="flex items-center gap-2">
                     <GraduationCap className="h-4 w-4" />
                     {BUTTONS_MENUS.INTERVIEW_PREP}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/roadmap" className="flex items-center gap-2">
+                    <Route className="h-4 w-4" />
+                    Roadmap Generator
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>

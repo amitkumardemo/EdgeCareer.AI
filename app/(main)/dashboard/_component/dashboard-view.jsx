@@ -16,6 +16,10 @@ import {
   TrendingUp,
   TrendingDown,
   Brain,
+  Trophy,
+  Star,
+  Flame,
+  Award,
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import {
@@ -28,7 +32,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 
-const DashboardView = ({ insights }) => {
+const DashboardView = ({ insights, gamification }) => {
   // Transform salary data for the chart
   const salaryData = insights.salaryRanges.map((range) => ({
     name: range.role,
@@ -138,6 +142,70 @@ const DashboardView = ({ insights }) => {
                   {skill}
                 </Badge>
               ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Gamification Progress */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Level</CardTitle>
+            <Trophy className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{gamification.level}</div>
+            <p className="text-xs text-muted-foreground">
+              {gamification.points} points earned
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Points</CardTitle>
+            <Star className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{gamification.points}</div>
+            <p className="text-xs text-muted-foreground">
+              Keep learning to level up
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Streak</CardTitle>
+            <Flame className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{gamification.streak}</div>
+            <p className="text-xs text-muted-foreground">
+              Days active in a row
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Badges</CardTitle>
+            <Award className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{gamification.badges.length}</div>
+            <div className="flex flex-wrap gap-1 mt-2">
+              {gamification.badges.slice(0, 3).map((badge, index) => (
+                <Badge key={index} variant="secondary" className="text-xs">
+                  {badge}
+                </Badge>
+              ))}
+              {gamification.badges.length > 3 && (
+                <Badge variant="outline" className="text-xs">
+                  +{gamification.badges.length - 3}
+                </Badge>
+              )}
             </div>
           </CardContent>
         </Card>

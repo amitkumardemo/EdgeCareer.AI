@@ -3,6 +3,7 @@
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { updateGamification } from "./gamification";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
@@ -128,7 +129,10 @@ export async function saveQuizResult(questions, answers, score) {
       },
     });
 
-    return assessment;
+    // Update gamification
+    const gamification = await updateGamification('quiz_completed');
+
+    return { assessment, gamification };
   } catch (error) {
     console.error("Error saving quiz result:", error);
     throw new Error("Failed to save quiz result");

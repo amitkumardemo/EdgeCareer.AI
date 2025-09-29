@@ -3,9 +3,25 @@
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { updateGamification } from "./gamification";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+async function generateWithRetry(prompt, maxRetries = 3) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const result = await model.generateContent(prompt);
+      return result;
+    } catch (error) {
+      if (attempt === maxRetries || !error.message.includes('503')) {
+        throw error;
+      }
+      // Wait before retry (exponential backoff)
+      await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
+    }
+  }
+}
 
 export async function generateCoverLetter(data) {
   const { userId } = await auth();
@@ -54,7 +70,10 @@ export async function generateCoverLetter(data) {
       },
     });
 
-    return coverLetter;
+    // Update gamification for cover letter creation
+    const gamification = await updateGamification(user.id, "cover_letter_created");
+
+    return { coverLetter, gamification };
   } catch (error) {
     console.error("Error generating cover letter:", error.message);
     throw new Error("Failed to generate cover letter");

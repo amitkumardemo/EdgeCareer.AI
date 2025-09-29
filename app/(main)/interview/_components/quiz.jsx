@@ -25,7 +25,7 @@ export default function Quiz() {
   const [showExplanation, setShowExplanation] = useState(false);
   const [role, setRole] = useState("");
   const [company, setCompany] = useState("");
-  const quizCompleted=false;
+  const [currentQuestionCompleted, setCurrentQuestionCompleted] = useState(false);
 
   const {
     loading: generatingQuiz,
@@ -74,8 +74,16 @@ export default function Quiz() {
   const finishQuiz = async () => {
     const score = calculateScore();
     try {
-      await saveQuizResultFn(quizData, answers, score);
-      //setQuizCompleted(true);
+      const result = await saveQuizResultFn(quizData, answers, score);
+      // Show animated badges if earned
+      if (result.gamification.earnedBadges && result.gamification.earnedBadges.length > 0) {
+        result.gamification.earnedBadges.forEach((badge) => {
+          toast.success(`🎉 Congratulations! You earned the "${badge}" badge!`, {
+            duration: 4000,
+            icon: "🏆",
+          });
+        });
+      }
       toast.success("Quiz completed!");
     } catch (error) {
       toast.error(error.message || "Failed to save quiz results");
@@ -100,7 +108,7 @@ export default function Quiz() {
   if (resultData) {
     return (
       <div className="mx-2">
-        <QuizResult result={resultData} onStartNew={startNewQuiz} />
+        <QuizResult result={resultData.assessment} onStartNew={startNewQuiz} />
       </div>
     );
   }
@@ -177,7 +185,7 @@ export default function Quiz() {
           ))}
         </RadioGroup>
 
-        {quizCompleted && (
+        {showExplanation && (
           <div className="mt-4 p-4 bg-muted rounded-lg">
             <p className="font-medium" >Explanation:</p>
             <p className="text-muted-foreground">{question.explanation}</p>
@@ -189,7 +197,7 @@ export default function Quiz() {
           <Button
             onClick={() => setShowExplanation(true)}
             variant="outline"
-            disabled={!quizCompleted}
+            disabled={!answers[currentQuestion]}
           >
             {BUTTONS_MENUS.EXPLAIN}
           </Button>
