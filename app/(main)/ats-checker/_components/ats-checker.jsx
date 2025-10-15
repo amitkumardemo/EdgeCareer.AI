@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Loader2, Upload, CheckCircle2 } from "lucide-react";
+import { Loader2, CheckCircle2, FileText } from "lucide-react";
 import { toast } from "sonner";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 const steps = [
   "Parsing your resume",
@@ -19,12 +19,53 @@ export default function ATSChecker() {
   const [atsScore, setAtsScore] = useState(null);
   const [feedback, setFeedback] = useState(null);
   const [currentStep, setCurrentStep] = useState(0);
+  const [dragActive, setDragActive] = useState(false);
+  const fileInputRef = useRef(null);
+
+  const handleDrag = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const droppedFile = e.dataTransfer.files[0];
+      if (droppedFile.type === "application/pdf") {
+        setFile(droppedFile);
+        setAtsScore(null);
+        setFeedback(null);
+        setCurrentStep(0);
+      } else {
+        toast.error("Please upload a PDF file only.");
+      }
+    }
+  };
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-    setAtsScore(null);
-    setFeedback(null);
-    setCurrentStep(0);
+    if (e.target.files && e.target.files[0]) {
+      const selectedFile = e.target.files[0];
+      if (selectedFile.type === "application/pdf") {
+        setFile(selectedFile);
+        setAtsScore(null);
+        setFeedback(null);
+        setCurrentStep(0);
+      } else {
+        toast.error("Please upload a PDF file only.");
+      }
+    }
+  };
+
+  const handleChooseFile = () => {
+    fileInputRef.current?.click();
   };
 
   useEffect(() => {
@@ -39,7 +80,7 @@ export default function ATSChecker() {
 
   const handleSubmit = async () => {
     if (!file) {
-      toast.error("Please upload a resume file first.");
+      toast.error("Please upload a PDF file.");
       return;
     }
 
@@ -64,7 +105,6 @@ export default function ATSChecker() {
 
       const data = await response.json();
       setAtsScore(data.atsScore);
-      // Add animation-friendly feedback formatting
       if (data.feedback && data.feedback.includes("Unable to parse AI response")) {
         setFeedback("We encountered an issue parsing your resume. Please review it manually or try again.");
       } else {
@@ -82,29 +122,50 @@ export default function ATSChecker() {
   return (
     <div className="max-w-4xl mx-auto p-4 grid grid-cols-1 md:grid-cols-3 gap-6">
       <div className="border rounded-lg p-4 bg-white shadow-md">
-        <label
-          htmlFor="resume-upload"
-          className="flex flex-col items-center justify-center gap-2 cursor-pointer text-primary"
-        >
-          <Upload className="w-10 h-10 text-indigo-600" />
-          <span className="text-lg font-semibold">Upload your resume (PDF only)</span>
-          <input
-            id="resume-upload"
-            type="file"
-            accept=".pdf"
-            onChange={handleFileChange}
-            className="hidden"
-          />
+        <label className="flex flex-col gap-2">
+          <span className="text-lg font-semibold">Upload PDF Resume</span>
+          <div
+            className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
+              dragActive
+                ? "border-blue-500 bg-blue-50"
+                : "border-gray-300 hover:border-gray-400"
+            }`}
+            onDragEnter={handleDrag}
+            onDragLeave={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
+          >
+            <FileText className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+            <p className="text-sm font-medium mb-1">
+              Drag & drop your resume here
+            </p>
+            <p className="text-xs text-gray-500 mb-3">or</p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleChooseFile}
+              className="cursor-pointer"
+            >
+              Choose File
+            </Button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".pdf"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+            {file && (
+              <p className="mt-3 text-xs text-gray-600">
+                Selected: <strong>{file.name}</strong>
+              </p>
+            )}
+          </div>
         </label>
-        {file && (
-          <p className="mt-2 text-center text-gray-700">
-            Selected file: <strong>{file.name}</strong>
-          </p>
-        )}
         <Button onClick={handleSubmit} disabled={loading} className="mt-4 w-full">
           {loading ? (
             <>
-              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Analyzing...
             </>
           ) : (
@@ -179,7 +240,6 @@ export default function ATSChecker() {
                     .split("\n")
                     .filter((line) => line.trim() !== "")
                     .map((line, idx) => {
-                      // Parse line for issue and solution if formatted as "Issue: Solution"
                       const parts = line.split(":");
                       if (parts.length >= 2) {
                         const issue = parts[0].trim();
@@ -213,7 +273,7 @@ export default function ATSChecker() {
             </div>
           </motion.div>
         ) : (
-          <p className="text-gray-500">Upload a resume and check your ATS score.</p>
+          <p className="text-gray-500">Upload a PDF resume and check your ATS score.</p>
         )}
       </div>
     </div>
