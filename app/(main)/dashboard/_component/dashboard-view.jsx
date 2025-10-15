@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import StreakCalendar from "@/components/streak-calendar";
 
 const DashboardView = ({ insights, gamification }) => {
   // Transform salary data for the chart
@@ -252,42 +253,46 @@ const DashboardView = ({ insights, gamification }) => {
         </CardContent>
       </Card>
 
-      {/* Industry Trends */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card>
-          <CardHeader>
-            <CardTitle>Key Industry Trends</CardTitle>
-            <CardDescription>
-              Current trends shaping the industry
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-4">
-              {insights.keyTrends.map((trend, index) => (
-                <li key={index} className="flex items-start space-x-2">
-                  <div className="h-2 w-2 mt-2 rounded-full bg-primary" />
-                  <span>{trend}</span>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
+      {/* Streak Calendar and Industry Trends */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <StreakCalendar />
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Recommended Skills</CardTitle>
-            <CardDescription>Skills to consider developing</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-2">
-              {insights.recommendedSkills.map((skill) => (
-                <Badge key={skill} variant="outline">
-                  {skill}
-                </Badge>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        <div className="grid grid-cols-1 gap-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Key Industry Trends</CardTitle>
+              <CardDescription>
+                Current trends shaping the industry
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-4">
+                {insights.keyTrends.map((trend, index) => (
+                  <li key={index} className="flex items-start space-x-2">
+                    <div className="h-2 w-2 mt-2 rounded-full bg-primary" />
+                    <span>{trend}</span>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Recommended Skills</CardTitle>
+              <CardDescription>Skills to consider developing</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-wrap gap-2">
+                {insights.recommendedSkills.map((skill) => (
+                  <Badge key={skill} variant="outline">
+                    {skill}
+                  </Badge>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

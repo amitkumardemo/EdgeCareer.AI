@@ -12,6 +12,7 @@ import {
   SunIcon,
   Route,
   BriefcaseBusiness,
+  Flame,
 } from "lucide-react";
 
 import Link from "next/link";
@@ -26,10 +27,12 @@ import Image from "next/image";
 import { checkUser } from "@/lib/checkUser";
 import { useTheme } from "next-themes";
 import ThemSwitch from "./theme-switch";
+import { getUserStreak } from "@/actions/streak";
 
 
 export default async function Header() {
   await checkUser();
+  const streakData = await getUserStreak();
 
   return (
     <header className="fixed top-0 w-full border-b bg-background/80 backdrop-blur-md z-50 supports-[backdrop-filter]:bg-background/60">
@@ -47,6 +50,14 @@ export default async function Header() {
         {/* Action Buttons */}
         <div className="flex items-center space-x-2 md:space-x-4">
           <SignedIn>
+            {/* Streak Counter */}
+            {streakData.streak > 0 && (
+              <div className="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                <Flame className="h-4 w-4" />
+                <span className="hidden sm:inline">{streakData.streak} day{streakData.streak !== 1 ? 's' : ''}</span>
+                <span className="sm:hidden">{streakData.streak}</span>
+              </div>
+            )}
             <Link href="/dashboard">
               <Button
                 variant="outline"

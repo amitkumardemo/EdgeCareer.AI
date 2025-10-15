@@ -28,6 +28,8 @@ model User {
   badges        String[]  @default([])
   streak        Int       @default(0)
   lastActivity  DateTime?
+  lastStreakDate DateTime?
+  streakStartDate DateTime?
 
   // Relations
   skills        String[]  // Array of skills
