@@ -5,7 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 export async function POST(request) {
   try {
@@ -34,33 +34,39 @@ export async function POST(request) {
     const data = await pdfParse(Buffer.from(buffer));
     const resumeText = data.text;
 
-    // Analyze with AI
+    // Analyze with AI using a different approach
     const prompt = `
-      Analyze the following resume for ATS (Applicant Tracking System) compatibility. Provide:
-      1. An ATS score out of 100 (based on keyword optimization, format, structure, etc.)
-      2. Detailed feedback on what to improve to increase the ATS score.
+      Analyze the following resume for ATS (Applicant Tracking System) compatibility.
 
       Resume text:
       ${resumeText}
 
-      Respond in JSON format: { "atsScore": number, "feedback": "string" }
+      Provide your analysis in exactly this format:
+      SCORE: [number between 0-100]
+      FEEDBACK: [detailed feedback text]
+
+      Do not include any other text or formatting.
     `;
 
     const result = await model.generateContent(prompt);
     const response = result.response;
     const analysisText = response.text().trim();
 
-    // Parse the JSON response
+    // Parse the response
     let analysis;
     try {
-      analysis = JSON.parse(analysisText);
+      const scoreMatch = analysisText.match(/SCORE:\s*(\d+(?:\.\d+)?)/i);
+      const feedbackMatch = analysisText.match(/FEEDBACK:\s*(.+)/is);
+
+      const atsScore = scoreMatch ? Math.min(100, Math.max(0, parseFloat(scoreMatch[1]))) : 70;
+      const feedback = feedbackMatch ? feedbackMatch[1].trim() : "Please review your resume for better ATS compatibility.";
+
+      analysis = { atsScore, feedback };
     } catch (e) {
-      // If not JSON, extract score and feedback manually
-      const scoreMatch = analysisText.match(/atsScore["\s:]*(\d+)/i);
-      const feedbackMatch = analysisText.match(/feedback["\s:]*["']([^"']+)["']/i);
+      // Fallback if parsing fails
       analysis = {
-        atsScore: scoreMatch ? parseFloat(scoreMatch[1]) : 50,
-        feedback: feedbackMatch ? feedbackMatch[1] : "Unable to parse feedback.",
+        atsScore: 70,
+        feedback: "Unable to analyze resume. Please ensure your resume is in a readable format."
       };
     }
 

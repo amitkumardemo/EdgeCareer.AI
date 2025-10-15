@@ -1,16 +1,16 @@
-import { 
-  BrainCircuit, 
-  Briefcase, 
-  LineChart, 
-  ScrollText, 
-  FileText, 
-  ShieldCheck, 
-  Edit3, 
-  Mic, 
-  BarChart3, 
-  Upload, 
-  Users, 
-  BriefcaseBusiness 
+import {
+  BrainCircuit,
+  Briefcase,
+  LineChart,
+  ScrollText,
+  FileText,
+  ShieldCheck,
+  Edit3,
+  Mic,
+  BarChart3,
+  Upload,
+  Users,
+  BriefcaseBusiness
 } from "lucide-react";
 
 export const features = [
@@ -58,10 +58,10 @@ export const features = [
   },
   {
     icon: <Users className="w-6 h-6 mb-4 text-gray-400" />,
-    title: "Shortlist Top Talent",
-    description: "AI-powered tools for recruiters to filter resumes efficiently.",
-    button: { text: "For Recruiters", link: "/recruiter-tools" },
+    title: "Find Best Internship",
+    description: "AI-powered tools to find and prepare for the best internships.",
+    button: { text: "Find Best Internship", link: "/internships" },
   },
 ];
 
-export default features;  
+export default features;

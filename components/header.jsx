@@ -11,6 +11,7 @@ import {
   MoonIcon,
   SunIcon,
   Route,
+  BriefcaseBusiness,
 } from "lucide-react";
 
 import Link from "next/link";
@@ -94,6 +95,12 @@ export default async function Header() {
                   <Link href="/roadmap" className="flex items-center gap-2">
                     <Route className="h-4 w-4" />
                     Roadmap Generator
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/internships" className="flex items-center gap-2">
+                    <BriefcaseBusiness className="h-4 w-4" />
+                    Find Internships
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>

@@ -1,21 +1,13 @@
-# TODO: Add ATS Checker Feature
+# Fix Job Matches Page
 
-## Steps to Complete
-- [x] Install pdf-parse and pdfreader for PDF text extraction.
-- [x] Create app/(main)/ats-checker/page.jsx: Main page for ATS checker.
-- [x] Create app/(main)/ats-checker/_components/ats-checker.jsx: Component for file upload and results display.
-- [x] Create app/api/resume/ats-checker/route.js: API route to handle file upload, extract text, analyze with AI, and return ATS score and feedback.
-- [x] Add atsChecker function in actions/resume.js: Server action for ATS analysis.
-- [x] Update database: Resume model already has atsScore and feedback fields.
-- [x] Fix PDF parsing library issues (switched from pdf-parse to pdfreader for server compatibility).
-- [x] Improve error handling in component to show specific API error messages.
-- [x] Test the feature: Dev server running, API compiled successfully. Error handling shows auth requirement.
+- [x] Remove duplicate imports and constants in actions/job-matches.js
+- [x] Add analyzeResume function to extract role and skills from resume text using AI
+- [x] Update getJobMatches function to accept resume_text and use analyzeResume
+- [x] Test the job-matches page to ensure it opens and works
 
-## Notes
-- Uses Gemini AI to analyze resume for ATS compatibility.
-- Considers keyword optimization, format, structure, etc.
-- Saves ATS score and feedback to user's resume in DB.
-- Supports PDF file uploads only for now.
-- Fixed PDF parsing issues by using pdfreader library instead of pdf-parse.
-- Added fallback mock content for testing when PDF parsing fails.
-- Feature requires user authentication (Clerk).
+# Update Internships to use RapidAPI
+
+- [x] Add location input to internships page
+- [x] Update internships API route to accept location
+- [x] Update actions/internships.js to use RAPIDAPI_KEY and RAPIDAPI_HOST for internships-api.p.rapidapi.com
+- [x] Ensure internships are open with proper links
