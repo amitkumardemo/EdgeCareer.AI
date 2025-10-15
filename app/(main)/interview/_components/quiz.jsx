@@ -26,6 +26,7 @@ export default function Quiz() {
   const [role, setRole] = useState("");
   const [company, setCompany] = useState("");
   const [currentQuestionCompleted, setCurrentQuestionCompleted] = useState(false);
+  const [loadingResults, setLoadingResults] = useState(false);
 
   const {
     loading: generatingQuiz,
@@ -73,6 +74,7 @@ export default function Quiz() {
 
   const finishQuiz = async () => {
     const score = calculateScore();
+    setLoadingResults(true); // Add loading state
     try {
       const result = await saveQuizResultFn(quizData, answers, score);
       // Show animated badges if earned
@@ -87,6 +89,8 @@ export default function Quiz() {
       toast.success("Quiz completed!");
     } catch (error) {
       toast.error(error.message || "Failed to save quiz results");
+    } finally {
+      setLoadingResults(false);
     }
   };
 
@@ -102,6 +106,37 @@ export default function Quiz() {
 
   if (generatingQuiz) {
     return <BarLoader className="mt-4" width={"100%"} color="gray" />;
+  }
+
+  // Show loading animation when finishing quiz
+  if (loadingResults) {
+    return (
+      <Card className="mx-2">
+        <CardContent className="text-center space-y-4 py-8">
+          <div className="flex justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold">Processing Your Results...</h3>
+            <p className="text-muted-foreground">Analyzing your performance and generating insights</p>
+          </div>
+          <div className="flex justify-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+              <span className="text-sm">Calculating Score</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+              <span className="text-sm">Generating Feedback</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+              <span className="text-sm">Preparing Results</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
   }
 
   // Show results if quiz is completed

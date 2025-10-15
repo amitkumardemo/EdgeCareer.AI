@@ -575,7 +575,7 @@ export default function LandingPage() {
               onLetterAnimationComplete={() => { }}
             />
             <ShinyText
-              text="Four simple steps to accelerate your career growth with AI-powered guidance"
+              text="Eight comprehensive steps to accelerate your career growth with AI-powered guidance"
               speed={3}
               className="text-muted-foreground"
             />
@@ -601,7 +601,7 @@ export default function LandingPage() {
               viewport={{ once: true, margin: "-100px" }}
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16 relative">
               {howItWorks.map((item, index) => (
                 <motion.div
                   key={index}
@@ -713,7 +713,43 @@ export default function LandingPage() {
                   </motion.div>
 
                   {/* Connection arrow to next step */}
-                  {index < howItWorks.length - 1 && (
+                  {index === 3 ? (
+                    // Special curved connection from step 4 to step 5 (vertical)
+                    <motion.div
+                      className="hidden lg:block absolute top-8 left-1/2 transform -translate-x-1/2 w-8 h-16"
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      transition={{ delay: 0.8 + index * 0.3, duration: 0.7 }}
+                      viewport={{ once: true }}
+                    >
+                      <motion.svg
+                        className="w-full h-full text-primary/40"
+                        viewBox="0 0 40 100"
+                        initial={{ pathLength: 0, opacity: 0.2 }}
+                        whileInView={{ pathLength: 1, opacity: 1 }}
+                        transition={{ delay: 1 + index * 0.3, duration: 1 }}
+                        viewport={{ once: true }}
+                      >
+                        <path
+                          d="M20,0 C10,30 30,70 20,100"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeDasharray="none"
+                        />
+                        <motion.path
+                          d="M15,90 L20,100 L25,90"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          initial={{ opacity: 0 }}
+                          whileInView={{ opacity: 1 }}
+                          transition={{ delay: 1.5 + index * 0.3, duration: 0.3 }}
+                          viewport={{ once: true }}
+                        />
+                      </motion.svg>
+                    </motion.div>
+                  ) : index < howItWorks.length - 1 && index !== 3 && (
                     <motion.div
                       className="hidden lg:block absolute top-8 left-[60%] w-[calc(40%-10px)]" // Fixed width to prevent overflow
                       initial={{ opacity: 0 }}

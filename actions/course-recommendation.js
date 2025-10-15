@@ -36,8 +36,9 @@ export async function fetchCoursesFromYouTube(query) {
         rating: details ? details.statistics.likeCount / (details.statistics.likeCount + details.statistics.dislikeCount || 1) * 5 : "N/A",
         duration: isPlaylist ? "Playlist" : (details ? parseDuration(details.contentDetails.duration) : "N/A"),
         url: isPlaylist ? `https://www.youtube.com/playlist?list=${item.id.playlistId}` : `https://www.youtube.com/watch?v=${item.id.videoId}`,
+        thumbnail: item.snippet.thumbnails.medium.url,
         topics: [query], // Simplified
-        description: item.snippet.description,
+        description: item.snippet.description.substring(0, 150) + (item.snippet.description.length > 150 ? '...' : ''),
         channelTitle: item.snippet.channelTitle,
         viewCount: details ? details.statistics.viewCount : 0,
         type: isPlaylist ? 'playlist' : 'video',
@@ -55,8 +56,9 @@ export async function fetchCoursesFromYouTube(query) {
         rating: "4.8",
         duration: "10 hours",
         url: "https://www.youtube.com/watch?v=example1",
+        thumbnail: "https://img.youtube.com/vi/example1/mqdefault.jpg",
         topics: ["Machine Learning", "AI", "Python"],
-        description: "Complete machine learning course",
+        description: "Complete machine learning course covering all essential concepts from basics to advanced topics.",
         channelTitle: "Example Channel",
         viewCount: 1000000,
       },
@@ -66,8 +68,9 @@ export async function fetchCoursesFromYouTube(query) {
         rating: "4.5",
         duration: "8 hours",
         url: "https://www.youtube.com/watch?v=example2",
+        thumbnail: "https://img.youtube.com/vi/example2/mqdefault.jpg",
         topics: ["Data Science", "Python", "Pandas"],
-        description: "Learn data science from scratch",
+        description: "Learn data science from scratch with practical examples and real-world projects.",
         channelTitle: "Data Science Hub",
         viewCount: 500000,
       },
@@ -141,11 +144,13 @@ export async function recommendCourses(userSkills, careerGoal) {
     Courses:
     ${coursesText}
 
-    Provide a JSON object with:
-    - recommendations: array of top 5-10 courses, each with course_title, platform, rating, duration, url, reason
-    - bestRecommendation: the single best course with course_title, platform, rating, duration, url, reason (why it's the best overall)
+    For each recommended course, also search for relevant certifications from platforms like Coursera, Udemy, edX, Google, Microsoft, AWS, etc. that are related to the course domain and user's skills.
 
-    Focus on comprehensive courses from reputable channels. Compare them in terms of depth, popularity, and suitability. Prefer playlists for thorough learning.
+    Provide a JSON object with:
+    - recommendations: array of top 5-10 courses, each with course_title, platform, rating, duration, url, reason, certification (if available, include certification name, provider, and URL)
+    - bestRecommendation: the single best course with course_title, platform, rating, duration, url, reason, certification (if available)
+
+    Focus on comprehensive courses from reputable channels. Compare them in terms of depth, popularity, and suitability. Prefer playlists for thorough learning. Include certification information where relevant to the course domain.
   `;
 
   try {
