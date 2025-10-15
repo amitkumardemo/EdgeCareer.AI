@@ -51,7 +51,11 @@ export async function fetchJobsFromJSearch(query, numPages = 1) {
       throw new Error(`JSearch API error: ${response.statusText}`);
     }
     const data = await response.json();
-    return data.data || [];
+    // If API returns empty data, throw an error to show user-friendly message
+    if (!data.data || data.data.length === 0) {
+      throw new Error("No jobs found for the specified role and location. Please try a different role or location.");
+    }
+    return data.data;
   } catch (error) {
     console.error("Error fetching jobs from JSearch:", error);
     // Return mock data for testing
