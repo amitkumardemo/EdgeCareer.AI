@@ -100,7 +100,8 @@ export default function ATSChecker() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to analyze resume");
+        toast.error(errorData.error || "Failed to analyze resume");
+        return;
       }
 
       const data = await response.json();
@@ -120,31 +121,41 @@ export default function ATSChecker() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4 grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div className="border rounded-lg p-4 bg-white shadow-md">
-        <label className="flex flex-col gap-2">
-          <span className="text-lg font-semibold">Upload PDF Resume</span>
+    <div className="max-w-6xl mx-auto p-6 bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+      <div className="text-center mb-8">
+        <h1 className="text-4xl font-bold text-gray-900 mb-2">ATS Resume Analyzer</h1>
+        <p className="text-lg text-gray-600">Get professional insights to optimize your resume for Applicant Tracking Systems</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Upload Section */}
+        <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-200">
+          <div className="mb-6">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-2">Upload Your Resume</h2>
+            <p className="text-gray-600">Upload a PDF resume to get detailed ATS compatibility analysis</p>
+          </div>
+
           <div
-            className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
+            className={`border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 ${
               dragActive
-                ? "border-blue-500 bg-blue-50"
-                : "border-gray-300 hover:border-gray-400"
+                ? "border-indigo-500 bg-indigo-50 scale-105"
+                : "border-gray-300 hover:border-indigo-400 hover:bg-gray-50"
             }`}
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}
             onDragOver={handleDrag}
             onDrop={handleDrop}
           >
-            <FileText className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-            <p className="text-sm font-medium mb-1">
+            <FileText className="w-12 h-12 mx-auto mb-4 text-indigo-500" />
+            <p className="text-lg font-medium mb-2 text-gray-900">
               Drag & drop your resume here
             </p>
-            <p className="text-xs text-gray-500 mb-3">or</p>
+            <p className="text-sm text-gray-500 mb-4">or</p>
             <Button
               variant="outline"
-              size="sm"
+              size="lg"
               onClick={handleChooseFile}
-              className="cursor-pointer"
+              className="cursor-pointer border-indigo-300 hover:bg-indigo-50 hover:border-indigo-500"
             >
               Choose File
             </Button>
@@ -156,125 +167,154 @@ export default function ATSChecker() {
               className="hidden"
             />
             {file && (
-              <p className="mt-3 text-xs text-gray-600">
+              <p className="mt-4 text-sm text-indigo-600 font-medium">
                 Selected: <strong>{file.name}</strong>
               </p>
             )}
           </div>
-        </label>
-        <Button onClick={handleSubmit} disabled={loading} className="mt-4 w-full">
-          {loading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Analyzing...
-            </>
-          ) : (
-            "Check ATS Score"
-          )}
-        </Button>
-      </div>
 
-      <div className="md:col-span-2 p-6 bg-gray-50 rounded shadow">
-        {loading || currentStep < steps.length ? (
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Analyzing Resume</h2>
-            <ul className="space-y-3">
-              {steps.map((step, index) => (
-                <li key={index} className="flex items-center gap-3">
-                  {index < currentStep ? (
-                    <CheckCircle2 className="text-blue-600" />
-                  ) : (
-                    <div className="w-5 h-5 border border-gray-400 rounded-full" />
-                  )}
-                  <span
-                    className={
-                      index === currentStep
-                        ? "font-semibold text-blue-600"
-                        : "text-gray-700"
-                    }
-                  >
-                    {step}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : atsScore !== null ? (
-          <motion.div
-            key="result"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="space-y-6"
+          <Button
+            onClick={handleSubmit}
+            disabled={loading || !file}
+            className="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 text-lg font-semibold"
           >
-            <div className="text-center">
-              <h2 className="text-3xl font-bold mb-2">Your Score</h2>
-              <div className="text-5xl font-extrabold text-indigo-600">
-                {atsScore.toFixed(0)}/100
+            {loading ? (
+              <>
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                Analyzing Resume...
+              </>
+            ) : (
+              "Analyze ATS Score"
+            )}
+          </Button>
+        </div>
+
+        {/* Results Section */}
+        <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-200">
+          {loading || currentStep < steps.length ? (
+            <div>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-6">Analysis in Progress</h2>
+              <div className="space-y-4">
+                {steps.map((step, index) => (
+                  <div key={index} className="flex items-center gap-4">
+                    {index < currentStep ? (
+                      <CheckCircle2 className="text-green-600 w-6 h-6" />
+                    ) : index === currentStep ? (
+                      <div className="w-6 h-6 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      <div className="w-6 h-6 border border-gray-300 rounded-full" />
+                    )}
+                    <span
+                      className={`text-lg ${
+                        index === currentStep
+                          ? "font-semibold text-indigo-600"
+                          : index < currentStep
+                          ? "text-green-600"
+                          : "text-gray-500"
+                      }`}
+                    >
+                      {step}
+                    </span>
+                  </div>
+                ))}
               </div>
-              <p className="text-gray-600 mt-1">
-                {feedback ? `${feedback.split("\n").length} Issues Found` : ""}
-              </p>
             </div>
+          ) : atsScore !== null ? (
+            <motion.div
+              key="result"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="space-y-6"
+            >
+              <div className="text-center">
+                <h2 className="text-3xl font-bold text-gray-900 mb-4">Your ATS Score</h2>
+                <div className={`text-6xl font-extrabold mb-4 ${
+                  atsScore >= 80 ? 'text-green-600' :
+                  atsScore >= 60 ? 'text-yellow-600' : 'text-red-600'
+                }`}>
+                  {atsScore}/100
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-3 mb-4">
+                  <div
+                    className={`h-3 rounded-full transition-all duration-1000 ${
+                      atsScore >= 80 ? 'bg-green-600' :
+                      atsScore >= 60 ? 'bg-yellow-600' : 'bg-red-600'
+                    }`}
+                    style={{ width: `${atsScore}%` }}
+                  ></div>
+                </div>
+                <p className="text-gray-600">
+                  {atsScore >= 80 ? 'Excellent! Your resume is ATS-friendly.' :
+                   atsScore >= 60 ? 'Good job! Some improvements needed.' :
+                   'Needs significant improvements for better ATS compatibility.'}
+                </p>
+              </div>
 
-            <div>
-              <h3 className="text-xl font-semibold mb-3">CONTENT</h3>
-              <p className="mb-2">
-                ATS Parse Rate:{" "}
-                <span className="font-semibold text-indigo-600">
-                  {atsScore.toFixed(0)}%
-                </span>
-              </p>
-              <p className="text-gray-700">
-                An Applicant Tracking System (ATS) is a system used by employers
-                and recruiters to quickly scan a large number of job
-                applications. A high parse rate of your resume ensures that the
-                ATS can read your resume, experience, and skills.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-xl font-semibold mb-3">Improvement Tips</h3>
-              <ul className="max-h-64 overflow-y-auto space-y-3">
-                {feedback && !feedback.includes("Unable to parse AI response") ? (
-                  feedback
-                    .split("\n")
-                    .filter((line) => line.trim() !== "")
-                    .map((line, idx) => {
+              <div className="bg-gray-50 rounded-lg p-6">
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Professional Improvement Guide</h3>
+                <div className="space-y-4">
+                  {feedback && !feedback.includes("PDF parsing encountered") ? (
+                    feedback.split("\n").filter(line => line.trim()).map((line, idx) => {
                       const parts = line.split(":");
                       if (parts.length >= 2) {
                         const issue = parts[0].trim();
                         const solution = parts.slice(1).join(":").trim();
                         return (
-                          <li
-                            key={idx}
-                            className="flex items-start gap-3 animate-fadeIn"
-                          >
-                            <span className="text-red-600 text-xl font-bold">✗</span>
+                          <div key={idx} className="flex items-start gap-3 p-3 bg-white rounded-lg border">
+                            <span className="text-red-500 text-xl font-bold mt-1">⚠</span>
                             <div>
-                              <p className="font-semibold">{issue}</p>
-                              <p className="text-gray-700">{solution}</p>
+                              <p className="font-semibold text-gray-900">{issue}</p>
+                              <p className="text-gray-700 text-sm">{solution}</p>
                             </div>
-                          </li>
+                          </div>
                         );
                       }
                       return (
-                        <li key={idx} className="animate-fadeIn">
-                          {line}
-                        </li>
+                        <div key={idx} className="p-3 bg-white rounded-lg border">
+                          <p className="text-gray-700">{line}</p>
+                        </div>
                       );
                     })
-                ) : (
-                  <p className="text-gray-600">
-                    We encountered an issue parsing your resume. Please review it
-                    manually or try again.
-                  </p>
-                )}
-              </ul>
+                  ) : (
+                    <div className="text-center py-8">
+                      <p className="text-gray-600 mb-4">
+                        We encountered an issue analyzing your resume. Here are general best practices:
+                      </p>
+                      <div className="space-y-3 text-left">
+                        <div className="flex items-start gap-3">
+                          <span className="text-green-500 text-lg">✓</span>
+                          <p className="text-gray-700">Use standard fonts (Arial, Calibri, Times New Roman)</p>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <span className="text-green-500 text-lg">✓</span>
+                          <p className="text-gray-700">Include relevant keywords from job descriptions</p>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <span className="text-green-500 text-lg">✓</span>
+                          <p className="text-gray-700">Use clear section headings (Experience, Skills, Education)</p>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <span className="text-green-500 text-lg">✓</span>
+                          <p className="text-gray-700">Save as text-based PDF, not image-based</p>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <span className="text-green-500 text-lg">✓</span>
+                          <p className="text-gray-700">Avoid tables, graphics, and complex formatting</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          ) : (
+            <div className="text-center py-12">
+              <FileText className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Ready to Analyze</h3>
+              <p className="text-gray-600">Upload your resume to get detailed ATS insights and improvement recommendations</p>
             </div>
-          </motion.div>
-        ) : (
-          <p className="text-gray-500">Upload a PDF resume and check your ATS score.</p>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

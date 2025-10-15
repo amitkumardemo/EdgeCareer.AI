@@ -71,7 +71,8 @@ export default function ResumeUploader() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to analyze resume");
+        toast.error(errorData.error || "Failed to analyze resume");
+        return;
       }
 
       const data = await response.json();
