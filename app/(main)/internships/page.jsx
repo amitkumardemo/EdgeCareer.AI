@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function Internships() {
   const [role, setRole] = useState("");
@@ -90,6 +91,43 @@ export default function Internships() {
           {loading ? "Finding Internships..." : "Find Internships"}
         </motion.button>
       </motion.div>
+
+      {/* Loading Animation */}
+      {loading && (
+        <Card className="mx-auto max-w-2xl">
+          <CardContent className="text-center space-y-6 py-12">
+            <div className="flex justify-center">
+              <div className="relative">
+                <div className="animate-spin rounded-full h-16 w-16 border-4 border-primary border-t-transparent"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-8 h-8 bg-primary rounded-full opacity-20 animate-pulse"></div>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-3">
+              <h3 className="text-xl font-semibold">Finding the Best Internships for You</h3>
+              <p className="text-muted-foreground">Analyzing your skills and preferences to match you with perfect internship opportunities</p>
+            </div>
+            <div className="flex justify-center space-x-6">
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce"></div>
+                <span className="text-sm font-medium">Searching</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 bg-green-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                <span className="text-sm font-medium">Matching</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                <span className="text-sm font-medium">Ranking</span>
+              </div>
+            </div>
+            <div className="text-xs text-muted-foreground">
+              This may take a few moments...
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <AnimatePresence>
         {internships.length > 0 && (

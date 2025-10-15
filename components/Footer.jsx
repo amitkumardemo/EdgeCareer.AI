@@ -4,7 +4,7 @@ import { Github, Linkedin, Mail } from "lucide-react";
 export default function Footer() {
   return (
     <footer className="text-black dark:text-gray-300 border-t border-gray-200 dark:border-gray-800 pt-14 pb-10 px-4 md:px-8">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 text-sm">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 text-sm">
         {/* Logo and Tagline */}
         <div className="col-span-1">
           <div className="flex items-center gap-2 mb-4">
@@ -18,29 +18,29 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* Navigation */}
+        {/* AI Features Column 1 */}
         <div>
           <h3 className="text-xl md:text-2xl font-bold mb-4 text-black dark:text-white border-b border-black/10 dark:border-white/20 pb-1">
-            Explore
+            AI Features to Accelerate Your Career
           </h3>
           <ul className="space-y-2">
-            <li><Link href="/dashboard" className="hover:text-primary transition">Dashboard</Link></li>
-            <li><Link href="/resume" className="hover:text-primary transition">Resume Builder</Link></li>
-            <li><Link href="/interview" className="hover:text-primary transition">Mock Interviews</Link></li>
-            <li><Link href="/ai-cover-letter" className="hover:text-primary transition">AI Cover Letter</Link></li>
+            <li><Link href="/dashboard" className="hover:text-primary transition">AI-Powered Career Guidance</Link></li>
+            <li><Link href="/resume" className="hover:text-primary transition">Build Smart Resume & Cover Letter</Link></li>
+            <li><Link href="/ats-checker" className="hover:text-primary transition">Optimize with ATS Score Check</Link></li>
+            <li><Link href="/course-recommendation" className="hover:text-primary transition">Skill Enhancement Courses</Link></li>
           </ul>
         </div>
 
-        {/* Resources */}
+        {/* AI Features Column 2 */}
         <div>
           <h3 className="text-xl md:text-2xl font-bold mb-4 text-black dark:text-white border-b border-black/10 dark:border-white/20 pb-1">
-            Resources
+            &nbsp;
           </h3>
           <ul className="space-y-2">
-            <li><Link href="/blog" className="hover:text-primary transition">Tech Blog</Link></li>
-            <li><Link href="/careers" className="hover:text-primary transition">Careers</Link></li>
-            <li><Link href="/terms" className="hover:text-primary transition">Terms of Use</Link></li>
-            <li><Link href="/privacy" className="hover:text-primary transition">Privacy Policy</Link></li>
+            <li><Link href="/interview" className="hover:text-primary transition">Practice with Mock Interviews</Link></li>
+            <li><Link href="/roadmap" className="hover:text-primary transition">Generate Career Roadmap</Link></li>
+            <li><Link href="/latest-jobs" className="hover:text-primary transition">Find Perfect Job Matches</Link></li>
+            <li><Link href="/internships" className="hover:text-primary transition">Secure Your Dream Internship</Link></li>
           </ul>
         </div>
 
