@@ -97,31 +97,72 @@ export default function QuizResult({
       day: 'numeric'
     })}`, 500, 480);
 
-    // Signature line
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(700, 550);
-    ctx.lineTo(850, 550);
-    ctx.stroke();
+    // Load and draw signature image
+    const signatureImg = new Image();
+    signatureImg.crossOrigin = 'anonymous';
+    signatureImg.onload = () => {
+      // Draw signature above the line
+      const sigWidth = 150;
+      const sigHeight = 60;
+      const sigX = 725;
+      const sigY = 480;
+      ctx.drawImage(signatureImg, sigX, sigY, sigWidth, sigHeight);
 
-    // Signature text
-    ctx.fillStyle = '#e5e7eb';
-    ctx.font = '16px serif';
-    ctx.fillText('EdgeCareer.AI Platform', 775, 575);
+      // Signature line
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(700, 550);
+      ctx.lineTo(850, 550);
+      ctx.stroke();
 
-    // Footer
-    ctx.fillStyle = '#fbbf24';
-    ctx.font = 'bold 20px serif';
-    ctx.fillText('www.edgecareer.ai', 500, 620);
+      // Signature text
+      ctx.fillStyle = '#e5e7eb';
+      ctx.font = '16px serif';
+      ctx.fillText('EdgeCareer.AI Platform', 775, 575);
 
-    // Download
-    const link = document.createElement('a');
-    link.download = `EdgeCareer_MockInterview_Certificate_${userName.replace(/\s+/g, '_')}.png`;
-    link.href = canvas.toDataURL();
-    link.click();
+      // Footer
+      ctx.fillStyle = '#fbbf24';
+      ctx.font = 'bold 20px serif';
+      ctx.fillText('www.edgecareer.ai', 500, 620);
 
-    toast.success('Certificate downloaded successfully!');
+      // Download
+      const link = document.createElement('a');
+      link.download = `EdgeCareer_MockInterview_Certificate_${userName.replace(/\s+/g, '_')}.png`;
+      link.href = canvas.toDataURL();
+      link.click();
+
+      toast.success('Certificate downloaded successfully!');
+    };
+    signatureImg.onerror = () => {
+      // Fallback if image fails to load
+      // Signature line
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(700, 550);
+      ctx.lineTo(850, 550);
+      ctx.stroke();
+
+      // Signature text
+      ctx.fillStyle = '#e5e7eb';
+      ctx.font = '16px serif';
+      ctx.fillText('EdgeCareer.AI Platform', 775, 575);
+
+      // Footer
+      ctx.fillStyle = '#fbbf24';
+      ctx.font = 'bold 20px serif';
+      ctx.fillText('www.edgecareer.ai', 500, 620);
+
+      // Download
+      const link = document.createElement('a');
+      link.download = `EdgeCareer_MockInterview_Certificate_${userName.replace(/\s+/g, '_')}.png`;
+      link.href = canvas.toDataURL();
+      link.click();
+
+      toast.success('Certificate downloaded successfully!');
+    };
+    signatureImg.src = '/EdgeCareers.png';
   };
 
   return (
