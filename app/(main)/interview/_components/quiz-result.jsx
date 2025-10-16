@@ -25,6 +25,11 @@ export default function QuizResult({
   };
 
   const downloadCertificate = () => {
+    // Generate unique certificate number
+    const timestamp = Date.now();
+    const randomNum = Math.floor(Math.random() * 10000);
+    const certificateNumber = `EC-${timestamp}-${randomNum}`;
+
     // Create a professional certificate
     const canvas = document.createElement('canvas');
     canvas.width = 1000;
@@ -48,6 +53,12 @@ export default function QuizResult({
     ctx.strokeStyle = '#ffffff';
     ctx.lineWidth = 2;
     ctx.strokeRect(40, 40, 920, 620);
+
+    // Certificate number (top right)
+    ctx.fillStyle = '#fbbf24';
+    ctx.font = 'bold 16px serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(`Certificate No: ${certificateNumber}`, 920, 70);
 
     // Header text
     ctx.fillStyle = '#ffffff';

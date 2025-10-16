@@ -5,59 +5,60 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Briefcase, Code, MapPin, Building, Star, Users, Globe, Award, ArrowRight, CheckCircle, BookOpen, Target } from "lucide-react";
+import { Briefcase, Code, MapPin, Building, Star, Users, Globe, Award, ArrowRight, CheckCircle, BookOpen, Target, Search, Filter } from "lucide-react";
 import TestimonialCarousel from "@/components/ui/TestimonialCarousel";
 
-// Internship-specific testimonials
-const internshipTestimonials = [
+// Job matching testimonials
+const jobTestimonials = [
   {
-    quote: "This platform helped me land my first internship in tech. The personalized recommendations were spot-on!",
-    author: "Alex Johnson",
-    image: "https://randomuser.me/api/portraits/men/32.jpg",
-    role: "Software Engineering Intern",
-    company: "Tech Startup",
+    quote: "The job matching algorithm found me opportunities I never would have discovered. Got my dream job in just 2 weeks!",
+    author: "Sarah Chen",
+    image: "https://randomuser.me/api/portraits/women/28.jpg",
+    role: "Senior Software Engineer",
+    company: "Tech Giant Inc",
   },
   {
-    quote: "The internship search was seamless, and the tips really boosted my application success rate.",
-    author: "Emma Davis",
-    image: "https://randomuser.me/api/portraits/women/44.jpg",
-    role: "Data Science Intern",
-    company: "Big Tech Corp",
+    quote: "The personalized job recommendations were incredibly accurate. It understood my skills and career goals perfectly.",
+    author: "Michael Rodriguez",
+    image: "https://randomuser.me/api/portraits/men/45.jpg",
+    role: "Product Manager",
+    company: "Startup Co",
   },
   {
-    quote: "Found amazing opportunities worldwide. The location-based search made it easy to explore options.",
-    author: "Carlos Rodriguez",
-    image: "https://randomuser.me/api/portraits/men/67.jpg",
-    role: "Marketing Intern",
-    company: "Global Agency",
+    quote: "Saved me hours of searching. The AI-powered matching found relevant positions that matched my experience level.",
+    author: "Emily Johnson",
+    image: "https://randomuser.me/api/portraits/women/67.jpg",
+    role: "Data Scientist",
+    company: "Analytics Corp",
   },
 ];
 
-export default function Internships() {
+export default function JobMatches() {
   const [role, setRole] = useState("");
   const [skills, setSkills] = useState("");
   const [location, setLocation] = useState("");
+  const [experience, setExperience] = useState("");
   const [loading, setLoading] = useState(false);
-  const [internships, setInternships] = useState([]);
+  const [jobs, setJobs] = useState([]);
 
   const handleSubmit = async () => {
     if (!role.trim() || !skills.trim() || !location.trim()) {
-      alert("Please fill in all fields: role, skills, and location.");
+      alert("Please fill in all required fields: role, skills, and location.");
       return;
     }
     setLoading(true);
-    setInternships([]);
+    setJobs([]);
     try {
-      const response = await fetch("/api/internships", {
+      const response = await fetch("/api/job-matches", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ role, skills, location }),
+        body: JSON.stringify({ role, skills, location, experience }),
       });
       if (!response.ok) {
-        throw new Error("Failed to fetch internships");
+        throw new Error("Failed to fetch job matches");
       }
       const data = await response.json();
-      setInternships(data.internships);
+      setJobs(data.jobs);
     } catch (error) {
       alert(error.message);
     } finally {
@@ -78,11 +79,11 @@ export default function Internships() {
             className="space-y-6"
           >
             <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Launch Your Career with the Perfect Internship
+              Find Your Perfect Job Match
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              Discover personalized internship opportunities that match your skills and ambitions.
-              Get expert tips, prepare effectively, and land your dream role.
+              Discover personalized job opportunities that match your skills, experience, and career aspirations.
+              Get matched with the right roles that align with your professional goals.
             </p>
 
             {/* Stats */}
@@ -93,8 +94,8 @@ export default function Internships() {
                 transition={{ delay: 0.2 }}
                 className="text-center"
               >
-                <div className="text-3xl font-bold text-blue-600">10K+</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Internships Found</div>
+                <div className="text-3xl font-bold text-blue-600">50K+</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">Active Jobs</div>
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -102,8 +103,8 @@ export default function Internships() {
                 transition={{ delay: 0.3 }}
                 className="text-center"
               >
-                <div className="text-3xl font-bold text-purple-600">500+</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Partner Companies</div>
+                <div className="text-3xl font-bold text-purple-600">2000+</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">Companies</div>
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -111,8 +112,8 @@ export default function Internships() {
                 transition={{ delay: 0.4 }}
                 className="text-center"
               >
-                <div className="text-3xl font-bold text-green-600">50+</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Countries</div>
+                <div className="text-3xl font-bold text-green-600">85%</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">Match Accuracy</div>
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -120,8 +121,8 @@ export default function Internships() {
                 transition={{ delay: 0.5 }}
                 className="text-center"
               >
-                <div className="text-3xl font-bold text-orange-600">95%</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Success Rate</div>
+                <div className="text-3xl font-bold text-orange-600">24hrs</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">Avg. Response</div>
               </motion.div>
             </div>
 
@@ -136,7 +137,7 @@ export default function Internships() {
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
                 onClick={() => document.getElementById('search-form').scrollIntoView({ behavior: 'smooth' })}
               >
-                Start Your Search <ArrowRight className="ml-2 h-5 w-5" />
+                Start Job Search <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </motion.div>
           </motion.div>
@@ -152,49 +153,62 @@ export default function Internships() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl font-bold mb-4">Find Your Perfect Internship Match</h2>
-            <p className="text-gray-600 dark:text-gray-300">Tell us about your goals and we'll find opportunities that fit you perfectly.</p>
+            <h2 className="text-3xl font-bold mb-4">Tell Us About Your Ideal Job</h2>
+            <p className="text-gray-600 dark:text-gray-300">Our AI will find the best matches based on your profile and preferences.</p>
           </motion.div>
 
           <Card className="shadow-2xl border-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
             <CardContent className="p-8 space-y-6">
-              <div className="grid md:grid-cols-3 gap-6">
+              <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300">
                     <Briefcase className="h-4 w-4 mr-2 text-blue-600" />
-                    Desired Role
+                    Desired Role *
                   </label>
                   <Input
                     type="text"
                     value={role}
                     onChange={(e) => setRole(e.target.value)}
-                    placeholder="e.g. Software Engineer"
+                    placeholder="e.g. Software Engineer, Product Manager"
                     className="h-12 text-base"
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300">
                     <Code className="h-4 w-4 mr-2 text-green-600" />
-                    Your Skills
+                    Key Skills *
                   </label>
                   <Input
                     type="text"
                     value={skills}
                     onChange={(e) => setSkills(e.target.value)}
-                    placeholder="e.g. Python, React, ML"
+                    placeholder="e.g. Python, React, Machine Learning"
                     className="h-12 text-base"
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300">
                     <MapPin className="h-4 w-4 mr-2 text-red-600" />
-                    Location
+                    Location *
                   </label>
                   <Input
                     type="text"
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
-                    placeholder="e.g. Bangalore, India"
+                    placeholder="e.g. Bangalore, India or Remote"
+                    className="h-12 text-base"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300">
+                    <Award className="h-4 w-4 mr-2 text-purple-600" />
+                    Experience Level
+                  </label>
+                  <Input
+                    type="text"
+                    value={experience}
+                    onChange={(e) => setExperience(e.target.value)}
+                    placeholder="e.g. 2-3 years, Entry Level, Senior"
                     className="h-12 text-base"
                   />
                 </div>
@@ -205,7 +219,7 @@ export default function Internships() {
                 disabled={loading}
                 className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:opacity-50"
               >
-                {loading ? "Finding Internships..." : "Find My Perfect Internship"}
+                {loading ? "Finding Your Perfect Matches..." : "Find My Job Matches"}
               </Button>
             </CardContent>
           </Card>
@@ -231,8 +245,8 @@ export default function Internships() {
               </div>
 
               <div className="space-y-4">
-                <h3 className="text-2xl font-bold">AI-Powered Internship Matching</h3>
-                <p className="text-gray-600 dark:text-gray-300">Analyzing thousands of opportunities to find your perfect fit</p>
+                <h3 className="text-2xl font-bold">AI-Powered Job Matching</h3>
+                <p className="text-gray-600 dark:text-gray-300">Analyzing thousands of job postings to find your perfect matches</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -243,9 +257,9 @@ export default function Internships() {
                   className="flex flex-col items-center space-y-3"
                 >
                   <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                    <Building className="h-6 w-6 text-blue-600" />
+                    <Search className="h-6 w-6 text-blue-600" />
                   </div>
-                  <div className="text-sm font-medium">Scanning Companies</div>
+                  <div className="text-sm font-medium">Scanning Jobs</div>
                   <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                     <motion.div
                       className="bg-blue-600 h-2 rounded-full"
@@ -283,7 +297,7 @@ export default function Internships() {
                   className="flex flex-col items-center space-y-3"
                 >
                   <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
-                    <Award className="h-6 w-6 text-purple-600" />
+                    <Filter className="h-6 w-6 text-purple-600" />
                   </div>
                   <div className="text-sm font-medium">Ranking Results</div>
                   <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
@@ -297,7 +311,7 @@ export default function Internships() {
                 </motion.div>
               </div>
 
-              <p className="text-sm text-gray-500 dark:text-gray-400">This usually takes 10-15 seconds...</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">This usually takes 15-20 seconds...</p>
             </CardContent>
           </Card>
         </section>
@@ -305,7 +319,7 @@ export default function Internships() {
 
       {/* Enhanced Results Display */}
       <AnimatePresence>
-        {internships.length > 0 && (
+        {jobs.length > 0 && (
           <section className="py-16 px-4">
             <div className="max-w-6xl mx-auto">
               <motion.div
@@ -313,14 +327,14 @@ export default function Internships() {
                 animate={{ opacity: 1, y: 0 }}
                 className="text-center mb-12"
               >
-                <h2 className="text-3xl font-bold mb-4">Your Personalized Internship Matches</h2>
-                <p className="text-gray-600 dark:text-gray-300">Based on your skills and preferences, here are the best opportunities for you.</p>
+                <h2 className="text-3xl font-bold mb-4">Your Personalized Job Matches</h2>
+                <p className="text-gray-600 dark:text-gray-300">Based on your profile, here are the best opportunities that match your skills and career goals.</p>
               </motion.div>
 
               <div className="grid gap-8 md:grid-cols-2">
-                {internships.map((internship, idx) => (
+                {jobs.map((job, idx) => (
                   <motion.div
-                    key={internship.internship_id}
+                    key={job.job_id || `job-${idx}`}
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.1 }}
@@ -330,16 +344,21 @@ export default function Internships() {
                         <div className="p-6 space-y-4">
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
-                              <h3 className="text-xl font-bold mb-2 line-clamp-2">{internship.title}</h3>
+                              <h3 className="text-xl font-bold mb-2 line-clamp-2">{job.title}</h3>
                               <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
                                 <div className="flex items-center">
                                   <Building className="h-4 w-4 mr-1" />
-                                  {internship.company}
+                                  {job.company}
                                 </div>
                                 <div className="flex items-center">
                                   <MapPin className="h-4 w-4 mr-1" />
-                                  {internship.location}
+                                  {job.location}
                                 </div>
+                              </div>
+                              <div className="flex items-center mt-2">
+                                <span className="text-sm font-medium text-green-600 bg-green-100 dark:bg-green-900 px-2 py-1 rounded-full">
+                                  {job.match_percentage}% Match
+                                </span>
                               </div>
                             </div>
                             <div className="flex items-center space-x-1">
@@ -348,28 +367,21 @@ export default function Internships() {
                             </div>
                           </div>
 
-                          <p className="text-gray-700 dark:text-gray-300 line-clamp-3">{internship.description}</p>
+                          <p className="text-gray-700 dark:text-gray-300 line-clamp-3">{job.description}</p>
 
                           <div className="flex flex-wrap gap-2">
                             <Button
                               asChild
                               className="bg-green-600 hover:bg-green-700 text-white"
                             >
-                              <a href={internship.apply_link} target="_blank" rel="noopener noreferrer">
+                              <a href={job.apply_link} target="_blank" rel="noopener noreferrer">
                                 Apply Now <ArrowRight className="ml-2 h-4 w-4" />
                               </a>
                             </Button>
-                            {internship.preparation_course && (
-                              <Button
-                                asChild
-                                variant="outline"
-                                className="border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950"
-                              >
-                                <a href={internship.preparation_course.url} target="_blank" rel="noopener noreferrer">
-                                  <BookOpen className="mr-2 h-4 w-4" />
-                                  Prepare
-                                </a>
-                              </Button>
+                            {job.salary_range && (
+                              <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                                <span className="font-medium">Salary: {job.salary_range}</span>
+                              </div>
                             )}
                           </div>
                         </div>
@@ -379,15 +391,15 @@ export default function Internships() {
                             <div className="flex items-start space-x-3">
                               <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
                               <div>
-                                <h4 className="font-semibold text-blue-600 mb-1">Resume Tips</h4>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">{internship.resume_tips}</p>
+                                <h4 className="font-semibold text-blue-600 mb-1">Why This Matches You</h4>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">{job.match_reasons}</p>
                               </div>
                             </div>
                             <div className="flex items-start space-x-3">
                               <CheckCircle className="h-5 w-5 text-purple-600 mt-0.5 flex-shrink-0" />
                               <div>
-                                <h4 className="font-semibold text-purple-600 mb-1">Interview Prep</h4>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">{internship.interview_tips}</p>
+                                <h4 className="font-semibold text-purple-600 mb-1">Application Tips</h4>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">{job.application_tips}</p>
                               </div>
                             </div>
                           </div>
@@ -411,11 +423,11 @@ export default function Internships() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl font-bold mb-4">Success Stories from Our Interns</h2>
-            <p className="text-gray-600 dark:text-gray-300">Real experiences from students who found their dream internships with our platform.</p>
+            <h2 className="text-3xl font-bold mb-4">Success Stories from Job Seekers</h2>
+            <p className="text-gray-600 dark:text-gray-300">Real stories from professionals who found their dream jobs through our platform.</p>
           </motion.div>
 
-          <TestimonialCarousel testimonials={internshipTestimonials} />
+          <TestimonialCarousel testimonials={jobTestimonials} />
         </div>
       </section>
 
@@ -428,33 +440,33 @@ export default function Internships() {
             viewport={{ once: true }}
             className="space-y-8"
           >
-            <h2 className="text-4xl font-bold">Ready to Launch Your Career?</h2>
+            <h2 className="text-4xl font-bold">Ready to Find Your Dream Job?</h2>
             <p className="text-xl text-gray-600 dark:text-gray-300">
-              Join thousands of students who have found their perfect internship match.
-              Start your journey today and gain the experience that employers are looking for.
+              Join thousands of professionals who have found their perfect career matches.
+              Start your job search journey today and get matched with opportunities that fit your ambitions.
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 my-12">
               <div className="text-center space-y-4">
                 <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto">
-                  <Users className="h-8 w-8 text-blue-600" />
+                  <Search className="h-8 w-8 text-blue-600" />
                 </div>
-                <h3 className="text-xl font-semibold">Personalized Matching</h3>
-                <p className="text-gray-600 dark:text-gray-400">AI-powered recommendations tailored to your skills and goals.</p>
+                <h3 className="text-xl font-semibold">Smart Matching</h3>
+                <p className="text-gray-600 dark:text-gray-400">AI-powered algorithm finds the most relevant opportunities for you.</p>
               </div>
               <div className="text-center space-y-4">
                 <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto">
                   <Award className="h-8 w-8 text-green-600" />
                 </div>
-                <h3 className="text-xl font-semibold">Expert Preparation</h3>
-                <p className="text-gray-600 dark:text-gray-400">Comprehensive tips and resources to help you succeed.</p>
+                <h3 className="text-xl font-semibold">Quality Opportunities</h3>
+                <p className="text-gray-600 dark:text-gray-400">Access to verified job postings from top companies worldwide.</p>
               </div>
               <div className="text-center space-y-4">
                 <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mx-auto">
                   <Globe className="h-8 w-8 text-purple-600" />
                 </div>
-                <h3 className="text-xl font-semibold">Global Opportunities</h3>
-                <p className="text-gray-600 dark:text-gray-400">Access internships from top companies worldwide.</p>
+                <h3 className="text-xl font-semibold">Global Reach</h3>
+                <p className="text-gray-600 dark:text-gray-400">Find opportunities in your preferred locations or work remotely.</p>
               </div>
             </div>
 
@@ -464,7 +476,7 @@ export default function Internships() {
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-12 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
                 onClick={() => document.getElementById('search-form').scrollIntoView({ behavior: 'smooth' })}
               >
-                Find Your Internship Now <ArrowRight className="ml-2 h-5 w-5" />
+                Start Your Job Search <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
               <p className="text-sm text-gray-500 dark:text-gray-400">No credit card required • Free to start</p>
             </div>

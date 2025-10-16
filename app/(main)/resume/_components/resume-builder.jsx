@@ -567,7 +567,7 @@ export default function ResumeBuilder({ initialContent }) {
       parts.push(`💼 [LinkedIn](${contactInfo.linkedin})`);
     if (contactInfo.github) parts.push(`💻 [GitHub](${contactInfo.github})`);
 
-    const displayName = contactInfo.name || user.fullName || "Your Name";
+    const displayName = contactInfo.name || (user?.fullName) || "Your Name";
 
     return parts.length > 0
       ? `## <div align="center">${displayName}</div>
