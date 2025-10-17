@@ -12,9 +12,9 @@ import Footer from "@/components/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "EdgeCareer - Your AI-Powered Career Assistant",
+  title: "EdgeCareer - Your AI-Powered Career Tutor",
   description:
-    "Your AI-powered assistant for job search, resume optimization, mock interviews, and career growth.",
+    "Your AI-powered career tutor for job search, resume optimization, mock interviews, and career growth.",
     icons: {
     icon: "/icons/favicon.ico",
     shortcut: "/icons/favicon.ico",
