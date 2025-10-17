@@ -250,7 +250,7 @@ useEffect(() => {
                 transition={{ duration: 0.8, delay: 0.5 }}
                 className="inline-block"
               >
-                Your AI-Powered Career Assistant
+                Your AI-Powered Career Tutor
               </motion.span>
             </h1>
           </SequenceItem>
@@ -258,8 +258,7 @@ useEffect(() => {
           <SequenceItem animation="scale" delay={0.8}>
             <div className="relative">
               <ShinyText
-                text="AI-powered career assistant for smarter job search, resume
-                optimization, mock interviews, and industry insights."
+                text="AI-powered career tutor for smarter job search, resume optimization, mock interviews, industry insights, personalized roadmaps, course recommendations, internship opportunities, ATS scoring, and job matching."
                 speed={3}
                 className="mx-auto max-w-[600px] md:text-xl relative z-10 text-muted-foreground"
               />
