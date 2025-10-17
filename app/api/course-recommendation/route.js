@@ -7,8 +7,8 @@ export async function POST(request) {
     if (!skills) {
       return NextResponse.json({ error: "Skills are required" }, { status: 400 });
     }
-    const recommendations = await recommendCourses(skills, goal);
-    return NextResponse.json(recommendations);
+    const { courses, playlists } = await recommendCourses(skills, goal);
+    return NextResponse.json({ courses, playlists });
   } catch (error) {
     console.error("Error in course recommendation API:", error);
     return NextResponse.json({ error: error.message || "Internal Server Error" }, { status: 500 });

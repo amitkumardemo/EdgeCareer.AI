@@ -14,6 +14,7 @@ export default function CourseRecommendation() {
   const [goal, setGoal] = useState("");
   const [loading, setLoading] = useState(false);
   const [recommendations, setRecommendations] = useState([]);
+  const [playlists, setPlaylists] = useState([]);
   const [completedSteps, setCompletedSteps] = useState([]);
 
   const handleSubmit = async () => {
@@ -34,7 +35,8 @@ export default function CourseRecommendation() {
         throw new Error("Failed to fetch recommendations");
       }
       const data = await response.json();
-      setRecommendations(data);
+      setRecommendations(data.courses || []);
+      setPlaylists(data.playlists || []);
     } catch (error) {
       alert(error.message);
     } finally {
@@ -222,173 +224,217 @@ export default function CourseRecommendation() {
           </motion.div>
         )}
 
-        {recommendations.length > 0 && (
+        {(recommendations.length > 0 || playlists.length > 0) && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.6 }}
-            className="mt-6"
+            className="mt-6 space-y-12"
           >
-            <h2 className="text-2xl font-semibold mb-6 text-center">Recommended Courses</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {recommendations.slice(0, -1).map((course, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.1, duration: 0.5 }}
-                >
-                  <Card className="h-full shadow-lg hover:shadow-xl transition-shadow duration-300 border-0 bg-white/90 backdrop-blur-sm">
-                    <CardContent className="p-6">
-                      <div className="flex flex-col gap-4">
-                        <div className="flex-shrink-0">
-                          <img
-                            src={course.thumbnail}
-                            alt={course.course_title}
-                            className="w-full h-32 object-cover rounded-lg"
-                            onError={(e) => e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTI4IiBoZWlnaHQ9IjcyIiB2aWV3Qm94PSIwIDAgMTI4IDcyIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjcyIiBmaWxsPSIjRjNGNEY2Ii8+Cjx0ZXh0IHg9IjY0IiB5PSIzNiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzk5OTk5OSI+VGh1bWJuYWlsPC90ZXh0Pgo8L3N2Zz4K'}
-                          />
-                        </div>
-                        <div className="flex-1">
-                          <a
-                            href={course.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 font-semibold text-lg hover:underline line-clamp-2"
-                          >
-                            {course.course_title}
-                          </a>
-                          <p className="text-sm text-gray-600 mt-2 line-clamp-3">{course.description}</p>
-                          <div className="flex flex-wrap gap-3 mt-3 text-sm text-gray-500">
-                            <span className="flex items-center gap-1">
-                              <Users className="w-4 h-4" />
-                              {course.platform}
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <Star className="w-4 h-4 text-yellow-500" />
-                              {course.rating}
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <Clock className="w-4 h-4" />
-                              {course.duration}
-                            </span>
-                          </div>
-                          <p className="italic mt-3 text-sm text-gray-700">{course.reason}</p>
-                          <div className="mt-4 flex gap-2">
-                            <Button asChild size="sm" className="bg-red-600 hover:bg-red-700">
-                              <a href={course.url} target="_blank" rel="noopener noreferrer">
-                                Enroll Now
-                              </a>
-                            </Button>
-                          </div>
-                          {course.certification && (
-                            <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-                              <p className="text-sm font-medium text-green-800 flex items-center gap-2">
-                                <Award className="w-4 h-4" />
-                                Verified Certification:
-                              </p>
-                              <p className="text-sm text-green-700">{course.certification.name} by {course.certification.provider}</p>
-                              {course.certification.url && (
-                                <a
-                                  href={course.certification.url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-xs text-green-600 hover:underline mt-1 inline-block"
-                                >
-                                  View Certification →
-                                </a>
-                              )}
+            {/* Coursera Courses Section */}
+            {recommendations.length > 0 && (
+              <div>
+                <h2 className="text-2xl font-semibold mb-6 text-center flex items-center justify-center gap-2">
+                  <Award className="w-6 h-6 text-blue-600" />
+                  Coursera Certification Courses
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {recommendations.slice(0, -1).map((course, idx) => (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.1, duration: 0.5 }}
+                    >
+                      <Card className="h-full shadow-lg hover:shadow-xl transition-shadow duration-300 border-0 bg-white/90 backdrop-blur-sm">
+                        <CardContent className="p-6">
+                          <div className="flex flex-col gap-4">
+                            <div className="flex-shrink-0">
+                              <img
+                                src={course.thumbnail}
+                                alt={course.course_title}
+                                className="w-full h-32 object-cover rounded-lg"
+                                onError={(e) => e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTI4IiBoZWlnaHQ9IjcyIiB2aWV3Qm94PSIwIDAgMTI4IDcyIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjcyIiBmaWxsPSIjRjNGNEY2Ii8+Cjx0ZXh0IHg9IjY0IiB5PSIzNiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzk5OTk5OSI+VGh1bWJuYWlsPC90ZXh0Pgo8L3N2Zz4K'}
+                              />
                             </div>
-                          )}
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-            {recommendations.length > 1 && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.3, duration: 0.5 }}
-                className="mt-8"
-              >
-                <div className="bg-gradient-to-r from-yellow-100 to-orange-100 border-l-4 border-yellow-500 p-6 rounded-lg shadow-lg">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Badge variant="secondary" className="bg-yellow-500 text-white font-semibold">
-                      Top Pick
-                    </Badge>
-                    <h3 className="text-xl font-semibold">Best Recommendation</h3>
-                  </div>
-                  <Card className="shadow-xl border-0 bg-white/95 backdrop-blur-sm">
-                    <CardContent className="p-6">
-                      <div className="flex flex-col md:flex-row gap-6">
-                        <div className="flex-shrink-0">
-                          <img
-                            src={recommendations[recommendations.length - 1].thumbnail}
-                            alt={recommendations[recommendations.length - 1].course_title}
-                            className="w-40 h-28 object-cover rounded-lg"
-                            onError={(e) => e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTI4IiBoZWlnaHQ9IjcyIiB2aWV3Qm94PSIwIDAgMTI4IDcyIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjcyIiBmaWxsPSIjRjNGNEY2Ii8+Cjx0ZXh0IHg9IjY0IiB5PSIzNiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzk5OTk5OSI+VGh1bWJuYWlsPC90ZXh0Pgo8L3N2Zz4K'}
-                          />
-                        </div>
-                        <div className="flex-1">
-                          <a
-                            href={recommendations[recommendations.length - 1].url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 font-semibold text-xl hover:underline"
-                          >
-                            {recommendations[recommendations.length - 1].course_title}
-                          </a>
-                          <p className="text-sm text-gray-600 mt-2">{recommendations[recommendations.length - 1].description}</p>
-                          <div className="flex flex-wrap gap-4 mt-3 text-sm text-gray-500">
-                            <span className="flex items-center gap-1">
-                              <Users className="w-4 h-4" />
-                              {recommendations[recommendations.length - 1].platform}
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <Star className="w-4 h-4 text-yellow-500" />
-                              {recommendations[recommendations.length - 1].rating}
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <Clock className="w-4 h-4" />
-                              {recommendations[recommendations.length - 1].duration}
-                            </span>
-                          </div>
-                          <p className="italic mt-3 text-sm text-gray-700">{recommendations[recommendations.length - 1].reason}</p>
-                          <div className="mt-4 flex gap-2">
-                            <Button asChild className="bg-red-600 hover:bg-red-700">
-                              <a href={recommendations[recommendations.length - 1].url} target="_blank" rel="noopener noreferrer">
-                                Enroll Now
+                            <div className="flex-1">
+                              <a
+                                href={course.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 font-semibold text-lg hover:underline line-clamp-2"
+                              >
+                                {course.course_title}
                               </a>
-                            </Button>
-                          </div>
-                          {recommendations[recommendations.length - 1].certification && (
-                            <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-                              <p className="text-sm font-medium text-green-800 flex items-center gap-2">
-                                <Award className="w-4 h-4" />
-                                Verified Certification:
-                              </p>
-                              <p className="text-sm text-green-700">{recommendations[recommendations.length - 1].certification.name} by {recommendations[recommendations.length - 1].certification.provider}</p>
-                              {recommendations[recommendations.length - 1].certification.url && (
-                                <a
-                                  href={recommendations[recommendations.length - 1].certification.url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-xs text-green-600 hover:underline mt-1 inline-block"
-                                >
-                                  View Certification →
-                                </a>
-                              )}
+                              <p className="text-sm text-gray-600 mt-2 line-clamp-3">{course.description}</p>
+                              <div className="flex flex-wrap gap-3 mt-3 text-sm text-gray-500">
+                                <span className="flex items-center gap-1">
+                                  <Users className="w-4 h-4" />
+                                  {course.platform}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <Star className="w-4 h-4 text-yellow-500" />
+                                  {course.rating}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <Clock className="w-4 h-4" />
+                                  {course.duration}
+                                </span>
+                                {course.isPaid !== undefined && (
+                                  <Badge variant={course.isPaid ? "destructive" : "secondary"} className="text-xs">
+                                    {course.isPaid ? "Paid" : "Free"}
+                                  </Badge>
+                                )}
+                              </div>
+                              <p className="italic mt-3 text-sm text-gray-700">{course.reason}</p>
+                              <div className="mt-4 flex gap-2">
+                                <Button asChild size="sm" className="bg-red-600 hover:bg-red-700">
+                                  <a href={course.url} target="_blank" rel="noopener noreferrer">
+                                    Enroll Now
+                                  </a>
+                                </Button>
+                              </div>
                             </div>
-                          )}
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  ))}
                 </div>
-              </motion.div>
+                {recommendations.length > 1 && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.3, duration: 0.5 }}
+                    className="mt-8"
+                  >
+                    <div className="bg-gradient-to-r from-yellow-100 to-orange-100 border-l-4 border-yellow-500 p-6 rounded-lg shadow-lg">
+                      <div className="flex items-center gap-2 mb-4">
+                        <Badge variant="secondary" className="bg-yellow-500 text-white font-semibold">
+                          Top Pick
+                        </Badge>
+                        <h3 className="text-xl font-semibold text-black">Best Certification Course</h3>
+                      </div>
+                      <Card className="shadow-xl border-0 bg-white/95 backdrop-blur-sm">
+                        <CardContent className="p-6">
+                          <div className="flex flex-col md:flex-row gap-6">
+                            <div className="flex-shrink-0">
+                              <img
+                                src={recommendations[recommendations.length - 1].thumbnail}
+                                alt={recommendations[recommendations.length - 1].course_title}
+                                className="w-40 h-28 object-cover rounded-lg"
+                                onError={(e) => e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTI4IiBoZWlnaHQ9IjcyIiB2aWV3Qm94PSIwIDAgMTI4IDcyIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjcyIiBmaWxsPSIjRjNGNEY2Ii8+Cjx0ZXh0IHg9IjY0IiB5PSIzNiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzk5OTk5OSI+VGh1bWJuYWlsPC90ZXh0Pgo8L3N2Zz4K'}
+                              />
+                            </div>
+                            <div className="flex-1">
+                              <a
+                                href={recommendations[recommendations.length - 1].url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 font-semibold text-xl hover:underline"
+                              >
+                                {recommendations[recommendations.length - 1].course_title}
+                              </a>
+                              <p className="text-sm text-gray-600 mt-2">{recommendations[recommendations.length - 1].description}</p>
+                              <div className="flex flex-wrap gap-4 mt-3 text-sm text-gray-500">
+                                <span className="flex items-center gap-1">
+                                  <Users className="w-4 h-4" />
+                                  {recommendations[recommendations.length - 1].platform}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <Star className="w-4 h-4 text-yellow-500" />
+                                  {recommendations[recommendations.length - 1].rating}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <Clock className="w-4 h-4" />
+                                  {recommendations[recommendations.length - 1].duration}
+                                </span>
+                                {recommendations[recommendations.length - 1].isPaid !== undefined && (
+                                  <Badge variant={recommendations[recommendations.length - 1].isPaid ? "destructive" : "secondary"} className="text-xs">
+                                    {recommendations[recommendations.length - 1].isPaid ? "Paid" : "Free"}
+                                  </Badge>
+                                )}
+                              </div>
+                              <p className="italic mt-3 text-sm text-gray-700">{recommendations[recommendations.length - 1].reason}</p>
+                              <div className="mt-4 flex gap-2">
+                                <Button asChild className="bg-red-600 hover:bg-red-700">
+                                  <a href={recommendations[recommendations.length - 1].url} target="_blank" rel="noopener noreferrer">
+                                    Enroll Now
+                                  </a>
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </motion.div>
+                )}
+              </div>
+            )}
+
+            {/* YouTube Playlists Section */}
+            {playlists.length > 0 && (
+              <div>
+                <h2 className="text-2xl font-semibold mb-6 text-center text-black flex items-center justify-center gap-2">
+                  <BookOpen className="w-6 h-6 text-black" />
+                  YouTube Learning Playlists
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {playlists.map((playlist, idx) => (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.1, duration: 0.5 }}
+                    >
+                      <Card className="h-full shadow-lg hover:shadow-xl transition-shadow duration-300 border-0 bg-white/90 backdrop-blur-sm">
+                        <CardContent className="p-6">
+                          <div className="flex flex-col gap-4">
+                            <div className="flex-shrink-0">
+                              <img
+                                src={playlist.thumbnail}
+                                alt={playlist.title}
+                                className="w-full h-32 object-cover rounded-lg"
+                                onError={(e) => e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTI4IiBoZWlnaHQ9IjcyIiB2aWV3Qm94PSIwIDAgMTI4IDcyIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjcyIiBmaWxsPSIjRjNGNEY2Ii8+Cjx0ZXh0IHg9IjY0IiB5PSIzNiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzk5OTk5OSI+VGh1bWJuYWlsPC90ZXh0Pgo8L3N2Zz4K'}
+                              />
+                            </div>
+                            <div className="flex-1">
+                              <a
+                                href={playlist.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-red-600 font-semibold text-lg hover:underline line-clamp-2"
+                              >
+                                {playlist.title}
+                              </a>
+                              <p className="text-sm text-gray-600 mt-2 line-clamp-3">{playlist.description}</p>
+                              <div className="flex flex-wrap gap-3 mt-3 text-sm text-gray-500">
+                                <span className="flex items-center gap-1">
+                                  <Users className="w-4 h-4" />
+                                  {playlist.channelTitle}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <BookOpen className="w-4 h-4" />
+                                  {playlist.videoCount} videos
+                                </span>
+                              </div>
+                              <p className="italic mt-3 text-sm text-gray-700">{playlist.reason}</p>
+                              <div className="mt-4 flex gap-2">
+                                <Button asChild size="sm" className="bg-red-600 hover:bg-red-700">
+                                  <a href={playlist.url} target="_blank" rel="noopener noreferrer">
+                                    Watch Playlist
+                                  </a>
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
             )}
           </motion.div>
         )}
