@@ -5,8 +5,22 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Briefcase, Code, MapPin, Building, Star, Users, Globe, Award, ArrowRight, CheckCircle, BookOpen, Target, Search, Filter } from "lucide-react";
 import TestimonialCarousel from "@/components/ui/TestimonialCarousel";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 // Job matching testimonials
 const jobTestimonials = [
@@ -40,6 +54,7 @@ export default function JobMatches() {
   const [experience, setExperience] = useState("");
   const [loading, setLoading] = useState(false);
   const [jobs, setJobs] = useState([]);
+  const [showNoJobsDialog, setShowNoJobsDialog] = useState(false);
 
   const handleSubmit = async () => {
     if (!role.trim() || !skills.trim() || !location.trim()) {
@@ -58,7 +73,11 @@ export default function JobMatches() {
         throw new Error("Failed to fetch job matches");
       }
       const data = await response.json();
-      setJobs(data.jobs);
+      if (data.error) {
+        alert("Unable to fetch jobs at the moment. Please try again later or contact support if the issue persists.");
+        return;
+      }
+      setJobs(data.jobs || []);
     } catch (error) {
       alert(error.message);
     } finally {
@@ -165,13 +184,27 @@ export default function JobMatches() {
                     <Briefcase className="h-4 w-4 mr-2 text-blue-600" />
                     Desired Role *
                   </label>
-                  <Input
-                    type="text"
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
-                    placeholder="e.g. Software Engineer, Product Manager"
-                    className="h-12 text-base"
-                  />
+                  <Select value={role} onValueChange={setRole}>
+                    <SelectTrigger className="h-12 text-base">
+                      <SelectValue placeholder="Select your desired role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Frontend Developer">Frontend Developer</SelectItem>
+                      <SelectItem value="Backend Developer">Backend Developer</SelectItem>
+                      <SelectItem value="Full Stack Developer">Full Stack Developer</SelectItem>
+                      <SelectItem value="Software Engineer">Software Engineer</SelectItem>
+                      <SelectItem value="Data Scientist">Data Scientist</SelectItem>
+                      <SelectItem value="DevOps Engineer">DevOps Engineer</SelectItem>
+                      <SelectItem value="Mobile Developer">Mobile Developer</SelectItem>
+                      <SelectItem value="QA Engineer">QA Engineer</SelectItem>
+                      <SelectItem value="Product Manager">Product Manager</SelectItem>
+                      <SelectItem value="UI/UX Designer">UI/UX Designer</SelectItem>
+                      <SelectItem value="Machine Learning Engineer">Machine Learning Engineer</SelectItem>
+                      <SelectItem value="Cybersecurity Analyst">Cybersecurity Analyst</SelectItem>
+                      <SelectItem value="Cloud Engineer">Cloud Engineer</SelectItem>
+                      <SelectItem value="Blockchain Developer">Blockchain Developer</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="space-y-2">
                   <label className="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300">
@@ -483,6 +516,21 @@ export default function JobMatches() {
           </motion.div>
         </div>
       </section>
+
+      {/* No Jobs Dialog */}
+      <Dialog open={showNoJobsDialog} onOpenChange={setShowNoJobsDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>No Jobs Found</DialogTitle>
+            <DialogDescription>
+              No jobs found for the specified role and location. Please try a different role or location.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end">
+            <Button onClick={() => setShowNoJobsDialog(false)}>Close</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

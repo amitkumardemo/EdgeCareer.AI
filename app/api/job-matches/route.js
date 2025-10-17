@@ -11,6 +11,6 @@ export async function POST(request) {
     return NextResponse.json(jobMatches);
   } catch (error) {
     console.error("Error in job matches API:", error);
-    return NextResponse.json({ error: error.message || "Internal Server Error" }, { status: 500 });
+    return NextResponse.json({ error: error.message || "Internal Server Error" }, { status: 200 });
   }
 }

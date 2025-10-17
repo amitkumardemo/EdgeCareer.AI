@@ -1,4 +1,4 @@
-"use client";
+ "use client";
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
@@ -41,6 +41,8 @@ export default function CourseRecommendation() {
       setLoading(false);
     }
   };
+
+
 
   useEffect(() => {
     if (loading) {
@@ -129,11 +131,11 @@ export default function CourseRecommendation() {
                   value={skills}
                   onChange={(e) => setSkills(e.target.value)}
                   placeholder="e.g. Python, Data Analysis, Machine Learning"
-                  className="w-full border-2 border-gray-200 focus:border-blue-500 transition-colors"
+                  className="w-full border-2 border-gray-200 focus:border-blue-500 transition-colors text-black"
                 />
               </div>
               <div className="space-y-3">
-                <Label htmlFor="goal" className="text-sm font-medium flex items-center gap-2">
+                <Label htmlFor="goal" className="text-sm font-medium flex items-center gap-2 text-black">
                   <TrendingUp className="w-4 h-4 text-purple-600" />
                   Your Career Goal (optional)
                 </Label>
@@ -143,7 +145,7 @@ export default function CourseRecommendation() {
                   value={goal}
                   onChange={(e) => setGoal(e.target.value)}
                   placeholder="e.g. Become a Data Scientist"
-                  className="w-full border-2 border-gray-200 focus:border-purple-500 transition-colors"
+                  className="w-full border-2 border-gray-200 focus:border-purple-500 transition-colors text-black"
                 />
               </div>
               <Button
@@ -275,7 +277,7 @@ export default function CourseRecommendation() {
                           <div className="mt-4 flex gap-2">
                             <Button asChild size="sm" className="bg-red-600 hover:bg-red-700">
                               <a href={course.url} target="_blank" rel="noopener noreferrer">
-                                Watch Now
+                                Enroll Now
                               </a>
                             </Button>
                           </div>
@@ -358,7 +360,7 @@ export default function CourseRecommendation() {
                           <div className="mt-4 flex gap-2">
                             <Button asChild className="bg-red-600 hover:bg-red-700">
                               <a href={recommendations[recommendations.length - 1].url} target="_blank" rel="noopener noreferrer">
-                                Watch Now
+                                Enroll Now
                               </a>
                             </Button>
                           </div>
