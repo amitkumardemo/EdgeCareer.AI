@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Card, CardContent } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { useMediaQuery } from "react-responsive";
 
 // Duplicate the testimonial data to have at least 6 items
 const duplicateTestimonials = (testimonials) => {
@@ -30,18 +31,20 @@ export default function TestimonialCarousel({ testimonials }) {
   const [direction, setDirection] = useState(1); // 1 for forward, -1 for backward
   const [autoPlayIndex, setAutoPlayIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const isMobile = useMediaQuery({ maxWidth: 767 });
 
   // Auto-rotation logic
   useEffect(() => {
     if (isPaused) return;
     
+    const intervalTime = isMobile ? 10000 : 7000;
     const interval = setInterval(() => {
       rotateForward();
       setAutoPlayIndex((prev) => (prev + 1) % 2);
-    }, 7000);
+    }, intervalTime);
     
     return () => clearInterval(interval);
-  }, [isPaused]);
+  }, [isPaused, isMobile]);
   
   const rotateForward = useCallback(() => {
     setDirection(1);

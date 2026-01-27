@@ -1,24 +1,21 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { BUTTONS_MENUS } from "@/lib/constants";
 import Link from "next/link";
 import ShinyText from "./ui/blocks/ShinyText/ShinyText";
 import SplitType from "split-type";
-import SplitText from "./ui/blocks/ShinyText/SplitText";
+import { gsap } from "gsap";
 import {
   motion,
   useAnimation,
   useInView,
-  useScroll,
-  useTransform,
 } from "framer-motion";
-import { ArrowRight, Sparkles, Star, MousePointerClick } from "lucide-react";
+import { ArrowRight, Sparkles, Star } from "lucide-react";
 
 // Create a reusable sequence animation component
-const SequenceItem = ({ children, delay = 0, animation = "slideUp" }) => {
+const SequenceItem = ({ children, delay = 0, animation = "slideUp", isMobile = false }) => {
   const animations = {
     slideUp: {
       hidden: { y: 40, opacity: 0 },
@@ -42,14 +39,17 @@ const SequenceItem = ({ children, delay = 0, animation = "slideUp" }) => {
     },
   };
 
+  const adjustedDelay = isMobile ? delay * 0.5 : delay;
+  const adjustedDuration = isMobile ? 0.5 : 0.7;
+
   return (
     <motion.div
       variants={animations[animation]}
       initial="hidden"
       animate="visible"
       transition={{
-        duration: 0.7,
-        delay,
+        duration: adjustedDuration,
+        delay: adjustedDelay,
         ease: [0.25, 0.1, 0.25, 1.0],
       }}
     >
@@ -87,70 +87,17 @@ const FloatingElement = ({ children, index }) => {
 };
 
 const HeroSection = () => {
-  const imageRef = useRef(null);
   const containerRef = useRef(null);
-  const imageWrapperRef = useRef(null);
   const isInView = useInView(containerRef, { once: true, margin: "-100px" });
   const controls = useAnimation();
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
-  const [quote, setQuote] = useState(null);
-const [quoteError, setQuoteError] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
 
-useEffect(() => {
-  async function fetchQuote() {
-    try {
-      const res = await fetch("https://zenquotes.io/api/today", { cache: "no-store" });
-      const data = await res.json();
-     setQuote(data[0]);
-    } catch (error) {
-      setQuoteError("Could not load today's quote.");
-    }
-  }
-
-  fetchQuote();
-}, []);useEffect(() => {
-  async function fetchQuote() {
-    try {
-      const res = await fetch("/api/quote");
-      const data = await res.json();
-      setQuote(data);
-    } catch (error) {
-      setQuoteError("Could not load today's quote.");
-    }
-  }
-
-  fetchQuote();
-}, []);
-
-
-
-
-  // Scroll-based animations
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
-  });
-
-  const imageScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
-  const imageOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0.9]);
-  const imageY = useTransform(scrollYProgress, [0, 0.5], [0, 50]);
-  const imageRotate = useTransform(scrollYProgress, [0, 0.5], [0, -2]);
-
-  // Interactive tilt effect
-  const handleMouseMove = (e) => {
-    if (!imageWrapperRef.current || !isHovered) return;
-
-    const rect = imageWrapperRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    // Calculate position relative to center (values between -0.5 and 0.5)
-    const relativeX = x / rect.width - 0.5;
-    const relativeY = y / rect.height - 0.5;
-
-    setMousePosition({ x: relativeX, y: relativeY });
-  };
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     if (isInView) {
@@ -158,52 +105,32 @@ useEffect(() => {
     }
   }, [isInView, controls]);
 
-  useEffect(() => {
-    const imageElement = imageRef.current;
-
-    if (!imageElement) return;
-
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      const scrollThreshold = 100;
-
-      if (scrollPosition > scrollThreshold) {
-        imageElement.classList.add("scrolled");
-      } else {
-        imageElement.classList.remove("scrolled");
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-   useEffect(()=>{
-    const text= new SplitType(".gradient-title")
-    let t1=gsap.timeline()
-    t1.from(".char",{ 
-      y: 50,
-      opacity: 0,
-      duration: 0.5,
-      stagger: 0.05,
-      ease: "power2.out",
-    })
-    t1.from("#hero-description", {
-      scale:0,
-      opacity: 0,
-      duration: 0.5,    
-      ease: "power2.out",
-    })
-  },[])
+  // useEffect(() => {
+  //   const text = new SplitType(".gradient-title");
+  //   let t1 = gsap.timeline();
+  //   t1.from(".char", {
+  //     y: 50,
+  //     opacity: 0,
+  //     duration: 0.5,
+  //     stagger: 0.05,
+  //     ease: "power2.out",
+  //   });
+  //   t1.from("#hero-description", {
+  //     scale: 0,
+  //     opacity: 0,
+  //     duration: 0.5,
+  //     ease: "power2.out",
+  //   });
+  // }, []);
 
 
   // Decorative elements for visual flair
-  const decorativeElements = [
-    <Sparkles key={1} className="text-primary w-6 h-6 opacity-60" />,
-    <Star key={2} className="text-yellow-500 w-5 h-5 opacity-70" />,
-    <Sparkles key={3} className="text-sky-400 w-7 h-7 opacity-50" />,
-    <Star key={4} className="text-primary w-4 h-4 opacity-60" />,
-  ];
+  // const decorativeElements = [
+  //   <Sparkles key={1} className="text-primary w-6 h-6 opacity-60" />,
+  //   <Star key={2} className="text-yellow-500 w-5 h-5 opacity-70" />,
+  //   <Sparkles key={3} className="text-sky-400 w-7 h-7 opacity-50" />,
+  //   <Star key={4} className="text-primary w-4 h-4 opacity-60" />,
+  // ];
 
   return (
     <section
@@ -224,78 +151,62 @@ useEffect(() => {
         transition={{ duration: 1.5, delay: 0.5 }}
       />
 
+      {/* Background Video */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover z-[-1]"
+      >
+        <source src="/intro.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
+      {/* Dark Overlay */}
+      <div className="absolute inset-0 bg-black/50 z-10"></div>
+
       {/* Floating decorative elements */}
-      {decorativeElements.map((element, index) => (
+      {/* {decorativeElements.map((element, index) => (
         <FloatingElement key={index} index={index}>
           {element}
         </FloatingElement>
-      ))}
+      ))} */}
 
-      <div className="space-y-6 text-center">
+      <div
+        className="space-y-6 text-center relative z-20"
+      >
         {/* Main content with sequence animations */}
         <div className="space-y-6 mx-auto pt-32 pb-4">
-          <SequenceItem animation="slideUp" delay={0.1}>
-            <h1 className="text-3xl font-bold md:text-4xl lg:text-5xl xl:text-6xl ">
-              <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1.2, delay: 0.2 }}
-              >
-                Welcome to EdgeCareer
-              </motion.span>
-              <br />
-              <motion.span
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.5 }}
-                className="inline-block"
-              >
-                Your AI-Powered Career Tutor
-              </motion.span>
+          <SequenceItem animation="slideUp" delay={0.1} isMobile={isMobile}>
+            <h1
+              className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-white text-center"
+              style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}
+            >
+              TechieHelp Institute of AI
             </h1>
           </SequenceItem>
 
-          <SequenceItem animation="scale" delay={0.8}>
-            <div className="relative">
-              <ShinyText
-                text="AI-powered career tutor for smarter job search, resume optimization, mock interviews, industry insights, personalized roadmaps, course recommendations, internship opportunities, ATS scoring, and job matching."
-                speed={3}
-                className="mx-auto max-w-[600px] md:text-xl relative z-10 text-muted-foreground"
-              />
-              {quote && (
-                <motion.div
-                  className="mt-6 text-center"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.2, duration: 0.6 }}
-                >
-                  <div className="text-sm font-semibold text-primary flex justify-center items-center gap-2 mb-1">
-                    <Sparkles className="w-4 h-4" />
-                    Quote of the Day
-                  </div>
-
-                  <p className="text-sm italic text-muted-foreground leading-relaxed">
-                    "{quote.q}" — <span className="font-medium">Amit Kumar, Founder of TechieHelp</span>
-                  </p>
-                      
-                </motion.div>
-              )}
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent blur-sm -z-10"
-                initial={{ x: -300, opacity: 0 }}
-                animate={{ x: 300, opacity: 1 }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  repeatType: "loop",
-                }}
-              />
+          <SequenceItem animation="scale" delay={0.8} isMobile={isMobile}>
+            <div className="relative bg-black/30 backdrop-blur-sm rounded-lg px-4 py-2 mx-auto max-w-[700px]">
+              <p
+                className="text-lg md:text-xl lg:text-2xl font-semibold text-center text-[#00E5FF]"
+                style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.7)' }}
+              >
+                Building Careers with AI, Innovation & Industry Readiness
+              </p>
             </div>
+          </SequenceItem>
+
+          <SequenceItem animation="fade" delay={1.2} isMobile={isMobile}>
+            <p className="text-sm md:text-base text-[#B0BEC5] text-center font-medium">
+              Powered by TechieHelp
+            </p>
           </SequenceItem>
 
         </div>
 
-        <SequenceItem animation="slideUp" delay={1.0}>
+        <SequenceItem animation="slideUp" delay={1.0} isMobile={isMobile}>
           <motion.div
             className="flex justify-center space-x-4 mt-6 mb-20"
             whileInView={{
@@ -351,182 +262,7 @@ useEffect(() => {
           </motion.div>
         </SequenceItem>
 
-        <SequenceItem animation="slideUp" delay={1.3}>
-          {/* Interactive hint to engage with the image */}
-          <motion.div
-            className="text-sm text-muted-foreground flex items-center justify-center gap-2 my-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 2.5, duration: 0.7 }}
-          >
-            <MousePointerClick className="h-4 w-4 text-primary/70" />
-            <span>Hover and move your mouse over the image</span>
-          </motion.div>
 
-          {/* Improved image container with proper margins and sizing */}
-          <div
-            className="hero-image-wrapper md:mt-4 relative max-w-5xl mx-auto px-6 md:px-12"
-            ref={imageWrapperRef}
-            onMouseMove={handleMouseMove}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => {
-              setIsHovered(false);
-              setMousePosition({ x: 0, y: 0 });
-            }}
-          >
-            <motion.div
-              ref={imageRef}
-              className="hero-image relative z-10 overflow-hidden rounded-xl border border-slate-800/80"
-              initial={{ y: 30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              style={{
-                scale: imageScale,
-                opacity: imageOpacity,
-                y: imageY,
-                rotateX: isHovered ? mousePosition.y * 10 : 0,
-                rotateY: isHovered ? -mousePosition.x * 10 : 0,
-                rotate: imageRotate,
-                transformStyle: "preserve-3d",
-                perspective: 1000,
-                boxShadow: isHovered
-                  ? "0 30px 60px rgba(0, 0, 0, 0.4)"
-                  : "0 10px 30px rgba(0, 0, 0, 0.2)",
-              }}
-              transition={{
-                rotateX: { duration: 0.1, type: "tween" },
-                rotateY: { duration: 0.1, type: "tween" },
-                boxShadow: { duration: 0.3 },
-              }}
-            >
-              {/* Responsive image with aspect ratio preservation */}
-              <div className="relative w-full aspect-video">
-                <Image
-                  src="/about.webp"
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 60vw"
-                  alt="Dashboard Preview"
-                  className="object-cover transition-all duration-500"
-                  priority
-                />
-
-                {/* Overlay effect on hover/scroll */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent mix-blend-overlay"
-                  style={{
-                    opacity: useTransform(scrollYProgress, [0, 0.5], [0, 0.3]),
-                  }}
-                />
-
-                {/* Reflection effect */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent"
-                  style={{
-                    opacity: isHovered ? 0.2 : 0,
-                  }}
-                  transition={{ duration: 0.3 }}
-                />
-              </div>
-
-              {/* Dynamic glow effect that follows cursor */}
-              <motion.div
-                className="absolute inset-0 rounded-lg"
-                style={{
-                  background: isHovered
-                    ? `radial-gradient(circle at ${
-                        (mousePosition.x + 0.5) * 100
-                      }% ${
-                        (mousePosition.y + 0.5) * 100
-                      }%, rgba(124, 58, 237, 0.3) 0%, rgba(0, 0, 0, 0) 70%)`
-                    : "none",
-                  opacity: isHovered ? 1 : 0,
-                }}
-                transition={{ duration: 0.2 }}
-              />
-
-              {/* Subtle pulsing glow effect */}
-              <motion.div
-                className="absolute inset-0 rounded-lg bg-primary/5"
-                animate={{
-                  boxShadow: [
-                    "0 0 0 rgba(124, 58, 237, 0)",
-                    "0 0 20px rgba(124, 58, 237, 0.3)",
-                    "0 0 0 rgba(124, 58, 237, 0)",
-                  ],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  repeatType: "loop",
-                }}
-              />
-            </motion.div>
-
-            {/* Interactive UI elements that float above the image */}
-            <motion.div
-              className="absolute -bottom-4 -right-4 md:bottom-4 md:right-0 bg-background/80 backdrop-blur-sm p-3 rounded-lg border border-slate-700/80 shadow-lg z-20 hover:border-primary/40 transition-colors"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 1.8 }}
-              style={{
-                transform: isHovered ? "translateZ(50px)" : "none",
-                transformStyle: "preserve-3d",
-              }}
-              whileHover={{ scale: 1.05 }}
-            >
-              <div className="flex items-center gap-2">
-                <Sparkles className="text-primary h-5 w-5" />
-                <span className="text-sm font-medium">AI-powered insights</span>
-              </div>
-            </motion.div>
-
-            <motion.div
-              className="absolute -top-4 -left-4 md:top-4 md:left-0 bg-background/80 backdrop-blur-sm p-3 rounded-lg border border-slate-700/80 shadow-lg z-20 hover:border-primary/40 transition-colors"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 2 }}
-              style={{
-                transform: isHovered ? "translateZ(40px)" : "none",
-                transformStyle: "preserve-3d",
-              }}
-              whileHover={{ scale: 1.05 }}
-            >
-              <div className="flex items-center gap-2">
-                <Star className="text-yellow-500 h-5 w-5" />
-                <span className="text-sm font-medium">95% Success Rate</span>
-              </div>
-            </motion.div>
-
-            {/* Virtual screen glare effect */}
-            <motion.div
-              className="absolute inset-0 pointer-events-none z-10 overflow-hidden rounded-xl"
-              style={{
-                opacity: isHovered ? 0.1 : 0,
-              }}
-            >
-              <motion.div
-                className="w-[150%] h-[150%] absolute -top-1/4 -left-1/4 bg-gradient-to-br from-white via-transparent to-transparent rotate-12 opacity-70"
-                animate={{
-                  x: isHovered ? mousePosition.x * 100 : 0,
-                  y: isHovered ? mousePosition.y * 100 : 0,
-                }}
-                transition={{
-                  type: "spring",
-                  stiffness: 40,
-                  damping: 10,
-                }}
-              />
-            </motion.div>
-
-          </div>
-        </SequenceItem>
-
-        {/* Animated highlight bar at bottom */}
-        <motion.div
-          className="max-w-md h-1 bg-gradient-to-r from-transparent via-primary to-transparent mx-auto mt-6 rounded-full"
-          initial={{ width: "0%", opacity: 0 }}
-          animate={{ width: "100%", opacity: 1 }}
-          transition={{ duration: 0.8, delay: 2.3 }}
-        />
       </div>
     </section>
   );
