@@ -33,13 +33,27 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import StreakCalendar from "@/components/streak-calendar";
 
-const DashboardView = ({ insights, gamification }) => {
+const DashboardView = ({ insights, gamification, userData }) => {
+  // Parse JSON strings back to arrays/objects
+  const parsedInsights = {
+    ...insights,
+    salaryRanges: JSON.parse(insights.salaryRanges),
+    topSkills: JSON.parse(insights.topSkills),
+    keyTrends: JSON.parse(insights.keyTrends),
+    recommendedSkills: JSON.parse(insights.recommendedSkills),
+  };
+
+  const parsedGamification = {
+    ...gamification,
+    badges: JSON.parse(gamification.badges || '[]'),
+  };
+
   // Transform salary data for the chart
-  const salaryData = insights.salaryRanges.map((range) => ({
+  const salaryData = parsedInsights.salaryRanges.map((range) => ({
     name: range.role,
-    min: range.min / 1000,
-    max: range.max / 1000,
-    median: range.median / 1000,
+    min: range.min / 100000, // Convert to lakhs
+    max: range.max / 100000,
+    median: range.median / 100000,
   }));
 
   const getDemandLevelColor = (level) => {
@@ -83,6 +97,33 @@ const DashboardView = ({ insights, gamification }) => {
       <div className="flex justify-between items-center">
         <Badge variant="outline">Last updated: {lastUpdatedDate}</Badge>
       </div>
+
+      {/* Welcome Section */}
+      <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950">
+        <CardContent className="pt-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                Welcome back, {userData.name}!
+              </h1>
+              <p className="text-lg text-gray-600 dark:text-gray-300 mt-1">
+                {userData.industry.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} Professional
+              </p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                {userData.experience} years of experience • {JSON.parse(userData.skills || '[]').length} skills
+              </p>
+            </div>
+            <div className="text-right">
+              <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                Level {gamification.level}
+              </div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">
+                {gamification.points} points
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Market Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -138,7 +179,7 @@ const DashboardView = ({ insights, gamification }) => {
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-1">
-              {insights.topSkills.map((skill) => (
+              {parsedInsights.topSkills.map((skill) => (
                 <Badge key={skill} variant="secondary">
                   {skill}
                 </Badge>
@@ -195,16 +236,16 @@ const DashboardView = ({ insights, gamification }) => {
             <Award className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{gamification.badges.length}</div>
+            <div className="text-2xl font-bold">{parsedGamification.badges.length}</div>
             <div className="flex flex-wrap gap-1 mt-2">
-              {gamification.badges.slice(0, 3).map((badge, index) => (
+              {parsedGamification.badges.slice(0, 3).map((badge, index) => (
                 <Badge key={index} variant="secondary" className="text-xs">
                   {badge}
                 </Badge>
               ))}
-              {gamification.badges.length > 3 && (
+              {parsedGamification.badges.length > 3 && (
                 <Badge variant="outline" className="text-xs">
-                  +{gamification.badges.length - 3}
+                  +{parsedGamification.badges.length - 3}
                 </Badge>
               )}
             </div>
@@ -217,7 +258,7 @@ const DashboardView = ({ insights, gamification }) => {
         <CardHeader>
           <CardTitle>Salary Ranges by Role</CardTitle>
           <CardDescription>
-            Displaying minimum, median, and maximum salaries (in thousands)
+            Displaying minimum, median, and maximum salaries in INR (lakhs)
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -235,7 +276,7 @@ const DashboardView = ({ insights, gamification }) => {
                           <p className="font-medium">{label}</p>
                           {payload.map((item) => (
                             <p key={item.name} className="text-sm">
-                              {item.name}: ${item.value}K
+                              {item.name}: ₹{item.value} Lakhs
                             </p>
                           ))}
                         </div>
@@ -267,7 +308,7 @@ const DashboardView = ({ insights, gamification }) => {
             </CardHeader>
             <CardContent>
               <ul className="space-y-4">
-                {insights.keyTrends.map((trend, index) => (
+                {parsedInsights.keyTrends.map((trend, index) => (
                   <li key={index} className="flex items-start space-x-2">
                     <div className="h-2 w-2 mt-2 rounded-full bg-primary" />
                     <span>{trend}</span>
@@ -284,7 +325,7 @@ const DashboardView = ({ insights, gamification }) => {
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-2">
-                {insights.recommendedSkills.map((skill) => (
+                {parsedInsights.recommendedSkills.map((skill) => (
                   <Badge key={skill} variant="outline">
                     {skill}
                   </Badge>

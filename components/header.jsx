@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 import Link from "next/link";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { SignedIn } from "@clerk/nextjs";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,6 +28,7 @@ import { checkUser } from "@/lib/checkUser";
 import { useTheme } from "next-themes";
 import ThemSwitch from "./theme-switch";
 import { getUserStreak } from "@/actions/streak";
+import AuthButtons from "./AuthButtons";
 
 
 export default async function Header() {
@@ -118,24 +119,7 @@ export default async function Header() {
             </DropdownMenu>
           </SignedIn>
 
-          <SignedOut>
-            <SignInButton>
-              <Button variant="outline">{BUTTONS_MENUS.SIGN_IN}</Button>
-            </SignInButton>
-          </SignedOut>
-
-          <SignedIn>
-            <UserButton
-              appearance={{
-                elements: {
-                  avatarBox: "w-10 h-10",
-                  userButtonPopoverCard: "shadow-xl",
-                  userPreviewMainIdentifier: "font-semibold",
-                },
-              }}
-              afterSignOutUrl="/"
-            />
-          </SignedIn>
+          <AuthButtons />
           <ThemSwitch />
         </div>
       </nav>

@@ -237,7 +237,7 @@ const timelineData = [
   },
   {
     id: 5,
-    title: "Placement & Interview Readiness",
+    title: "Placement & Career Resources",
     content: "Comprehensive preparation with AI mock interviews, ATS-optimized resume building, and company-specific training.",
     status: "completed",
     date: "2024",
@@ -373,7 +373,39 @@ export default function LandingPage() {
         style={{ scaleX: scrollYProgress }}
       />
 
-      <div className="grid-background"></div>
+      {/* Professional Education + AI Institute Background */}
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        {/* Gradient Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-100/50 dark:from-slate-900 dark:via-blue-950/30 dark:to-indigo-950/50"></div>
+
+        {/* Grid Pattern */}
+        <div className="absolute inset-0 opacity-20 dark:opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px)
+            `,
+            backgroundSize: '50px 50px'
+          }}></div>
+        </div>
+
+        {/* Floating AI/Education Elements */}
+        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-blue-400/20 to-purple-500/20 rounded-full blur-xl animate-pulse"></div>
+        <div className="absolute top-40 right-20 w-24 h-24 bg-gradient-to-br from-green-400/20 to-blue-500/20 rounded-full blur-xl animate-pulse delay-1000"></div>
+        <div className="absolute bottom-40 left-1/4 w-40 h-40 bg-gradient-to-br from-purple-400/20 to-pink-500/20 rounded-full blur-xl animate-pulse delay-2000"></div>
+        <div className="absolute bottom-20 right-10 w-28 h-28 bg-gradient-to-br from-indigo-400/20 to-cyan-500/20 rounded-full blur-xl animate-pulse delay-3000"></div>
+
+        {/* Circuit-like patterns */}
+        <svg className="absolute inset-0 w-full h-full opacity-5 dark:opacity-3" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="circuit" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+              <path d="M10 10 L90 10 M50 10 L50 90 M10 50 L90 50" stroke="currentColor" strokeWidth="0.5" fill="none"/>
+              <circle cx="50" cy="50" r="2" fill="currentColor"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#circuit)"/>
+        </svg>
+      </div>
 
       <section id="hero" aria-label="Hero Section">
         <HeroSection />
@@ -701,245 +733,329 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* AI-Powered Career Ecosystem */}
-      <SectionGlow className="w-full py-16 md:py-24 bg-gradient-to-br from-gray-900 to-gray-800 text-white">
-        <div className="container mx-auto px-4 md:px-6">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="text-center mb-12"
-          >
-            <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold mb-4">
-              AI-Powered Career Ecosystem
-            </motion.h2>
-            <motion.p variants={fadeIn} className="text-lg text-gray-300 max-w-2xl mx-auto mb-8">
-              Smart tools to guide learning, internships, and placements.
-            </motion.p>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            {[
-              {
-                title: "Industry Dashboard",
-                icon: <BarChart3 className="h-6 w-6" />,
-                description: "Comprehensive industry insights and trends",
-                delay: 0.6
-              },
-              {
-                title: "Career Roadmap Generator",
-                icon: <Route className="h-6 w-6" />,
-                description: "Personalized career path planning",
-                delay: 0.7
-              },
-              {
-                title: "Skill Gap Analysis",
-                icon: <Target className="h-6 w-6" />,
-                description: "Identify and bridge skill gaps",
-                delay: 0.8
-              },
-              {
-                title: "Course Recommendations",
-                icon: <BookOpen className="h-6 w-6" />,
-                description: "AI-powered learning suggestions",
-                delay: 0.9
-              },
-              {
-                title: "Internship Matching",
-                icon: <Briefcase className="h-6 w-6" />,
-                description: "Find perfect internship opportunities",
-                delay: 1.0
-              },
-              {
-                title: "Job Matching Engine",
-                icon: <Building className="h-6 w-6" />,
-                description: "Advanced job matching algorithm",
-                delay: 1.1
-              },
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: item.delay }}
-                viewport={{ once: true }}
-                whileHover={{ y: -8, scale: 1.02 }}
-                className="p-6 bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300"
+      {/* AI-Driven Career Growth Platform */}
+      <section className="w-full py-16 md:py-24 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white relative overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 left-10 w-64 h-64 bg-gradient-to-br from-blue-500/30 to-purple-600/30 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 right-10 w-48 h-48 bg-gradient-to-br from-green-500/30 to-blue-600/30 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-indigo-500/20 to-cyan-600/20 rounded-full blur-3xl"></div>
+        </div>
+
+        {/* Tech Grid Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              linear-gradient(rgba(59, 130, 246, 0.3) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(59, 130, 246, 0.3) 1px, transparent 1px)
+            `,
+            backgroundSize: '40px 40px'
+          }}></div>
+        </div>
+
+        <div className="container mx-auto px-4 md:px-6 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Side: Content */}
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+              className="order-1 lg:order-1"
+            >
+              <motion.h2
+                variants={fadeIn}
+                className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent"
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-gray-700/50 rounded-lg">
-                    {item.icon}
-                  </div>
-                  <h3 className="text-xl font-semibold text-white">
-                    {item.title}
-                  </h3>
-                </div>
-                <p className="text-gray-300">{item.description}</p>
+                AI-Driven Career Growth Platform
+              </motion.h2>
+              <motion.p
+                variants={fadeIn}
+                className="text-lg text-gray-300 mb-8 leading-relaxed"
+              >
+                TechieHelp Institute of AI is an AI-powered career ecosystem designed to guide students from learning to placement. The platform offers intelligent resume building, ATS optimization, interview preparation, personalized career roadmaps, and smart job & internship matching — all integrated into a unified, data-driven dashboard.
+              </motion.p>
+              <motion.div
+                variants={fadeIn}
+                className="flex flex-col sm:flex-row gap-4"
+              >
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  <Button
+                    size="lg"
+                    className="px-8 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                  >
+                    Start 14 Days Free Trial
+                  </Button>
+                </motion.div>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="px-8 border-2 border-gray-400 hover:border-gray-200 text-gray-200 hover:text-white hover:bg-white/10 transition-all duration-300"
+                  >
+                    Explore Features
+                  </Button>
+                </motion.div>
               </motion.div>
-            ))}
+            </motion.div>
+
+            {/* Right Side: Feature Cards */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="order-2 lg:order-2"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {[
+                  {
+                    title: "Resume Builder",
+                    icon: <FileText className="h-5 w-5" />,
+                    description: "AI-powered resume creation",
+                    delay: 0.6
+                  },
+                  {
+                    title: "ATS Checker",
+                    icon: <CheckCircle className="h-5 w-5" />,
+                    description: "Optimize for recruiters",
+                    delay: 0.7
+                  },
+                  {
+                    title: "Interview Prep",
+                    icon: <Users className="h-5 w-5" />,
+                    description: "Practice & improve skills",
+                    delay: 0.8
+                  },
+                  {
+                    title: "Job Matching",
+                    icon: <Building className="h-5 w-5" />,
+                    description: "Find perfect opportunities",
+                    delay: 0.9
+                  },
+                ].map((item, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: item.delay }}
+                    viewport={{ once: true }}
+                    whileHover={{ y: -5, scale: 1.02 }}
+                    className="p-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl hover:bg-white/15 hover:border-white/30 transition-all duration-300"
+                  >
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="p-2 bg-white/20 rounded-lg">
+                        {item.icon}
+                      </div>
+                      <h3 className="text-sm font-semibold text-white">
+                        {item.title}
+                      </h3>
+                    </div>
+                    <p className="text-xs text-gray-300">{item.description}</p>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
           </div>
         </div>
-      </SectionGlow>
+      </section>
 
       
 
       <InterviewPlacementSection />
 
-      {/* Open Source & Hackathon Hub */}
-      <section className="w-full py-16 md:py-24 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-        <div className="container mx-auto px-4 md:px-6">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="text-center mb-12"
-          >
-            <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold mb-4">
-              Open Source & Hackathon Hub
-            </motion.h2>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: <Code className="w-8 h-8" />, title: "Open-source roadmaps" },
-              { icon: <Code className="w-8 h-8" />, title: "GitHub audits" },
-              { icon: <Lightbulb className="w-8 h-8" />, title: "Hackathon idea generation" },
-              { icon: <Users className="w-8 h-8" />, title: "Team matching & mentorship" },
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ scale: 1.05 }}
-                className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg transition-all text-center"
-              >
-                <div className="text-primary mb-4 flex justify-center">{item.icon}</div>
-                <h3 className="font-semibold">{item.title}</h3>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      
+      
 
-      {/* LinkedIn & Personal Branding Lab */}
+      {/* Career Branding Lab */}
       <section className="w-full py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="text-center mb-12"
-          >
-            <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold mb-4">
-              LinkedIn & Personal Branding Lab
-            </motion.h2>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: <Linkedin className="w-8 h-8" />, title: "LinkedIn profile AI analysis" },
-              { icon: <FileText className="w-8 h-8" />, title: "Headline & summary optimization" },
-              { icon: <TrendingUp className="w-8 h-8" />, title: "Recruiter visibility score" },
-              { icon: <Target className="w-8 h-8" />, title: "Content strategy" },
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="p-6 border rounded-lg text-center hover:shadow-lg transition-shadow"
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="flex justify-center order-2 lg:order-1"
+            >
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="w-full max-w-lg h-auto object-cover rounded-lg shadow-2xl"
               >
-                <div className="text-primary mb-4 flex justify-center">{item.icon}</div>
-                <h3 className="font-semibold">{item.title}</h3>
+                <source src="/Career.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </motion.div>
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+              className="order-1 lg:order-2"
+            >
+              <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold mb-6">
+                Career Branding Lab
+              </motion.h2>
+              <motion.p variants={fadeIn} className="text-lg text-muted-foreground mb-8 leading-relaxed">
+                A weak profile can cost you interviews — even if you have the skills. Most students miss opportunities because their LinkedIn and GitHub profiles don't clearly show their real skills. Career Branding Lab helps you build a professional, recruiter-trusted career brand using AI.
+              </motion.p>
+              <motion.div variants={fadeIn}>
+                <Link href="/career-branding-lab">
+                  <Button size="lg" className="px-8">
+                    Fix My Profile Now
+                  </Button>
+                </Link>
               </motion.div>
-            ))}
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* Founder & Startup School */}
-      <section className="w-full py-16 md:py-24 bg-gradient-to-r from-primary/5 to-secondary/5">
-        <div className="container mx-auto px-4 md:px-6">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="text-center mb-12"
-          >
-            <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold mb-4">
-              Founder & Startup School
-            </motion.h2>
-            <motion.p variants={fadeIn} className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Focus on building the next generation of entrepreneurs and innovators.
-            </motion.p>
-          </motion.div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {[
-              "Startup in college",
-              "Freelancing to agency",
-              "MVP building",
-              "Monetization",
-              "Personal branding",
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ scale: 1.1 }}
-                className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow text-center hover:shadow-lg transition-all"
-              >
-                <Rocket className="w-8 h-8 text-primary mx-auto mb-2" />
-                <p className="font-medium">{item}</p>
+      <section className="w-full py-16 md:py-24 bg-gradient-to-r from-primary/5 to-secondary/5 relative overflow-hidden">
+        <div className="grid-background absolute inset-0"></div>
+        <div className="container mx-auto px-4 md:px-6 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+              className="order-1 lg:order-1"
+            >
+              <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold mb-6">
+                Founder & Startup School
+              </motion.h2>
+              <motion.p variants={fadeIn} className="text-lg text-muted-foreground mb-8 leading-relaxed">
+                For students who want to <span className="font-semibold text-primary">build, not just apply</span>. Learn the fundamentals of <span className="font-semibold text-primary">startups, freelancing, and product building</span> — alongside your core career path. This program is designed to help students explore entrepreneurship in a practical, structured, and <span className="font-semibold text-primary">career-safe way</span>.
+              </motion.p>
+              <motion.div variants={fadeIn}>
+                <Button size="lg" className="px-8">
+                  Explore Startup Learning
+                </Button>
               </motion.div>
-            ))}
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="flex justify-center order-2 lg:order-2"
+            >
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="w-full max-w-lg h-auto object-cover rounded-lg shadow-2xl"
+              >
+                <source src="/startup.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* Certifications & Digital Resources */}
-      <section className="w-full py-16 md:py-24 bg-background">
-        <div className="container mx-auto px-4 md:px-6">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="text-center mb-12"
-          >
-            <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold mb-4">
-              Certifications & Digital Resources
-            </motion.h2>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { title: "Skill certifications", icon: <Award className="w-8 h-8" /> },
-              { title: "Career readiness certificates", icon: <Trophy className="w-8 h-8" /> },
-              { title: "Resume & ATS toolkits", icon: <FileText className="w-8 h-8" /> },
-              { title: "Interview question banks", icon: <BookOpen className="w-8 h-8" /> },
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -5 }}
-                className="p-6 border rounded-lg text-center hover:shadow-lg transition-all"
-              >
-                <div className="text-primary mb-4 flex justify-center">{item.icon}</div>
-                <h3 className="font-semibold mb-2">{item.title}</h3>
-                <p className="text-sm text-muted-foreground">Lifetime access</p>
-              </motion.div>
-            ))}
-          </div>
+      <section className="w-full py-16 md:py-24 bg-gradient-to-br from-slate-900 via-blue-900/80 to-indigo-900/60 text-white relative overflow-hidden">
+        {/* Industry Background Elements */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 left-10 w-64 h-64 bg-gradient-to-br from-blue-500/30 to-purple-600/30 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 right-10 w-48 h-48 bg-gradient-to-br from-green-500/30 to-blue-600/30 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-indigo-500/20 to-cyan-600/20 rounded-full blur-3xl"></div>
         </div>
-      </section>
+
+        {/* Tech Grid Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              linear-gradient(rgba(59, 130, 246, 0.3) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(59, 130, 246, 0.3) 1px, transparent 1px)
+            `,
+            backgroundSize: '40px 40px'
+          }}></div>
+        </div>
+
+        <div className="container mx-auto px-4 md:px-6 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+      {/* LEFT: VIDEO */}
+      <motion.div
+        initial={{ opacity: 0, x: -50 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+        className="flex justify-center order-1"
+      >
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full max-w-lg h-auto object-cover rounded-lg shadow-2xl"
+          onLoadedMetadata={(e) => {
+            e.currentTarget.playbackRate = 0.7; // 🔥 Slow video
+          }}
+        >
+          <source src="/certificates.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </motion.div>
+
+      {/* RIGHT: TEXT */}
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={staggerContainer}
+        className="order-2"
+      >
+        <motion.h2
+          variants={fadeIn}
+          className="text-3xl md:text-4xl font-bold mb-6"
+        >
+          Placement & Career Resources
+        </motion.h2>
+
+        <motion.p
+          variants={fadeIn}
+          className="text-lg text-muted-foreground mb-8 leading-relaxed"
+        >
+          Most students lose opportunities due to
+          <span className="font-semibold text-primary"> poor resumes </span>
+          and
+          <span className="font-semibold text-primary"> lack of preparation</span>.
+          Placement & Career Resources give you lifetime access to
+          <span className="font-semibold text-primary"> certifications, resume tools, </span>
+          and
+          <span className="font-semibold text-primary"> interview preparation</span>
+          — so you feel confident during placements.
+        </motion.p>
+
+        <motion.div variants={fadeIn}>
+          <Button size="lg" className="px-8">
+            Explore Career Resources
+          </Button>
+        </motion.div>
+      </motion.div>
+
+    </div>
+  </div>
+</section>
+
+
 
       {/* College & TPO Partnerships */}
       <section className="w-full py-16 md:py-24 bg-muted/30">
@@ -975,86 +1091,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Who Can Join? */}
-      <section className="w-full py-16 md:py-24 bg-background">
-        <div className="container mx-auto px-4 md:px-6">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="text-center mb-12"
-          >
-            <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold mb-4">
-              Who Can Join?
-            </motion.h2>
-          </motion.div>
-          <div className="max-w-2xl mx-auto space-y-4">
-            {[
-              "College students",
-              "Fresh graduates",
-              "Working professionals",
-              "Aspiring founders",
-              "Career switchers",
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="flex items-center gap-3"
-              >
-                <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0" />
-                <span className="text-lg">{item}</span>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="w-full py-16 md:py-24 bg-muted/30">
-        <div className="container mx-auto px-4 md:px-6">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="text-center mb-12"
-          >
-            <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold mb-4">
-              How It Works
-            </motion.h2>
-          </motion.div>
-          <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-8 max-w-4xl mx-auto">
-            {[
-              { step: 1, title: "Register", desc: "Create your account" },
-              { step: 2, title: "AI profile analysis", desc: "Get personalized insights" },
-              { step: 3, title: "Personalized roadmap", desc: "Follow your career path" },
-              { step: 4, title: "Learn & build", desc: "Acquire skills and projects" },
-              { step: 5, title: "Internships & jobs", desc: "Apply and get placed" },
-              { step: 6, title: "Track progress", desc: "Monitor your growth" },
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="text-center"
-              >
-                <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center font-bold mb-4 mx-auto">
-                  {item.step}
-                </div>
-                <h3 className="font-semibold mb-2">{item.title}</h3>
-                <p className="text-sm text-muted-foreground">{item.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
+      
       {/* Testimonials Section */}
       <section className="w-full py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
@@ -1076,39 +1113,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Our Commitment */}
-      <section className="w-full py-16 md:py-24 bg-background">
-        <div className="container mx-auto px-4 md:px-6 text-center">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-          >
-            <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold mb-8">
-              Our Commitment
-            </motion.h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-4xl mx-auto">
-              {[
-                "Quality education",
-                "Practical exposure",
-                "Ethical AI",
-                "Career-first outcomes",
-                "Continuous innovation",
-              ].map((item, index) => (
-                <motion.div
-                  key={index}
-                  variants={fadeIn}
-                  className="p-4"
-                >
-                  <p className="font-medium">{item}</p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
+      
       {/* CTA Section */}
       <section className="w-full py-16 md:py-24 bg-gradient-to-r from-primary to-secondary text-white">
         <div className="container mx-auto px-4 md:px-6 text-center">

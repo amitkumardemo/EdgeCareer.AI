@@ -148,6 +148,49 @@ Make changes, commit, and raise a pull request with a clear message.
 
 ---
 
+## 📖 Usage Guide
+
+### For Users
+
+1. **Sign Up/Login**: Visit the application and sign up using Clerk authentication. After signing up, you'll be redirected to the onboarding page.
+
+2. **Complete Onboarding**: Fill out the onboarding form with your industry, specialization, years of experience, skills, and professional bio. This helps personalize your dashboard.
+
+3. **Dashboard Overview**: After onboarding, you'll see your personalized dashboard with:
+   - Industry insights and salary ranges
+   - Recommended skills and career trends
+   - Job matching features
+   - Resume building tools
+   - Interview preparation
+   - Gamification elements (streaks, achievements)
+
+4. **Key Features**:
+   - **Resume Builder**: Create and optimize your resume with AI-powered suggestions
+   - **Job Matches**: Get personalized job recommendations based on your profile
+   - **Cover Letter Generator**: Generate tailored cover letters for job applications
+   - **Interview Prep**: Practice interviews with AI feedback
+   - **Course Recommendations**: Get learning suggestions for career growth
+   - **Roadmap**: View personalized career development paths
+
+### For Developers
+
+- **API Routes**: All API endpoints are located in `app/api/`
+- **Actions**: Server actions are in the `actions/` directory
+- **Components**: Reusable UI components in `components/`
+- **Database**: Prisma schema in `prisma/schema.prisma`
+- **Styling**: Tailwind CSS with Shadcn UI components
+
+### Environment Variables
+
+Ensure all required environment variables are set in your `.env.local` file:
+- `DATABASE_URL`: Your NeonDB connection string
+- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`: Clerk publishable key
+- `CLERK_SECRET_KEY`: Clerk secret key
+- `GEMINI_API_KEY`: Google Gemini API key
+- Clerk redirect URLs (already configured in the file)
+
+---
+
 ## Docker Setup✅
 
 **Run the application in a containerized environment using Docker.**
