@@ -18,8 +18,20 @@ export default function QuizResult({
 
   if (!result) return null;
 
+  // Parse questions if it's a JSON string
+  const questions = typeof result.questions === 'string' 
+    ? (() => {
+        try {
+          return JSON.parse(result.questions);
+        } catch (error) {
+          console.error('Failed to parse questions:', error);
+          return [];
+        }
+      })()
+    : (Array.isArray(result.questions) ? result.questions : []);
+
   const shareOnLinkedIn = () => {
-    const text = `🎉 I just completed a Mock Interview Test on EdgeCareer.AI and scored ${result.quizScore.toFixed(1)}%! 🚀 Ready to ace my next interview! #EdgeCareerAI #MockInterview #CareerGrowth`;
+    const text = `🎉 I just completed a Mock Interview Test on TechieHelp Institute of AI and scored ${result.quizScore.toFixed(1)}%! 🚀 Ready to ace my next interview! #TechieHelpAI #MockInterview #CareerGrowth`;
     const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(text)}`;
     window.open(url, '_blank');
   };
@@ -28,7 +40,7 @@ export default function QuizResult({
     // Generate unique certificate number
     const timestamp = Date.now();
     const randomNum = Math.floor(Math.random() * 10000);
-    const certificateNumber = `EC-${timestamp}-${randomNum}`;
+    const certificateNumber = `TECHIE-${timestamp}-${randomNum}`;
 
     // Create a professional certificate
     const canvas = document.createElement('canvas');
@@ -54,126 +66,148 @@ export default function QuizResult({
     ctx.lineWidth = 2;
     ctx.strokeRect(40, 40, 920, 620);
 
-    // Certificate number (top right)
-    ctx.fillStyle = '#fbbf24';
-    ctx.font = 'bold 16px serif';
-    ctx.textAlign = 'right';
-    ctx.fillText(`Certificate No: ${certificateNumber}`, 920, 70);
-
-    // Header text
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 42px serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('CERTIFICATE OF ACHIEVEMENT', 500, 120);
-
-    // Subtitle
-    ctx.font = 'italic 28px serif';
-    ctx.fillStyle = '#e5e7eb';
-    ctx.fillText('Mock Interview Test Completion', 500, 170);
-
-    // Main content
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '24px serif';
-    ctx.fillText('This is to certify that', 500, 250);
-
-    // Name
-    ctx.fillStyle = '#fbbf24';
-    ctx.font = 'bold 36px serif';
-    ctx.fillText(userName, 500, 300);
-
-    // Achievement text
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '22px serif';
-    ctx.fillText('has successfully completed the Mock Interview Test', 500, 350);
-    ctx.fillText(`with a score of ${result.quizScore.toFixed(1)}%`, 500, 385);
-
-    // Performance level
-    let performanceLevel = '';
-    if (result.quizScore >= 90) performanceLevel = 'Outstanding Performance';
-    else if (result.quizScore >= 80) performanceLevel = 'Excellent Performance';
-    else if (result.quizScore >= 70) performanceLevel = 'Good Performance';
-    else if (result.quizScore >= 60) performanceLevel = 'Satisfactory Performance';
-    else performanceLevel = 'Needs Improvement';
-
-    ctx.fillStyle = '#60a5fa';
-    ctx.font = 'bold 24px serif';
-    ctx.fillText(performanceLevel, 500, 430);
-
-    // Date
-    ctx.fillStyle = '#e5e7eb';
-    ctx.font = '18px serif';
-    ctx.fillText(`Awarded on ${new Date().toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    })}`, 500, 480);
-
-    // Load and draw signature image
-    const signatureImg = new Image();
-    signatureImg.crossOrigin = 'anonymous';
-    signatureImg.onload = () => {
-      // Draw signature above the line
-      const sigWidth = 150;
-      const sigHeight = 60;
-      const sigX = 725;
-      const sigY = 480;
-      ctx.drawImage(signatureImg, sigX, sigY, sigWidth, sigHeight);
-
-      // Signature line
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(700, 550);
-      ctx.lineTo(850, 550);
-      ctx.stroke();
-
-      // Signature text
-      ctx.fillStyle = '#e5e7eb';
-      ctx.font = '16px serif';
-      ctx.fillText('EdgeCareer.AI Platform', 775, 575);
-
-      // Footer
-      ctx.fillStyle = '#fbbf24';
-      ctx.font = 'bold 20px serif';
-      ctx.fillText('www.edgecareer.ai', 500, 620);
-
-      // Download
-      const link = document.createElement('a');
-      link.download = `EdgeCareer_MockInterview_Certificate_${userName.replace(/\s+/g, '_')}.png`;
-      link.href = canvas.toDataURL();
-      link.click();
-
-      toast.success('Certificate downloaded successfully!');
+    // Load and draw logo at top-left
+    const logo = new Image();
+    logo.crossOrigin = 'anonymous';
+    logo.onload = () => {
+      // Draw logo at top-left corner
+      const logoWidth = 80;
+      const logoHeight = 80;
+      const logoX = 60;
+      const logoY = 50;
+      ctx.drawImage(logo, logoX, logoY, logoWidth, logoHeight);
+      
+      // Continue with the rest of the certificate
+      drawCertificateContent();
     };
-    signatureImg.onerror = () => {
-      // Fallback if image fails to load
-      // Signature line
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(700, 550);
-      ctx.lineTo(850, 550);
-      ctx.stroke();
-
-      // Signature text
-      ctx.fillStyle = '#e5e7eb';
-      ctx.font = '16px serif';
-      ctx.fillText('EdgeCareer.AI Platform', 775, 575);
-
-      // Footer
-      ctx.fillStyle = '#fbbf24';
-      ctx.font = 'bold 20px serif';
-      ctx.fillText('www.edgecareer.ai', 500, 620);
-
-      // Download
-      const link = document.createElement('a');
-      link.download = `EdgeCareer_MockInterview_Certificate_${userName.replace(/\s+/g, '_')}.png`;
-      link.href = canvas.toDataURL();
-      link.click();
-
-      toast.success('Certificate downloaded successfully!');
+    logo.onerror = () => {
+      // If logo fails to load, continue without it
+      drawCertificateContent();
     };
-    signatureImg.src = '/EdgeCareers.png';
+    logo.src = '/skill.png';
+
+    const drawCertificateContent = () => {
+      // Certificate number (top right)
+      ctx.fillStyle = '#fbbf24';
+      ctx.font = 'bold 16px serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(`Certificate No: ${certificateNumber}`, 920, 70);
+
+      // Header text
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 42px serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('CERTIFICATE OF ACHIEVEMENT', 500, 120);
+
+      // Subtitle
+      ctx.font = 'italic 28px serif';
+      ctx.fillStyle = '#e5e7eb';
+      ctx.fillText('Mock Interview Test Completion', 500, 170);
+
+      // Main content
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '24px serif';
+      ctx.fillText('This is to certify that', 500, 250);
+
+      // Name
+      ctx.fillStyle = '#fbbf24';
+      ctx.font = 'bold 36px serif';
+      ctx.fillText(userName, 500, 300);
+
+      // Achievement text
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '22px serif';
+      ctx.fillText('has successfully completed the Mock Interview Test', 500, 350);
+      ctx.fillText(`with a score of ${result.quizScore.toFixed(1)}%`, 500, 385);
+
+      // Performance level
+      let performanceLevel = '';
+      if (result.quizScore >= 90) performanceLevel = 'Outstanding Performance';
+      else if (result.quizScore >= 80) performanceLevel = 'Excellent Performance';
+      else if (result.quizScore >= 70) performanceLevel = 'Good Performance';
+      else if (result.quizScore >= 60) performanceLevel = 'Satisfactory Performance';
+      else performanceLevel = 'Needs Improvement';
+
+      ctx.fillStyle = '#60a5fa';
+      ctx.font = 'bold 24px serif';
+      ctx.fillText(performanceLevel, 500, 430);
+
+      // Date
+      ctx.fillStyle = '#e5e7eb';
+      ctx.font = '18px serif';
+      ctx.fillText(`Awarded on ${new Date().toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })}`, 500, 480);
+
+      // Load and draw signature image
+      const signatureImg = new Image();
+      signatureImg.crossOrigin = 'anonymous';
+      signatureImg.onload = () => {
+        // Draw signature above the line
+        const sigWidth = 150;
+        const sigHeight = 60;
+        const sigX = 725;
+        const sigY = 480;
+        ctx.drawImage(signatureImg, sigX, sigY, sigWidth, sigHeight);
+
+        // Signature line
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(700, 550);
+        ctx.lineTo(850, 550);
+        ctx.stroke();
+
+        // Signature text
+        ctx.fillStyle = '#e5e7eb';
+        ctx.font = '16px serif';
+        ctx.fillText('TechieHelp Institute of AI', 775, 575);
+
+        // Footer
+        ctx.fillStyle = '#fbbf24';
+        ctx.font = 'bold 18px serif';
+        ctx.fillText('https://techiehelpinstituteofai.in/', 500, 620);
+
+        // Download
+        const link = document.createElement('a');
+        link.download = `TechieHelp_MockInterview_Certificate_${userName.replace(/\s+/g, '_')}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+
+        toast.success('Certificate downloaded successfully!');
+      };
+      signatureImg.onerror = () => {
+        // Fallback if image fails to load
+        // Signature line
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(700, 550);
+        ctx.lineTo(850, 550);
+        ctx.stroke();
+
+        // Signature text
+        ctx.fillStyle = '#e5e7eb';
+        ctx.font = '16px serif';
+        ctx.fillText('TechieHelp Institute of AI', 775, 575);
+
+        // Footer
+        ctx.fillStyle = '#fbbf24';
+        ctx.font = 'bold 18px serif';
+        ctx.fillText('https://techiehelpinstituteofai.in/', 500, 620);
+
+        // Download
+        const link = document.createElement('a');
+        link.download = `TechieHelp_MockInterview_Certificate_${userName.replace(/\s+/g, '_')}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+
+        toast.success('Certificate downloaded successfully!');
+      };
+      signatureImg.src = '/EdgeCareers.png';
+    };
   };
 
   return (
@@ -230,7 +264,7 @@ export default function QuizResult({
         {/* Questions Review */}
         <div className="space-y-4">
           <h3 className="font-medium">Question Review</h3>
-          {result.questions.map((q, index) => (
+          {questions.map((q, index) => (
             <div key={index} className="border rounded-lg p-4 space-y-2">
               <div className="flex items-start justify-between gap-2">
                 <p className="font-medium">{q.question}</p>

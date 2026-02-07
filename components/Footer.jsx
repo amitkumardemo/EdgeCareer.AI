@@ -54,11 +54,13 @@ export default function Footer() {
               className="bg-gray-100 dark:bg-gray-800 text-black dark:text-white 
              px-3 py-2 rounded-md border border-gray-300 dark:border-gray-600 
              focus:outline-none focus:ring-3 focus:ring-primary transition-colors"
+              suppressHydrationWarning
             />
 
             <button
               type="submit"
               className="bg-primary hover:bg-primary/90 text-white py-2 rounded-md transition dark:text-black"
+              suppressHydrationWarning
             >
               Subscribe
             </button>

@@ -21,6 +21,7 @@ import { Sparkles, PlusCircle, X, Pencil, Save, Loader2 } from "lucide-react";
 import { improveWithAI } from "@/actions/resume";
 import { toast } from "sonner";
 import useFetch from "@/hooks/use-fetch";
+import { CharacterCounter } from "./character-counter";
 
 const formatDisplayDate = (dateString) => {
   if (!dateString) return "";
@@ -143,9 +144,19 @@ export function EntryForm({ type, entries, onChange }) {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Input
-                  placeholder="Title/Position"
+                  placeholder="Title/Position (Max 60)"
                   {...register("title")}
+                  maxLength={60}
+                  className={
+                    watch("title")?.length >= 60
+                      ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                      : ""
+                  }
                   error={errors.title}
+                />
+                <CharacterCounter
+                  current={watch("title")?.length || 0}
+                  limit={60}
                 />
                 {errors.title && (
                   <p className="text-sm text-red-500">{errors.title.message}</p>
@@ -153,9 +164,19 @@ export function EntryForm({ type, entries, onChange }) {
               </div>
               <div className="space-y-2">
                 <Input
-                  placeholder="Organization/Company"
+                  placeholder="Organization/Company (Max 60)"
                   {...register("organization")}
+                  maxLength={60}
+                  className={
+                    watch("organization")?.length >= 60
+                      ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                      : ""
+                  }
                   error={errors.organization}
+                />
+                <CharacterCounter
+                  current={watch("organization")?.length || 0}
+                  limit={60}
                 />
                 {errors.organization && (
                   <p className="text-sm text-red-500">
@@ -209,12 +230,26 @@ export function EntryForm({ type, entries, onChange }) {
             </div>
 
             <div className="space-y-2">
-              <Textarea
-                placeholder={`Description of your ${type.toLowerCase()}`}
-                className="h-32"
-                {...register("description")}
-                error={errors.description}
-              />
+              <div className="space-y-1">
+                <label className="text-sm font-medium text-gray-700">
+                  Description ({type === "Experience" ? "Max 3 bullets × 120 chars" : "Max 2 bullets × 110 chars"})
+                </label>
+                <Textarea
+                  placeholder={`Description of your ${type.toLowerCase()}\n• Bullet point 1\n• Bullet point 2\n• Bullet point 3`}
+                  className={`h-32 ${
+                    watch("description")?.length >= 360
+                      ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                      : ""
+                  }`}
+                  {...register("description")}
+                  maxLength={360}
+                  error={errors.description}
+                />
+                <CharacterCounter
+                  current={watch("description")?.length || 0}
+                  limit={360}
+                />
+              </div>
               {errors.description && (
                 <p className="text-sm text-red-500">
                   {errors.description.message}

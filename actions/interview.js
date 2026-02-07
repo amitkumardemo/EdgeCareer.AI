@@ -163,10 +163,26 @@ export async function getAssessments() {
     });
 
     // Parse questions from JSON string
-    return assessments.map(assessment => ({
-      ...assessment,
-      questions: typeof assessment.questions === 'string' ? JSON.parse(assessment.questions) : assessment.questions,
-    }));
+    return assessments.map(assessment => {
+      let parsedQuestions = assessment.questions;
+      
+      // If questions is a string, try to parse it
+      if (typeof assessment.questions === 'string') {
+        try {
+          parsedQuestions = JSON.parse(assessment.questions);
+        } catch (parseError) {
+          console.error(`Failed to parse questions for assessment ${assessment.id}:`, parseError);
+          console.error(`Malformed JSON: ${assessment.questions}`);
+          // Return empty array or default value if parsing fails
+          parsedQuestions = [];
+        }
+      }
+      
+      return {
+        ...assessment,
+        questions: parsedQuestions,
+      };
+    });
   } catch (error) {
     console.error("Error fetching assessments:", error);
     throw new Error("Failed to fetch assessments");

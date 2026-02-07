@@ -9,6 +9,7 @@ import { useMediaQuery } from "react-responsive";
 export default function RadialOrbitalTimeline({
   timelineData
 }) {
+  const [isMounted, setIsMounted] = useState(false);
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const [expandedItems, setExpandedItems] = useState({});
   const [viewMode, setViewMode] = useState("orbital");
@@ -23,6 +24,11 @@ export default function RadialOrbitalTimeline({
   const containerRef = useRef(null);
   const orbitRef = useRef(null);
   const nodeRefs = useRef({});
+
+  // Only render on client after mount to avoid hydration issues
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleContainerClick = (e) => {
     if (e.target === containerRef.current || e.target === orbitRef.current) {
@@ -135,6 +141,13 @@ export default function RadialOrbitalTimeline({
     }
   };
 
+  // Prevent hydration mismatch by only rendering on client
+  if (!isMounted) {
+    return <div className="w-full h-full min-h-[600px] flex items-center justify-center">
+      <div className="animate-pulse text-muted-foreground">Loading...</div>
+    </div>;
+  }
+
   return (
     <div
       className="w-full h-full flex flex-col items-center justify-center overflow-hidden"
@@ -180,6 +193,7 @@ export default function RadialOrbitalTimeline({
                 ref={(el) => (nodeRefs.current[item.id] = el)}
                 className="absolute transition-all duration-700 cursor-pointer"
                 style={nodeStyle}
+                suppressHydrationWarning
                 onClick={(e) => {
                   e.stopPropagation();
                   toggleItem(item.id);

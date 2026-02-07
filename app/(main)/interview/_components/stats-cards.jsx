@@ -18,10 +18,19 @@ export default function StatsCards({ assessments }) {
 
   const getTotalQuestions = () => {
     if (!assessments?.length) return 0;
-    return assessments.reduce(
-      (sum, assessment) => sum + assessment.questions.length,
-      0
-    );
+    return assessments.reduce((sum, assessment) => {
+      // Handle both string and array cases
+      const questions = typeof assessment.questions === 'string'
+        ? (() => {
+            try {
+              return JSON.parse(assessment.questions);
+            } catch (error) {
+              return [];
+            }
+          })()
+        : (Array.isArray(assessment.questions) ? assessment.questions : []);
+      return sum + questions.length;
+    }, 0);
   };
 
   return (
