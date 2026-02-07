@@ -6,21 +6,22 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 export const runtime = "nodejs"; // ✅ Prevents Edge runtime errors
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 export async function POST(request) {
   try {
-    // Temporarily disable auth for testing
-    // const { userId } = await auth();
-    // if (!userId) {
-    //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    // }
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-    // const user = await db.user.upsert({
-    //   where: { clerkUserId: userId },
-    //   update: {},
-    //   create: { clerkUserId: userId },
-    // });
+    const user = await db.user.findUnique({
+      where: { clerkUserId: userId },
+    });
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
 
     const formData = await request.formData();
     const file = formData.get("resume");
@@ -31,6 +32,16 @@ export async function POST(request) {
     // Parse PDF with fallback
     let resumeText = "";
     let analysis;
+    
+    // Define these outside try-catch so they're accessible later
+    const keywords = ['experience', 'skills', 'education', 'projects', 'certifications', 'contact', 'summary', 'objective'];
+    const industryKeywords = ['javascript', 'python', 'java', 'react', 'node', 'sql', 'aws', 'docker', 'git', 'agile'];
+    const formattingIssues = ['table', 'image', 'graphic', 'column'];
+    
+    let foundKeywords = [];
+    let foundIndustryKeywords = [];
+    let foundFormattingIssues = [];
+    let feedback = "";
 
     try {
       const buffer = Buffer.from(await file.arrayBuffer());
@@ -39,14 +50,10 @@ export async function POST(request) {
       resumeText = data.text;
 
       // Advanced analysis based on multiple factors
-      const keywords = ['experience', 'skills', 'education', 'projects', 'certifications', 'contact', 'summary', 'objective'];
-      const industryKeywords = ['javascript', 'python', 'java', 'react', 'node', 'sql', 'aws', 'docker', 'git', 'agile'];
-      const formattingIssues = ['table', 'image', 'graphic', 'column'];
-
       let score = 40; // base score
-      const foundKeywords = keywords.filter(k => resumeText.toLowerCase().includes(k));
-      const foundIndustryKeywords = industryKeywords.filter(k => resumeText.toLowerCase().includes(k));
-      const foundFormattingIssues = formattingIssues.filter(k => resumeText.toLowerCase().includes(k));
+      foundKeywords = keywords.filter(k => resumeText.toLowerCase().includes(k));
+      foundIndustryKeywords = industryKeywords.filter(k => resumeText.toLowerCase().includes(k));
+      foundFormattingIssues = formattingIssues.filter(k => resumeText.toLowerCase().includes(k));
 
       // Score calculation
       score += foundKeywords.length * 8; // +8 per standard section
@@ -56,7 +63,7 @@ export async function POST(request) {
       score = Math.min(Math.max(score, 0), 100); // clamp to 0-100
 
       // Generate detailed feedback
-      let feedback = "";
+      feedback = "";
       if (foundKeywords.length < 3) {
         feedback += "Missing key sections: Add Experience, Skills, and Education sections.\n";
       }
@@ -89,31 +96,74 @@ export async function POST(request) {
       if (fileSize > 2000000) fallbackScore -= 15; // Large files might have formatting issues
       if (fileName.includes('resume') || fileName.includes('cv')) fallbackScore += 5;
 
+      feedback = "PDF parsing encountered an issue. Estimated score based on file analysis. For best results, ensure your PDF contains selectable text and standard formatting. Key improvements: Use Arial/Calibri fonts, include clear section headings (Experience, Skills, Education), and avoid complex layouts or images.";
+      
       analysis = {
         score: Math.max(60, Math.min(85, fallbackScore)),
-        feedback: "PDF parsing encountered an issue. Estimated score based on file analysis. For best results, ensure your PDF contains selectable text and standard formatting. Key improvements: Use Arial/Calibri fonts, include clear section headings (Experience, Skills, Education), and avoid complex layouts or images."
+        feedback: feedback
       };
     }
 
-    // Save in DB - temporarily disabled
-    // await db.resume.upsert({
-    //   where: { userId: user.id },
-    //   update: {
-    //     atsScore: analysis.score,
-    //     feedback: analysis.feedback,
-    //     content: resumeText,
-    //   },
-    //   create: {
-    //     userId: user.id,
-    //     atsScore: analysis.score,
-    //     feedback: analysis.feedback,
-    //     content: resumeText,
-    //   },
-    // });
+    // Calculate detailed scores
+    const keywordMatchScore = Math.min((foundKeywords.length / keywords.length) * 100, 100);
+    const skillsScore = Math.min((foundIndustryKeywords.length / 5) * 100, 100);
+    const formattingScore = Math.max(100 - (foundFormattingIssues.length * 15), 0);
+    const experienceScore = Math.min((resumeText.length / 1500) * 100, 100);
+    const projectScore = resumeText.toLowerCase().includes('project') ? 85 : 60;
+    const atsCompatibleScore = formattingScore;
+
+    // Generate suggestions
+    const suggestions = [];
+    if (foundKeywords.length < 3) suggestions.push("Add more standard resume sections");
+    if (foundIndustryKeywords.length < 3) suggestions.push("Include more technical keywords");
+    if (resumeText.length < 800) suggestions.push("Expand your experience descriptions");
+    if (foundFormattingIssues.length > 0) suggestions.push("Remove tables and complex formatting");
+
+    // Identify strengths and weaknesses
+    const strengths = [];
+    const weaknesses = [];
+    if (keywordMatchScore >= 70) strengths.push("Good section structure");
+    else weaknesses.push("Missing key sections");
+    if (skillsScore >= 70) strengths.push("Strong technical keywords");
+    else weaknesses.push("Limited technical skills mentioned");
+    if (formattingScore >= 80) strengths.push("Clean formatting");
+    else weaknesses.push("Formatting issues detected");
+
+    // Save detailed analysis to database
+    const { createATSAnalysis } = await import('@/actions/ats');
+    await createATSAnalysis({
+      resumeFileName: file.name,
+      atsScore: analysis.score,
+      keywordMatchScore,
+      skillsScore,
+      formattingScore,
+      experienceScore,
+      projectScore,
+      atsCompatibleScore,
+      matchedKeywords: foundKeywords,
+      missingKeywords: keywords.filter(k => !foundKeywords.includes(k)),
+      suggestions,
+      strengths,
+      weaknesses,
+      improvementTip: feedback,
+    });
 
     return NextResponse.json({
       atsScore: analysis.score,
       feedback: analysis.feedback,
+      detailedScores: {
+        keywordMatchScore,
+        skillsScore,
+        formattingScore,
+        experienceScore,
+        projectScore,
+        atsCompatibleScore,
+      },
+      matchedKeywords: foundKeywords,
+      missingKeywords: keywords.filter(k => !foundKeywords.includes(k)),
+      suggestions,
+      strengths,
+      weaknesses,
     });
   } catch (err) {
     console.error("❌ ATS Checker Error:", err);

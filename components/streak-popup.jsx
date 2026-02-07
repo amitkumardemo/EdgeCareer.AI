@@ -5,17 +5,16 @@ import { Flame, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
-export default function StreakPopup({ streak, onClose }) {
+export default function StreakPopup({ streak }) {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(false);
-      onClose();
     }, 5000); // Auto close after 5 seconds
 
     return () => clearTimeout(timer);
-  }, [onClose]);
+  }, []);
 
   if (!isVisible) return null;
 
@@ -54,10 +53,7 @@ export default function StreakPopup({ streak, onClose }) {
       <Card className="w-full max-w-md mx-4">
         <CardContent className="p-6 text-center">
           <button
-            onClick={() => {
-              setIsVisible(false);
-              onClose();
-            }}
+            onClick={() => setIsVisible(false)}
             className="absolute top-2 right-2 text-muted-foreground hover:text-foreground"
           >
             <X className="h-4 w-4" />
@@ -77,10 +73,7 @@ export default function StreakPopup({ streak, onClose }) {
           </div>
 
           <Button
-            onClick={() => {
-              setIsVisible(false);
-              onClose();
-            }}
+            onClick={() => setIsVisible(false)}
             className="w-full"
           >
             Continue Learning

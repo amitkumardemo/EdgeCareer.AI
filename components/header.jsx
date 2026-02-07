@@ -13,6 +13,11 @@ import {
   Route,
   BriefcaseBusiness,
   Flame,
+  CheckCircle,
+  BookOpen,
+  Briefcase,
+  Search,
+  Sparkles,
 } from "lucide-react";
 
 import Link from "next/link";
@@ -81,7 +86,7 @@ export default async function Header() {
                   <ChevronDown className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuContent align="end" className="w-56 max-h-[500px] overflow-y-auto">
                 <DropdownMenuItem asChild>
                   <Link href="/resume" className="flex items-center gap-2">
                     <FileText className="h-4 w-4" />
@@ -98,6 +103,12 @@ export default async function Header() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
+                  <Link href="/ats-checker" className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4" />
+                    ATS Checker
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link href="/interview" className="flex items-center gap-2">
                     <GraduationCap className="h-4 w-4" />
                     {BUTTONS_MENUS.INTERVIEW_PREP}
@@ -110,9 +121,33 @@ export default async function Header() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
+                  <Link href="/course-recommendation" className="flex items-center gap-2">
+                    <BookOpen className="h-4 w-4" />
+                    Course Recommendation
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link href="/internships" className="flex items-center gap-2">
                     <BriefcaseBusiness className="h-4 w-4" />
                     Find Internships
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/latest-jobs" className="flex items-center gap-2">
+                    <Briefcase className="h-4 w-4" />
+                    Latest Jobs
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/job-matches" className="flex items-center gap-2">
+                    <Search className="h-4 w-4" />
+                    Job Matches
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/career-branding-lab" className="flex items-center gap-2">
+                    <Sparkles className="h-4 w-4" />
+                    Career Branding Lab
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>

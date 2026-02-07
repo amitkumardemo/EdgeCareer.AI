@@ -33,6 +33,9 @@ export async function generateCoverLetter(data) {
 
   if (!user) throw new Error("User not found");
 
+  // Parse skills from JSON string
+  const skills = typeof user.skills === 'string' ? JSON.parse(user.skills) : user.skills;
+
   const prompt = `
     Write a ${data.tone || "professional"} cover letter for a ${data.jobTitle} position at ${
       data.companyName
@@ -41,7 +44,7 @@ export async function generateCoverLetter(data) {
     Candidate Name: ${data.fullName || "The applicant"}
     Industry: ${user.industry}
     Years of Experience: ${user.experience}
-    Skills: ${user.skills?.join(", ")}
+    Skills: ${skills?.join(", ")}
     Bio: ${user.bio}
 
     Job Description:

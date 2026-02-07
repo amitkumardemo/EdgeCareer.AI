@@ -20,6 +20,8 @@ import {
   Star,
   Flame,
   Award,
+  FileCheck,
+  Target,
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import {
@@ -33,19 +35,34 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import StreakCalendar from "@/components/streak-calendar";
 
-const DashboardView = ({ insights, gamification, userData }) => {
-  // Parse JSON strings back to arrays/objects
+const DashboardView = ({ insights, gamification, userData, atsAnalytics }) => {
+  // Safely parse JSON strings back to arrays/objects with fallback values
+  const safeJSONParse = (jsonString, fallback = []) => {
+    try {
+      // If it's already an object/array, return it
+      if (typeof jsonString === 'object') {
+        return jsonString;
+      }
+      // Try to parse the JSON string
+      return JSON.parse(jsonString);
+    } catch (error) {
+      console.error('Error parsing JSON:', error);
+      return fallback;
+    }
+  };
+
   const parsedInsights = {
     ...insights,
-    salaryRanges: JSON.parse(insights.salaryRanges),
-    topSkills: JSON.parse(insights.topSkills),
-    keyTrends: JSON.parse(insights.keyTrends),
-    recommendedSkills: JSON.parse(insights.recommendedSkills),
+    salaryRanges: safeJSONParse(insights.salaryRanges, []),
+    topSkills: safeJSONParse(insights.topSkills, []),
+    keyTrends: safeJSONParse(insights.keyTrends, []),
+    recommendedSkills: safeJSONParse(insights.recommendedSkills, []),
   };
 
   const parsedGamification = {
     ...gamification,
-    badges: JSON.parse(gamification.badges || '[]'),
+    // badges are already parsed in getUserGamification()
+    badges: gamification.badges || [],
   };
 
   // Transform salary data for the chart
@@ -106,11 +123,13 @@ const DashboardView = ({ insights, gamification, userData }) => {
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                 Welcome back, {userData.name}!
               </h1>
-              <p className="text-lg text-gray-600 dark:text-gray-300 mt-1">
-                {userData.industry.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} Professional
-              </p>
+              {userData.industry && (
+                <p className="text-lg text-gray-600 dark:text-gray-300 mt-1">
+                  {userData.industry.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} Professional
+                </p>
+              )}
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-                {userData.experience} years of experience • {JSON.parse(userData.skills || '[]').length} skills
+                {userData.experience || 0} years of experience • {safeJSONParse(userData.skills, []).length} skills
               </p>
             </div>
             <div className="text-right">
@@ -188,6 +207,88 @@ const DashboardView = ({ insights, gamification, userData }) => {
           </CardContent>
         </Card>
       </div>
+
+      {/* ATS Resume Analytics */}
+      {atsAnalytics && atsAnalytics.totalAnalyses > 0 && (
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold">Resume ATS Performance</h2>
+            <a href="/ats-checker/analytics" className="text-sm text-primary hover:underline">
+              View Analytics →
+            </a>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Resumes Analyzed
+                </CardTitle>
+                <FileCheck className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{atsAnalytics.totalAnalyses}</div>
+                <p className="text-xs text-muted-foreground">
+                  Total analyses completed
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Latest Score
+                </CardTitle>
+                <Target className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-blue-600">
+                  {atsAnalytics.lastScore}/100
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Most recent analysis
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Best Score
+                </CardTitle>
+                <Award className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-green-600">
+                  {atsAnalytics.bestScore}/100
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Your highest achievement
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Improvement
+                </CardTitle>
+                <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className={`text-2xl font-bold ${
+                  atsAnalytics.improvementPercentage >= 0 ? 'text-green-600' : 'text-red-600'
+                }`}>
+                  {atsAnalytics.improvementPercentage >= 0 ? '+' : ''}
+                  {atsAnalytics.improvementPercentage.toFixed(1)}%
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  From first to latest
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      )}
 
       {/* Gamification Progress */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

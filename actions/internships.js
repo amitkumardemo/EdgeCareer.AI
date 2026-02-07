@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { fetchCoursesFromYouTube } from "./course-recommendation";
+import { fetchYouTubePlaylists } from "./course-recommendation";
 import * as cheerio from "cheerio";
 
 const ADZUNA_APP_ID = process.env.ADZUNA_APP_ID;
@@ -195,7 +195,7 @@ export async function getInternshipMatches(role, skills, location) {
 
   // Fetch preparation courses for the role
   const courseQuery = `fast preparation ${role} tutorial`;
-  const preparationCourses = await fetchCoursesFromYouTube(courseQuery);
+  const preparationCourses = await fetchYouTubePlaylists(courseQuery);
 
   // Limit to top 10 internships
   const topInternships = internships.slice(0, 10);

@@ -5,7 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 export const generateAIInsights = async (industry) => {
   try {
@@ -36,7 +36,16 @@ export const generateAIInsights = async (industry) => {
     const text = response.text();
     const cleanedText = text.replace(/```(?:json)?\n?/g, "").trim();
 
-    return JSON.parse(cleanedText);
+    const parsedData = JSON.parse(cleanedText);
+    
+    // Stringify array/object fields to match database schema
+    return {
+      ...parsedData,
+      salaryRanges: JSON.stringify(parsedData.salaryRanges),
+      topSkills: JSON.stringify(parsedData.topSkills),
+      keyTrends: JSON.stringify(parsedData.keyTrends),
+      recommendedSkills: JSON.stringify(parsedData.recommendedSkills),
+    };
   } catch (error) {
     console.error("Error generating AI insights:", error);
     // Return industry-specific insights if API fails - Indian market salaries in INR
@@ -144,6 +153,16 @@ export const generateAIInsights = async (industry) => {
   }
 };
 
+// Helper function to validate JSON strings
+const isValidJSON = (str) => {
+  try {
+    JSON.parse(str);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 export async function getIndustryInsights() {
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
@@ -157,8 +176,22 @@ export async function getIndustryInsights() {
 
   if (!user) throw new Error("User not found");
 
-  // If no insights exist, generate them
-  if (!user.industryInsight) {
+  // Check if insights exist and are valid
+  const hasValidInsights = user.industryInsight && 
+    isValidJSON(user.industryInsight.salaryRanges) &&
+    isValidJSON(user.industryInsight.topSkills) &&
+    isValidJSON(user.industryInsight.keyTrends) &&
+    isValidJSON(user.industryInsight.recommendedSkills);
+
+  // If no insights exist or they're corrupted, regenerate them
+  if (!hasValidInsights) {
+    // Delete corrupted data if it exists
+    if (user.industryInsight) {
+      await db.industryInsight.delete({
+        where: { id: user.industryInsight.id },
+      });
+    }
+
     const insights = await generateAIInsights(user.industry);
 
     const industryInsight = await db.industryInsight.create({

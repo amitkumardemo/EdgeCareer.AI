@@ -1146,44 +1146,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="w-full bg-gray-900 text-white py-12">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="text-xl font-bold mb-4">TechieHelp Institute of AI</h3>
-              <p className="text-gray-300 mb-4">
-                Building Careers with AI, Innovation & Industry Readiness
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2">
-                <li><Link href="/about" className="text-gray-300 hover:text-white transition-colors">About</Link></li>
-                <li><Link href="/programs" className="text-gray-300 hover:text-white transition-colors">Programs</Link></li>
-                <li><Link href="/internships" className="text-gray-300 hover:text-white transition-colors">Internships</Link></li>
-                <li><Link href="/careers" className="text-gray-300 hover:text-white transition-colors">Careers</Link></li>
-                <li><Link href="/contact" className="text-gray-300 hover:text-white transition-colors">Contact</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Contact</h4>
-              <p className="text-gray-300 mb-2">
-                <Mail className="inline w-4 h-4 mr-2" />
-                support@techiehelp.in
-              </p>
-              <p className="text-gray-300">
-                <ExternalLink className="inline w-4 h-4 mr-2" />
-                www.techiehelp.in
-              </p>
-            </div>
-          </div>
-          <div className="border-t border-gray-700 mt-8 pt-8 text-center">
-            <p className="text-gray-400">© 2026 TechieHelp Institute of AI. Powered by TechieHelp</p>
-          </div>
-        </div>
-      </footer>
-
       {/* Scroll To Top Button */}
       <ScrollToTop />
     </>

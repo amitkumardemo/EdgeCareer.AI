@@ -25,10 +25,7 @@ const MainLayout = async ({ children }) => {
         {children}
       </div>
       {showStreakPopup && (
-        <StreakPopup
-          streak={currentStreak}
-          onClose={() => {}} // Will be handled by component's auto-close
-        />
+        <StreakPopup streak={currentStreak} />
       )}
     </>
   );

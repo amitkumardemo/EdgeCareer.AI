@@ -2,7 +2,6 @@
 
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { revalidatePath } from "next/cache";
 
 export async function updateUserStreak() {
   const { userId } = await auth();
@@ -57,7 +56,7 @@ export async function updateUserStreak() {
     },
   });
 
-  revalidatePath("/dashboard");
+  // Note: revalidatePath removed - caller should handle revalidation if needed
   return { streak: newStreak, isNewDay: true };
 }
 

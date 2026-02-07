@@ -54,7 +54,9 @@ export async function updateGamification(actionType) {
   }
 
   // Check for new badges
-  const newBadges = [...user.badges];
+  // Parse badges from JSON string
+  const currentBadges = typeof user.badges === 'string' ? JSON.parse(user.badges) : user.badges;
+  const newBadges = [...currentBadges];
   const earnedBadges = [];
 
   // Action-based badges
@@ -104,7 +106,7 @@ export async function updateGamification(actionType) {
     data: {
       points: newPoints,
       level: newLevel,
-      badges: newBadges,
+      badges: JSON.stringify(newBadges), // Store as JSON string
       streak: newStreak,
       lastActivity: now,
     },
@@ -136,5 +138,9 @@ export async function getUserGamification() {
 
   if (!user) throw new Error("User not found");
 
-  return user;
+  // Parse badges from JSON string
+  return {
+    ...user,
+    badges: typeof user.badges === 'string' ? JSON.parse(user.badges) : user.badges,
+  };
 }

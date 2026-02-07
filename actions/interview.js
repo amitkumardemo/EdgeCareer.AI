@@ -22,6 +22,9 @@ export async function generateQuiz(role, company) {
 
   if (!user) throw new Error("User not found");
 
+  // Parse skills from JSON string
+  const skills = typeof user.skills === 'string' ? JSON.parse(user.skills) : user.skills;
+
   const roleText = role ? ` for a ${role} position` : "";
   const companyText = company ? ` at ${company}` : "";
 
@@ -29,7 +32,7 @@ export async function generateQuiz(role, company) {
     Generate 10 technical interview questions for a ${
       user.industry
     } professional${roleText}${companyText}${
-    user.skills?.length ? ` with expertise in ${user.skills.join(", ")}` : ""
+    skills?.length ? ` with expertise in ${skills.join(", ")}` : ""
   }.
 
     Include 4 coding questions (provide a code snippet and ask about its output or behavior as multiple choice).
@@ -123,7 +126,7 @@ export async function saveQuizResult(questions, answers, score) {
       data: {
         userId: user.id,
         quizScore: score,
-        questions: questionResults,
+        questions: JSON.stringify(questionResults),
         category: "Technical",
         improvementTip,
       },
@@ -159,7 +162,11 @@ export async function getAssessments() {
       },
     });
 
-    return assessments;
+    // Parse questions from JSON string
+    return assessments.map(assessment => ({
+      ...assessment,
+      questions: typeof assessment.questions === 'string' ? JSON.parse(assessment.questions) : assessment.questions,
+    }));
   } catch (error) {
     console.error("Error fetching assessments:", error);
     throw new Error("Failed to fetch assessments");

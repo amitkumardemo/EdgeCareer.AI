@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -36,73 +36,114 @@ model User {
   assessments   Assessment[]
   resume        Resume?
   coverLetter   CoverLetter[]
+  atsAnalyses   ATSAnalysis[]
+  
+  // ATS Stats
+  totalResumesAnalyzed Int @default(0)
+  bestAtsScore         Float?
+  lastAtsScore         Float?
 }
 
 model Assessment {
-  id            String    @id @default(cuid())
-  userId        String
-  user          User      @relation(fields: [userId], references: [id])
-  quizScore     Float     // Overall quiz score
-  questions     String    @default("[]") // JSON string
-  category      String    // "Technical", "Behavioral", etc.
-  improvementTip String?  // AI-generated improvement tip
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id             String   @id @default(cuid())
+  userId         String
+  quizScore      Float
+  questions      String   @default("[]")
+  category       String
+  improvementTip String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  user           User     @relation(fields: [userId], references: [id])
 
   @@index([userId])
 }
 
 model Resume {
-  id          String    @id @default(cuid())
-  userId      String    @unique    // One resume per user
-  user        User      @relation(fields: [userId], references: [id])
-  content     String    // Markdown content
-  atsScore    Float?
-  feedback    String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  content   String
+  atsScore  Float?
+  feedback  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model CoverLetter {
-  id              String    @id @default(cuid())
-  userId          String
-  user            User      @relation(fields: [userId], references: [id])
-  content         String    // Markdown content
-  jobDescription  String?
-  companyName     String    // Name of the company applying to
-  jobTitle        String    // Position applying for
-  status          String    @default("draft") // draft, completed
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id             String   @id @default(cuid())
+  userId         String
+  content        String
+  jobDescription String?
+  companyName    String
+  jobTitle       String
+  status         String   @default("draft")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  user           User     @relation(fields: [userId], references: [id])
 
   @@index([userId])
 }
 
-// Combined Industry Trends and Salary Insights
 model IndustryInsight {
-  id            String    @id @default(cuid())
-  industry      String    @unique  // The industry this data belongs to (e.g., "tech-software-development")
+  id                String   @id @default(cuid())
+  industry          String   @unique
   
   // Users in this industry
-  users         User[]
+  users             User[]
   
   // Salary data
-  salaryRanges  String    @default("[]") // JSON string
+  salaryRanges      String   @default("[]") // JSON string
 
   // Industry trends
-  growthRate    Float     // Industry growth rate
-  demandLevel   String    // "High", "Medium", "Low"
-  topSkills     String    @default("[]") // JSON string
+  growthRate        Float    // Industry growth rate
+  demandLevel       String   // "High", "Medium", "Low"
+  topSkills         String   @default("[]") // JSON string
 
   // Market conditions
-  marketOutlook String    // "Positive", "Neutral", "Negative"
-  keyTrends     String    @default("[]") // JSON string
+  marketOutlook     String   // "Positive", "Neutral", "Negative"
+  keyTrends         String   @default("[]") // JSON string
 
   // Learning suggestions
-  recommendedSkills String @default("[]") // JSON string
+  recommendedSkills String   @default("[]") // JSON string
   
-  lastUpdated   DateTime  @default(now())
-  nextUpdate    DateTime  // Scheduled update time
+  lastUpdated       DateTime @default(now())
+  nextUpdate        DateTime // Scheduled update time
 
   @@index([industry])
+}
+
+model ATSAnalysis {
+  id                  String    @id @default(cuid())
+  userId              String
+  user                User      @relation(fields: [userId], references: [id])
+  resumeFileName      String
+  atsScore            Float
+  scoreCategory       String    // Poor / Average / Good / Excellent
+  keywordMatchScore   Float
+  skillsScore         Float
+  formattingScore     Float
+  experienceScore     Float
+  projectScore        Float
+  atsCompatibleScore  Float
+  
+  // Detailed Analysis
+  matchedKeywords     String    @default("[]") // JSON array
+  missingKeywords     String    @default("[]") // JSON array
+  suggestions         String    @default("[]") // JSON array
+  strengths           String    @default("[]") // JSON array
+  weaknesses          String    @default("[]") // JSON array
+  
+  // Insights
+  improvementTip      String?
+  comparisonData      String?   // JSON string for comparison with previous analyses
+  
+  // Sharing
+  shareToken          String?   @unique // Unique token for shareable links
+  isPublic            Boolean   @default(false)
+  
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  
+  @@index([userId])
+  @@index([shareToken])
 }

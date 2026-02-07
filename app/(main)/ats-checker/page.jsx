@@ -1,12 +1,15 @@
 "use client";
 
 import ATSChecker from "./_components/ats-checker";
+import ATSNav from "./_components/ats-nav";
 
 export default function ATSCheckerPage() {
   return (
-    <main className="max-w-4xl mx-auto p-4">
-      <h1 className="text-4xl font-bold mb-6">ATS Resume Checker</h1>
+    <div className="min-h-screen">
+      <div className="container mx-auto py-4">
+        <ATSNav />
+      </div>
       <ATSChecker />
-    </main>
+    </div>
   );
 }

@@ -2,15 +2,139 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Loader2, CheckCircle2, FileText } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { 
+  Loader2, 
+  CheckCircle2, 
+  FileText, 
+  Upload,
+  Target,
+  TrendingUp,
+  Award,
+  Zap,
+  Shield,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+  Sparkles,
+  BarChart3,
+  FileCheck,
+  Clock,
+  Users,
+  ArrowRight,
+  TrendingDown,
+  Activity,
+  Rocket,
+  Star,
+  Check,
+  X,
+} from "lucide-react";
 import { toast } from "sonner";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import { 
+  RadarChart, 
+  PolarGrid, 
+  PolarAngleAxis, 
+  PolarRadiusAxis, 
+  Radar,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
 
 const steps = [
   "Parsing your resume",
   "Analyzing your experience",
   "Extracting your skills",
   "Generating recommendations",
+];
+
+// Mock data for visualizations (UI only)
+const scoreBreakdownData = [
+  { category: "Keywords", score: 75, fullMark: 100 },
+  { category: "Skills", score: 85, fullMark: 100 },
+  { category: "Formatting", score: 90, fullMark: 100 },
+  { category: "Experience", score: 70, fullMark: 100 },
+  { category: "Projects", score: 65, fullMark: 100 },
+  { category: "ATS Compatible", score: 88, fullMark: 100 },
+];
+
+const keywordMatchData = [
+  { name: "Matched", value: 65, color: "#10b981" },
+  { name: "Missing", value: 35, color: "#f59e0b" },
+];
+
+const skillsData = [
+  { skill: "JavaScript", level: 90 },
+  { skill: "React", level: 85 },
+  { skill: "Node.js", level: 75 },
+  { skill: "Python", level: 70 },
+  { skill: "SQL", level: 80 },
+  { skill: "Git", level: 95 },
+];
+
+const experienceImpactData = [
+  { category: "Experience Quality", score: 85 },
+  { category: "Project Relevance", score: 72 },
+  { category: "Action Verbs", score: 68 },
+  { category: "Quantified Results", score: 55 },
+];
+
+const matchedKeywords = [
+  "JavaScript", "React", "API", "Database", "Agile", "Git", "Problem Solving"
+];
+
+const missingKeywords = [
+  "TypeScript", "Testing", "CI/CD", "Docker", "Microservices", "Cloud (AWS/Azure)"
+];
+
+const improvementPriorities = [
+  {
+    priority: 1,
+    title: "Add missing keywords",
+    description: "Include 'TypeScript', 'Testing', 'CI/CD' to boost ATS score by ~15%",
+    impact: "High",
+  },
+  {
+    priority: 2,
+    title: "Improve project descriptions",
+    description: "Add quantifiable metrics and results to each project",
+    impact: "High",
+  },
+  {
+    priority: 3,
+    title: "Optimize formatting",
+    description: "Ensure consistent date formats and section headings",
+    impact: "Medium",
+  },
+  {
+    priority: 4,
+    title: "Enhance skills section",
+    description: "Categorize skills into Technical, Tools, and Soft Skills",
+    impact: "Medium",
+  },
+];
+
+const atsCompatibilityChecks = [
+  { check: "PDF format (text-based)", passed: true },
+  { check: "Clean section headings", passed: true },
+  { check: "No tables or complex graphics", passed: true },
+  { check: "Standard fonts used", passed: true },
+  { check: "Optimal section ordering", passed: false },
+  { check: "Contact info format", passed: true },
 ];
 
 export default function ATSChecker() {
@@ -120,178 +244,284 @@ export default function ATSChecker() {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-black text-white">
-      {/* Hero Section with Gamification */}
-      <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-900 via-blue-900 to-indigo-900 opacity-90"></div>
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10"></div>
-          <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3e%3cg fill='none' fill-rule='evenodd'%3e%3cg fill='%23ffffff' fill-opacity='0.05'%3e%3ccircle cx='30' cy='30' r='2'/%3e%3c/g%3e%3c/g%3e%3c/svg%3e")`
-          }}></div>
-        </div>
+  const getScoreStatus = (score) => {
+    if (score >= 81) return { 
+      label: "Excellent", 
+      color: "text-green-500", 
+      bgColor: "bg-green-500/10", 
+      borderColor: "border-green-500/30",
+      glowColor: "shadow-green-500/50"
+    };
+    if (score >= 66) return { 
+      label: "Good", 
+      color: "text-blue-500", 
+      bgColor: "bg-blue-500/10", 
+      borderColor: "border-blue-500/30",
+      glowColor: "shadow-blue-500/50"
+    };
+    if (score >= 41) return { 
+      label: "Average", 
+      color: "text-yellow-500", 
+      bgColor: "bg-yellow-500/10", 
+      borderColor: "border-yellow-500/30",
+      glowColor: "shadow-yellow-500/50"
+    };
+    return { 
+      label: "Poor", 
+      color: "text-red-500", 
+      bgColor: "bg-red-500/10", 
+      borderColor: "border-red-500/30",
+      glowColor: "shadow-red-500/50"
+    };
+  };
 
-        <div className="relative max-w-6xl mx-auto px-6 py-16">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-yellow-500 text-black px-4 py-2 rounded-full font-bold text-sm mb-4">
-              <span className="text-xl">🏆</span> ATS CHAMPION CHALLENGE
+  const getImpactColor = (impact) => {
+    if (impact === "High") return "bg-red-500/10 text-red-500 border-red-500/30";
+    if (impact === "Medium") return "bg-yellow-500/10 text-yellow-500 border-yellow-500/30";
+    return "bg-green-500/10 text-green-500 border-green-500/30";
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/20">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden border-b">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-primary/10 to-secondary/5"></div>
+        <div className="absolute inset-0 bg-grid-white/[0.02]"></div>
+        
+        <div className="container mx-auto px-4 py-16 md:py-24 relative">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center max-w-4xl mx-auto"
+          >
+            {/* TechieHelp Branding */}
+            <div className="flex items-center justify-center gap-2 mb-6">
+              <Image
+                src="/skill.png"
+                alt="TechieHelp Logo"
+                width={40}
+                height={40}
+                className="h-10 w-auto"
+              />
+              <div className="text-left">
+                <h3 className="text-lg font-bold">TechieHelp Institute of AI</h3>
+                <p className="text-xs text-muted-foreground">Building Careers with AI & Innovation</p>
+              </div>
             </div>
-            <h1 className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 bg-clip-text text-transparent">
+
+            <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-primary via-purple-500 to-secondary bg-clip-text text-transparent">
               ATS Resume Analyzer
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Level up your resume game! Get AI-powered insights and beat the ATS system to land your dream job
+            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+              AI-powered resume analysis to beat Applicant Tracking Systems
             </p>
-            <div className="flex justify-center gap-4 mt-6">
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2">
-                <div className="text-2xl font-bold text-yellow-400">10K+</div>
-                <div className="text-sm text-gray-400">Resumes Analyzed</div>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2">
-                <div className="text-2xl font-bold text-green-400">95%</div>
-                <div className="text-sm text-gray-400">Success Rate</div>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2">
-                <div className="text-2xl font-bold text-blue-400">AI-Powered</div>
-                <div className="text-sm text-gray-400">Smart Analysis</div>
-              </div>
+
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
+              <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
+                <CardContent className="p-6 text-center">
+                  <Users className="h-8 w-8 mx-auto mb-2 text-primary" />
+                  <div className="text-3xl font-bold mb-1">10K+</div>
+                  <div className="text-sm text-muted-foreground">Resumes Analyzed</div>
+                </CardContent>
+              </Card>
+              <Card className="bg-gradient-to-br from-green-500/10 to-green-500/5 border-green-500/20">
+                <CardContent className="p-6 text-center">
+                  <TrendingUp className="h-8 w-8 mx-auto mb-2 text-green-500" />
+                  <div className="text-3xl font-bold mb-1">95%</div>
+                  <div className="text-sm text-muted-foreground">Success Rate</div>
+                </CardContent>
+              </Card>
+              <Card className="bg-gradient-to-br from-purple-500/10 to-purple-500/5 border-purple-500/20">
+                <CardContent className="p-6 text-center">
+                  <Sparkles className="h-8 w-8 mx-auto mb-2 text-purple-500" />
+                  <div className="text-3xl font-bold mb-1">AI-Powered</div>
+                  <div className="text-sm text-muted-foreground">Smart Analysis</div>
+                </CardContent>
+              </Card>
             </div>
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </section>
 
-      <div className="max-w-6xl mx-auto p-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Upload Section */}
-          <div className="bg-gray-900 rounded-2xl shadow-2xl p-8 border border-gray-800">
-            <div className="mb-6">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold">📤</span>
-                </div>
-                <h2 className="text-2xl font-bold text-white">Upload Challenge</h2>
-              </div>
-              <p className="text-gray-400">Drop your resume and see how you rank against top performers</p>
-            </div>
-
-            <div
-              className={`border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-300 ${
-                dragActive
-                  ? "border-purple-500 bg-purple-500/10 scale-105 shadow-lg shadow-purple-500/20"
-                  : "border-gray-600 hover:border-purple-400 hover:bg-gray-800/50"
-              }`}
-              onDragEnter={handleDrag}
-              onDragLeave={handleDrag}
-              onDragOver={handleDrag}
-              onDrop={handleDrop}
-            >
-              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <FileText className="w-8 h-8 text-white" />
-              </div>
-              <p className="text-xl font-semibold mb-2 text-white">
-                Drag & drop your resume
-              </p>
-              <p className="text-gray-400 mb-6">or</p>
-              <Button
-                variant="outline"
-                size="lg"
-                onClick={handleChooseFile}
-                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 border-0 text-white font-semibold px-8 py-3 rounded-xl"
-              >
-                Choose File
-              </Button>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".pdf"
-                onChange={handleFileChange}
-                className="hidden"
-              />
-              {file && (
-                <p className="mt-4 text-purple-400 font-medium">
-                  Selected: <strong className="text-white">{file.name}</strong>
-                </p>
-              )}
-            </div>
-
-            <Button
-              onClick={handleSubmit}
-              disabled={loading || !file}
-              className="mt-6 w-full bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white py-4 text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  Analyzing Your Resume...
-                </>
-              ) : (
-                <>
-                  <span className="mr-2">🚀</span>
-                  Start ATS Challenge
-                </>
-              )}
-            </Button>
-          </div>
-
-          {/* Results Section */}
-          <div className="bg-gray-900 rounded-2xl shadow-2xl p-8 border border-gray-800">
-            {loading || currentStep < steps.length ? (
-              <div>
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold">⚡</span>
+      <div className="container mx-auto px-4 py-12">
+        {/* Upload & Initial Results Section */}
+        {!atsScore && (
+          <div className="max-w-6xl mx-auto mb-16">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Upload Section */}
+              <Card className="shadow-lg">
+                <CardContent className="p-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                      <Upload className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold">Upload Resume</h2>
+                      <p className="text-sm text-muted-foreground">Get instant ATS feedback</p>
+                    </div>
                   </div>
-                  <h2 className="text-2xl font-bold text-white">Analysis in Progress</h2>
-                </div>
-                <div className="space-y-4">
-                  {steps.map((step, index) => (
-                    <div key={index} className="flex items-center gap-4 p-3 bg-gray-800 rounded-lg">
-                      {index < currentStep ? (
-                        <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                          <CheckCircle2 className="w-4 h-4 text-white" />
-                        </div>
-                      ) : index === currentStep ? (
-                        <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                      ) : (
-                        <div className="w-6 h-6 border border-gray-600 rounded-full"></div>
-                      )}
-                      <span
-                        className={`text-lg font-medium ${
-                          index === currentStep
-                            ? "text-blue-400"
-                            : index < currentStep
-                            ? "text-green-400"
-                            : "text-gray-500"
-                        }`}
+
+                  <div
+                    className={`border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 ${
+                      dragActive
+                        ? "border-primary bg-primary/5 scale-[1.02]"
+                        : "border-border hover:border-primary/50 hover:bg-muted/50"
+                    }`}
+                    onDragEnter={handleDrag}
+                    onDragLeave={handleDrag}
+                    onDragOver={handleDrag}
+                    onDrop={handleDrop}
+                  >
+                    <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                      <FileText className="w-8 h-8 text-primary" />
+                    </div>
+                    <p className="text-lg font-semibold mb-2">
+                      Drag & drop your resume here
+                    </p>
+                    <p className="text-muted-foreground mb-4">or</p>
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      onClick={handleChooseFile}
+                      className="mb-2"
+                    >
+                      Choose File
+                    </Button>
+                    <p className="text-xs text-muted-foreground">PDF files only (Max 5MB)</p>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept=".pdf"
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                    {file && (
+                      <div className="mt-4 p-3 bg-primary/5 rounded-lg border border-primary/20">
+                        <p className="text-sm">
+                          <strong className="text-primary">Selected:</strong> {file.name}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  <Button
+                    onClick={handleSubmit}
+                    disabled={loading || !file}
+                    className="mt-6 w-full"
+                    size="lg"
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        Analyzing Resume...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="mr-2 h-5 w-5" />
+                        Analyze Resume
+                      </>
+                    )}
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Analysis Progress */}
+              <Card className="shadow-lg">
+                <CardContent className="p-8">
+                  <AnimatePresence mode="wait">
+                    {loading || currentStep < steps.length ? (
+                      <motion.div
+                        key="loading"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
                       >
-                        {step}
-                      </span>
-                      {index < currentStep && (
-                        <div className="ml-auto text-green-400 font-bold">✓</div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : atsScore !== null ? (
-              <motion.div
-                key="result"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="space-y-6"
-              >
-                <div className="text-center">
-                  <div className="flex items-center justify-center gap-3 mb-4">
-                    <div className="w-8 h-8 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg flex items-center justify-center">
-                      <span className="text-white font-bold">🏆</span>
-                    </div>
-                    <h2 className="text-3xl font-bold text-white">Your ATS Score</h2>
-                  </div>
+                        <div className="flex items-center gap-3 mb-6">
+                          <div className="p-2 bg-primary/10 rounded-lg">
+                            <Loader2 className="h-6 w-6 text-primary animate-spin" />
+                          </div>
+                          <div>
+                            <h2 className="text-2xl font-bold">Analyzing</h2>
+                            <p className="text-sm text-muted-foreground">Please wait...</p>
+                          </div>
+                        </div>
+                        <div className="space-y-3">
+                          {steps.map((step, index) => (
+                            <div
+                              key={index}
+                              className="flex items-center gap-3 p-3 bg-muted rounded-lg"
+                            >
+                              {index < currentStep ? (
+                                <CheckCircle2 className="h-5 w-5 text-green-500" />
+                              ) : index === currentStep ? (
+                                <div className="h-5 w-5 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+                              ) : (
+                                <div className="h-5 w-5 border-2 border-muted-foreground/30 rounded-full"></div>
+                              )}
+                              <span
+                                className={`text-sm font-medium ${
+                                  index === currentStep
+                                    ? "text-primary"
+                                    : index < currentStep
+                                    ? "text-green-500"
+                                    : "text-muted-foreground"
+                                }`}
+                              >
+                                {step}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="initial"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="text-center py-12"
+                      >
+                        <div className="w-16 h-16 bg-muted rounded-xl flex items-center justify-center mx-auto mb-4">
+                          <FileCheck className="w-8 h-8 text-muted-foreground" />
+                        </div>
+                        <h3 className="text-xl font-semibold mb-2">Ready to Analyze</h3>
+                        <p className="text-muted-foreground text-sm">
+                          Upload your resume to get detailed ATS feedback
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        )}
 
-                  {/* Circular Progress */}
-                  <div className="relative w-48 h-48 mx-auto mb-6">
-                    <svg className="w-48 h-48 transform -rotate-90" viewBox="0 0 100 100">
+        {/* ENHANCED POST-ANALYSIS UI */}
+        {atsScore !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="max-w-7xl mx-auto space-y-8"
+          >
+            {/* 1. ENHANCED ATS SCORE OVERVIEW */}
+            <Card className="shadow-xl overflow-hidden">
+              <div className="bg-gradient-to-r from-primary/10 via-purple-500/10 to-secondary/10 p-8">
+                <div className="text-center">
+                  <h2 className="text-3xl font-bold mb-8">Your ATS Score</h2>
+
+                  {/* Animated Circular Gauge with Glow */}
+                  <div className="relative w-64 h-64 mx-auto mb-6">
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 0.6, type: "spring" }}
+                      className={`absolute inset-0 rounded-full blur-2xl ${getScoreStatus(atsScore).glowColor} shadow-2xl`}
+                      style={{ transform: 'scale(1.1)' }}
+                    />
+                    <svg className="w-64 h-64 transform -rotate-90 relative z-10" viewBox="0 0 100 100">
                       <circle
                         cx="50"
                         cy="50"
@@ -299,9 +529,9 @@ export default function ATSChecker() {
                         stroke="currentColor"
                         strokeWidth="8"
                         fill="transparent"
-                        className="text-gray-700"
+                        className="text-muted/30"
                       />
-                      <circle
+                      <motion.circle
                         cx="50"
                         cy="50"
                         r="45"
@@ -309,131 +539,522 @@ export default function ATSChecker() {
                         strokeWidth="8"
                         fill="transparent"
                         strokeDasharray={`${2 * Math.PI * 45}`}
-                        strokeDashoffset={`${2 * Math.PI * 45 * (1 - atsScore / 100)}`}
-                        className={`transition-all duration-2000 ${
-                          atsScore >= 80 ? 'text-green-500' :
-                          atsScore >= 60 ? 'text-yellow-500' : 'text-red-500'
-                        }`}
+                        initial={{ strokeDashoffset: 2 * Math.PI * 45 }}
+                        animate={{ strokeDashoffset: 2 * Math.PI * 45 * (1 - atsScore / 100) }}
+                        transition={{ duration: 2, ease: "easeOut" }}
+                        className={`${getScoreStatus(atsScore).color}`}
                         strokeLinecap="round"
                       />
                     </svg>
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="text-center">
-                        <div className={`text-5xl font-bold ${
-                          atsScore >= 80 ? 'text-green-400' :
-                          atsScore >= 60 ? 'text-yellow-400' : 'text-red-400'
-                        }`}>
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ delay: 0.5, type: "spring" }}
+                          className={`text-6xl font-bold ${getScoreStatus(atsScore).color}`}
+                        >
                           {atsScore}
-                        </div>
-                        <div className="text-gray-400 text-sm">/100</div>
+                        </motion.div>
+                        <div className="text-muted-foreground text-lg">/100</div>
                       </div>
                     </div>
                   </div>
 
-                  <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold ${
-                    atsScore >= 80 ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
-                    atsScore >= 60 ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
-                    'bg-red-500/20 text-red-400 border border-red-500/30'
-                  }`}>
-                    {atsScore >= 80 ? '🎉 EXCELLENT!' :
-                     atsScore >= 60 ? '👍 GOOD JOB!' :
-                     '💪 NEEDS WORK'}
+                  <Badge className={`${getScoreStatus(atsScore).bgColor} ${getScoreStatus(atsScore).color} border ${getScoreStatus(atsScore).borderColor} text-base px-4 py-2`}>
+                    {getScoreStatus(atsScore).label} Profile
+                  </Badge>
+
+                  <p className="text-lg text-muted-foreground mt-4 max-w-2xl mx-auto">
+                    {atsScore >= 81 ? "Strong Profile with Optimization Potential – Your resume is ATS-ready and competitive!" :
+                     atsScore >= 66 ? "Good Foundation with Room for Improvement – A few tweaks will make you stand out." :
+                     atsScore >= 41 ? "Average Score – Strategic optimization needed for better ATS performance." :
+                     "Needs Significant Improvement – Let's rebuild your resume for ATS success."}
+                  </p>
+                </div>
+              </div>
+            </Card>
+
+            {/* 2. ATS SCORE BREAKDOWN - RADAR CHART */}
+            <Card className="shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Activity className="h-6 w-6 text-primary" />
+                  ATS Score Breakdown
+                </CardTitle>
+                <CardDescription>
+                  Detailed analysis of each scoring factor
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {/* Radar Chart */}
+                  <div className="h-80">
+                    <ChartContainer
+                      config={{
+                        score: {
+                          label: "Score",
+                          color: "hsl(var(--primary))",
+                        },
+                      }}
+                      className="w-full h-full"
+                    >
+                      <RadarChart data={scoreBreakdownData}>
+                        <PolarGrid stroke="hsl(var(--border))" />
+                        <PolarAngleAxis 
+                          dataKey="category" 
+                          tick={{ fill: 'hsl(var(--foreground))', fontSize: 12 }}
+                        />
+                        <PolarRadiusAxis angle={90} domain={[0, 100]} tick={{ fill: 'hsl(var(--muted-foreground))' }} />
+                        <Radar
+                          name="Score"
+                          dataKey="score"
+                          stroke="hsl(var(--primary))"
+                          fill="hsl(var(--primary))"
+                          fillOpacity={0.3}
+                        />
+                      </RadarChart>
+                    </ChartContainer>
                   </div>
 
-                  <p className="text-gray-300 text-lg">
-                    {atsScore >= 80 ? 'Your resume is ATS-ready! You\'re in the top tier.' :
-                     atsScore >= 60 ? 'Solid foundation! A few tweaks will get you to 80+.' :
-                     'Time to level up! Let\'s optimize your resume for better results.'}
+                  {/* Score Details */}
+                  <div className="space-y-4">
+                    {scoreBreakdownData.map((item, index) => (
+                      <motion.div
+                        key={item.category}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className="space-y-2"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium">{item.category}</span>
+                          <span className={`font-bold ${
+                            item.score >= 80 ? 'text-green-500' :
+                            item.score >= 60 ? 'text-blue-500' :
+                            item.score >= 40 ? 'text-yellow-500' : 'text-red-500'
+                          }`}>
+                            {item.score}%
+                          </span>
+                        </div>
+                        <Progress value={item.score} className="h-2" />
+                        <p className="text-xs text-muted-foreground">
+                          {item.category === "Keywords" && "Alignment with job description keywords"}
+                          {item.category === "Skills" && "Relevance of technical and soft skills"}
+                          {item.category === "Formatting" && "Resume structure and readability"}
+                          {item.category === "Experience" && "Work history quality and impact"}
+                          {item.category === "Projects" && "Project descriptions and achievements"}
+                          {item.category === "ATS Compatible" && "System readability and parsing"}
+                        </p>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* 3. KEYWORD MATCH ANALYSIS - DONUT CHART */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card className="shadow-lg">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Target className="h-6 w-6 text-primary" />
+                    Keyword Match Insights
+                  </CardTitle>
+                  <CardDescription>
+                    Recruiters' ATS systems prioritize keyword alignment
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-64 mb-6">
+                    <ChartContainer
+                      config={{
+                        matched: {
+                          label: "Matched",
+                          color: "hsl(142, 76%, 36%)",
+                        },
+                        missing: {
+                          label: "Missing",
+                          color: "hsl(24, 100%, 50%)",
+                        },
+                      }}
+                      className="w-full h-full"
+                    >
+                      <PieChart>
+                        <Pie
+                          data={keywordMatchData}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={60}
+                          outerRadius={90}
+                          paddingAngle={5}
+                          dataKey="value"
+                        >
+                          {keywordMatchData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                      </PieChart>
+                    </ChartContainer>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 text-center">
+                    <div className="p-4 bg-green-500/10 rounded-lg border border-green-500/20">
+                      <div className="text-3xl font-bold text-green-500">65%</div>
+                      <div className="text-sm text-muted-foreground">Matched</div>
+                    </div>
+                    <div className="p-4 bg-orange-500/10 rounded-lg border border-orange-500/20">
+                      <div className="text-3xl font-bold text-orange-500">35%</div>
+                      <div className="text-sm text-muted-foreground">Missing</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Keyword Tags */}
+              <Card className="shadow-lg">
+                <CardHeader>
+                  <CardTitle>Keywords Analysis</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {/* Matched Keywords */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <CheckCircle className="h-5 w-5 text-green-500" />
+                      <span className="font-semibold">Matched Keywords</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {matchedKeywords.map((keyword, index) => (
+                        <Badge key={index} variant="outline" className="bg-green-500/10 text-green-600 border-green-500/30">
+                          {keyword}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Missing Keywords */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <AlertCircle className="h-5 w-5 text-orange-500" />
+                      <span className="font-semibold">Missing / Recommended Keywords</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {missingKeywords.map((keyword, index) => (
+                        <Badge key={index} variant="outline" className="bg-orange-500/10 text-orange-600 border-orange-500/30">
+                          {keyword}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* 4. SKILLS & TECH STACK VISUALIZATION */}
+            <Card className="shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Zap className="h-6 w-6 text-primary" />
+                  Skills Alignment with Industry
+                </CardTitle>
+                <CardDescription>
+                  Your technical skills compared to industry standards
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {skillsData.map((skill, index) => (
+                    <motion.div
+                      key={skill.skill}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="space-y-2"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">{skill.skill}</span>
+                        <span className={`font-bold ${
+                          skill.level >= 80 ? 'text-green-500' :
+                          skill.level >= 60 ? 'text-blue-500' : 'text-yellow-500'
+                        }`}>
+                          {skill.level}%
+                        </span>
+                      </div>
+                      <div className="relative">
+                        <Progress value={skill.level} className="h-3" />
+                        <div className="absolute inset-0 flex items-center px-2">
+                          <div 
+                            className="h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent rounded-full"
+                            style={{ width: `${skill.level}%` }}
+                          />
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+
+                <div className="mt-6 p-4 bg-blue-500/10 rounded-lg border border-blue-500/20">
+                  <p className="text-sm text-blue-600 flex items-center gap-2">
+                    <Sparkles className="h-4 w-4" />
+                    <strong>Pro Tip:</strong> Add proficiency levels to your skills section (Beginner, Intermediate, Advanced)
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* 5. ATS COMPATIBILITY CHECK */}
+            <Card className="shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Shield className="h-6 w-6 text-primary" />
+                  ATS Compatibility Check
+                </CardTitle>
+                <CardDescription>
+                  Technical requirements for ATS systems
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3 mb-6">
+                  {atsCompatibilityChecks.map((item, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                      className={`flex items-center gap-3 p-3 rounded-lg border ${
+                        item.passed 
+                          ? 'bg-green-500/5 border-green-500/20' 
+                          : 'bg-red-500/5 border-red-500/20'
+                      }`}
+                    >
+                      {item.passed ? (
+                        <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
+                      ) : (
+                        <X className="h-5 w-5 text-red-500 flex-shrink-0" />
+                      )}
+                      <span className={item.passed ? 'text-foreground' : 'text-muted-foreground'}>
+                        {item.check}
+                      </span>
+                    </motion.div>
+                  ))}
+                </div>
+
+                <div className="p-4 bg-muted rounded-lg">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-semibold">ATS Readability Score</span>
+                    <span className="text-2xl font-bold text-green-500">88%</span>
+                  </div>
+                  <Progress value={88} className="h-2" />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* 6. EXPERIENCE & PROJECT IMPACT GRAPH */}
+            <Card className="shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <BarChart3 className="h-6 w-6 text-primary" />
+                  Experience & Project Impact
+                </CardTitle>
+                <CardDescription>
+                  How well your experience is presented for ATS
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-80">
+                  <ChartContainer
+                    config={{
+                      score: {
+                        label: "Score",
+                        color: "hsl(var(--primary))",
+                      },
+                    }}
+                    className="w-full h-full"
+                  >
+                    <BarChart data={experienceImpactData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                      <XAxis 
+                        dataKey="category" 
+                        tick={{ fill: 'hsl(var(--foreground))', fontSize: 11 }}
+                        angle={-15}
+                        textAnchor="end"
+                        height={80}
+                      />
+                      <YAxis tick={{ fill: 'hsl(var(--muted-foreground))' }} />
+                      <ChartTooltip 
+                        content={({ active, payload }) => {
+                          if (active && payload && payload.length) {
+                            return (
+                              <div className="bg-background border rounded-lg p-3 shadow-lg">
+                                <p className="font-semibold">{payload[0].payload.category}</p>
+                                <p className="text-primary font-bold">{payload[0].value}%</p>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  {payload[0].payload.category === "Quantified Results" && 
+                                    "Projects with metrics perform better in ATS scans"}
+                                </p>
+                              </div>
+                            );
+                          }
+                          return null;
+                        }}
+                      />
+                      <Bar 
+                        dataKey="score" 
+                        fill="hsl(var(--primary))" 
+                        radius={[8, 8, 0, 0]}
+                      />
+                    </BarChart>
+                  </ChartContainer>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* 7. IMPROVEMENT PRIORITY TIMELINE */}
+            <Card className="shadow-lg border-2 border-primary/20">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Rocket className="h-6 w-6 text-primary" />
+                  What to Fix First
+                </CardTitle>
+                <CardDescription>
+                  Prioritized action plan to boost your ATS score
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {improvementPriorities.map((item, index) => (
+                    <motion.div
+                      key={item.priority}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="relative"
+                    >
+                      <div className="flex gap-4">
+                        {/* Priority Number */}
+                        <div className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl ${
+                          item.priority === 1 ? 'bg-red-500 text-white' :
+                          item.priority === 2 ? 'bg-orange-500 text-white' :
+                          item.priority === 3 ? 'bg-yellow-500 text-white' :
+                          'bg-green-500 text-white'
+                        }`}>
+                          {item.priority}
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex-1 pb-8 border-l-2 border-dashed border-muted pl-6 -ml-6">
+                          <div className="bg-muted/50 rounded-lg p-4 hover:bg-muted transition-colors">
+                            <div className="flex items-start justify-between gap-4 mb-2">
+                              <h3 className="font-semibold text-lg">{item.title}</h3>
+                              <Badge className={`${getImpactColor(item.impact)} border`}>
+                                {item.impact} Impact
+                              </Badge>
+                            </div>
+                            <p className="text-sm text-muted-foreground">{item.description}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* 8. HIGH-CONVERSION CTA SECTION */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card className="shadow-lg hover:shadow-xl transition-shadow border-2 border-primary/20 hover:border-primary/40">
+                <CardContent className="p-6 text-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-primary to-purple-500 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <Sparkles className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="font-bold text-lg mb-2">Build ATS-Optimized Resume</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Use our AI Resume Builder with ATS templates
+                  </p>
+                  <Button className="w-full gap-2" onClick={() => window.location.href = '/resume'}>
+                    Start Building
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="shadow-lg hover:shadow-xl transition-shadow border-2 border-green-500/20 hover:border-green-500/40">
+                <CardContent className="p-6 text-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <Zap className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="font-bold text-lg mb-2">Fix Resume with AI</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Get personalized fixes powered by TechieHelp AI
+                  </p>
+                  <Button variant="outline" className="w-full gap-2 border-green-500/30 hover:bg-green-500/10">
+                    Get AI Fixes
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="shadow-lg hover:shadow-xl transition-shadow border-2 border-blue-500/20 hover:border-blue-500/40">
+                <CardContent className="p-6 text-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <Upload className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="font-bold text-lg mb-2">Re-analyze After Changes</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Upload updated resume to track improvements
+                  </p>
+                  <Button variant="outline" className="w-full gap-2 border-blue-500/30 hover:bg-blue-500/10" onClick={() => window.location.reload()}>
+                    Upload Again
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* TechieHelp Branding Footer */}
+            <Card className="bg-gradient-to-br from-primary/5 to-secondary/5 border-primary/20 shadow-lg">
+              <CardContent className="p-8 text-center">
+                <div className="flex items-center justify-center gap-3 mb-4">
+                  <Image
+                    src="/skill.png"
+                    alt="TechieHelp Logo"
+                    width={48}
+                    height={48}
+                    className="h-12 w-auto"
+                  />
+                  <div className="text-left">
+                    <h3 className="text-xl font-bold">Powered by TechieHelp Institute of AI</h3>
+                    <p className="text-sm text-muted-foreground">Building Careers with AI, Innovation & Industry Readiness</p>
+                  </div>
+                </div>
+
+                <div className="mt-6 p-4 bg-background/50 rounded-lg border border-border max-w-3xl mx-auto">
+                  <p className="text-sm text-muted-foreground">
+                    <strong className="text-foreground">Disclaimer:</strong> This ATS score is generated using AI-based analysis aligned with industry hiring systems. 
+                    Final recruiter decisions may vary based on specific company requirements and job descriptions. 
+                    Use this tool as a guide to optimize your resume for better ATS compatibility.
                   </p>
                 </div>
 
-                <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
-                      <span className="text-white font-bold">🎯</span>
-                    </div>
-                    <h3 className="text-xl font-bold text-white">Improvement Mission</h3>
+                <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    <Shield className="h-4 w-4 text-primary" />
+                    <span>Secure & Private</span>
                   </div>
-
-                  <div className="space-y-4">
-                    {feedback && !feedback.includes("PDF parsing encountered") ? (
-                      feedback.split("\n").filter(line => line.trim()).map((line, idx) => {
-                        const parts = line.split(":");
-                        if (parts.length >= 2) {
-                          const issue = parts[0].trim();
-                          const solution = parts.slice(1).join(":").trim();
-                          return (
-                            <div key={idx} className="flex items-start gap-3 p-4 bg-gray-700 rounded-lg border border-gray-600">
-                              <span className="text-red-400 text-xl font-bold mt-1">⚠</span>
-                              <div className="flex-1">
-                                <p className="font-semibold text-white mb-1">{issue}</p>
-                                <p className="text-gray-300 text-sm">{solution}</p>
-                                <p className="text-xs text-gray-500 mt-1">Found in your resume - this reduced your score</p>
-                              </div>
-                            </div>
-                          );
-                        }
-                        return (
-                          <div key={idx} className="p-4 bg-gray-700 rounded-lg border border-gray-600">
-                            <p className="text-gray-300">{line}</p>
-                          </div>
-                        );
-                      })
-                    ) : (
-                      <div className="text-center py-8">
-                        <p className="text-gray-300 mb-4">
-                          We encountered an issue analyzing your resume. Here are proven strategies:
-                        </p>
-                        <div className="space-y-3 text-left">
-                          <div className="flex items-start gap-3 p-3 bg-gray-700 rounded-lg">
-                            <span className="text-green-400 text-lg">✓</span>
-                            <p className="text-gray-300">Use standard fonts (Arial, Calibri, Times New Roman)</p>
-                          </div>
-                          <div className="flex items-start gap-3 p-3 bg-gray-700 rounded-lg">
-                            <span className="text-green-400 text-lg">✓</span>
-                            <p className="text-gray-300">Include relevant keywords from job descriptions</p>
-                          </div>
-                          <div className="flex items-start gap-3 p-3 bg-gray-700 rounded-lg">
-                            <span className="text-green-400 text-lg">✓</span>
-                            <p className="text-gray-300">Use clear section headings (Experience, Skills, Education)</p>
-                          </div>
-                          <div className="flex items-start gap-3 p-3 bg-gray-700 rounded-lg">
-                            <span className="text-green-400 text-lg">✓</span>
-                            <p className="text-gray-300">Save as text-based PDF, not image-based</p>
-                          </div>
-                          <div className="flex items-start gap-3 p-3 bg-gray-700 rounded-lg">
-                            <span className="text-green-400 text-lg">✓</span>
-                            <p className="text-gray-300">Avoid tables, graphics, and complex formatting</p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
+                  <div className="flex items-center gap-2">
+                    <Zap className="h-4 w-4 text-primary" />
+                    <span>Instant Analysis</span>
                   </div>
-
-                  {/* CTA Button */}
-                  <div className="mt-6 text-center">
-                    <Button
-                      className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
-                      onClick={() => window.location.href = '/resume'}
-                    >
-                      <span className="mr-2">🚀</span>
-                      Improve Now - Use Resume Builder
-                    </Button>
-                    <p className="text-xs text-gray-500 mt-2">Fix these issues automatically with our AI Resume Builder</p>
+                  <div className="flex items-center gap-2">
+                    <Award className="h-4 w-4 text-primary" />
+                    <span>Industry-Grade</span>
                   </div>
                 </div>
-              </motion.div>
-            ) : (
-              <div className="text-center py-12">
-                <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <FileText className="w-10 h-10 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-white mb-2">Ready for Challenge</h3>
-                <p className="text-gray-400">Upload your resume to unlock detailed ATS insights and level up your job search game</p>
-              </div>
-            )}
-          </div>
-        </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
       </div>
     </div>
   );
