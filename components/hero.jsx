@@ -183,7 +183,7 @@ const HeroSection = () => {
               className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-white text-center"
               style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}
             >
-              TechieHelp Institute of AI
+              TechieHelp Institute of AI <br /> <span className="text-2xl md:text-4xl lg:text-5xl block mt-4 text-[#00E5FF]">AI Resume Builder & Career Platform</span>
             </h1>
           </SequenceItem>
 

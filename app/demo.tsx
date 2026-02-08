@@ -87,9 +87,8 @@ const GlowCard = ({ children, className = "" }) => {
 
       {/* Card content */}
       <div
-        className={`relative bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6 h-full transition-all duration-300 ${
-          isHovered ? 'scale-105 shadow-2xl shadow-blue-500/25' : 'scale-100'
-        }`}
+        className={`relative bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6 h-full transition-all duration-300 ${isHovered ? 'scale-105 shadow-2xl shadow-blue-500/25' : 'scale-100'
+          }`}
       >
         {children}
       </div>
@@ -117,7 +116,7 @@ export function GlowingEffectDemo() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent"
           >
-            AI Career Tutor (EdgeCareer Platform)
+            AI Career Tutor (TechieHelp Institute of AI Platform)
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}

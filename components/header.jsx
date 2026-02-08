@@ -46,7 +46,7 @@ export default async function Header() {
         <Link href="/">
           <Image
             src={"/skill.png"}
-            alt="EdgeCareer Logo"
+            alt="TechieHelp Institute of AI Logo"
             width={200}
             height={60}
             className="h-12 py-1 w-auto object-contain"

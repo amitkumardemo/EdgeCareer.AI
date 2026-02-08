@@ -1,100 +1,220 @@
 import Link from "next/link";
-import { Github, Linkedin, Mail } from "lucide-react";
+import { Github, Linkedin, Mail, Twitter } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="text-black dark:text-gray-300 border-t border-gray-200 dark:border-gray-800 pt-14 pb-10 px-4 md:px-8">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 text-sm">
-        {/* Logo and Tagline */}
-        <div className="col-span-1">
-          <div className="flex items-center gap-2 mb-4">
-            <img src="/skill.png" alt="EdgeCareer Logo" className="h-6 w-auto" />
-            <span className="text-xl md:text-2xl font-extrabold tracking-wide text-black dark:text-white">
-              EdgeCareer
-            </span>
+    <footer className="bg-muted/50 border-t border-gray-200 dark:border-gray-800 pt-16 pb-8">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          {/* FEATURES */}
+          <div>
+            <h3 className="font-bold text-lg mb-4 text-foreground">Features</h3>
+            <ul className="space-y-3">
+              <li>
+                <Link
+                  href="/resume"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  AI Resume Builder
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/ats-checker"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  ATS Resume Checker
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/interview"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  Mock Interviews
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/career-branding-lab"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  Career Branding Lab
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/internships"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  Internship Programs
+                </Link>
+              </li>
+            </ul>
           </div>
-          <p className="text-gray-600 dark:text-gray-400">
-            Your AI-powered assistant for jobs, resumes, mock interviews, and beyond.
-          </p>
-        </div>
 
-        {/* AI Features Column 1 */}
-        <div>
-          <h3 className="text-xl md:text-2xl font-bold mb-4 text-black dark:text-white border-b border-black/10 dark:border-white/20 pb-1">
-            AI Features to Accelerate Your Career
-          </h3>
-          <ul className="space-y-2">
-            <li><Link href="/dashboard" className="hover:text-primary transition">AI-Powered Career Guidance</Link></li>
-            <li><Link href="/resume" className="hover:text-primary transition">Build Smart Resume & Cover Letter</Link></li>
-            <li><Link href="/ats-checker" className="hover:text-primary transition">Optimize with ATS Score Check</Link></li>
-            <li><Link href="/course-recommendation" className="hover:text-primary transition">Skill Enhancement Courses</Link></li>
-          </ul>
-        </div>
+          {/* PLATFORM */}
+          <div>
+            <h3 className="font-bold text-lg mb-4 text-foreground">Platform</h3>
+            <ul className="space-y-3">
+              <li>
+                <Link
+                  href="/dashboard"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  Dashboard
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/resume"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  Resume History
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/dashboard"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  Analytics
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/dashboard"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  AI Tools
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-        {/* AI Features Column 2 */}
-        <div>
-          <h3 className="text-xl md:text-2xl font-bold mb-4 text-black dark:text-white border-b border-black/10 dark:border-white/20 pb-1">
-            &nbsp;
-          </h3>
-          <ul className="space-y-2">
-            <li><Link href="/interview" className="hover:text-primary transition">Practice with Mock Interviews</Link></li>
-            <li><Link href="/roadmap" className="hover:text-primary transition">Generate Career Roadmap</Link></li>
-            <li><Link href="/latest-jobs" className="hover:text-primary transition">Find Perfect Job Matches</Link></li>
-            <li><Link href="/internships" className="hover:text-primary transition">Secure Your Dream Internship</Link></li>
-          </ul>
-        </div>
+          {/* COMPANY */}
+          <div>
+            <h3 className="font-bold text-lg mb-4 text-foreground">Company</h3>
+            <ul className="space-y-3">
+              <li>
+                <Link
+                  href="/about"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  About TechieHelp Institute of AI
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/contact"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  Contact Us
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/privacy"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/terms"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  Terms & Conditions
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-        {/* Newsletter & Social */}
-        <div>
-          <h3 className="text-xl md:text-2xl font-bold mb-4 text-black dark:text-white">Stay Updated</h3>
-          <form className="flex flex-col gap-3">
-            <input
-              type="email"
-              placeholder="Your email"
-              className="bg-gray-100 dark:bg-gray-800 text-black dark:text-white 
-             px-3 py-2 rounded-md border border-gray-300 dark:border-gray-600 
-             focus:outline-none focus:ring-3 focus:ring-primary transition-colors"
-              suppressHydrationWarning
-            />
-
-            <button
-              type="submit"
-              className="bg-primary hover:bg-primary/90 text-white py-2 rounded-md transition dark:text-black"
-              suppressHydrationWarning
-            >
-              Subscribe
-            </button>
-          </form>
-
-          <div className="flex gap-4 mt-6">
-            <a
-              href="https://github.com/amitkumardemo/EdgeCareer"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-primary transition-colors"
-            >
-              <Github className="h-6 w-6 hover:scale-110 transition-transform" />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/amit-kumar-686196225/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-primary transition-colors"
-            >
-              <Linkedin className="h-6 w-6 hover:scale-110 transition-transform" />
-            </a>
-            <a
-              href="mailto:amitk25783@gmail.com"
-              className="hover:text-primary transition-colors"
-            >
-              <Mail className="h-6 w-6 hover:scale-110 transition-transform" />
-            </a>
+          {/* RESOURCES */}
+          <div>
+            <h3 className="font-bold text-lg mb-4 text-foreground">Resources</h3>
+            <ul className="space-y-3">
+              <li>
+                <Link
+                  href="/career-guidance"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  Career Guidance
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/placement-preparation"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  Placement Preparation
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/interview-tips"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  Interview Tips
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/resume-optimization"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  Resume Optimization
+                </Link>
+              </li>
+            </ul>
           </div>
         </div>
-      </div>
 
-      <div className="text-center text-gray-500 dark:text-gray-400 text-xs mt-10">
-        © {new Date().getFullYear()} EdgeCareer. Built with 💡 by Edge Career.
+        {/* Bottom Section */}
+        <div className="pt-8 border-t border-gray-200 dark:border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="text-center md:text-left">
+            <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
+              <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-600">
+                TechieHelp Institute of AI
+              </span>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              © {new Date().getFullYear()} TechieHelp Institute of AI. All rights reserved.
+            </p>
+          </div>
+
+          <div className="flex gap-4">
+            <Link
+              href="#"
+              className="text-muted-foreground hover:text-primary transition-colors"
+              aria-label="Twitter"
+            >
+              <Twitter className="h-5 w-5" />
+            </Link>
+            <Link
+              href="#"
+              className="text-muted-foreground hover:text-primary transition-colors"
+              aria-label="GitHub"
+            >
+              <Github className="h-5 w-5" />
+            </Link>
+            <Link
+              href="#"
+              className="text-muted-foreground hover:text-primary transition-colors"
+              aria-label="LinkedIn"
+            >
+              <Linkedin className="h-5 w-5" />
+            </Link>
+            <Link
+              href="/contact"
+              className="text-muted-foreground hover:text-primary transition-colors"
+              aria-label="Email"
+            >
+              <Mail className="h-5 w-5" />
+            </Link>
+          </div>
+        </div>
       </div>
     </footer>
   );

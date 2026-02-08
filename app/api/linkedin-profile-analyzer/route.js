@@ -15,8 +15,8 @@ export async function POST(request) {
     // Extract LinkedIn username from URL
     const urlMatch = linkedinUrl.match(/linkedin\.com\/in\/([^\/\?]+)/);
     if (!urlMatch) {
-      return NextResponse.json({ 
-        error: "Invalid LinkedIn URL format. Please use format: https://linkedin.com/in/username" 
+      return NextResponse.json({
+        error: "Invalid LinkedIn URL format. Please use format: https://linkedin.com/in/username"
       }, { status: 400 });
     }
 
@@ -25,7 +25,7 @@ export async function POST(request) {
     // Fetch LinkedIn profile data using RapidAPI (LinkedIn Data API)
     let linkedinData = null;
     let dataFetchError = null;
-    
+
     try {
       const rapidApiResponse = await fetch(
         `https://${process.env.RAPIDAPI_HOST}/get-profile-data-by-url?url=https://www.linkedin.com/in/${linkedinUsername}`,
@@ -66,7 +66,7 @@ export async function POST(request) {
     // Check for leadership signals
     if (linkedinData?.experiences) {
       const leadershipTitles = ['founder', 'ceo', 'cto', 'director', 'head', 'lead', 'manager', 'vp', 'chief'];
-      dataAvailability.leadership = linkedinData.experiences.some(exp => 
+      dataAvailability.leadership = linkedinData.experiences.some(exp =>
         leadershipTitles.some(title => exp.title?.toLowerCase().includes(title))
       );
     }
@@ -91,7 +91,7 @@ export async function POST(request) {
         dataAvailabilityPercentage: dataAvailabilityPercentage.toFixed(1),
         error: {
           title: "Unable to Access LinkedIn Profile Data",
-          message: dataFetchError 
+          message: dataFetchError
             ? `We encountered an issue while trying to fetch your LinkedIn profile: ${dataFetchError}`
             : "We couldn't retrieve enough information from your LinkedIn profile to provide an accurate analysis.",
           reasons: [
@@ -100,7 +100,7 @@ export async function POST(request) {
             "The profile might have privacy settings that prevent data access",
             "There may be a temporary issue with the data source"
           ],
-          whyRealDataMatters: "EdgeCareer uses real, structured LinkedIn data (via RapidAPI) to provide accurate, personalized career intelligence. Unlike generic tools, we analyze your actual profile content, metrics, and positioning to give you actionable insights that are specific to YOUR career brand.",
+          whyRealDataMatters: "TechieHelp Institute of AI uses real, structured LinkedIn data (via RapidAPI) to provide accurate, personalized career intelligence. Unlike generic tools, we analyze your actual profile content, metrics, and positioning to give you actionable insights that are specific to YOUR career brand.",
           nextSteps: [
             {
               step: "Make your LinkedIn profile public",
@@ -199,7 +199,7 @@ ${linkedinData.skills?.slice(0, 30).join(', ') || 'No skills listed'}
 ${Object.entries(dataAvailability).map(([field, available]) => `- ${field}: ${available ? '✅ Available' : '❌ Not Available'}`).join('\n')}
 ` : 'No data available';
 
-    const prompt = `You are the LinkedIn Profile Intelligence Agent for EdgeCareer.
+    const prompt = `You are the LinkedIn Profile Intelligence Agent for TechieHelp Institute of AI.
 
 DATA SOURCE (STRICT & VERIFIED):
 ${profileDataContext}
@@ -433,7 +433,7 @@ OUTPUT FORMAT (STRICT JSON):
 
 TONE: Executive, transparent, analytical, professional, trust-first.
 
-GOAL: Make EdgeCareer feel like a real, data-driven, enterprise-grade career intelligence platform where users first SEE their actual data, then UNDERSTAND the problems, and finally TRUST the improvements.
+GOAL: Make TechieHelp Institute of AI feel like a real, data-driven, enterprise-grade career intelligence platform where users first SEE their actual data, then UNDERSTAND the problems, and finally TRUST the improvements.
 `;
 
     const result = await model.generateContent(prompt);
@@ -450,17 +450,17 @@ GOAL: Make EdgeCareer feel like a real, data-driven, enterprise-grade career int
 
     try {
       const parsed = JSON.parse(jsonResponse);
-      
+
       // Add raw profile data for trust-building display
       parsed.rawProfileData = rawProfileData;
       parsed.dataAvailability = dataAvailability;
-      
+
       return NextResponse.json(parsed);
-      
+
     } catch (parseError) {
       console.error("❌ JSON parse error:", parseError);
       console.error("AI Response preview:", aiResponse.substring(0, 800));
-      
+
       // Return error with partial data if available
       return NextResponse.json({
         error: "Failed to parse AI analysis response",

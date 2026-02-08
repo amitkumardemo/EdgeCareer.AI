@@ -67,7 +67,7 @@ ${Object.entries(providedSections).filter(([_, v]) => v).map(([k]) => `- ${k}: �
 ${Object.entries(providedSections).filter(([_, v]) => !v).map(([k]) => `- ${k}: ❌ Not provided`).join('\n')}
 `;
 
-    const prompt = `You are the LinkedIn Profile Intelligence Agent for EdgeCareer.
+    const prompt = `You are the LinkedIn Profile Intelligence Agent for TechieHelp Institute of AI.
 
 INPUT MODE (STRICT):
 The user has manually pasted their LinkedIn profile data.
@@ -312,20 +312,20 @@ GOAL: Turn manually provided LinkedIn data into a high-authority, recruiter-read
 
     try {
       const parsed = JSON.parse(jsonResponse);
-      
+
       // Add input metadata
       parsed.inputMetadata = {
         providedSections,
         completenessPercentage,
         inputStatus
       };
-      
+
       return NextResponse.json(parsed);
-      
+
     } catch (parseError) {
       console.error("❌ JSON parse error:", parseError);
       console.error("AI Response preview:", aiResponse.substring(0, 800));
-      
+
       return NextResponse.json({
         error: "Failed to parse AI analysis response",
         inputStatus,

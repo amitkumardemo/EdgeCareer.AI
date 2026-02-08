@@ -21,7 +21,7 @@ export default function StreakPopup({ streak }) {
   const getStreakMessage = () => {
     if (streak === 1) {
       return {
-        title: "Welcome to EdgeCareer! 🎉",
+        title: "Welcome to TechieHelp Institute of AI! 🎉",
         message: "You've started your learning journey. Keep it up!",
         icon: "🚀",
       };
