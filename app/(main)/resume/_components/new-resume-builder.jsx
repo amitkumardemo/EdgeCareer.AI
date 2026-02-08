@@ -19,12 +19,13 @@ import { useUser } from "@clerk/nextjs";
 import { CharacterCounter } from "./character-counter";
 import { ResumeLimitInfo } from "./resume-limit-info";
 
-export default function NewResumeBuilder({ initialContent }) {
+export default function NewResumeBuilder({ initialContent, initialName, resumeId }) {
   const { user } = useUser();
   const [showPreview, setShowPreview] = useState(true);
   const [aiSuggestions, setAiSuggestions] = useState([]);
   const [selectedJobTitle, setSelectedJobTitle] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [resumeName, setResumeName] = useState(initialName || "My Resume");
 
   const {
     control,
@@ -145,6 +146,11 @@ export default function NewResumeBuilder({ initialContent }) {
       const html2pdf = (await import("html2pdf.js/dist/html2pdf.min.js")).default;
       const element = document.getElementById("resume-preview");
       
+      if (!element) {
+        toast.error("Resume preview not found");
+        return;
+      }
+      
       const opt = {
         margin: [10, 10],
         filename: `${formValues.contactInfo?.name || 'Resume'}_Resume.pdf`,
@@ -152,17 +158,38 @@ export default function NewResumeBuilder({ initialContent }) {
         html2canvas: { 
           scale: 2,
           useCORS: true,
-          logging: false
+          logging: false,
+          windowHeight: element.scrollHeight,
+          height: element.scrollHeight
         },
         jsPDF: { 
           unit: "mm", 
           format: "a4", 
-          orientation: "portrait" 
+          orientation: "portrait",
+          compress: true
         },
+        pagebreak: { 
+          mode: ['avoid-all', 'css', 'legacy'],
+          avoid: ['div', 'p', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+        }
       };
 
       await html2pdf().set(opt).from(element).save();
-      toast.success("PDF downloaded successfully!");
+      
+      // Track download analytics
+      if (saveResult?.resume?.id) {
+        try {
+          await fetch('/api/track-download', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ resumeId: saveResult.resume.id })
+          });
+        } catch (err) {
+          console.error("Failed to track download:", err);
+        }
+      }
+      
+      toast.success("PDF downloaded successfully! (One page, ATS-optimized)");
     } catch (error) {
       console.error("PDF generation error:", error);
       toast.error("Failed to generate PDF");
@@ -171,9 +198,10 @@ export default function NewResumeBuilder({ initialContent }) {
 
   const onSubmit = async (data) => {
     try {
-      // Convert form data to markdown for storage
+      // Convert form data to JSON for storage
       const content = JSON.stringify(data);
-      await saveResumeFn(content);
+      // Default to manual mode for new-resume-builder
+      await saveResumeFn(content, resumeId, resumeName, "manual");
     } catch (error) {
       console.error("Save error:", error);
     }
@@ -183,13 +211,21 @@ export default function NewResumeBuilder({ initialContent }) {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col lg:flex-row justify-between items-start gap-4">
-        <div className="space-y-2">
+        <div className="space-y-2 flex-1">
           <h1 className="font-bold gradient-title text-5xl md:text-6xl">
             AI Resume Builder
           </h1>
           <p className="text-muted-foreground">
             Build ATS-optimized resumes with live preview
           </p>
+          <div className="max-w-md">
+            <Input
+              placeholder="Resume name (e.g., Software Engineer Resume)"
+              value={resumeName}
+              onChange={(e) => setResumeName(e.target.value)}
+              className="text-sm"
+            />
+          </div>
         </div>
 
         <div className="flex gap-2">
@@ -527,7 +563,7 @@ export default function NewResumeBuilder({ initialContent }) {
               {/* Work Experience */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Work Experience</CardTitle>
+                  <CardTitle>Work Experience (Max 3 entries)</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Controller
@@ -538,6 +574,7 @@ export default function NewResumeBuilder({ initialContent }) {
                         type="Experience"
                         entries={field.value}
                         onChange={field.onChange}
+                        maxEntries={3}
                       />
                     )}
                   />
@@ -547,7 +584,7 @@ export default function NewResumeBuilder({ initialContent }) {
               {/* Education */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Education</CardTitle>
+                  <CardTitle>Education (Max 2 entries)</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Controller
@@ -558,6 +595,7 @@ export default function NewResumeBuilder({ initialContent }) {
                         type="Education"
                         entries={field.value}
                         onChange={field.onChange}
+                        maxEntries={2}
                       />
                     )}
                   />
@@ -567,7 +605,7 @@ export default function NewResumeBuilder({ initialContent }) {
               {/* Projects */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Projects</CardTitle>
+                  <CardTitle>Projects (Max 3 entries)</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Controller
@@ -578,6 +616,7 @@ export default function NewResumeBuilder({ initialContent }) {
                         type="Project"
                         entries={field.value}
                         onChange={field.onChange}
+                        maxEntries={3}
                       />
                     )}
                   />

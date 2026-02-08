@@ -9,6 +9,12 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  LineChart as RechartsLineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
 } from "recharts";
 import {
   BriefcaseIcon,
@@ -22,6 +28,10 @@ import {
   Award,
   FileCheck,
   Target,
+  FileText,
+  Download,
+  Share2,
+  Clock,
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import {
@@ -35,7 +45,16 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import StreakCalendar from "@/components/streak-calendar";
 
-const DashboardView = ({ insights, gamification, userData, atsAnalytics }) => {
+const DashboardView = ({ 
+  insights, 
+  gamification, 
+  userData, 
+  atsAnalytics,
+  resumeAnalytics,
+  resumeTimeline,
+  resumeStatusDistribution,
+  recentResumeActivity 
+}) => {
   // Safely parse JSON strings back to arrays/objects with fallback values
   const safeJSONParse = (jsonString, fallback = []) => {
     try {
@@ -287,6 +306,274 @@ const DashboardView = ({ insights, gamification, userData, atsAnalytics }) => {
               </CardContent>
             </Card>
           </div>
+        </div>
+      )}
+
+      {/* Resume Builder Analytics */}
+      {resumeAnalytics && resumeAnalytics.totalResumesCreated > 0 && (
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold">Resume Builder Analytics</h2>
+            <a href="/resume" className="text-sm text-primary hover:underline">
+              Go to Resume Builder →
+            </a>
+          </div>
+
+          {/* Quick Stats Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Total Resumes
+                </CardTitle>
+                <FileText className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{resumeAnalytics.totalResumesCreated}</div>
+                <p className="text-xs text-muted-foreground">
+                  All resumes built
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Manual Resumes
+                </CardTitle>
+                <FileCheck className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{resumeAnalytics.manualResumesCount || 0}</div>
+                <p className="text-xs text-muted-foreground">
+                  Built manually
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  AI Resumes
+                </CardTitle>
+                <Brain className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{resumeAnalytics.aiResumesCount || 0}</div>
+                <p className="text-xs text-muted-foreground">
+                  AI-generated
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Downloads
+                </CardTitle>
+                <Download className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{resumeAnalytics.totalResumesDownloaded}</div>
+                <p className="text-xs text-muted-foreground">
+                  PDF downloads
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Shares
+                </CardTitle>
+                <Share2 className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{resumeAnalytics.totalResumesShared}</div>
+                <p className="text-xs text-muted-foreground">
+                  Resume shares
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Charts Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            {/* Resume Mode Distribution - Bar Chart */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Resume Builder Mode</CardTitle>
+                <CardDescription>
+                  Manual vs AI-generated resumes
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={[
+                      { name: 'Manual', count: resumeAnalytics.manualResumesCount || 0 },
+                      { name: 'AI', count: resumeAnalytics.aiResumesCount || 0 },
+                    ]}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip
+                        content={({ active, payload }) => {
+                          if (active && payload && payload.length) {
+                            return (
+                              <div className="bg-background border rounded-lg p-2 shadow-md">
+                                <p className="font-medium">{payload[0].payload.name} Mode</p>
+                                <p className="text-sm text-primary">
+                                  Count: {payload[0].value}
+                                </p>
+                              </div>
+                            );
+                          }
+                          return null;
+                        }}
+                      />
+                      <Bar dataKey="count" fill="#3b82f6" radius={[8, 8, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Resume Status Distribution - Pie Chart */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Resume Status Distribution</CardTitle>
+                <CardDescription>
+                  Breakdown by status
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={resumeStatusDistribution}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                        outerRadius={80}
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
+                        {resumeStatusDistribution.map((entry, index) => {
+                          const colors = ['#3b82f6', '#10b981', '#f59e0b'];
+                          return <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />;
+                        })}
+                      </Pie>
+                      <Tooltip />
+                      <Legend />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Resume Creation Timeline - Line Chart */}
+          {resumeTimeline && resumeTimeline.length > 0 && (
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle>Resume Creation Timeline</CardTitle>
+                <CardDescription>
+                  Your resume building activity over time
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <RechartsLineChart data={resumeTimeline}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis 
+                        dataKey="date" 
+                        tickFormatter={(date) => format(new Date(date), "MMM dd")}
+                      />
+                      <YAxis />
+                      <Tooltip
+                        content={({ active, payload }) => {
+                          if (active && payload && payload.length) {
+                            return (
+                              <div className="bg-background border rounded-lg p-2 shadow-md">
+                                <p className="font-medium">
+                                  {format(new Date(payload[0].payload.date), "MMM dd, yyyy")}
+                                </p>
+                                <p className="text-sm text-primary">
+                                  Resumes: {payload[0].value}
+                                </p>
+                              </div>
+                            );
+                          }
+                          return null;
+                        }}
+                      />
+                      <Line 
+                        type="monotone" 
+                        dataKey="count" 
+                        stroke="#3b82f6" 
+                        strokeWidth={2}
+                        dot={{ fill: '#3b82f6', r: 4 }}
+                        activeDot={{ r: 6 }}
+                      />
+                    </RechartsLineChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Recent Resume Activity */}
+          {recentResumeActivity && recentResumeActivity.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Resume Activity</CardTitle>
+                <CardDescription>
+                  Your latest resume updates
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {recentResumeActivity.map((resume) => (
+                    <div key={resume.id} className="flex items-center justify-between border-b pb-3 last:border-0">
+                      <div className="flex items-center gap-3">
+                        <FileText className="h-5 w-5 text-primary" />
+                        <div>
+                          <p className="font-medium">{resume.name}</p>
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <Clock className="h-3 w-3" />
+                            <span>
+                              {formatDistanceToNow(new Date(resume.updatedAt), { addSuffix: true })}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        {resume.downloadCount > 0 && (
+                          <div className="flex items-center gap-1">
+                            <Download className="h-3 w-3" />
+                            <span>{resume.downloadCount}</span>
+                          </div>
+                        )}
+                        {resume.shareCount > 0 && (
+                          <div className="flex items-center gap-1">
+                            <Share2 className="h-3 w-3" />
+                            <span>{resume.shareCount}</span>
+                          </div>
+                        )}
+                        <Badge variant={resume.status === 'downloaded' ? 'default' : 'secondary'}>
+                          {resume.status}
+                        </Badge>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
       )}
 

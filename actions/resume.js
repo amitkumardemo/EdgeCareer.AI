@@ -9,42 +9,105 @@ import { updateGamification } from "./gamification";
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-export async function saveResume(content) {
+export async function saveResume(content, resumeId = null, name = "My Resume", mode = "manual") {
   const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  if (!userId) {
+    console.error("❌ [Action] Unauthorized saveResume attempt");
+    throw new Error("Unauthorized");
+  }
 
   const user = await db.user.findUnique({
     where: { clerkUserId: userId },
   });
 
-  if (!user) throw new Error("User not found");
+  if (!user) {
+    console.error("❌ [Action] User not found");
+    throw new Error("User not found");
+  }
 
   try {
-    const resume = await db.resume.upsert({
-      where: {
-        userId: user.id,
-      },
-      update: {
-        content,
-      },
-      create: {
-        userId: user.id,
-        content,
-      },
-    });
+    let resume;
+    
+    if (resumeId) {
+      console.log(`🔄 [DB] Updating existing resume ${resumeId} for user ${user.id}...`);
+      console.log(`📝 Mode: ${mode}, Name: ${name}`);
+      
+      // Update existing resume
+      resume = await db.resume.update({
+        where: {
+          id: resumeId,
+          userId: user.id,
+        },
+        data: {
+          content,
+          name,
+          mode,
+          status: "saved",
+        },
+      });
+
+      console.log(`✅ [DB] Resume ${resumeId} updated successfully`);
+
+      // Update user analytics
+      await db.user.update({
+        where: { id: user.id },
+        data: {
+          totalResumesSaved: {
+            increment: 1,
+          },
+        },
+      });
+      
+      console.log(`📊 [DB] User analytics updated - totalResumesSaved incremented`);
+    } else {
+      console.log(`🔄 [DB] Creating new resume for user ${user.id}...`);
+      console.log(`📝 Mode: ${mode}, Name: ${name}`);
+      
+      // Create new resume
+      resume = await db.resume.create({
+        data: {
+          userId: user.id,
+          content,
+          name,
+          mode,
+          status: "saved",
+        },
+      });
+
+      console.log(`✅ [DB] New resume created with ID: ${resume.id}`);
+
+      // Update user analytics
+      await db.user.update({
+        where: { id: user.id },
+        data: {
+          totalResumesCreated: {
+            increment: 1,
+          },
+          totalResumesSaved: {
+            increment: 1,
+          },
+        },
+      });
+      
+      console.log(`📊 [DB] User analytics updated - totalResumesCreated and totalResumesSaved incremented`);
+    }
 
     // Update gamification for resume creation
     const gamification = await updateGamification(user.id, "resume_created");
 
     revalidatePath("/resume");
+    revalidatePath("/dashboard");
+    
+    console.log(`✅ [Action] Resume saved successfully - ID: ${resume.id}, Mode: ${mode}`);
+    
     return { resume, gamification };
   } catch (error) {
-    console.error("Error saving resume:", error);
+    console.error("❌ [Action] Error saving resume:", error.message);
     throw new Error("Failed to save resume");
   }
 }
 
-export async function getResume() {
+export async function getResume(resumeId = null) {
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
@@ -54,9 +117,45 @@ export async function getResume() {
 
   if (!user) throw new Error("User not found");
 
-  return await db.resume.findUnique({
+  if (resumeId) {
+    return await db.resume.findUnique({
+      where: {
+        id: resumeId,
+        userId: user.id,
+      },
+    });
+  }
+
+  // Get the most recent resume
+  const resumes = await db.resume.findMany({
     where: {
       userId: user.id,
+    },
+    orderBy: {
+      updatedAt: "desc",
+    },
+    take: 1,
+  });
+
+  return resumes[0] || null;
+}
+
+export async function getAllResumes() {
+  const { userId } = await auth();
+  if (!userId) throw new Error("Unauthorized");
+
+  const user = await db.user.findUnique({
+    where: { clerkUserId: userId },
+  });
+
+  if (!user) throw new Error("User not found");
+
+  return await db.resume.findMany({
+    where: {
+      userId: user.id,
+    },
+    orderBy: {
+      updatedAt: "desc",
     },
   });
 }

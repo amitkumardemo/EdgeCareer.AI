@@ -36,11 +36,11 @@ export const contactSchema = z.object({
 
 export const entrySchema = z
   .object({
-    title: z.string().min(1, "Title is required").max(60, "Title too long"),
-    organization: z.string().min(1, "Organization is required").max(60, "Organization name too long"),
+    title: z.string().min(1, "Title is required").max(60, "Title too long (max 60 characters)"),
+    organization: z.string().min(1, "Organization is required").max(60, "Organization name too long (max 60 characters)"),
     startDate: z.string().min(1, "Start date is required"),
     endDate: z.string().optional(),
-    description: z.string().min(1, "Description is required").max(360, "Description too long (max 3 bullets × 120 chars)"),
+    description: z.string().min(1, "Description is required").max(360, "Description too long (max 3 bullets × 120 chars each)"),
     current: z.boolean().default(false),
   })
   .refine(
@@ -58,21 +58,21 @@ export const entrySchema = z
 
 export const resumeSchema = z.object({
   contactInfo: z.object({
-    name: z.string().max(50, "Name too long").optional(),
+    name: z.string().max(50, "Name too long (max 50 characters)").optional(),
     email: z.string().email("Invalid email address").optional(),
-    mobile: z.string().max(20, "Mobile number too long").optional(),
+    mobile: z.string().max(20, "Mobile number too long (max 20 characters)").optional(),
     linkedin: z.string().url("Invalid URL").optional().or(z.literal("")),
     github: z.string().url("Invalid URL").optional().or(z.literal("")),
     portfolio: z.string().url("Invalid URL").optional().or(z.literal("")),
   }),
   summary: z.string().max(200, "Summary too long (max 200 characters)").optional(),
-  skills: z.string().max(300, "Skills section too long (max 12 skills per category)").optional(),
-  experience: z.array(entrySchema).max(4, "Too many experience entries (max 4)").optional(),
-  education: z.array(entrySchema).max(3, "Too many education entries (max 3)").optional(),
-  projects: z.array(entrySchema).max(3, "Too many projects (max 3)").optional(),
-  achievements: z.string().max(300, "Achievements too long (max 3 points × 100 chars)").optional(),
-  positions: z.string().max(220, "Positions too long (max 2 points × 110 chars)").optional(),
-  whyIFit: z.string().max(300, "Why I Fit section too long (max 3 points × 100 chars)").optional(),
+  skills: z.string().max(300, "Skills section too long (max 300 characters)").optional(),
+  experience: z.array(entrySchema).max(3, "Maximum 3 experiences allowed for one-page resume").optional(),
+  education: z.array(entrySchema).max(2, "Maximum 2 education entries allowed for one-page resume").optional(),
+  projects: z.array(entrySchema).max(3, "Maximum 3 projects allowed for one-page resume").optional(),
+  achievements: z.string().max(300, "Achievements too long (max 3 points × 100 chars each)").optional(),
+  positions: z.string().max(220, "Positions too long (max 2 points × 110 chars each)").optional(),
+  whyIFit: z.string().max(300, "Why I Fit section too long (max 3 points × 100 chars each)").optional(),
 });
 
 export const coverLetterSchema = z.object({

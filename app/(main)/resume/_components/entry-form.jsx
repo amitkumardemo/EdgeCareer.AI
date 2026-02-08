@@ -29,8 +29,9 @@ const formatDisplayDate = (dateString) => {
   return format(date, "MMM yyyy");
 };
 
-export function EntryForm({ type, entries, onChange }) {
+export function EntryForm({ type, entries = [], onChange, maxEntries = 10 }) {
   const [isAdding, setIsAdding] = useState(false);
+  const isMaxReached = entries.length >= maxEntries;
 
   const {
     register,
@@ -295,7 +296,7 @@ export function EntryForm({ type, entries, onChange }) {
         </Card>
       )}
 
-      {!isAdding && (
+      {!isAdding && !isMaxReached && (
         <Button
           className="w-full"
           variant="outline"
@@ -304,6 +305,14 @@ export function EntryForm({ type, entries, onChange }) {
           <PlusCircle className="h-4 w-4 mr-2" />
           Add {type}
         </Button>
+      )}
+
+      {!isAdding && isMaxReached && (
+        <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-sm text-red-700 font-medium text-center">
+            ⚠️ Maximum {maxEntries} {type.toLowerCase()}(s) allowed for one-page resume
+          </p>
+        </div>
       )}
     </div>
   );

@@ -94,6 +94,12 @@ export default async function Header() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
+                  <Link href="/ai-resume-generator" className="flex items-center gap-2">
+                    <Sparkles className="h-4 w-4" />
+                    AI Resume Generator
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link
                     href="/ai-cover-letter"
                     className="flex items-center gap-2"

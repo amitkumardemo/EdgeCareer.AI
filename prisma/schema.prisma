@@ -34,9 +34,15 @@ model User {
   // Relations
   skills        String    @default("[]") // JSON string
   assessments   Assessment[]
-  resume        Resume?
+  resumes       Resume[]
   coverLetter   CoverLetter[]
   atsAnalyses   ATSAnalysis[]
+  
+  // Resume Analytics
+  totalResumesCreated   Int @default(0)
+  totalResumesSaved     Int @default(0)
+  totalResumesDownloaded Int @default(0)
+  totalResumesShared    Int @default(0)
   
   // ATS Stats
   totalResumesAnalyzed Int @default(0)
@@ -59,14 +65,24 @@ model Assessment {
 }
 
 model Resume {
-  id        String   @id @default(cuid())
-  userId    String   @unique
-  content   String
-  atsScore  Float?
-  feedback  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id])
+  id            String   @id @default(cuid())
+  userId        String
+  name          String   @default("My Resume")
+  content       String
+  mode          String   @default("manual") // manual, ai
+  status        String   @default("draft") // draft, saved, downloaded
+  atsScore      Float?
+  feedback      String?
+  downloadCount Int      @default(0)
+  shareCount    Int      @default(0)
+  shareToken    String?  @unique
+  isPublic      Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([shareToken])
 }
 
 model CoverLetter {
