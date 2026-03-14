@@ -8,8 +8,8 @@ export default function ResumePreview({ formData, data, isPublicView = false }) 
   const { contactInfo = {}, summary, skills, experience = [], education = [], projects = [], achievements, positions, whyIFit } = resumeData;
 
   return (
-    <div id="resume-preview" className="bg-white text-black p-8 shadow-lg" style={{ 
-      width: '210mm', 
+    <div id="resume-preview" className="bg-white text-black p-8 shadow-lg" style={{
+      width: '210mm',
       height: '297mm',
       maxHeight: '297mm',
       fontSize: '11.5px',
@@ -21,11 +21,11 @@ export default function ResumePreview({ formData, data, isPublicView = false }) 
       boxSizing: 'border-box'
     }}>
       {/* Header */}
-      <div className="border-b-2 border-gray-800 pb-3 mb-4">
-        <h1 className="font-bold text-gray-900 mb-2" style={{ fontSize: '26px', letterSpacing: '-0.5px' }}>
+      <div className="border-b-2 border-gray-800 pb-3 mb-5">
+        <h1 className="font-bold text-gray-900 mb-2 uppercase tracking-wide" style={{ fontSize: '28px', letterSpacing: '-0.5px' }}>
           {contactInfo.name || "YOUR NAME"}
         </h1>
-        <div className="flex flex-wrap gap-x-3 gap-y-1 text-gray-700" style={{ fontSize: '10.5px' }}>
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-gray-700" style={{ fontSize: '11px' }}>
           {contactInfo.email && (
             <a href={`mailto:${contactInfo.email}`} className="flex items-center gap-1 hover:text-blue-600 no-underline">
               <Mail style={{ width: '12px', height: '12px', color: '#374151' }} />
@@ -66,10 +66,10 @@ export default function ResumePreview({ formData, data, isPublicView = false }) 
           {/* Professional Summary */}
           {summary && (
             <div>
-              <h2 className="font-bold text-gray-900 border-b border-gray-400 pb-1 mb-1" style={{ fontSize: '13px', fontWeight: '700' }}>
+              <h2 className="font-bold text-gray-900 border-b-2 border-gray-300 pb-1 mb-2 uppercase tracking-wider" style={{ fontSize: '14px' }}>
                 SUMMARY
               </h2>
-              <p className="text-gray-800 whitespace-pre-wrap" style={{ fontSize: '10.5px', lineHeight: '1.45' }}>
+              <p className="text-gray-800 whitespace-pre-wrap text-justify" style={{ fontSize: '11px', lineHeight: '1.6' }}>
                 {summary}
               </p>
             </div>
@@ -78,19 +78,19 @@ export default function ResumePreview({ formData, data, isPublicView = false }) 
           {/* Education */}
           {education && education.length > 0 && (
             <div>
-              <h2 className="font-bold text-gray-900 border-b border-gray-400 pb-1 mb-1" style={{ fontSize: '13px', fontWeight: '700' }}>
+              <h2 className="font-bold text-gray-900 border-b-2 border-gray-300 pb-1 mb-2 uppercase tracking-wider" style={{ fontSize: '14px' }}>
                 EDUCATION
               </h2>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {education.map((edu, index) => (
-                  <div key={index} style={{ fontSize: '10.5px' }}>
-                    <div className="font-semibold text-gray-900">{edu.title}</div>
-                    <div className="text-gray-700">{edu.organization}</div>
-                    <div className="text-gray-600" style={{ fontSize: '9.5px' }}>
+                  <div key={index} style={{ fontSize: '11px' }}>
+                    <div className="font-bold text-gray-900">{edu.title}</div>
+                    <div className="text-gray-700 font-medium">{edu.organization}</div>
+                    <div className="text-gray-600 font-medium" style={{ fontSize: '10px' }}>
                       {edu.current ? `${edu.startDate} - Present` : `${edu.startDate} - ${edu.endDate}`}
                     </div>
                     {edu.description && (
-                      <p className="text-gray-700 mt-1 whitespace-pre-wrap" style={{ fontSize: '10px', lineHeight: '1.4' }}>{edu.description}</p>
+                      <p className="text-gray-700 mt-1 whitespace-pre-wrap" style={{ fontSize: '10.5px', lineHeight: '1.5' }}>{edu.description}</p>
                     )}
                   </div>
                 ))}
@@ -101,10 +101,10 @@ export default function ResumePreview({ formData, data, isPublicView = false }) 
           {/* Skills */}
           {skills && (
             <div>
-              <h2 className="font-bold text-gray-900 border-b border-gray-400 pb-1 mb-1" style={{ fontSize: '13px', fontWeight: '700' }}>
+              <h2 className="font-bold text-gray-900 border-b-2 border-gray-300 pb-1 mb-2 uppercase tracking-wider" style={{ fontSize: '14px' }}>
                 SKILLS
               </h2>
-              <div className="text-gray-800 whitespace-pre-wrap" style={{ fontSize: '10.5px', lineHeight: '1.45' }}>
+              <div className="text-gray-800 whitespace-pre-wrap text-justify" style={{ fontSize: '11px', lineHeight: '1.6' }}>
                 {skills}
               </div>
             </div>
@@ -113,10 +113,10 @@ export default function ResumePreview({ formData, data, isPublicView = false }) 
           {/* Achievements */}
           {achievements && (
             <div>
-              <h2 className="font-bold text-gray-900 border-b border-gray-400 pb-1 mb-1" style={{ fontSize: '13px', fontWeight: '700' }}>
+              <h2 className="font-bold text-gray-900 border-b-2 border-gray-300 pb-1 mb-2 uppercase tracking-wider" style={{ fontSize: '14px' }}>
                 ACHIEVEMENTS
               </h2>
-              <div className="text-gray-800 whitespace-pre-wrap" style={{ fontSize: '10.5px', lineHeight: '1.45' }}>
+              <div className="text-gray-800 whitespace-pre-wrap text-justify" style={{ fontSize: '11px', lineHeight: '1.6' }}>
                 {achievements}
               </div>
             </div>
@@ -125,10 +125,10 @@ export default function ResumePreview({ formData, data, isPublicView = false }) 
           {/* Positions of Responsibility */}
           {positions && (
             <div>
-              <h2 className="font-bold text-gray-900 border-b border-gray-400 pb-1 mb-1" style={{ fontSize: '13px', fontWeight: '700' }}>
+              <h2 className="font-bold text-gray-900 border-b-2 border-gray-300 pb-1 mb-2 uppercase tracking-wider" style={{ fontSize: '14px' }}>
                 LEADERSHIP
               </h2>
-              <div className="text-gray-800 whitespace-pre-wrap" style={{ fontSize: '10.5px', lineHeight: '1.45' }}>
+              <div className="text-gray-800 whitespace-pre-wrap text-justify" style={{ fontSize: '11px', lineHeight: '1.6' }}>
                 {positions}
               </div>
             </div>
@@ -140,23 +140,23 @@ export default function ResumePreview({ formData, data, isPublicView = false }) 
           {/* Experience */}
           {experience && experience.length > 0 && (
             <div>
-              <h2 className="font-bold text-gray-900 border-b border-gray-400 pb-1 mb-2" style={{ fontSize: '13px', fontWeight: '700' }}>
+              <h2 className="font-bold text-gray-900 border-b-2 border-gray-300 pb-1 mb-3 uppercase tracking-wider" style={{ fontSize: '14px' }}>
                 EXPERIENCE
               </h2>
-              <div className="space-y-2">
+              <div className="space-y-4">
                 {experience.map((exp, index) => (
-                  <div key={index} style={{ fontSize: '10.5px' }}>
+                  <div key={index} style={{ fontSize: '11px' }}>
                     <div className="flex justify-between items-start mb-1">
                       <div>
-                        <div className="font-semibold text-gray-900">{exp.title}</div>
-                        <div className="text-gray-700">{exp.organization}</div>
+                        <div className="font-bold text-gray-900 text-lg" style={{ fontSize: '12.5px' }}>{exp.title}</div>
+                        <div className="text-gray-700 font-medium">{exp.organization}</div>
                       </div>
-                      <div className="text-gray-600 text-right" style={{ fontSize: '9.5px' }}>
+                      <div className="text-gray-600 text-right font-medium" style={{ fontSize: '10px' }}>
                         {exp.current ? `${exp.startDate} - Present` : `${exp.startDate} - ${exp.endDate}`}
                       </div>
                     </div>
                     {exp.description && (
-                      <div className="text-gray-700 mt-1 whitespace-pre-wrap" style={{ fontSize: '10px', lineHeight: '1.4' }}>
+                      <div className="text-gray-700 mt-1 whitespace-pre-wrap text-justify" style={{ fontSize: '10.5px', lineHeight: '1.5' }}>
                         {exp.description}
                       </div>
                     )}
@@ -169,27 +169,27 @@ export default function ResumePreview({ formData, data, isPublicView = false }) 
           {/* Projects */}
           {projects && projects.length > 0 && (
             <div>
-              <h2 className="font-bold text-gray-900 border-b border-gray-400 pb-1 mb-2" style={{ fontSize: '13px', fontWeight: '700' }}>
+              <h2 className="font-bold text-gray-900 border-b-2 border-gray-300 pb-1 mb-3 uppercase tracking-wider" style={{ fontSize: '14px' }}>
                 PROJECTS
               </h2>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {projects.map((project, index) => (
-                  <div key={index} style={{ fontSize: '10.5px' }}>
+                  <div key={index} style={{ fontSize: '11px' }}>
                     <div className="flex justify-between items-start mb-1">
                       <div>
-                        <div className="font-semibold text-gray-900">{project.title}</div>
+                        <div className="font-bold text-gray-900" style={{ fontSize: '12px' }}>{project.title}</div>
                         {project.organization && (
-                          <div className="text-gray-700">{project.organization}</div>
+                          <div className="text-gray-700 font-medium">{project.organization}</div>
                         )}
                       </div>
                       {(project.startDate || project.endDate) && (
-                        <div className="text-gray-600 text-right" style={{ fontSize: '9.5px' }}>
+                        <div className="text-gray-600 text-right font-medium" style={{ fontSize: '10px' }}>
                           {project.current ? `${project.startDate} - Present` : `${project.startDate} - ${project.endDate}`}
                         </div>
                       )}
                     </div>
                     {project.description && (
-                      <div className="text-gray-700 mt-1 whitespace-pre-wrap" style={{ fontSize: '10px', lineHeight: '1.4' }}>
+                      <div className="text-gray-700 mt-1 whitespace-pre-wrap text-justify" style={{ fontSize: '10.5px', lineHeight: '1.5' }}>
                         {project.description}
                       </div>
                     )}

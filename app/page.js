@@ -399,11 +399,11 @@ export default function LandingPage() {
         <svg className="absolute inset-0 w-full h-full opacity-5 dark:opacity-3" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="circuit" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
-              <path d="M10 10 L90 10 M50 10 L50 90 M10 50 L90 50" stroke="currentColor" strokeWidth="0.5" fill="none"/>
-              <circle cx="50" cy="50" r="2" fill="currentColor"/>
+              <path d="M10 10 L90 10 M50 10 L50 90 M10 50 L90 50" stroke="currentColor" strokeWidth="0.5" fill="none" />
+              <circle cx="50" cy="50" r="2" fill="currentColor" />
             </pattern>
           </defs>
-          <rect width="100%" height="100%" fill="url(#circuit)"/>
+          <rect width="100%" height="100%" fill="url(#circuit)" />
         </svg>
       </div>
 
@@ -452,23 +452,23 @@ export default function LandingPage() {
                 <div className="flex items-center space-x-8 md:space-x-12">
                   <div className="text-center">
                     <div className="text-2xl md:text-3xl font-bold text-primary">5000+</div>
-                    <div className="text-sm text-muted-foreground">Students Enrolled</div>
+                    <div className="text-sm text-muted-foreground">Students Using AI Tools</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl md:text-3xl font-bold text-primary">95%</div>
-                    <div className="text-sm text-muted-foreground">Placement Rate</div>
+                    <div className="text-2xl md:text-3xl font-bold text-primary">85%</div>
+                    <div className="text-sm text-muted-foreground">Improved Resume Readiness</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl md:text-3xl font-bold text-primary">200+</div>
-                    <div className="text-sm text-muted-foreground">Partner Companies</div>
+                    <div className="text-sm text-muted-foreground">Colleges, Mentors & Partners</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl md:text-3xl font-bold text-primary">24/7</div>
                     <div className="text-sm text-muted-foreground">AI Support</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl md:text-3xl font-bold text-primary">12 LPA</div>
-                    <div className="text-sm text-muted-foreground">Highest Package</div>
+                    <div className="text-2xl md:text-3xl font-bold text-primary">AICTE</div>
+                    <div className="text-sm text-muted-foreground">Internship Portal Aligned</div>
                   </div>
                 </div>
               </div>
@@ -508,23 +508,23 @@ export default function LandingPage() {
                 <div className="flex items-center space-x-8 md:space-x-12">
                   <div className="text-center">
                     <div className="text-2xl md:text-3xl font-bold text-primary">5000+</div>
-                    <div className="text-sm text-muted-foreground">Students Enrolled</div>
+                    <div className="text-sm text-muted-foreground">Students Using AI Tools</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl md:text-3xl font-bold text-primary">95%</div>
-                    <div className="text-sm text-muted-foreground">Placement Rate</div>
+                    <div className="text-2xl md:text-3xl font-bold text-primary">85%</div>
+                    <div className="text-sm text-muted-foreground">Improved Resume Readiness</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl md:text-3xl font-bold text-primary">200+</div>
-                    <div className="text-sm text-muted-foreground">Partner Companies</div>
+                    <div className="text-sm text-muted-foreground">Colleges, Mentors & Partners</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl md:text-3xl font-bold text-primary">24/7</div>
                     <div className="text-sm text-muted-foreground">AI Support</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl md:text-3xl font-bold text-primary">12 LPA</div>
-                    <div className="text-sm text-muted-foreground">Highest Package</div>
+                    <div className="text-2xl md:text-3xl font-bold text-primary">AICTE</div>
+                    <div className="text-sm text-muted-foreground">Internship Portal Aligned</div>
                   </div>
                 </div>
               </div>
@@ -547,8 +547,6 @@ export default function LandingPage() {
           }
         `}</style>
       </section>
-
-      
 
       {/* About Us Section */}
       <section className="w-full py-12 md:py-20 bg-background">
@@ -574,16 +572,33 @@ export default function LandingPage() {
             >
               <motion.h2
                 variants={fadeIn}
-                className="text-3xl md:text-4xl font-bold mb-6"
+                className="text-3xl md:text-4xl font-bold mb-3"
               >
-                TechieHelp Institute of AI
+                About TechieHelp Institute of AI
               </motion.h2>
               <motion.p
                 variants={fadeIn}
-                className="text-lg text-muted-foreground mb-6"
+                className="text-sm font-semibold text-primary mb-4 uppercase tracking-widest"
               >
-                TechieHelp Institute of AI is a future-focused, AI-powered career and skill development institute designed to bridge the gap between education and industry. We empower students, graduates, and professionals with practical skills, real-world exposure, and AI-driven career guidance. Founded with the vision of transforming learning into outcomes, we combine AI technology, mentorship, internships, automation, and career intelligence into one ecosystem.
+                An AI Software Company–Backed Career Intelligence Platform
               </motion.p>
+              <motion.p
+                variants={fadeIn}
+                className="text-lg text-muted-foreground mb-4 leading-relaxed"
+              >
+                TechieHelp Institute of AI is an <strong>AI-powered career intelligence and placement readiness platform</strong> — built by TechieHelp, an established AI software development company. Our platform helps students prepare for placements with precision, and equips college TPOs with real-time data to support better placement decisions.
+              </motion.p>
+              <motion.p
+                variants={fadeIn}
+                className="text-lg text-muted-foreground mb-4 leading-relaxed"
+              >
+                We are <strong>not a hiring platform</strong>. We are the infrastructure that makes students job-ready and makes placement processes data-driven, fair, and efficient.
+              </motion.p>
+              <motion.div variants={fadeIn} className="flex flex-wrap gap-2 mt-2">
+                {["MSME Certified", "ISO Certified", "AICTE Aligned", "Founder-Led"].map(badge => (
+                  <span key={badge} className="text-xs font-semibold bg-primary/10 text-primary border border-primary/20 px-3 py-1 rounded-full">{badge}</span>
+                ))}
+              </motion.div>
             </motion.div>
           </div>
         </div>
@@ -619,33 +634,33 @@ export default function LandingPage() {
               className="order-1 lg:order-2"
             >
               <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold mb-6">
-                Internship & Training at TechieHelp Institute of AI
+                Internship & Skill Training Programs
               </motion.h2>
               <motion.p variants={fadeIn} className="text-lg text-gray-300 mb-8 leading-relaxed">
-                TechieHelp Institute of AI provides industry-oriented internships and training programs designed to equip students with practical skills, real-world project experience, and career readiness. Our focus is on learning by doing, guided by mentors and aligned with current industry demands.
+                Our structured internship and training programs are aligned with the <strong>AICTE National Internship Portal</strong> and designed to build real, demonstrable skills — not just theoretical knowledge. Students gain hands-on experience through live projects mentored by industry practitioners.
               </motion.p>
               <motion.ul variants={fadeIn} className="space-y-4 mb-8">
                 <li className="flex items-start gap-3">
                   <Rocket className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-                  <span className="text-gray-300">Hands-on Internship & Live Training</span>
+                  <span className="text-gray-300">AICTE-aligned internship programs with structured learning paths</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <Code className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-                  <span className="text-gray-300">Real-world projects & industry exposure</span>
+                  <span className="text-gray-300">Live project experience with GitHub-tracked deliverables</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <BookOpen className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-                  <span className="text-gray-300">Skill development for students & freshers</span>
+                  <span className="text-gray-300">Domain-specific skill building validated by AI assessments</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <FileText className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-                  <span className="text-gray-300">Career-ready portfolio & certifications</span>
+                  <span className="text-gray-300">Certification-backed portfolio — preparation tool, not a job guarantee</span>
                 </li>
               </motion.ul>
               <motion.div variants={fadeIn}>
                 <Link href="/internships">
                   <Button size="lg" className="px-8 bg-primary hover:bg-primary/90 text-white shadow-lg">
-                    Learn More
+                    Explore Training Programs
                   </Button>
                 </Link>
               </motion.div>
@@ -695,13 +710,13 @@ export default function LandingPage() {
                 variants={fadeIn}
                 className="text-3xl md:text-4xl font-bold mb-6"
               >
-                Why Choose TechieHelp Institute of AI?
+                Why TechieHelp Institute of AI?
               </motion.h2>
               <motion.p
                 variants={fadeIn}
                 className="text-lg text-gray-300 mb-8 leading-relaxed"
               >
-                TechieHelp Institute of AI is a future-focused, AI-powered learning ecosystem designed to transform students into industry-ready professionals.
+                Built by an AI software company, we don&apos;t just teach — we build the intelligence layer that makes placement preparation measurable, personalized, and scalable for both students and institutions.
               </motion.p>
               <motion.ul
                 variants={fadeIn}
@@ -709,23 +724,23 @@ export default function LandingPage() {
               >
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-                  <span className="text-gray-300">Industry-aligned curriculum</span>
+                  <span className="text-gray-300"><strong>AI Resume Scoring</strong> — ATS analysis with specific improvement feedback, not generic tips</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-                  <span className="text-gray-300">Real-world internships & projects</span>
+                  <span className="text-gray-300"><strong>AI Mock Interviews</strong> — Aptitude, Technical &amp; HR rounds with automated performance evaluation</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-                  <span className="text-gray-300">AI-powered career guidance</span>
+                  <span className="text-gray-300"><strong>Skill Gap Detection</strong> — AI identifies weak areas and generates personalized preparation paths</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-                  <span className="text-gray-300">Placement & interview readiness</span>
+                  <span className="text-gray-300"><strong>TPO Dashboards</strong> — Real-time student readiness scores, GitHub activity, and ranking tools</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-                  <span className="text-gray-300">Lifetime learning access</span>
+                  <span className="text-gray-300"><strong>MSME · ISO · AICTE</strong> — Certified, credible, and built for scale</span>
                 </li>
               </motion.ul>
             </motion.div>
@@ -767,13 +782,13 @@ export default function LandingPage() {
                 variants={fadeIn}
                 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent"
               >
-                AI-Driven Career Growth Platform
+                How AI Powers Placement Readiness
               </motion.h2>
               <motion.p
                 variants={fadeIn}
                 className="text-lg text-gray-300 mb-8 leading-relaxed"
               >
-                TechieHelp Institute of AI is an AI-powered career ecosystem designed to guide students from learning to placement. The platform offers intelligent resume building, ATS optimization, interview preparation, personalized career roadmaps, and smart job & internship matching — all integrated into a unified, data-driven dashboard.
+                Our platform uses AI at every stage of the career preparation journey — from building an ATS-optimized resume, to evaluating mock interview responses, to detecting skill gaps and generating a personalized roadmap. Every insight is data-backed, not generic.
               </motion.p>
               <motion.div
                 variants={fadeIn}
@@ -784,25 +799,29 @@ export default function LandingPage() {
                   whileTap={{ scale: 0.98 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 >
-                  <Button
-                    size="lg"
-                    className="px-8 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
-                  >
-                    Start 14 Days Free Trial
-                  </Button>
+                  <Link href="/dashboard">
+                    <Button
+                      size="lg"
+                      className="px-8 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                    >
+                      Start Preparing with AI
+                    </Button>
+                  </Link>
                 </motion.div>
                 <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 >
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="px-8 border-2 border-gray-400 hover:border-gray-200 text-gray-200 hover:text-white hover:bg-white/10 transition-all duration-300"
-                  >
-                    Explore Features
-                  </Button>
+                  <Link href="/contact">
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="px-8 border-2 border-gray-400 hover:border-gray-200 text-gray-200 hover:text-white hover:bg-white/10 transition-all duration-300"
+                    >
+                      Request Dashboard Demo
+                    </Button>
+                  </Link>
                 </motion.div>
               </motion.div>
             </motion.div>
@@ -818,27 +837,27 @@ export default function LandingPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {[
                   {
-                    title: "Resume Builder",
+                    title: "AI Resume Builder",
                     icon: <FileText className="h-5 w-5" />,
-                    description: "AI-powered resume creation",
+                    description: "ATS score analysis with section-by-section feedback",
                     delay: 0.6
                   },
                   {
-                    title: "ATS Checker",
-                    icon: <CheckCircle className="h-5 w-5" />,
-                    description: "Optimize for recruiters",
+                    title: "AI Mock Interviews",
+                    icon: <Users className="h-5 w-5" />,
+                    description: "Aptitude, Technical & HR rounds with AI evaluation",
                     delay: 0.7
                   },
                   {
-                    title: "Interview Prep",
-                    icon: <Users className="h-5 w-5" />,
-                    description: "Practice & improve skills",
+                    title: "Skill Gap Detection",
+                    icon: <BarChart3 className="h-5 w-5" />,
+                    description: "Identifies weak areas and builds personalized prep paths",
                     delay: 0.8
                   },
                   {
-                    title: "Job Matching",
-                    icon: <Building className="h-5 w-5" />,
-                    description: "Find perfect opportunities",
+                    title: "TPO Readiness Dashboard",
+                    icon: <TrendingUp className="h-5 w-5" />,
+                    description: "Student rankings, GitHub analytics & placement insights",
                     delay: 0.9
                   },
                 ].map((item, index) => (
@@ -868,12 +887,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      
-
       <InterviewPlacementSection />
-
-      
-      
 
       {/* Career Branding Lab */}
       <section className="w-full py-16 md:py-24 bg-background">
@@ -907,13 +921,16 @@ export default function LandingPage() {
               <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold mb-6">
                 Career Branding Lab
               </motion.h2>
+              <motion.p variants={fadeIn} className="text-lg text-muted-foreground mb-4 leading-relaxed">
+                Strong skills alone don&apos;t win interviews — your professional presence does. Most students lose shortlisting opportunities because their LinkedIn, GitHub, and portfolio don&apos;t communicate their real capabilities.
+              </motion.p>
               <motion.p variants={fadeIn} className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                A weak profile can cost you interviews — even if you have the skills. Most students miss opportunities because their LinkedIn and GitHub profiles don't clearly show their real skills. Career Branding Lab helps you build a professional, recruiter-trusted career brand using AI.
+                The Career Branding Lab uses AI to help you audit, optimize, and rebuild your professional profile — so your digital presence matches your actual potential.
               </motion.p>
               <motion.div variants={fadeIn}>
                 <Link href="/career-branding-lab">
                   <Button size="lg" className="px-8">
-                    Fix My Profile Now
+                    Optimize My Profile
                   </Button>
                 </Link>
               </motion.div>
@@ -935,14 +952,14 @@ export default function LandingPage() {
               className="order-1 lg:order-1"
             >
               <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold mb-6">
-                Founder & Startup School
+                Founder &amp; Startup Mindset Program
               </motion.h2>
               <motion.p variants={fadeIn} className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                For students who want to <span className="font-semibold text-primary">build, not just apply</span>. Learn the fundamentals of <span className="font-semibold text-primary">startups, freelancing, and product building</span> — alongside your core career path. This program is designed to help students explore entrepreneurship in a practical, structured, and <span className="font-semibold text-primary">career-safe way</span>.
+                For students who want to <span className="font-semibold text-primary">build, not just apply</span>. This program covers the fundamentals of <span className="font-semibold text-primary">startups, product thinking, and freelancing</span> — structured alongside your core career preparation. Entrepreneurship as a mindset, not a distraction. A preparation tool that opens more doors, not a guarantee.
               </motion.p>
               <motion.div variants={fadeIn}>
                 <Button size="lg" className="px-8">
-                  Explore Startup Learning
+                  Explore Founder Program
                 </Button>
               </motion.div>
             </motion.div>
@@ -968,16 +985,12 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Certifications & Digital Resources */}
+      {/* Lifetime Career Resources */}
       <section className="w-full py-16 md:py-24 bg-gradient-to-br from-slate-900 via-blue-900/80 to-indigo-900/60 text-white relative overflow-hidden">
-        {/* Industry Background Elements */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-10 left-10 w-64 h-64 bg-gradient-to-br from-blue-500/30 to-purple-600/30 rounded-full blur-3xl"></div>
           <div className="absolute bottom-10 right-10 w-48 h-48 bg-gradient-to-br from-green-500/30 to-blue-600/30 rounded-full blur-3xl"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-indigo-500/20 to-cyan-600/20 rounded-full blur-3xl"></div>
         </div>
-
-        {/* Tech Grid Pattern */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute inset-0" style={{
             backgroundImage: `
@@ -990,72 +1003,73 @@ export default function LandingPage() {
 
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="flex justify-center order-1"
+            >
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="w-full max-w-lg h-auto object-cover rounded-lg shadow-2xl"
+                onLoadedMetadata={(e) => {
+                  e.currentTarget.playbackRate = 0.7;
+                }}
+              >
+                <source src="/certificates.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </motion.div>
 
-      {/* LEFT: VIDEO */}
-      <motion.div
-        initial={{ opacity: 0, x: -50 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true }}
-        className="flex justify-center order-1"
-      >
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="w-full max-w-lg h-auto object-cover rounded-lg shadow-2xl"
-          onLoadedMetadata={(e) => {
-            e.currentTarget.playbackRate = 0.7; // 🔥 Slow video
-          }}
-        >
-          <source src="/certificates.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-      </motion.div>
-
-      {/* RIGHT: TEXT */}
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={staggerContainer}
-        className="order-2"
-      >
-        <motion.h2
-          variants={fadeIn}
-          className="text-3xl md:text-4xl font-bold mb-6"
-        >
-          Placement & Career Resources
-        </motion.h2>
-
-        <motion.p
-          variants={fadeIn}
-          className="text-lg text-muted-foreground mb-8 leading-relaxed"
-        >
-          Most students lose opportunities due to
-          <span className="font-semibold text-primary"> poor resumes </span>
-          and
-          <span className="font-semibold text-primary"> lack of preparation</span>.
-          Placement & Career Resources give you lifetime access to
-          <span className="font-semibold text-primary"> certifications, resume tools, </span>
-          and
-          <span className="font-semibold text-primary"> interview preparation</span>
-          — so you feel confident during placements.
-        </motion.p>
-
-        <motion.div variants={fadeIn}>
-          <Button size="lg" className="px-8">
-            Explore Career Resources
-          </Button>
-        </motion.div>
-      </motion.div>
-
-    </div>
-  </div>
-</section>
-
-
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+              className="order-2"
+            >
+              <motion.h2
+                variants={fadeIn}
+                className="text-3xl md:text-4xl font-bold mb-6"
+              >
+                Lifetime Career Preparation Resources
+              </motion.h2>
+              <motion.p
+                variants={fadeIn}
+                className="text-lg text-muted-foreground mb-6 leading-relaxed"
+              >
+                Most students enter placements underprepared — not because they lack potential, but because they lacked structured, AI-driven guidance.
+                Our career resources library gives students <span className="font-semibold text-primary">lifetime access</span> to the tools they need to continuously improve.
+              </motion.p>
+              <motion.ul variants={fadeIn} className="space-y-3 mb-8">
+                {[
+                  "AI Resume Builder with ATS optimization scoring",
+                  "Mock interview bank — Aptitude, Technical & HR",
+                  "Skill assessment reports with gap analysis",
+                  "Certification-backed learning paths",
+                  "Career branding & LinkedIn/GitHub profile audits",
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-3 text-muted-foreground">
+                    <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </motion.ul>
+              <motion.div variants={fadeIn}>
+                <Link href="/dashboard">
+                  <Button size="lg" className="px-8">
+                    Access Career Resources
+                  </Button>
+                </Link>
+              </motion.div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
 
       {/* College & TPO Partnerships */}
       <section className="w-full py-16 md:py-24 bg-muted/30">
@@ -1068,10 +1082,10 @@ export default function LandingPage() {
             className="text-center mb-12"
           >
             <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold mb-4">
-              College & TPO Partnerships
+              For Colleges &amp; Training Placement Officers
             </motion.h2>
-            <motion.p variants={fadeIn} className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-              For Colleges & TPOs: Student readiness dashboards, white-label programs, placement analytics, career sessions, faculty workshops.
+            <motion.p variants={fadeIn} className="text-lg text-muted-foreground max-w-3xl mx-auto mb-4">
+              TPOs spend significant manual effort tracking student readiness — often relying on self-reported data and inconsistent resume formats. Our platform gives TPOs a real-time, AI-powered view of every student&apos;s placement preparedness.
             </motion.p>
           </motion.div>
           <motion.div
@@ -1079,19 +1093,50 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="text-center"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10"
+          >
+            {[
+              { icon: <BarChart3 className="w-6 h-6 text-primary" />, title: "Student Skill Dashboards", desc: "Track individual and batch-level readiness in real time" },
+              { icon: <Github className="w-6 h-6 text-primary" />, title: "GitHub & Coding Analytics", desc: "Verify actual coding activity and portfolio quality" },
+              { icon: <TrendingUp className="w-6 h-6 text-primary" />, title: "Placement Readiness Scores", desc: "AI-computed indicators based on resume, interviews & skills" },
+              { icon: <Users className="w-6 h-6 text-primary" />, title: "Ranking & Comparison Tools", desc: "Fair, data-backed shortlisting — reducing manual effort" },
+            ].map((card, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                viewport={{ once: true }}
+                className="p-5 bg-background border rounded-xl shadow-sm hover:shadow-md transition-all"
+              >
+                <div className="mb-3">{card.icon}</div>
+                <h3 className="font-semibold text-sm mb-1">{card.title}</h3>
+                <p className="text-xs text-muted-foreground">{card.desc}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <Link href="/contact">
               <Button size="lg" className="px-8">
-                Partner With Us
+                Request Dashboard Demo
                 <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </Link>
+            <Link href="/contact">
+              <Button size="lg" variant="outline" className="px-8">
+                Partner with TechieHelp
               </Button>
             </Link>
           </motion.div>
         </div>
       </section>
 
-      
       {/* Testimonials Section */}
       <section className="w-full py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
@@ -1103,17 +1148,16 @@ export default function LandingPage() {
             className="text-center mb-12"
           >
             <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold mb-4">
-              What Our Students Say
+              What Students &amp; Institutions Say
             </motion.h2>
             <motion.p variants={fadeIn} className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Hear from our successful graduates and professionals who transformed their careers with us.
+              Hear from students who improved their placement readiness, and from institutional partners who enhanced their TPO process with data-driven insights.
             </motion.p>
           </motion.div>
           <TestimonialCarousel testimonials={testimonial} />
         </div>
       </section>
 
-      
       {/* CTA Section */}
       <section className="w-full py-16 md:py-24 bg-gradient-to-r from-primary to-secondary text-white">
         <div className="container mx-auto px-4 md:px-6 text-center">
@@ -1124,21 +1168,26 @@ export default function LandingPage() {
             variants={staggerContainer}
           >
             <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold mb-4">
-              Ready to Transform Your Career?
+              Start Your AI-Powered Placement Journey
             </motion.h2>
-            <motion.p variants={fadeIn} className="text-lg mb-8 max-w-2xl mx-auto">
-              Join thousands of students who have accelerated their careers with AI-powered learning and industry connections.
+            <motion.p variants={fadeIn} className="text-lg mb-10 max-w-2xl mx-auto">
+              Whether you&apos;re a student preparing for placements, a college TPO looking for data-driven tools, or an organization looking to partner — TechieHelp Institute of AI has a clear path for you.
             </motion.p>
-            <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-4 justify-center">
+            <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-4 justify-center flex-wrap">
               <Link href="/dashboard">
                 <Button size="lg" className="px-8 bg-white text-primary hover:bg-gray-100">
-                  Get Started Now
+                  🎓 Start Preparing with AI
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link>
               <Link href="/contact">
                 <Button size="lg" variant="outline" className="px-8 border-white text-white hover:bg-white hover:text-primary">
-                  Contact Us
+                  🏫 Request Dashboard Demo
+                </Button>
+              </Link>
+              <Link href="/contact">
+                <Button size="lg" variant="outline" className="px-8 border-white/60 text-white/90 hover:bg-white/10 hover:text-white">
+                  🤝 Partner with TechieHelp
                 </Button>
               </Link>
             </motion.div>

@@ -1,22 +1,23 @@
-import { auth } from "@clerk/nextjs/server";
-import { db } from "@/lib/prisma";
+import { getFirebaseUser } from "@/lib/auth-utils";
+import db from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 
 export async function POST(req) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    const firebaseUser = await getFirebaseUser();
+    if (!firebaseUser) {
       console.error("❌ [API] Unauthorized download tracking attempt");
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const uid = firebaseUser.uid;
 
     const { resumeId } = await req.json();
-    
-    console.log(`📥 [API] Download tracking request for resume: ${resumeId}`);
+
+    console.log(`📥 [API] Download tracking request for resume: ${resumeId} by Firebase UID: ${uid}`);
 
     const user = await db.user.findUnique({
-      where: { clerkUserId: userId },
+      where: { uid: uid },
     });
 
     if (!user) {
@@ -59,7 +60,7 @@ export async function POST(req) {
     revalidatePath("/resume");
     revalidatePath("/dashboard");
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
       downloadCount: updatedResume.downloadCount,
       message: "Download tracked successfully"

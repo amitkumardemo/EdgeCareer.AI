@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import { getFirebaseUser } from "@/lib/auth-utils";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -164,11 +164,12 @@ const isValidJSON = (str) => {
 };
 
 export async function getIndustryInsights() {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) throw new Error("Unauthorized");
+  const userId = firebaseUser.uid;
 
   const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { uid: userId },
     include: {
       industryInsight: true,
     },

@@ -1,15 +1,21 @@
 "use server";
 
-import { db } from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import db from "@/lib/prisma";
+import { getFirebaseUser } from "@/lib/auth-utils";
+import { checkUser } from "@/lib/checkUser";
 
 export async function updateUserStreak() {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) throw new Error("Unauthorized");
+  const userId = firebaseUser.uid;
 
-  const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+  let user = await db.user.findUnique({
+    where: { uid: userId },
   });
+
+  if (!user) {
+    user = await checkUser();
+  }
 
   if (!user) throw new Error("User not found");
 
@@ -61,11 +67,12 @@ export async function updateUserStreak() {
 }
 
 export async function getUserStreak() {
-  const { userId } = await auth();
-  if (!userId) return { streak: 0, lastStreakDate: null };
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) return { streak: 0, lastStreakDate: null };
+  const userId = firebaseUser.uid;
 
   const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { uid: userId },
     select: {
       streak: true,
       lastStreakDate: true,
@@ -77,11 +84,12 @@ export async function getUserStreak() {
 }
 
 export async function getStreakCalendar() {
-  const { userId } = await auth();
-  if (!userId) return [];
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) return [];
+  const userId = firebaseUser.uid;
 
   const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { uid: userId },
     select: {
       streakStartDate: true,
       lastStreakDate: true,

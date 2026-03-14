@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
+import { getFirebaseUser } from "@/lib/auth-utils";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { updateGamification } from "./gamification";
 
@@ -49,8 +49,8 @@ async function fetchYouTubeVideoLink(query) {
  * Generate a learning roadmap for the logged-in user with real YouTube video links
  */
 export async function generateRoadmap(currentSkills, targetRole, timeFrame) {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) throw new Error("Unauthorized");
 
   const prompt = `
     Generate a detailed learning roadmap for someone aiming to become a ${targetRole}.

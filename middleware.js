@@ -1,31 +1,55 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-const isProtectedRoute = createRouteMatcher([
-  "/dashboard(.*)",
-  "/resume(.*)",
-  "/interview(.*)",
-  "/ai-cover-letter(.*)",
-  "/onboarding(.*)",
-  "/ats-checker(.*)",
-]);
+export function middleware(req) {
+  const session = req.cookies.get("__session")?.value;
+  const { pathname } = req.nextUrl;
 
-export default clerkMiddleware(async (auth, req) => {
-  const { userId } = await auth();
+  // Define protected routes
+  const protectedRoutes = [
+    "/dashboard",
+    "/resume",
+    "/interview",
+    "/ai-cover-letter",
+    "/onboarding",
+    "/ats-checker",
+    "/admin",
+    "/dsa",
+    "/roadmap",
+    "/course-recommendation",
+    "/internships",
+    "/latest-jobs",
+    "/job-matches",
+    "/career-branding-lab"
+  ];
 
-  if (!userId && isProtectedRoute(req)) {
-    const { redirectToSignIn } = await auth();
-    return redirectToSignIn();
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    pathname.startsWith(route)
+  );
+
+  // Skip public routes (e.g. /resume/share)
+  const publicRoutes = ["/resume/share"];
+  const isPublicRoute = publicRoutes.some((route) =>
+    pathname.startsWith(route)
+  );
+
+  if (isProtectedRoute && !isPublicRoute && !session) {
+    const url = new URL("/sign-in", req.url);
+    url.searchParams.set("redirect_url", pathname);
+    return NextResponse.redirect(url);
   }
 
   return NextResponse.next();
-});
+}
 
 export const config = {
   matcher: [
-    // Skip Next.js internals and all static files, unless found in search params
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    // Always run for API routes
-    "/(api|trpc)(.*)",
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public (public static files)
+     */
+    "/((?!_next/static|_next/image|favicon.ico|public).*)",
   ],
 };

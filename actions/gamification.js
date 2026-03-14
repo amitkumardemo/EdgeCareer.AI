@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import { getFirebaseUser } from "@/lib/auth-utils";
 
 const BADGES = {
   first_quiz: "First Quiz Completed",
@@ -22,11 +22,12 @@ const POINTS = {
 };
 
 export async function updateGamification(actionType) {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) throw new Error("Unauthorized");
+  const userId = firebaseUser.uid;
 
   const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { uid: userId },
   });
 
   if (!user) throw new Error("User not found");
@@ -102,7 +103,7 @@ export async function updateGamification(actionType) {
 
   // Update user
   await db.user.update({
-    where: { clerkUserId: userId },
+    where: { uid: userId },
     data: {
       points: newPoints,
       level: newLevel,
@@ -122,11 +123,12 @@ export async function updateGamification(actionType) {
 }
 
 export async function getUserGamification() {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) throw new Error("Unauthorized");
+  const userId = firebaseUser.uid;
 
   const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { uid: userId },
     select: {
       points: true,
       level: true,

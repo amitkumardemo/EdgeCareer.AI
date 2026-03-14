@@ -183,24 +183,31 @@ const HeroSection = () => {
               className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-white text-center"
               style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}
             >
-              TechieHelp Institute of AI <br /> <span className="text-2xl md:text-4xl lg:text-5xl block mt-4 text-[#00E5FF]">AI Resume Builder & Career Platform</span>
+              TechieHelp Institute of AI <br /> <span className="text-2xl md:text-4xl lg:text-5xl block mt-4 text-[#00E5FF]">AI-Powered Career Intelligence & Placement Readiness</span>
             </h1>
           </SequenceItem>
 
           <SequenceItem animation="scale" delay={0.8} isMobile={isMobile}>
-            <div className="relative bg-black/30 backdrop-blur-sm rounded-lg px-4 py-2 mx-auto max-w-[700px]">
+            <div className="relative bg-black/30 backdrop-blur-sm rounded-lg px-4 py-3 mx-auto max-w-[780px]">
               <p
-                className="text-lg md:text-xl lg:text-2xl font-semibold text-center text-[#00E5FF]"
+                className="text-base md:text-lg lg:text-xl font-medium text-center text-white/90"
                 style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.7)' }}
               >
-                Building Careers with AI, Innovation & Industry Readiness
+                Helping students become job-ready with AI — and helping colleges make data-driven placement decisions.
               </p>
             </div>
           </SequenceItem>
 
-          <SequenceItem animation="fade" delay={1.2} isMobile={isMobile}>
-            <p className="text-sm md:text-base text-[#B0BEC5] text-center font-medium">
-              Powered by TechieHelp
+          <SequenceItem animation="fade" delay={1.1} isMobile={isMobile}>
+            <div className="flex flex-wrap justify-center gap-4 mt-2 px-4">
+              <span className="text-xs md:text-sm text-[#00E5FF] font-semibold bg-white/10 px-3 py-1 rounded-full">🎓 For Students: AI Resume · Mock Interviews · Skill Feedback</span>
+              <span className="text-xs md:text-sm text-[#00E5FF] font-semibold bg-white/10 px-3 py-1 rounded-full">🏫 For Colleges: Readiness Dashboards · Analytics · TPO Tools</span>
+            </div>
+          </SequenceItem>
+
+          <SequenceItem animation="fade" delay={1.4} isMobile={isMobile}>
+            <p className="text-xs md:text-sm text-[#B0BEC5] text-center font-medium mt-1">
+              Powered by TechieHelp · MSME Certified · ISO Certified · AICTE Aligned
             </p>
           </SequenceItem>
 
@@ -208,7 +215,7 @@ const HeroSection = () => {
 
         <SequenceItem animation="slideUp" delay={1.0} isMobile={isMobile}>
           <motion.div
-            className="flex justify-center space-x-4 mt-6 mb-20"
+            className="flex flex-wrap justify-center gap-4 mt-6 mb-20 px-4"
             whileInView={{
               transition: {
                 staggerChildren: 0.2,
@@ -226,7 +233,7 @@ const HeroSection = () => {
                   className="px-8 relative overflow-hidden group"
                 >
                   <motion.span className="relative z-10 flex items-center gap-2">
-                    {BUTTONS_MENUS.GET_STARTED}
+                    Start Preparing with AI
                     <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                   </motion.span>
                   <motion.span
@@ -244,7 +251,7 @@ const HeroSection = () => {
               whileTap={{ scale: 0.98 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-              <Link href="/interview">
+              <Link href="/contact">
                 <Button
                   size="lg"
                   variant="outline"
@@ -252,7 +259,7 @@ const HeroSection = () => {
                 >
                   <motion.span className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 opacity-0 hover:opacity-100 transition-opacity duration-500" />
                   <ShinyText
-                    text="Interview Prep"
+                    text="Request TPO Demo"
                     speed={2}
                     className="text-lg font-semibold px-1 relative z-10"
                   />

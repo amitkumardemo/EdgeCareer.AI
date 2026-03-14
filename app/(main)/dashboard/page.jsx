@@ -9,6 +9,7 @@ import {
   getResumeStatusDistribution,
   getRecentResumeActivity 
 } from "@/actions/resume-analytics";
+import { getMyApplications } from "@/actions/internship-student";
 import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
@@ -28,6 +29,7 @@ export default async function DashboardPage() {
   const resumeTimeline = await getResumeTimeline();
   const resumeStatusDistribution = await getResumeStatusDistribution();
   const recentResumeActivity = await getRecentResumeActivity();
+  const internships = await getMyApplications().catch(() => []);
 
   return (
     <div className="container mx-auto">
@@ -40,6 +42,7 @@ export default async function DashboardPage() {
         resumeTimeline={resumeTimeline}
         resumeStatusDistribution={resumeStatusDistribution}
         recentResumeActivity={recentResumeActivity}
+        internships={internships}
       />
     </div>
   );

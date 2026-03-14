@@ -1,12 +1,9 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
-import Header from "@/components/header";
 import { ThemeProvider } from "@/components/theme-provider";
-import { dark } from "@clerk/themes";
 import Script from "next/script";
-import Footer from "@/components/Footer";
+import { AuthProvider } from "@/context/auth-context";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -51,7 +48,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider appearance={{ baseTheme: dark }}>
+    <AuthProvider>
       <html lang="en" suppressHydrationWarning className="dark">
         <head>
           <Script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" strategy="beforeInteractive" />
@@ -86,15 +83,8 @@ export default function RootLayout({ children }) {
             enableSystem
             disableTransitionOnChange
           >
-            <Header />
             <main className="min-h-screen">{children}</main>
             <Toaster richColors />
-
-            <footer className="bg-muted/50 py-10">
-              <div className="container mx-auto px-4 text-center text-gray-200">
-                <Footer />
-              </div>
-            </footer>
             <Script
               id="schema-markup"
               type="application/ld+json"
@@ -120,6 +110,6 @@ export default function RootLayout({ children }) {
           </ThemeProvider>
         </body>
       </html>
-    </ClerkProvider>
+    </AuthProvider>
   );
 }

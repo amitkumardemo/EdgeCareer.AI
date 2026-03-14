@@ -1,18 +1,19 @@
 "use server";
 
-import { db } from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import db from "@/lib/prisma";
+import { getFirebaseUser } from "@/lib/auth-utils";
 import { revalidatePath } from "next/cache";
 
 /**
  * Get all resumes for the current user
  */
 export async function getUserResumes() {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) throw new Error("Unauthorized");
+  const userId = firebaseUser.uid;
 
   const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { uid: userId },
   });
 
   if (!user) throw new Error("User not found");
@@ -33,11 +34,12 @@ export async function getUserResumes() {
  * Get resume analytics for the current user
  */
 export async function getResumeAnalytics() {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) throw new Error("Unauthorized");
+  const userId = firebaseUser.uid;
 
   const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { uid: userId },
     select: {
       id: true,
       totalResumesCreated: true,
@@ -69,11 +71,12 @@ export async function getResumeAnalytics() {
  * Create a new resume
  */
 export async function createResume(name, content) {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) throw new Error("Unauthorized");
+  const userId = firebaseUser.uid;
 
   const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { uid: userId },
   });
 
   if (!user) throw new Error("User not found");
@@ -106,11 +109,12 @@ export async function createResume(name, content) {
  * Update an existing resume
  */
 export async function updateResume(resumeId, content, name) {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) throw new Error("Unauthorized");
+  const userId = firebaseUser.uid;
 
   const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { uid: userId },
   });
 
   if (!user) throw new Error("User not found");
@@ -146,11 +150,12 @@ export async function updateResume(resumeId, content, name) {
  * Track resume download
  */
 export async function trackResumeDownload(resumeId) {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) throw new Error("Unauthorized");
+  const userId = firebaseUser.uid;
 
   const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { uid: userId },
   });
 
   if (!user) throw new Error("User not found");
@@ -178,19 +183,24 @@ export async function trackResumeDownload(resumeId) {
     },
   });
 
+  console.log(`✅ [DB] Resume download tracked for ${resumeId}. Count incremented.`);
+
   revalidatePath("/resume");
   revalidatePath("/dashboard");
+
+  return { success: true };
 }
 
 /**
  * Generate share token and track share
  */
 export async function shareResume(resumeId) {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) throw new Error("Unauthorized");
+  const userId = firebaseUser.uid;
 
   const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { uid: userId },
   });
 
   if (!user) throw new Error("User not found");
@@ -212,13 +222,13 @@ export async function shareResume(resumeId) {
     .toLowerCase()
     .replace(/\s+/g, '')
     .replace(/[^a-z0-9]/g, '');
-  
+
   const hash = crypto
     .createHash('md5')
     .update(`${cleanName}-${resumeId}-${Date.now()}`)
     .digest('hex')
     .substring(0, 6);
-  
+
   const shareToken = `${cleanName}_${hash}`;
 
   const resume = await db.resume.update({
@@ -249,14 +259,15 @@ export async function shareResume(resumeId) {
 
   revalidatePath("/resume");
   revalidatePath("/dashboard");
-  
+
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
   const shareUrl = `${baseUrl}/resume/share/${shareToken}`;
-  
+
   // For production: resume_{username}.techiehelpinstituteofai.in
   const brandedUrl = `resume_${shareToken}.techiehelpinstituteofai.in`;
 
   return {
+    success: true,
     shareToken,
     shareUrl,
     brandedUrl,
@@ -291,11 +302,12 @@ export async function getSharedResume(shareToken) {
  * Delete a resume
  */
 export async function deleteResume(resumeId) {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) throw new Error("Unauthorized");
+  const userId = firebaseUser.uid;
 
   const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { uid: userId },
   });
 
   if (!user) throw new Error("User not found");
@@ -315,11 +327,12 @@ export async function deleteResume(resumeId) {
  * Get resume creation timeline (for charts)
  */
 export async function getResumeTimeline() {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) throw new Error("Unauthorized");
+  const userId = firebaseUser.uid;
 
   const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { uid: userId },
   });
 
   if (!user) throw new Error("User not found");
@@ -353,11 +366,12 @@ export async function getResumeTimeline() {
  * Get resume status distribution (for pie chart)
  */
 export async function getResumeStatusDistribution() {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) throw new Error("Unauthorized");
+  const userId = firebaseUser.uid;
 
   const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { uid: userId },
   });
 
   if (!user) throw new Error("User not found");
@@ -391,11 +405,12 @@ export async function getResumeStatusDistribution() {
  * Get recent resume activity
  */
 export async function getRecentResumeActivity() {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) throw new Error("Unauthorized");
+  const userId = firebaseUser.uid;
 
   const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { uid: userId },
   });
 
   if (!user) throw new Error("User not found");

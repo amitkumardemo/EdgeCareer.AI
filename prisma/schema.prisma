@@ -7,47 +7,140 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  STUDENT
+  TPO
+  ADMIN
+}
+
 model User {
-  id            String    @id @default(uuid())
-  clerkUserId   String    @unique // clerk user id
-  email         String    @unique
-  name          String?
-  imageUrl      String?
-  industry      String?    // Combined industry-subindustry (e.g., "tech-software-development")
+  id              String           @id @default(uuid())
+  uid             String           @unique // firebase user id
+  email           String           @unique
+  name            String?
+  imageUrl        String?
+  industry        String? // Combined industry-subindustry (e.g., "tech-software-development")
   industryInsight IndustryInsight? @relation(fields: [industry], references: [industry])
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  // Role-based access for TPO Dashboard
+  role      UserRole @default(STUDENT)
+  collegeId String?
+  college   College? @relation(fields: [collegeId], references: [id])
+
+  // Student-specific fields
+  branch     String? // e.g., "Computer Science", "Mechanical"
+  year       Int? // 1, 2, 3, 4
+  section    String? // e.g., "A", "B"
+  rollNumber String? @unique
+
+  // GitHub & LeetCode integration
+  githubUsername   String? @unique
+  leetcodeUsername String?
 
   // Profile fields
-  bio           String?
-  experience    Int?      // Years of experience
+  bio        String?
+  experience Int? // Years of experience
 
   // Gamification
-  points        Int       @default(0)
-  level         Int       @default(1)
-  badges        String    @default("[]") // JSON string
-  streak        Int       @default(0)
-  lastActivity  DateTime?
-  lastStreakDate DateTime?
+  points          Int       @default(0)
+  level           Int       @default(1)
+  badges          String    @default("[]") // JSON string
+  streak          Int       @default(0)
+  lastActivity    DateTime?
+  lastStreakDate  DateTime?
   streakStartDate DateTime?
 
   // Relations
-  skills        String    @default("[]") // JSON string
-  assessments   Assessment[]
-  resumes       Resume[]
-  coverLetter   CoverLetter[]
-  atsAnalyses   ATSAnalysis[]
-  
+  skills      String        @default("[]") // JSON string
+  assessments Assessment[]
+  resumes     Resume[]
+  coverLetter CoverLetter[]
+  atsAnalyses ATSAnalysis[]
+
   // Resume Analytics
-  totalResumesCreated   Int @default(0)
-  totalResumesSaved     Int @default(0)
+  totalResumesCreated    Int @default(0)
+  totalResumesSaved      Int @default(0)
   totalResumesDownloaded Int @default(0)
-  totalResumesShared    Int @default(0)
-  
+  totalResumesShared     Int @default(0)
+
   // ATS Stats
-  totalResumesAnalyzed Int @default(0)
+  totalResumesAnalyzed Int              @default(0)
   bestAtsScore         Float?
   lastAtsScore         Float?
+  submissions          Submission[]
+  mockInterviews       MockInterview[]
+  githubActivities     GitHubActivity[]
+  internApplications   InternshipApplication[] @relation("InternApplications")
+  mentorBatches        InternshipBatch[]       @relation("BatchMentor")
+
+  @@index([collegeId])
+  @@index([role])
+  @@index([githubUsername])
+}
+
+model Question {
+  id           String     @id @default(cuid())
+  title        String
+  slug         String     @unique
+  description  String // Markdown supported
+  difficulty   Difficulty @default(EASY)
+  category     String? // e.g. "Arrays", "DP"
+  tags         String[]   @default([])
+  constraints  String?
+  inputFormat  String?
+  outputFormat String?
+  starterCode  String     @default("{}") // JSON string for multiple languages
+  published    Boolean    @default(false)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  testCases   TestCase[]
+  submissions Submission[]
+
+  @@index([difficulty])
+  @@index([published])
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+model TestCase {
+  id             String  @id @default(cuid())
+  questionId     String
+  input          String
+  expectedOutput String
+  isHidden       Boolean @default(true)
+  explanation    String?
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([questionId])
+}
+
+model Submission {
+  id              String   @id @default(cuid())
+  userId          String
+  questionId      String
+  language        String // e.g. "python", "cpp", "java"
+  code            String
+  status          String // e.g. "ACCEPTED", "WRONG_ANSWER", "TLE", "PENDING"
+  verdict         String? // Detailed info from Judge0
+  runtime         Float? // in seconds
+  memory          Int? // in KB
+  testCasesPassed Int      @default(0)
+  totalTestCases  Int      @default(0)
+  createdAt       DateTime @default(now())
+
+  user     User     @relation(fields: [userId], references: [id])
+  question Question @relation(fields: [questionId], references: [id])
+
+  @@index([userId])
+  @@index([questionId])
 }
 
 model Assessment {
@@ -65,21 +158,22 @@ model Assessment {
 }
 
 model Resume {
-  id            String   @id @default(cuid())
-  userId        String
-  name          String   @default("My Resume")
-  content       String
-  mode          String   @default("manual") // manual, ai
-  status        String   @default("draft") // draft, saved, downloaded
-  atsScore      Float?
-  feedback      String?
-  downloadCount Int      @default(0)
-  shareCount    Int      @default(0)
-  shareToken    String?  @unique
-  isPublic      Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  user          User     @relation(fields: [userId], references: [id])
+  id             String          @id @default(cuid())
+  userId         String
+  name           String          @default("My Resume")
+  content        String
+  mode           String          @default("manual") // manual, ai
+  status         String          @default("draft") // draft, saved, downloaded
+  atsScore       Float?
+  feedback       String?
+  downloadCount  Int             @default(0)
+  shareCount     Int             @default(0)
+  shareToken     String?         @unique
+  isPublic       Boolean         @default(false)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  user           User            @relation(fields: [userId], references: [id])
+  mockInterviews MockInterview[]
 
   @@index([userId])
   @@index([shareToken])
@@ -101,65 +195,424 @@ model CoverLetter {
 }
 
 model IndustryInsight {
-  id                String   @id @default(cuid())
-  industry          String   @unique
-  
+  id       String @id @default(cuid())
+  industry String @unique
+
   // Users in this industry
-  users             User[]
-  
+  users User[]
+
   // Salary data
-  salaryRanges      String   @default("[]") // JSON string
+  salaryRanges String @default("[]") // JSON string
 
   // Industry trends
-  growthRate        Float    // Industry growth rate
-  demandLevel       String   // "High", "Medium", "Low"
-  topSkills         String   @default("[]") // JSON string
+  growthRate  Float // Industry growth rate
+  demandLevel String // "High", "Medium", "Low"
+  topSkills   String @default("[]") // JSON string
 
   // Market conditions
-  marketOutlook     String   // "Positive", "Neutral", "Negative"
-  keyTrends         String   @default("[]") // JSON string
+  marketOutlook String // "Positive", "Neutral", "Negative"
+  keyTrends     String @default("[]") // JSON string
 
   // Learning suggestions
-  recommendedSkills String   @default("[]") // JSON string
-  
-  lastUpdated       DateTime @default(now())
-  nextUpdate        DateTime // Scheduled update time
+  recommendedSkills String @default("[]") // JSON string
+
+  lastUpdated DateTime @default(now())
+  nextUpdate  DateTime // Scheduled update time
 
   @@index([industry])
 }
 
 model ATSAnalysis {
-  id                  String    @id @default(cuid())
-  userId              String
-  user                User      @relation(fields: [userId], references: [id])
-  resumeFileName      String
-  atsScore            Float
-  scoreCategory       String    // Poor / Average / Good / Excellent
-  keywordMatchScore   Float
-  skillsScore         Float
-  formattingScore     Float
-  experienceScore     Float
-  projectScore        Float
-  atsCompatibleScore  Float
-  
+  id                 String @id @default(cuid())
+  userId             String
+  user               User   @relation(fields: [userId], references: [id])
+  resumeFileName     String
+  atsScore           Float
+  scoreCategory      String // Poor / Average / Good / Excellent
+  keywordMatchScore  Float
+  skillsScore        Float
+  formattingScore    Float
+  experienceScore    Float
+  projectScore       Float
+  atsCompatibleScore Float
+
   // Detailed Analysis
-  matchedKeywords     String    @default("[]") // JSON array
-  missingKeywords     String    @default("[]") // JSON array
-  suggestions         String    @default("[]") // JSON array
-  strengths           String    @default("[]") // JSON array
-  weaknesses          String    @default("[]") // JSON array
-  
+  matchedKeywords String @default("[]") // JSON array
+  missingKeywords String @default("[]") // JSON array
+  suggestions     String @default("[]") // JSON array
+  strengths       String @default("[]") // JSON array
+  weaknesses      String @default("[]") // JSON array
+
   // Insights
-  improvementTip      String?
-  comparisonData      String?   // JSON string for comparison with previous analyses
-  
+  improvementTip String?
+  comparisonData String? // JSON string for comparison with previous analyses
+
   // Sharing
-  shareToken          String?   @unique // Unique token for shareable links
-  isPublic            Boolean   @default(false)
-  
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
-  
+  shareToken String? @unique // Unique token for shareable links
+  isPublic   Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([userId])
   @@index([shareToken])
+}
+
+model MockInterview {
+  id            String          @id @default(cuid())
+  userId        String
+  role          String // Selected job role
+  status        InterviewStatus @default(IN_PROGRESS)
+  resumeId      String?
+  resumeText    String? // NEW: For direct uploads
+  candidateName String? // NEW: For personalization
+  overallScore  Float?
+  feedback      String? // Global AI feedback
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  user   User        @relation(fields: [userId], references: [id])
+  resume Resume?     @relation(fields: [resumeId], references: [id])
+  rounds MockRound[]
+
+  @@index([userId])
+  @@index([resumeId])
+}
+
+model MockRound {
+  id          String      @id @default(cuid())
+  interviewId String
+  roundNumber Int // 1, 2, or 3
+  type        RoundType
+  status      RoundStatus @default(PENDING)
+  score       Float?
+  questions   String      @default("[]") // JSON array of generated questions
+  answers     String      @default("[]") // JSON array of user answers
+  feedback    String? // AI feedback for this specific round
+  startTime   DateTime?
+  endTime     DateTime?
+
+  interview MockInterview @relation(fields: [interviewId], references: [id], onDelete: Cascade)
+
+  @@index([interviewId])
+}
+
+enum InterviewStatus {
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+}
+
+enum RoundType {
+  APTITUDE
+  TECHNICAL
+  HR
+}
+
+enum RoundStatus {
+  PENDING
+  IN_PROGRESS
+  PASSED
+  FAILED
+}
+
+// ========================================
+// TPO DASHBOARD MODELS
+// ========================================
+
+model College {
+  id        String   @id @default(uuid())
+  name      String
+  domain    String   @unique // e.g., "iitd.ac.in" for email verification
+  location  String?
+  type      String? // e.g., "Engineering", "Medical"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users       User[]
+  githubSyncs GitHubSync[]
+
+  @@index([domain])
+}
+
+model GitHubActivity {
+  id     String   @id @default(uuid())
+  userId String
+  date   DateTime @default(now())
+
+  // Daily metrics
+  commits      Int    @default(0)
+  pullRequests Int    @default(0)
+  issues       Int    @default(0)
+  reviews      Int    @default(0)
+  repositories String @default("[]") // JSON array of repo names
+  languages    String @default("{}") // JSON object {language: lineCount}
+
+  // Streak tracking
+  isActive Boolean @default(false)
+
+  // Metadata
+  fetchedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId])
+  @@index([date])
+}
+
+model GitHubSync {
+  id        String  @id @default(uuid())
+  collegeId String?
+  userId    String? // Null for college-wide sync
+
+  status      SyncStatus @default(PENDING)
+  startedAt   DateTime   @default(now())
+  completedAt DateTime?
+
+  // Rate limiting
+  studentsProcessed Int       @default(0)
+  studentsFailed    Int       @default(0)
+  rateLimitHit      Boolean   @default(false)
+  rateLimitResetAt  DateTime?
+
+  // Error tracking
+  errors String @default("[]") // JSON array of error messages
+
+  college College? @relation(fields: [collegeId], references: [id])
+
+  @@index([collegeId])
+  @@index([status])
+}
+
+model StudentRanking {
+  id        String @id @default(uuid())
+  userId    String @unique
+  collegeId String
+
+  // Ranking scores
+  commitScore      Float @default(0)
+  prScore          Float @default(0)
+  issueScore       Float @default(0)
+  consistencyScore Float @default(0)
+  overallScore     Float @default(0)
+
+  // Rankings
+  collegeRank Int?
+  branchRank  Int?
+  yearRank    Int?
+
+  // Metadata
+  lastCalculated DateTime @default(now())
+
+  @@index([collegeId])
+  @@index([overallScore])
+}
+
+enum SyncStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+}
+
+// ========================================
+// INTERNSHIP MANAGEMENT PLATFORM
+// ========================================
+
+enum ApplicationStatus {
+  APPLIED
+  UNDER_REVIEW
+  SELECTED
+  REJECTED
+}
+
+enum BatchStatus {
+  UPCOMING
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum InternTaskStatus {
+  PENDING
+  SUBMITTED
+  EVALUATED
+}
+
+enum InternSubmissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  NEEDS_REVISION
+}
+
+model InternshipProgram {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  domain      String
+  duration    Int
+  stipend     Float?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  batches InternshipBatch[]
+
+  @@index([domain])
+  @@index([isActive])
+}
+
+model InternshipBatch {
+  id          String      @id @default(uuid())
+  programId   String
+  program     InternshipProgram @relation(fields: [programId], references: [id], onDelete: Cascade)
+  name        String
+  startDate   DateTime
+  endDate     DateTime
+  maxStudents Int         @default(100)
+  status      BatchStatus @default(UPCOMING)
+  mentorId    String?
+  mentor      User?       @relation("BatchMentor", fields: [mentorId], references: [id])
+  description String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  applications  InternshipApplication[]
+  tasks         InternshipTask[]
+  announcements Announcement[]
+
+  @@index([programId])
+  @@index([status])
+  @@index([mentorId])
+}
+
+model InternshipApplication {
+  id          String            @id @default(uuid())
+  userId      String
+  user        User              @relation("InternApplications", fields: [userId], references: [id], onDelete: Cascade)
+  batchId     String
+  batch       InternshipBatch   @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  status      ApplicationStatus @default(APPLIED)
+  resumeUrl   String?
+  coverNote   String?
+  appliedAt   DateTime          @default(now())
+  reviewedAt  DateTime?
+  reviewNotes String?
+
+  offerLetter  OfferLetter?
+  progress     InternProgress?
+  attendance   AttendanceRecord[]
+  submissions  TaskSubmission[]
+
+  @@unique([userId, batchId])
+  @@index([userId])
+  @@index([batchId])
+  @@index([status])
+}
+
+model OfferLetter {
+  id            String   @id @default(uuid())
+  applicationId String   @unique
+  application   InternshipApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  pdfUrl        String?
+  generatedAt   DateTime @default(now())
+  validUntil    DateTime?
+  downloadCount Int      @default(0)
+}
+
+model InternshipTask {
+  id          String   @id @default(uuid())
+  batchId     String
+  batch       InternshipBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  title       String
+  description String
+  dueDate     DateTime
+  maxScore    Float    @default(100)
+  resources   String?  // JSON array of resource URLs
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  submissions TaskSubmission[]
+
+  @@index([batchId])
+  @@index([dueDate])
+}
+
+model TaskSubmission {
+  id            String   @id @default(uuid())
+  applicationId String
+  application   InternshipApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  taskId        String
+  task          InternshipTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  fileUrl       String?
+  notes         String?
+  score         Float?
+  feedback      String?
+  status        InternSubmissionStatus @default(PENDING)
+  submittedAt   DateTime @default(now())
+  evaluatedAt   DateTime?
+
+  @@unique([applicationId, taskId])
+  @@index([applicationId])
+  @@index([taskId])
+  @@index([status])
+}
+
+model AttendanceRecord {
+  id            String   @id @default(uuid())
+  applicationId String
+  application   InternshipApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  date          DateTime @db.Date
+  present       Boolean  @default(false)
+  markedBy      String?  // Admin/mentor userId
+  note          String?
+
+  @@unique([applicationId, date])
+  @@index([applicationId])
+  @@index([date])
+}
+
+model InternProgress {
+  id             String   @id @default(uuid())
+  applicationId  String   @unique
+  application    InternshipApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  progressPct    Float    @default(0)
+  performScore   Float    @default(0)
+  tasksCompleted Int      @default(0)
+  totalTasks     Int      @default(0)
+  attendancePct  Float    @default(0)
+  completed      Boolean  @default(false)
+  completedAt    DateTime?
+  updatedAt      DateTime @updatedAt
+
+  certificate InternshipCertificate?
+}
+
+model InternshipCertificate {
+  id         String   @id @default(uuid())
+  progressId String   @unique
+  progress   InternProgress @relation(fields: [progressId], references: [id], onDelete: Cascade)
+  pdfUrl     String?
+  issuedAt   DateTime @default(now())
+  serialNo   String   @unique @default(cuid())
+  downloadCount Int   @default(0)
+
+  @@index([serialNo])
+}
+
+model Announcement {
+  id        String   @id @default(uuid())
+  batchId   String?
+  batch     InternshipBatch? @relation(fields: [batchId], references: [id], onDelete: SetNull)
+  title     String
+  body      String
+  isGlobal  Boolean  @default(false)
+  createdBy String?
+  createdAt DateTime @default(now())
+
+  @@index([batchId])
+  @@index([isGlobal])
+  @@index([createdAt])
 }

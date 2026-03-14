@@ -1,7 +1,7 @@
 "use server";
 
-import { db } from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import db from "@/lib/prisma";
+import { getFirebaseUser } from "@/lib/auth-utils";
 import { randomBytes } from "crypto";
 
 /**
@@ -9,13 +9,14 @@ import { randomBytes } from "crypto";
  */
 export async function createATSAnalysis(data) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    const firebaseUser = await getFirebaseUser();
+    if (!firebaseUser) {
       throw new Error("Unauthorized");
     }
+    const userId = firebaseUser.uid;
 
     const user = await db.user.findUnique({
-      where: { clerkUserId: userId },
+      where: { uid: userId },
     });
 
     if (!user) {
@@ -74,13 +75,14 @@ export async function createATSAnalysis(data) {
  */
 export async function getUserATSAnalyses() {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    const firebaseUser = await getFirebaseUser();
+    if (!firebaseUser) {
       throw new Error("Unauthorized");
     }
+    const userId = firebaseUser.uid;
 
     const user = await db.user.findUnique({
-      where: { clerkUserId: userId },
+      where: { uid: userId },
     });
 
     if (!user) {
@@ -111,13 +113,14 @@ export async function getUserATSAnalyses() {
  */
 export async function getATSAnalysisById(id) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    const firebaseUser = await getFirebaseUser();
+    if (!firebaseUser) {
       throw new Error("Unauthorized");
     }
+    const userId = firebaseUser.uid;
 
     const user = await db.user.findUnique({
-      where: { clerkUserId: userId },
+      where: { uid: userId },
     });
 
     if (!user) {
@@ -191,13 +194,14 @@ export async function getATSAnalysisByToken(token) {
  */
 export async function toggleATSAnalysisSharing(id, isPublic) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    const firebaseUser = await getFirebaseUser();
+    if (!firebaseUser) {
       throw new Error("Unauthorized");
     }
+    const userId = firebaseUser.uid;
 
     const user = await db.user.findUnique({
-      where: { clerkUserId: userId },
+      where: { uid: userId },
     });
 
     if (!user) {
@@ -232,13 +236,14 @@ export async function toggleATSAnalysisSharing(id, isPublic) {
  */
 export async function getATSAnalytics() {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    const firebaseUser = await getFirebaseUser();
+    if (!firebaseUser) {
       throw new Error("Unauthorized");
     }
+    const userId = firebaseUser.uid;
 
     const user = await db.user.findUnique({
-      where: { clerkUserId: userId },
+      where: { uid: userId },
     });
 
     if (!user) {
@@ -299,13 +304,14 @@ export async function getATSAnalytics() {
  */
 export async function getATSInsights() {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    const firebaseUser = await getFirebaseUser();
+    if (!firebaseUser) {
       throw new Error("Unauthorized");
     }
+    const userId = firebaseUser.uid;
 
     const user = await db.user.findUnique({
-      where: { clerkUserId: userId },
+      where: { uid: userId },
     });
 
     if (!user) {
@@ -359,13 +365,14 @@ export async function getATSInsights() {
  */
 export async function deleteATSAnalysis(id) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    const firebaseUser = await getFirebaseUser();
+    if (!firebaseUser) {
       throw new Error("Unauthorized");
     }
+    const userId = firebaseUser.uid;
 
     const user = await db.user.findUnique({
-      where: { clerkUserId: userId },
+      where: { uid: userId },
     });
 
     if (!user) {

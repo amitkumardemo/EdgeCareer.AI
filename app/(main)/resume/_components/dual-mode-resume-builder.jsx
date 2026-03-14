@@ -17,12 +17,15 @@ import ModeSelector from "./mode-selector";
 import AIModeSection from "./ai-mode-section";
 import useFetch from "@/hooks/use-fetch";
 import { saveResume, improveWithAI } from "@/actions/resume";
-import { useUser } from "@clerk/nextjs";
+import { trackResumeDownload, shareResume } from "@/actions/resume-analytics";
+import { useAuth } from "@/context/auth-context";
+import { useRouter } from "next/navigation";
 import { CharacterCounter } from "./character-counter";
 import { ResumeLimitInfo } from "./resume-limit-info";
 
 export default function DualModeResumeBuilder({ initialContent, initialName, resumeId }) {
-  const { user } = useUser();
+  const { user } = useAuth();
+  const router = useRouter();
   const [mode, setMode] = useState("manual"); // 'manual' or 'ai'
   const [showPreview, setShowPreview] = useState(true);
   const [resumeName, setResumeName] = useState(initialName || "My Resume");
@@ -44,8 +47,8 @@ export default function DualModeResumeBuilder({ initialContent, initialName, res
     resolver: zodResolver(resumeSchema),
     defaultValues: {
       contactInfo: {
-        name: user?.fullName || "",
-        email: user?.primaryEmailAddress?.emailAddress || "",
+        name: user?.displayName || "",
+        email: user?.email || "",
       },
       summary: "",
       skills: "",
@@ -87,20 +90,43 @@ export default function DualModeResumeBuilder({ initialContent, initialName, res
   // Handle save notifications
   useEffect(() => {
     if (saveResult && !isSaving) {
-      toast.success("Resume saved successfully!");
-      if (saveResult.gamification?.earnedBadges?.length > 0) {
-        saveResult.gamification.earnedBadges.forEach((badge) => {
-          toast.success(`🎉 Badge Earned: ${badge.name}`, {
-            description: badge.description,
-            duration: 5000,
+      if (saveResult.success) {
+        toast.success("Resume saved successfully!");
+        if (saveResult.gamification?.earnedBadges?.length > 0) {
+          saveResult.gamification.earnedBadges.forEach((badge) => {
+            toast.success(`🎉 Badge Earned: ${badge.name}`, {
+              description: badge.description,
+              duration: 5000,
+            });
           });
-        });
+        }
+      } else {
+        toast.error(saveResult.error || "Failed to save resume");
       }
     }
     if (saveError) {
       toast.error(saveError.message || "Failed to save resume");
     }
   }, [saveResult, saveError, isSaving]);
+
+  // Debounced auto-save
+  useEffect(() => {
+    if (mode !== "manual") return;
+
+    const timer = setTimeout(() => {
+      const isDirty = Object.keys(errors).length === 0 && (
+        formValues.summary ||
+        formValues.skills ||
+        formValues.experience?.length > 0
+      );
+
+      if (isDirty) {
+        onSubmit(formValues);
+      }
+    }, 2000); // 2 second debounce
+
+    return () => clearTimeout(timer);
+  }, [formValues, mode]);
 
   const handleModeChange = (newMode) => {
     if (mode === newMode) return;
@@ -110,13 +136,13 @@ export default function DualModeResumeBuilder({ initialContent, initialName, res
 
   const handleAIGenerate = async (jobDetails, resumeInput) => {
     setIsGenerating(true);
-    
+
     try {
       const apiFormData = new FormData();
       apiFormData.append("companyName", jobDetails.companyName);
       apiFormData.append("jobRole", jobDetails.jobRole);
       apiFormData.append("jobDescription", jobDetails.jobDescription);
-      
+
       if (resumeInput.file) {
         apiFormData.append("resumeFile", resumeInput.file);
       } else {
@@ -152,7 +178,7 @@ export default function DualModeResumeBuilder({ initialContent, initialName, res
       });
 
       toast.success(`Resume generated with ${generatedResume.atsScore}% ATS compatibility!`);
-      
+
       // Switch to manual mode to show the filled form
       setMode("manual");
     } catch (error) {
@@ -179,22 +205,22 @@ export default function DualModeResumeBuilder({ initialContent, initialName, res
     try {
       const html2pdf = (await import("html2pdf.js/dist/html2pdf.min.js")).default;
       const element = document.getElementById("resume-preview");
-      
+
       if (!element) {
         toast.error("Resume preview not found");
         return;
       }
-      
+
       // Force one-page layout by constraining height
       const A4_HEIGHT_MM = 297; // A4 height in mm
       const MARGIN_MM = 20; // Total margin (top + bottom)
       const MAX_CONTENT_HEIGHT_MM = A4_HEIGHT_MM - MARGIN_MM;
-      
+
       const opt = {
         margin: [10, 10, 10, 10],
         filename: `${formValues.contactInfo?.name || resumeName}_Resume.pdf`,
         image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { 
+        html2canvas: {
           scale: 2,
           useCORS: true,
           logging: false,
@@ -202,13 +228,13 @@ export default function DualModeResumeBuilder({ initialContent, initialName, res
           height: element.scrollHeight,
           windowHeight: element.scrollHeight
         },
-        jsPDF: { 
-          unit: "mm", 
-          format: "a4", 
+        jsPDF: {
+          unit: "mm",
+          format: "a4",
           orientation: "portrait",
           compress: true
         },
-        pagebreak: { 
+        pagebreak: {
           mode: 'avoid-all',
           avoid: ['div', 'p', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'li', 'section']
         }
@@ -216,7 +242,7 @@ export default function DualModeResumeBuilder({ initialContent, initialName, res
 
       // Generate PDF
       const pdf = await html2pdf().set(opt).from(element).toPdf().get('pdf');
-      
+
       // Ensure only one page
       if (pdf.internal.getNumberOfPages() > 1) {
         // Delete extra pages
@@ -225,36 +251,25 @@ export default function DualModeResumeBuilder({ initialContent, initialName, res
           pdf.deletePage(i);
         }
       }
-      
+
       // Save the PDF
       pdf.save(`${formValues.contactInfo?.name || resumeName}_Resume.pdf`);
-      
+
       // Track download if resume is saved
-      if (saveResult?.resume?.id) {
+      if (saveResult?.resume?.id || resumeId) {
         try {
-          console.log(`🔄 Tracking download for resume ${saveResult.resume.id}...`);
-          
-          const response = await fetch('/api/track-download', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ resumeId: saveResult.resume.id })
-          });
-          
-          if (response.ok) {
-            const result = await response.json();
-            console.log("✅ Download tracked successfully:", result);
-            
-            // Use router refresh instead of full page reload
-            window.location.href = window.location.pathname;
-          } else {
-            const error = await response.json();
-            console.error("❌ Download tracking failed:", error);
-          }
+          const id = saveResult?.resume?.id || resumeId;
+          console.log(`🔄 Tracking download for resume ${id}...`);
+
+          await trackResumeDownload(id);
+
+          console.log("✅ Download tracked successfully");
+          router.refresh();
         } catch (err) {
           console.error("❌ Failed to track download:", err);
         }
       }
-      
+
       toast.success("✅ PDF downloaded! (One page, ATS-optimized)");
     } catch (error) {
       console.error("PDF generation error:", error);
@@ -264,34 +279,28 @@ export default function DualModeResumeBuilder({ initialContent, initialName, res
 
   const handleShare = async () => {
     // Check if resume is saved first
-    if (!saveResult?.resume?.id) {
+    const currentResumeId = saveResult?.resume?.id || resumeId;
+    if (!currentResumeId) {
       toast.error("Please save your resume before sharing");
       return;
     }
 
     setIsSharing(true);
     try {
-      console.log(`🔄 Sharing resume ${saveResult.resume.id}...`);
-      
-      const response = await fetch('/api/share-resume', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ resumeId: saveResult.resume.id })
-      });
+      console.log(`🔄 Sharing resume ${currentResumeId}...`);
 
-      const data = await response.json();
+      const result = await shareResume(currentResumeId);
 
-      if (!response.ok) {
-        console.error("❌ Share failed:", data.error);
-        throw new Error(data.error || "Failed to share resume");
+      if (!result.success) {
+        throw new Error(result.error || "Failed to share resume");
       }
 
-      console.log("✅ Share successful:", data);
-      
+      console.log("✅ Share successful:", result);
+
       // Use the branded URL from the response
-      const brandedUrl = data.brandedUrl || data.shareUrl;
+      const brandedUrl = result.brandedUrl;
       setShareUrl(brandedUrl);
-      
+
       // Copy branded URL to clipboard
       await navigator.clipboard.writeText(brandedUrl);
       setCopied(true);
@@ -302,10 +311,7 @@ export default function DualModeResumeBuilder({ initialContent, initialName, res
         duration: 5000,
       });
 
-      console.log(`✅ Resume shared successfully. Share count incremented. Token: ${data.shareToken}`);
-
-      // Use router refresh instead of full page reload
-      window.location.href = window.location.pathname;
+      router.refresh();
     } catch (error) {
       console.error("❌ Share error:", error);
       toast.error(error.message || "Failed to share resume");
@@ -328,12 +334,15 @@ export default function DualModeResumeBuilder({ initialContent, initialName, res
       const content = JSON.stringify(data);
       // Track mode: 'ai' if AI generated data exists, otherwise 'manual'
       const resumeMode = aiGeneratedData ? "ai" : "manual";
-      
+
       console.log(`🔄 Saving resume... Mode: ${resumeMode}, ID: ${resumeId || 'new'}, Name: ${resumeName}`);
-      
-      await saveResumeFn(content, resumeId, resumeName, resumeMode);
-      
-      console.log("✅ Resume saved successfully to database");
+
+      const result = await saveResumeFn(content, resumeId, resumeName, resumeMode);
+
+      if (result && result.success) {
+        console.log("✅ Resume saved successfully to database");
+        router.refresh();
+      }
     } catch (error) {
       console.error("❌ Save error:", error);
       toast.error("Failed to save resume. Please try again.");
@@ -390,10 +399,10 @@ export default function DualModeResumeBuilder({ initialContent, initialName, res
             <Download className="h-4 w-4 mr-2" />
             Download PDF
           </Button>
-          <Button 
-            onClick={handleShare} 
+          <Button
+            onClick={handleShare}
             variant="outline"
-            disabled={!saveResult?.resume?.id || isSharing}
+            disabled={!(saveResult?.resume?.id || resumeId) || isSharing}
           >
             {isSharing ? (
               <>
@@ -462,7 +471,7 @@ export default function DualModeResumeBuilder({ initialContent, initialName, res
 
       {/* Content Based on Mode */}
       {mode === "ai" ? (
-        <AIModeSection 
+        <AIModeSection
           onGenerate={handleAIGenerate}
           isGenerating={isGenerating}
         />

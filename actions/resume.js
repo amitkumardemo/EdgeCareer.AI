@@ -1,23 +1,39 @@
 "use server";
 
 import { db } from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import { getFirebaseUser } from "@/lib/auth-utils";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { revalidatePath } from "next/cache";
 import { updateGamification } from "./gamification";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+// Helper to get Gemini model safely
+function getGeminiModel(config = {}) {
+  let apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    console.warn("⚠️ GEMINI_API_KEY is missing. AI features will be limited.");
+    return null;
+  }
+
+  // Sanitize key (especially for Windows line endings)
+  apiKey = apiKey.trim();
+
+  const genAI = new GoogleGenerativeAI(apiKey);
+  return genAI.getGenerativeModel({
+    model: "gemini-2.5-flash-lite",
+    ...config
+  });
+}
 
 export async function saveResume(content, resumeId = null, name = "My Resume", mode = "manual") {
-  const { userId } = await auth();
-  if (!userId) {
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) {
     console.error("❌ [Action] Unauthorized saveResume attempt");
     throw new Error("Unauthorized");
   }
+  const userId = firebaseUser.uid;
 
   const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { uid: userId },
   });
 
   if (!user) {
@@ -27,11 +43,11 @@ export async function saveResume(content, resumeId = null, name = "My Resume", m
 
   try {
     let resume;
-    
+
     if (resumeId) {
       console.log(`🔄 [DB] Updating existing resume ${resumeId} for user ${user.id}...`);
       console.log(`📝 Mode: ${mode}, Name: ${name}`);
-      
+
       // Update existing resume
       resume = await db.resume.update({
         where: {
@@ -57,12 +73,12 @@ export async function saveResume(content, resumeId = null, name = "My Resume", m
           },
         },
       });
-      
+
       console.log(`📊 [DB] User analytics updated - totalResumesSaved incremented`);
     } else {
       console.log(`🔄 [DB] Creating new resume for user ${user.id}...`);
       console.log(`📝 Mode: ${mode}, Name: ${name}`);
-      
+
       // Create new resume
       resume = await db.resume.create({
         data: {
@@ -88,31 +104,53 @@ export async function saveResume(content, resumeId = null, name = "My Resume", m
           },
         },
       });
-      
+
       console.log(`📊 [DB] User analytics updated - totalResumesCreated and totalResumesSaved incremented`);
     }
 
+    // Verify resume was actually created/updated
+    if (!resume) {
+      throw new Error("Failed to create or update resume record");
+    }
+
     // Update gamification for resume creation
-    const gamification = await updateGamification(user.id, "resume_created");
+    // Only award points if it's a new resume or significant update
+    // For now, we'll keep the existing logic but ensure it doesn't fail the whole request
+    let gamification = null;
+    try {
+      gamification = await updateGamification(user.id, "resume_created");
+    } catch (gError) {
+      console.warn("⚠️ [Action] Gamification update failed:", gError.message);
+      // Don't fail the request, just continue
+    }
 
     revalidatePath("/resume");
     revalidatePath("/dashboard");
-    
+
     console.log(`✅ [Action] Resume saved successfully - ID: ${resume.id}, Mode: ${mode}`);
-    
-    return { resume, gamification };
+
+    return {
+      success: true,
+      resume,
+      gamification
+    };
   } catch (error) {
-    console.error("❌ [Action] Error saving resume:", error.message);
-    throw new Error("Failed to save resume");
+    console.error("❌ [Action] Error saving resume:", error);
+    // Return error object instead of throwing to handle it gracefully in UI
+    return {
+      success: false,
+      error: error.message || "Failed to save resume"
+    };
   }
 }
 
 export async function getResume(resumeId = null) {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) throw new Error("Unauthorized");
+  const userId = firebaseUser.uid;
 
   const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { uid: userId },
   });
 
   if (!user) throw new Error("User not found");
@@ -141,11 +179,12 @@ export async function getResume(resumeId = null) {
 }
 
 export async function getAllResumes() {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) throw new Error("Unauthorized");
+  const userId = firebaseUser.uid;
 
   const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { uid: userId },
   });
 
   if (!user) throw new Error("User not found");
@@ -161,11 +200,12 @@ export async function getAllResumes() {
 }
 
 export async function improveWithAI({ current, type }) {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) throw new Error("Unauthorized");
+  const userId = firebaseUser.uid;
 
   const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { uid: userId },
     include: {
       industryInsight: true,
     },
@@ -189,6 +229,9 @@ export async function improveWithAI({ current, type }) {
     Format the response as a single paragraph without any additional text or explanations.
   `;
 
+  const model = getGeminiModel();
+  if (!model) throw new Error("AI service unavailable (missing API key)");
+
   try {
     const result = await model.generateContent(prompt);
     const response = result.response;
@@ -201,23 +244,42 @@ export async function improveWithAI({ current, type }) {
 }
 
 export async function atsChecker(file) {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) throw new Error("Unauthorized");
+  const userId = firebaseUser.uid;
 
   const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { uid: userId },
   });
 
   if (!user) throw new Error("User not found");
 
-  // Extract text from file (assuming PDF)
-  const buffer = Buffer.from(await file.arrayBuffer());
-  const pdfParse = (await import("pdf-parse")).default;
-  const data = await pdfParse(buffer);
-  const resumeText = data.text;
+  let resumeText = "";
+  try {
+    if (typeof file === 'string') {
+      resumeText = file;
+    } else if (file instanceof File || (typeof file === 'object' && file.arrayBuffer)) {
+      if (file.type === 'application/pdf') {
+        const buffer = Buffer.from(await file.arrayBuffer());
+        console.log(`[Action] ATS Checker: Parsing PDF, size: ${buffer.length} bytes`);
+        const pdfModule = await import("pdf-parse");
+        const pdfParse = pdfModule.default || pdfModule;
+        const data = await pdfParse(buffer);
+        resumeText = data.text;
+        console.log(`[Action] ATS Checker: PDF parsed, length: ${resumeText?.length || 0}`);
+      } else {
+        resumeText = await file.text();
+      }
+    } else {
+      throw new Error("Invalid input format");
+    }
+  } catch (error) {
+    console.error("Error reading resume text:", error);
+    throw new Error("Failed to read resume content");
+  }
 
   if (!resumeText || resumeText.trim().length === 0) {
-    throw new Error("Could not extract text from file");
+    throw new Error("Resume content is empty");
   }
 
   const prompt = `
@@ -239,6 +301,9 @@ export async function atsChecker(file) {
     Return the response in JSON format with keys: "atsScore" (number) and "feedback" (string).
   `;
 
+  const model = getGeminiModel();
+  if (!model) throw new Error("AI service unavailable (missing API key)");
+
   try {
     const result = await model.generateContent(prompt);
     const response = result.response;
@@ -254,25 +319,21 @@ export async function atsChecker(file) {
       feedback = "Unable to parse AI response. Please review your resume manually.";
     }
 
-    await db.resume.upsert({
-      where: {
-        userId: user.id,
-      },
-      update: {
-        atsScore,
-        feedback,
-      },
-      create: {
-        userId: user.id,
-        content: resumeText,
-        atsScore,
-        feedback,
-      },
-    });
+    // Note: We are not saving to DB here as this is a quick check from the builder.
+    // For full analysis and history, use the main ATS Analyzer.
 
-    return { atsScore, feedback };
+    return {
+      success: true,
+      atsScore,
+      feedback,
+      analysisId: null
+    };
   } catch (error) {
     console.error("ATS Checker error:", error);
-    throw new Error("Failed to analyze resume");
+    return {
+      success: false,
+      error: error.message || "Failed to analyze resume"
+    };
   }
 }
+

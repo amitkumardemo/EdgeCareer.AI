@@ -10,14 +10,10 @@ COPY prisma ./prisma/
 RUN npm install
 
 # 3. Set build-time arguments as environment variables
-ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
-# ARG CLERK_SECRET_KEY
 ARG DATABASE_URL
 
 # 4. Create a .env file from build arguments
-RUN echo "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_ZGVjZW50LXBlYWNvY2stNTguY2xlcmsuYWNjb3VudHMuZGV2JA" > .env && \
-    echo "CLERK_SECRET_KEY=sk_test_u7lK4ZGXknnxdtadxMbXyptU5RmL3xsGVDEIpMVy7x" >> .env && \
-    echo "DATABASE_URL=postgresql://postgres:admin@localhost:5432/edgecareer?schema=public" >> .env && \
+RUN echo "DATABASE_URL=postgresql://neondb_owner:npg_P6egWGNOi4hv@ep-snowy-pine-a8481cq6-pooler.eastus2.azure.neon.tech/neondb?sslmode=require" > .env && \
     echo "NODE_ENV=production" >> .env
 
 # 5. Copy the rest of the application

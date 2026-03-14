@@ -21,7 +21,7 @@
 // import { saveResume } from "@/actions/resume";
 // import { EntryForm } from "./entry-form";
 // import useFetch from "@/hooks/use-fetch";
-// import { useUser } from "@clerk/nextjs";
+// import { entriesToMarkdown } from "@/app/lib/helper";
 // import { entriesToMarkdown } from "@/app/lib/helper";
 // import { resumeSchema } from "@/app/lib/schema";
 // import html2pdf from "html2pdf.js/dist/html2pdf.min.js";
@@ -457,14 +457,14 @@ import { saveResume, improveWithAI, atsChecker } from "@/actions/resume";
 
 import { EntryForm } from "./entry-form";
 import useFetch from "@/hooks/use-fetch";
-import { useUser } from "@clerk/nextjs";
+import { useAuth } from "@/context/auth-context";
 import { entriesToMarkdown } from "@/app/lib/helper";
 import { resumeSchema } from "@/app/lib/schema";
 
 export default function ResumeBuilder({ initialContent }) {
   const [activeTab, setActiveTab] = useState("edit");
   const [previewContent, setPreviewContent] = useState(initialContent);
-  const { user } = useUser();
+  const { user } = useAuth();
   const [resumeMode, setResumeMode] = useState("preview");
   const [isProcessing, setIsProcessing] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -567,7 +567,7 @@ export default function ResumeBuilder({ initialContent }) {
       parts.push(`💼 [LinkedIn](${contactInfo.linkedin})`);
     if (contactInfo.github) parts.push(`💻 [GitHub](${contactInfo.github})`);
 
-    const displayName = contactInfo.name || (user?.fullName) || "Your Name";
+    const displayName = contactInfo.name || (user?.displayName) || "Your Name";
 
     return parts.length > 0
       ? `## <div align="center">${displayName}</div>
