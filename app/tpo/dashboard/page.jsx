@@ -46,7 +46,7 @@ import {
 } from "@/components/tpo/analytics-charts";
 
 export default function TPODashboard() {
-    const { user } = useUser();
+    const { user } = useAuth();
 
     const [loading, setLoading] = useState(true);
     const [syncing, setSyncing] = useState(false);

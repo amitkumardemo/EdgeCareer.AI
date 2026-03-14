@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { getFinalResult } from "@/actions/mock-interview";
 import {
@@ -28,7 +28,7 @@ import {
     Trophy
 } from "lucide-react";
 
-export default function InterviewResult() {
+function ResultContent() {
     const { interviewId } = useParams();
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -266,5 +266,18 @@ export default function InterviewResult() {
                 </Button>
             </div>
         </div>
+    );
+}
+
+export default function InterviewResult() {
+    return (
+        <Suspense fallback={
+            <div className="flex flex-col items-center justify-center min-h-[70vh] gap-4">
+                <Loader2 className="h-12 w-12 animate-spin text-primary" />
+                <p className="text-xl font-semibold italic text-muted-foreground animate-pulse">Loading results...</p>
+            </div>
+        }>
+            <ResultContent />
+        </Suspense>
     );
 }

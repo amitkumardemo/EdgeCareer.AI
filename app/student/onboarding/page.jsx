@@ -19,7 +19,7 @@ import { Loader2, CheckCircle2, Github, AlertCircle } from "lucide-react";
 import { verifyGitHubUsername } from "@/actions/github-sync";
 
 export default function StudentOnboarding() {
-    const { user } = useUser();
+    const { user } = useAuth();
     const router = useRouter();
 
     const [formData, setFormData] = useState({
