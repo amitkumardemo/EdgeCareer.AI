@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useAuth } from "@/context/auth-context";
+import { getUserRole, logLoginActivity } from "@/actions/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -49,9 +50,30 @@ export default function SignInPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      await signInWithEmail(email, password);
+      const credential = await signInWithEmail(email, password);
+      // Set session cookie immediately before navigation so middleware sees it
+      const token = await credential.user.getIdToken();
+      const userData = await getUserRole(credential.user.uid);
+      
+      document.cookie = `__session=${token}; path=/; max-age=3600; SameSite=Lax`;
+      if (userData?.role) {
+        document.cookie = `__user_role=${userData.role}; path=/; max-age=3600; SameSite=Lax`;
+      } else {
+        document.cookie = "__user_role=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      }
+
+      await logLoginActivity(userData?.id);
+
+      // Determine redirect URL based on role
+      let finalRedirect = redirectUrl;
+      if (redirectUrl === "/dashboard" || redirectUrl === "/internship") {
+        if (userData?.role === "ADMIN") finalRedirect = "/internship/admin/dashboard";
+        else if (userData?.role === "TPO") finalRedirect = "/internship/college/dashboard";
+        else if (userData?.role === "STUDENT") finalRedirect = "/internship/student/dashboard";
+      }
+
       toast.success("Successfully signed in!");
-      router.push(redirectUrl);
+      router.push(finalRedirect);
     } catch (error) {
       toast.error(error.message || "Failed to sign in");
     } finally {
@@ -61,9 +83,30 @@ export default function SignInPage() {
 
   const handleGoogleSignIn = async () => {
     try {
-      await signInWithGoogle();
+      const credential = await signInWithGoogle();
+      // Set session cookie immediately before navigation so middleware sees it
+      const token = await credential.user.getIdToken();
+      const userData = await getUserRole(credential.user.uid);
+
+      document.cookie = `__session=${token}; path=/; max-age=3600; SameSite=Lax`;
+      if (userData?.role) {
+        document.cookie = `__user_role=${userData.role}; path=/; max-age=3600; SameSite=Lax`;
+      } else {
+        document.cookie = "__user_role=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      }
+
+      await logLoginActivity(userData?.id);
+
+      // Determine redirect URL based on role
+      let finalRedirect = redirectUrl;
+      if (redirectUrl === "/dashboard" || redirectUrl === "/internship") {
+        if (userData?.role === "ADMIN") finalRedirect = "/internship/admin/dashboard";
+        else if (userData?.role === "TPO") finalRedirect = "/internship/college/dashboard";
+        else if (userData?.role === "STUDENT") finalRedirect = "/internship/student/dashboard";
+      }
+
       toast.success("Successfully signed in with Google!");
-      router.push(redirectUrl);
+      router.push(finalRedirect);
     } catch (error) {
       toast.error(error.message || "Failed to sign in with Google");
     }

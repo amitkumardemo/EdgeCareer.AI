@@ -7,8 +7,22 @@ import { revalidatePath } from "next/cache";
 async function getStudentApp() {
   const firebaseUser = await getFirebaseUser();
   if (!firebaseUser) throw new Error("Unauthorized");
-  const user = await prisma.user.findUnique({ where: { uid: firebaseUser.uid } });
-  if (!user) throw new Error("User not found");
+
+  const { uid, email, name, picture } = firebaseUser;
+
+  // Auto-create DB record on first sign-in (same as checkUser.js)
+  const user = await prisma.user.upsert({
+    where: { uid },
+    create: {
+      uid,
+      email: email || "",
+      name: name || email?.split("@")[0] || "User",
+      imageUrl: picture || null,
+      role: "STUDENT",
+    },
+    update: {}, // no overwrites on subsequent calls
+  });
+
   return user;
 }
 
@@ -93,6 +107,26 @@ export async function getMyAttendance(applicationId) {
     where: { applicationId },
     orderBy: { date: "desc" },
   });
+}
+
+// Rich attendance data for the student attendance dashboard
+export async function getMyAttendanceFull() {
+  const user = await getStudentApp();
+  // Find the active (SELECTED) application with full batch + attendance info
+  const application = await prisma.internshipApplication.findFirst({
+    where: { userId: user.id, status: "SELECTED" },
+    include: {
+      batch: {
+        include: {
+          program: { select: { title: true, duration: true } },
+        },
+      },
+      attendance: { orderBy: { date: "asc" } }, // asc for calendar rendering
+      progress: { select: { attendancePct: true } },
+    },
+    orderBy: { appliedAt: "desc" },
+  });
+  return application;
 }
 
 export async function getLeaderboard(batchId) {

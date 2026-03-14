@@ -74,6 +74,7 @@ model User {
   githubActivities     GitHubActivity[]
   internApplications   InternshipApplication[] @relation("InternApplications")
   mentorBatches        InternshipBatch[]       @relation("BatchMentor")
+  loginLogs            LoginLog[]
 
   @@index([collegeId])
   @@index([role])
@@ -615,4 +616,15 @@ model Announcement {
   @@index([batchId])
   @@index([isGlobal])
   @@index([createdAt])
+}
+
+model LoginLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ipAddress String?
+  userAgent String?
+  loginAt   DateTime @default(now())
+
+  @@index([userId])
 }

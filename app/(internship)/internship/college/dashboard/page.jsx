@@ -1,9 +1,14 @@
 import { getTpoDashboardStats } from "@/actions/internship-tpo";
 import { Users, BookOpen, Award, TrendingUp, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function CollegeDashboardPage() {
   const stats = await getTpoDashboardStats();
+
+  if (!stats) {
+    redirect("/internship");
+  }
 
   const metrics = [
     { label: "Total Students", value: stats.totalStudents, icon: Users, color: "text-blue-400" },

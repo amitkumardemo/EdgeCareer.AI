@@ -5,15 +5,15 @@ import { getFirebaseUser } from "@/lib/auth-utils";
 
 async function getCollegeTpo() {
   const firebaseUser = await getFirebaseUser();
-  if (!firebaseUser) throw new Error("Unauthorized");
+  if (!firebaseUser) return null;
   
   const user = await prisma.user.findUnique({
     where: { uid: firebaseUser.uid },
     include: { college: true }
   });
   
-  if (!user || user.role !== "TPO") {
-    throw new Error("Not authorized as College TPO");
+  if (!user || (user.role !== "TPO" && user.role !== "ADMIN")) {
+    return null;
   }
   
   return user;
@@ -21,6 +21,7 @@ async function getCollegeTpo() {
 
 export async function getTpoDashboardStats() {
   const tpo = await getCollegeTpo();
+  if (!tpo) return null;
   
   // Either specific college binding OR matching domain email
   const domain = tpo.email.split("@")[1];

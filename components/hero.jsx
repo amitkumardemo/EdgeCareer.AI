@@ -12,7 +12,7 @@ import {
   useAnimation,
   useInView,
 } from "framer-motion";
-import { ArrowRight, Sparkles, Star } from "lucide-react";
+import { ArrowRight, Sparkles, Star, Award } from "lucide-react";
 
 // Create a reusable sequence animation component
 const SequenceItem = ({ children, delay = 0, animation = "slideUp", isMobile = false }) => {
@@ -137,78 +137,106 @@ const HeroSection = () => {
       className="w-full pt-32 md:pt-36 pb-24 relative overflow-hidden"
       ref={containerRef}
     >
-      {/* Decorative background elements */}
-      <motion.div
-        className="absolute top-0 right-0 w-1/2 h-1/2 bg-gradient-to-bl from-primary/5 to-transparent rounded-full blur-3xl -z-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.5, delay: 0.2 }}
-      />
-      <motion.div
-        className="absolute bottom-24 left-0 w-1/3 h-1/3 bg-gradient-to-tr from-secondary/5 to-transparent rounded-full blur-3xl -z-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.5, delay: 0.5 }}
-      />
+      {/* Clean SaaS Background with Animated Blobs */}
+      <div className="absolute inset-0 bg-transparent -z-10 overflow-hidden">
+        {/* Animated Gradient Blobs */}
+        <motion.div
+          animate={{
+            x: [0, 100, 0],
+            y: [0, 50, 0],
+            rotate: [0, 90, 0],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          className="absolute -top-[10%] -right-[5%] w-[40%] h-[40%] bg-indigo-200/30 rounded-full blur-[100px]"
+        />
+        <motion.div
+          animate={{
+            x: [0, -80, 0],
+            y: [0, 100, 0],
+          }}
+          transition={{
+            duration: 25,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          className="absolute top-[20%] -left-[10%] w-[35%] h-[35%] bg-blue-200/20 rounded-full blur-[80px]"
+        />
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.1, 0.2, 0.1],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="absolute bottom-[10%] right-[15%] w-[30%] h-[30%] bg-purple-200/20 rounded-full blur-[90px]"
+        />
+      </div>
 
-      {/* Background Video */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover z-[-1]"
-      >
-        <source src="/intro.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-
-      {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black/50 z-10"></div>
-
-      {/* Floating decorative elements */}
-      {/* {decorativeElements.map((element, index) => (
-        <FloatingElement key={index} index={index}>
-          {element}
-        </FloatingElement>
-      ))} */}
-
-      <div
-        className="space-y-6 text-center relative z-20"
-      >
+      <div className="space-y-6 text-center relative z-20">
         {/* Main content with sequence animations */}
-        <div className="space-y-6 mx-auto pt-32 pb-4">
+        <div className="space-y-6 mx-auto pt-32 pb-4 max-w-5xl px-4">
           <SequenceItem animation="slideUp" delay={0.1} isMobile={isMobile}>
+            <div className="flex justify-center mb-6">
+              <span className="inline-flex items-center gap-2 text-[10px] md:text-xs font-bold tracking-widest uppercase text-indigo-600 bg-indigo-50 border border-indigo-100 px-4 py-1.5 rounded-full shadow-sm">
+                <Sparkles className="h-3.5 w-3.5" /> AI-Powered Career Launchpad
+              </span>
+            </div>
             <h1
-              className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-white text-center"
-              style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}
+              className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-slate-900 leading-[1.1] tracking-tight"
             >
-              TechieHelp Institute of AI <br /> <span className="text-2xl md:text-4xl lg:text-5xl block mt-4 text-[#00E5FF]">AI-Powered Career Intelligence & Placement Readiness</span>
+              Master the Skills That <br /> 
+              <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                Get You Hired
+              </span>
             </h1>
           </SequenceItem>
 
-          <SequenceItem animation="scale" delay={0.8} isMobile={isMobile}>
-            <div className="relative bg-black/30 backdrop-blur-sm rounded-lg px-4 py-3 mx-auto max-w-[780px]">
-              <p
-                className="text-base md:text-lg lg:text-xl font-medium text-center text-white/90"
-                style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.7)' }}
-              >
-                Helping students become job-ready with AI — and helping colleges make data-driven placement decisions.
-              </p>
-            </div>
-          </SequenceItem>
-
-          <SequenceItem animation="fade" delay={1.1} isMobile={isMobile}>
-            <div className="flex flex-wrap justify-center gap-4 mt-2 px-4">
-              <span className="text-xs md:text-sm text-[#00E5FF] font-semibold bg-white/10 px-3 py-1 rounded-full">🎓 For Students: AI Resume · Mock Interviews · Skill Feedback</span>
-              <span className="text-xs md:text-sm text-[#00E5FF] font-semibold bg-white/10 px-3 py-1 rounded-full">🏫 For Colleges: Readiness Dashboards · Analytics · TPO Tools</span>
-            </div>
-          </SequenceItem>
-
-          <SequenceItem animation="fade" delay={1.4} isMobile={isMobile}>
-            <p className="text-xs md:text-sm text-[#B0BEC5] text-center font-medium mt-1">
-              Powered by TechieHelp · MSME Certified · ISO Certified · AICTE Aligned
+          <SequenceItem animation="slideUp" delay={0.4} isMobile={isMobile}>
+            <p
+              className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed font-medium"
+            >
+              Build a job-ready portfolio, practice with AI mentors, and get verified <br className="hidden md:block" /> 
+              certificates — everything you need to land your dream career.
             </p>
+          </SequenceItem>
+
+          <SequenceItem animation="fade" delay={1.2} isMobile={isMobile}>
+            <div className="flex flex-wrap justify-center gap-4 mt-10">
+              <motion.div 
+                whileHover={{ y: -5, scale: 1.02 }}
+                className="flex items-center gap-3 px-4 py-2 bg-white/80 backdrop-blur-md border border-slate-200/50 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(79,70,229,0.1)] transition-all duration-300"
+              >
+                <div className="p-1.5 bg-slate-50 rounded-lg">
+                  <img src="/msme.png" alt="MSME" className="h-5 w-auto object-contain brightness-110" onError={(e) => e.target.style.display = 'none'} />
+                </div>
+                <span className="text-[10px] font-black text-slate-500 uppercase tracking-tighter">MSME Certified</span>
+              </motion.div>
+              <motion.div 
+                whileHover={{ y: -5, scale: 1.02 }}
+                className="flex items-center gap-3 px-4 py-2 bg-white/80 backdrop-blur-md border border-slate-200/50 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(245,158,11,0.1)] transition-all duration-300"
+              >
+                <div className="p-1.5 bg-amber-50 rounded-lg">
+                  <Award className="h-4 w-4 text-amber-500" />
+                </div>
+                <span className="text-[10px] font-black text-slate-500 uppercase tracking-tighter">ISO 9001:2015</span>
+              </motion.div>
+              <motion.div 
+                whileHover={{ y: -5, scale: 1.02 }}
+                className="flex items-center gap-3 px-4 py-2 bg-white/80 backdrop-blur-md border border-slate-200/50 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(34,197,94,0.1)] transition-all duration-300"
+              >
+                <div className="p-1.5 bg-green-50 rounded-lg">
+                  <div className="w-2 ha-2 rounded-full bg-green-500 animate-pulse" />
+                </div>
+                <span className="text-[10px] font-black text-slate-500 uppercase tracking-tighter">AICTE Aligned</span>
+              </motion.div>
+            </div>
           </SequenceItem>
 
         </div>
@@ -230,18 +258,12 @@ const HeroSection = () => {
               <Link href="/dashboard">
                 <Button
                   size="lg"
-                  className="px-8 relative overflow-hidden group"
+                  className="px-8 h-12 md:h-14 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm md:text-base shadow-xl shadow-indigo-200 group"
                 >
-                  <motion.span className="relative z-10 flex items-center gap-2">
+                  <span className="flex items-center gap-2">
                     Start Preparing with AI
                     <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </motion.span>
-                  <motion.span
-                    className="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary rounded-md -z-10"
-                    initial={{ x: -100, opacity: 0.5 }}
-                    whileHover={{ x: 0, opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                  />
+                  </span>
                 </Button>
               </Link>
             </motion.div>
@@ -251,18 +273,13 @@ const HeroSection = () => {
               whileTap={{ scale: 0.98 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-              <Link href="/contact">
+              <Link href="/courses">
                 <Button
                   size="lg"
                   variant="outline"
-                  className="px-6 py-4 border-2 border-gray-400 hover:border-gray-200 transition-all duration-300 hover:text-gray-200 hover:bg-gray-900 relative overflow-hidden"
+                  className="px-8 h-12 md:h-14 rounded-full border-indigo-200 bg-white hover:bg-indigo-50 text-indigo-700 font-bold text-sm md:text-base transition-all duration-300 shadow-sm"
                 >
-                  <motion.span className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 opacity-0 hover:opacity-100 transition-opacity duration-500" />
-                  <ShinyText
-                    text="Request TPO Demo"
-                    speed={2}
-                    className="text-lg font-semibold px-1 relative z-10"
-                  />
+                  Explore Verified Courses
                 </Button>
               </Link>
             </motion.div>

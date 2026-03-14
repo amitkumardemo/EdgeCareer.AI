@@ -19,7 +19,8 @@ export function middleware(req) {
     "/internships",
     "/latest-jobs",
     "/job-matches",
-    "/career-branding-lab"
+    "/career-branding-lab",
+    "/internship"
   ];
 
   const isProtectedRoute = protectedRoutes.some((route) =>
@@ -36,6 +37,27 @@ export function middleware(req) {
     const url = new URL("/sign-in", req.url);
     url.searchParams.set("redirect_url", pathname);
     return NextResponse.redirect(url);
+  }
+
+  // Role-based Access Control (RBAC)
+  if (session) {
+    // Default to STUDENT if no role cookie is set yet
+    const userRole = req.cookies.get("__user_role")?.value || "STUDENT";
+
+    // Admin-only routes
+    if (pathname.startsWith("/internship/admin") && userRole !== "ADMIN") {
+      return NextResponse.redirect(new URL("/access-denied", req.url));
+    }
+
+    // Student-only routes (Admins can also view)
+    if (pathname.startsWith("/internship/student") && userRole !== "STUDENT" && userRole !== "ADMIN") {
+      return NextResponse.redirect(new URL("/access-denied", req.url));
+    }
+
+    // College/TPO routes (Admins can also view)
+    if (pathname.startsWith("/internship/college") && userRole !== "TPO" && userRole !== "ADMIN") {
+      return NextResponse.redirect(new URL("/access-denied", req.url));
+    }
   }
 
   return NextResponse.next();

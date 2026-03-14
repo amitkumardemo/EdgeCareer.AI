@@ -27,8 +27,9 @@ export const AuthProvider = ({ children }) => {
         document.cookie = `__session=${token}; path=/; max-age=3600; SameSite=Lax`;
       } else {
         setUser(null);
-        // Remove session cookie
+        // Remove session and role cookies
         document.cookie = "__session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        document.cookie = "__user_role=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
       }
       setLoading(false);
     });
