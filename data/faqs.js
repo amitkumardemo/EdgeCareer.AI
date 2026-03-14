@@ -13,7 +13,7 @@ export const faqs = [
   },
   {
     "question": "Is my data secure with TechieHelp Institute of AI?",
-    "answer": "Absolutely. We prioritize data privacy and security by implementing end-to-end encryption, secure authentication with Clerk, and strict data protection policies. Your personal information remains private and is never shared with third parties."
+    "answer": "Absolutely. We prioritize data privacy and security by implementing end-to-end encryption, secure authentication with Firebase, and strict data protection policies. Your personal information remains private and is never shared with third parties."
   },
   {
     "question": "How can I track my interview preparation progress?",

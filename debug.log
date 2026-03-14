@@ -1,0 +1,444 @@
+[2026-02-10T12:23:59.120Z] [Action] Starting mock interview {
+  "role": "software-engineer",
+  "userId": "22115541-0298-4d0c-b8ff-6eae6647ff24"
+}
+[2026-02-10T12:23:59.136Z] [DEBUG] Available DB models [
+  "$extends",
+  "user",
+  "question",
+  "testCase",
+  "submission",
+  "assessment",
+  "resume",
+  "coverLetter",
+  "industryInsight",
+  "aTSAnalysis",
+  "mockInterview",
+  "mockRound",
+  "$parent"
+]
+[2026-02-10T12:24:04.086Z] [Action] 🤖 Generating questions for APTITUDE Round... {
+  "interviewId": "cmlgkomg3000bdimgnz2t9n31",
+  "round": 1,
+  "candidate": "Candidate",
+  "role": "software-engineer"
+}
+[2026-02-10T12:24:04.295Z] ❌ [AI] API Call Failed {
+  "error": "[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 Not Found] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods."
+}
+[2026-02-10T12:24:05.858Z] [Action] 🤖 Generating questions for APTITUDE Round... {
+  "interviewId": "cmlgkomg3000bdimgnz2t9n31",
+  "round": 1,
+  "candidate": "Candidate",
+  "role": "software-engineer"
+}
+[2026-02-10T12:24:05.975Z] ❌ [AI] API Call Failed {
+  "error": "[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 Not Found] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods."
+}
+[2026-02-10T12:27:44.246Z] [Env] Initializing Gemini with key: AIzaSyAb...
+[2026-02-10T12:27:44.248Z] [Action] 🤖 Generating questions for APTITUDE Round... {
+  "interviewId": "cmlgkomg3000bdimgnz2t9n31",
+  "round": 1,
+  "candidate": "Candidate",
+  "role": "software-engineer"
+}
+[2026-02-10T12:27:44.430Z] ❌ [AI] API Call Failed {
+  "error": "[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 Not Found] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods."
+}
+[2026-02-10T12:28:16.544Z] [Env] Initializing Gemini with key: AIzaSyAb...
+[2026-02-10T12:28:16.546Z] [Action] 🤖 Generating questions for APTITUDE Round... {
+  "interviewId": "cmlgkomg3000bdimgnz2t9n31",
+  "round": 1,
+  "candidate": "Candidate",
+  "role": "software-engineer"
+}
+[2026-02-10T12:28:16.729Z] ❌ [AI] API Call Failed {
+  "error": "[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 Not Found] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods."
+}
+[2026-02-10T13:04:45.310Z] [Action] Starting mock interview {
+  "role": "software-engineer",
+  "userId": "22115541-0298-4d0c-b8ff-6eae6647ff24"
+}
+[2026-02-10T13:04:45.312Z] [DEBUG] Available DB models [
+  "$extends",
+  "user",
+  "question",
+  "testCase",
+  "submission",
+  "assessment",
+  "resume",
+  "coverLetter",
+  "industryInsight",
+  "aTSAnalysis",
+  "mockInterview",
+  "mockRound",
+  "$parent"
+]
+[2026-02-10T13:04:50.860Z] [Env] Initializing Gemini with key: AIzaSyAb... (Length: 39)
+[2026-02-10T13:04:50.861Z] [Action] 🤖 Generating questions for APTITUDE Round... {
+  "interviewId": "cmlgm51xf000gdimgpdnir2hn",
+  "round": 1,
+  "candidate": "Candidate",
+  "role": "software-engineer"
+}
+[2026-02-10T13:04:51.072Z] ❌ [AI] API Call Failed {
+  "error": "[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 Not Found] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods."
+}
+[2026-02-10T13:04:52.918Z] [Env] Initializing Gemini with key: AIzaSyAb... (Length: 39)
+[2026-02-10T13:04:52.920Z] [Action] 🤖 Generating questions for APTITUDE Round... {
+  "interviewId": "cmlgm51xf000gdimgpdnir2hn",
+  "round": 1,
+  "candidate": "Candidate",
+  "role": "software-engineer"
+}
+[2026-02-10T13:04:53.043Z] ❌ [AI] API Call Failed {
+  "error": "[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 Not Found] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods."
+}
+[2026-02-10T13:15:59.102Z] [Action] Starting mock interview {
+  "role": "software-engineer",
+  "userId": "22115541-0298-4d0c-b8ff-6eae6647ff24"
+}
+[2026-02-10T13:15:59.105Z] [DEBUG] Available DB models [
+  "$extends",
+  "user",
+  "question",
+  "testCase",
+  "submission",
+  "assessment",
+  "resume",
+  "coverLetter",
+  "industryInsight",
+  "aTSAnalysis",
+  "mockInterview",
+  "mockRound",
+  "$parent"
+]
+[2026-02-10T13:16:03.710Z] [Env] Initializing Gemini with key: AIzaSyAb... (Length: 39)
+[2026-02-10T13:16:03.711Z] [Action] 🤖 Generating questions for APTITUDE Round... {
+  "interviewId": "cmlgmjhtw000ldimg02vxnser",
+  "round": 1,
+  "candidate": "Candidate",
+  "role": "software-engineer"
+}
+[2026-02-10T13:16:48.649Z] [Action] ✅ AI response received {
+  "length": 46843
+}
+[2026-02-10T13:16:48.650Z] ⚠️ [AI] Direct JSON parse failed, attempting cleanup...
+[2026-02-10T13:16:48.651Z] ❌ [AI] JSON Cleanup failed {
+  "rawPreview": "{\n  \"questions\": [\n    {\n      \"id\": \"qa1\",\n      \"section\": \"Quantitative\",\n      \"question\": \"If a train travels at 60 km/hr, how long will it take to cover a distance of 240 km?\",\n      \"options\": "
+}
+[2026-02-10T13:16:50.545Z] [Env] Initializing Gemini with key: AIzaSyAb... (Length: 39)
+[2026-02-10T13:16:50.547Z] [Action] 🤖 Generating questions for APTITUDE Round... {
+  "interviewId": "cmlgmjhtw000ldimg02vxnser",
+  "round": 1,
+  "candidate": "Candidate",
+  "role": "software-engineer"
+}
+[2026-02-10T13:19:09.528Z] [Action] ✅ AI response received {
+  "length": 119463
+}
+[2026-02-10T13:19:09.530Z] [Action] 💾 Saving questions to DB... {
+  "count": 28
+}
+[2026-02-10T13:23:57.243Z] [Env] Initializing Gemini with key: AIzaSyAb... (Length: 39)
+[2026-02-10T13:24:02.080Z] [Env] Initializing Gemini with key: AIzaSyAb... (Length: 39)
+[2026-02-10T13:24:41.327Z] [Env] Initializing Gemini with key: AIzaSyAb... (Length: 39)
+[2026-02-10T13:27:38.650Z] [Env] Initializing Gemini with key: AIzaSyAb... (Length: 39)
+[2026-02-10T13:27:38.652Z] [Action] 🤖 Generating final results review... {
+  "interviewId": "cmlgmjhtw000ldimg02vxnser",
+  "score": 0
+}
+[2026-02-10T13:27:40.051Z] [Action] ✅ Final review generated successfully
+[2026-02-10T13:27:42.328Z] [Env] Initializing Gemini with key: AIzaSyAb... (Length: 39)
+[2026-02-10T13:27:42.330Z] [Action] 🤖 Generating final results review... {
+  "interviewId": "cmlgmjhtw000ldimg02vxnser",
+  "score": 0
+}
+[2026-02-10T13:27:43.621Z] [Action] ✅ Final review generated successfully
+[2026-02-10T13:32:42.625Z] [Action] Starting mock interview {
+  "role": "frontend-developer",
+  "userId": "22115541-0298-4d0c-b8ff-6eae6647ff24"
+}
+[2026-02-10T13:32:42.627Z] [DEBUG] Available DB models [
+  "$extends",
+  "user",
+  "question",
+  "testCase",
+  "submission",
+  "assessment",
+  "resume",
+  "coverLetter",
+  "industryInsight",
+  "aTSAnalysis",
+  "mockInterview",
+  "mockRound",
+  "$parent"
+]
+[2026-02-10T13:32:47.644Z] [Env] Initializing Gemini with key: AIzaSyAb... (Length: 39)
+[2026-02-10T13:32:47.645Z] [Action] 🤖 Generating questions for APTITUDE Round... {
+  "interviewId": "cmlgn505j000qdimg92by1pg3",
+  "round": 1,
+  "candidate": "Candidate",
+  "role": "frontend-developer"
+}
+[2026-02-10T13:33:05.112Z] [Action] ✅ AI response received {
+  "length": 15227,
+  "start": "{\n  \"questions\": [\n    {\n      \"id\": \"q1\",\n      \"section\": \"Quantitative\",\n      \"question\": \"If a ...",
+  "end": "...ing the verb 'buy', so no colon is needed. Commas correctly separate items in the list.\"\n    }\n  ]\n}"
+}
+[2026-02-10T13:33:05.115Z] [Action] 💾 Saving questions to DB... {
+  "count": 20
+}
+[2026-02-10T13:38:33.717Z] [Env] Initializing Gemini with key: AIzaSyAb... (Length: 39)
+[2026-02-10T13:38:33.719Z] [Action] 🤖 Generating final results review... {
+  "interviewId": "cmlgn505j000qdimg92by1pg3",
+  "score": 0
+}
+[2026-02-10T13:38:35.317Z] [Action] ✅ Final review generated successfully
+[2026-02-10T13:38:36.905Z] [Env] Initializing Gemini with key: AIzaSyAb... (Length: 39)
+[2026-02-10T13:38:36.907Z] [Action] 🤖 Generating final results review... {
+  "interviewId": "cmlgn505j000qdimg92by1pg3",
+  "score": 0
+}
+[2026-02-10T13:38:38.205Z] [Action] ✅ Final review generated successfully
+[2026-02-10T13:50:05.803Z] [Env] Initializing Gemini with key: AIzaSyAb... (Length: 39)
+[2026-02-10T13:50:05.804Z] [Action] 🤖 Generating final results review... {
+  "interviewId": "cmlgn505j000qdimg92by1pg3",
+  "score": 0
+}
+[2026-02-10T13:50:07.437Z] [Action] ✅ Final review generated successfully
+[2026-02-10T13:50:09.369Z] [Env] Initializing Gemini with key: AIzaSyAb... (Length: 39)
+[2026-02-10T13:50:09.371Z] [Action] 🤖 Generating final results review... {
+  "interviewId": "cmlgn505j000qdimg92by1pg3",
+  "score": 0
+}
+[2026-02-10T13:50:11.021Z] [Action] ✅ Final review generated successfully
+[2026-02-10T13:58:29.392Z] [Evaluation] Calculating Final Result {
+  "id": "cmlgn505j000qdimg92by1pg3",
+  "aptScore": 0,
+  "techScore": 0,
+  "hrScore": 0,
+  "overallScore": 0,
+  "status": "IN_PROGRESS"
+}
+[2026-02-10T13:58:29.395Z] [Env] Initializing Gemini with key: AIzaSyAb... (Length: 39)
+[2026-02-10T13:58:29.398Z] [Evaluation] 🤖 Requesting Final AI Review...
+[2026-02-10T13:58:30.864Z] [Evaluation] ✅ Final AI Review complete {
+  "readiness": "Needs Improvement",
+  "strengths": [],
+  "improvements": [
+    "Aptitude",
+    "Technical Skills",
+    "HR Communication"
+  ],
+  "feedback": "While the candidate demonstrates potential, significant improvement is needed across all assessed areas. Focusing on strengthening foundational knowledge in aptitude and technical skills, as well as refining communication for HR interactions, will be crucial for future success. Continued development in these key areas is recommended before reapplying."
+}
+[2026-02-10T13:59:09.095Z] [Action] Starting mock interview {
+  "role": "data-scientist",
+  "userId": "22115541-0298-4d0c-b8ff-6eae6647ff24"
+}
+[2026-02-10T13:59:09.097Z] [DEBUG] Available DB models [
+  "$extends",
+  "user",
+  "question",
+  "testCase",
+  "submission",
+  "assessment",
+  "resume",
+  "coverLetter",
+  "industryInsight",
+  "aTSAnalysis",
+  "mockInterview",
+  "mockRound",
+  "$parent"
+]
+[2026-02-10T13:59:15.905Z] [Env] Initializing Gemini with key: AIzaSyAb... (Length: 39)
+[2026-02-10T13:59:15.907Z] [Action] 🤖 Generating questions for APTITUDE Round... {
+  "interviewId": "cmlgo30a6000vdimgzmxgm3u7",
+  "round": 1,
+  "candidate": "Candidate",
+  "role": "data-scientist"
+}
+[2026-02-10T13:59:24.313Z] [Action] ✅ AI response received {
+  "length": 8595,
+  "start": "{\n  \"questions\": [\n    {\n      \"id\": \"q1\",\n      \"section\": \"Quantitative\",\n      \"question\": \"A tra...",
+  "end": "...ch should be positive and related to inspiration. 'Inspiring' is the most fitting word.\"\n    }\n  ]\n}"
+}
+[2026-02-10T13:59:24.317Z] [Action] 💾 Saving questions to DB... {
+  "count": 20
+}
+[2026-02-10T14:04:18.886Z] [Evaluation] Starting score calculation for Round 1 (APTITUDE) {
+  "answerCount": 0,
+  "questionCount": 0
+}
+[2026-02-10T14:04:18.888Z] [Evaluation] MCQ Round Complete {
+  "correctCount": 0,
+  "total": 0,
+  "score": null
+}
+[2026-02-10T14:04:19.498Z] [Evaluation] Round 1 saved with status: FAILED
+[2026-02-10T14:04:19.814Z] [Evaluation] Starting score calculation for Round 1 (APTITUDE) {
+  "answerCount": 20,
+  "questionCount": 20
+}
+[2026-02-10T14:04:19.817Z] [Evaluation] MCQ Round Complete {
+  "correctCount": 17,
+  "total": 20,
+  "score": 85
+}
+[2026-02-10T14:04:20.420Z] [Evaluation] Round 1 saved with status: PASSED
+[2026-02-10T14:04:40.026Z] [Env] Initializing Gemini with key: AIzaSyAb... (Length: 39)
+[2026-02-10T14:04:40.029Z] [Action] 🤖 Generating questions for TECHNICAL Round... {
+  "interviewId": "cmlgo30a6000vdimgzmxgm3u7",
+  "round": 2,
+  "candidate": "Candidate",
+  "role": "data-scientist"
+}
+[2026-02-10T14:04:54.420Z] [Action] ✅ AI response received {
+  "length": 14199,
+  "start": "{\n  \"questions\": [\n    {\n      \"id\": \"t1\",\n      \"question\": \"Given a dataset with a high degree of ...",
+  "end": "...eir purchasing behaviors, making it suitable for identifying similar customer segments.\"\n    }\n  ]\n}"
+}
+[2026-02-10T14:04:54.423Z] ⚠️ [AI] Direct JSON parse failed, attempting cleanup...
+[2026-02-10T14:04:54.426Z] ❌ [AI] JSON Cleanup failed {
+  "rawPreview": "{\n  \"questions\": [\n    {\n      \"id\": \"t1\",\n      \"question\": \"Given a dataset with a high degree of multicollinearity among predictor variables, which of the following regularization techniques would "
+}
+[2026-02-10T14:12:31.188Z] [Evaluation] Starting score calculation for Round 1 (APTITUDE) {
+  "answerCount": 20,
+  "questionCount": 20
+}
+[2026-02-10T14:12:31.192Z] [Evaluation] MCQ Round Complete {
+  "correctCount": 16,
+  "total": 20,
+  "score": 80
+}
+[2026-02-10T14:12:31.811Z] [Evaluation] Round 1 saved with status: PASSED
+[2026-02-10T14:12:37.180Z] [Env] Initializing Gemini with key: AIzaSyAb... (Length: 39)
+[2026-02-10T14:12:37.183Z] [Action] 🤖 Generating questions for TECHNICAL Round... {
+  "interviewId": "cmlgo30a6000vdimgzmxgm3u7",
+  "round": 2,
+  "candidate": "Candidate",
+  "role": "data-scientist"
+}
+[2026-02-10T14:12:42.769Z] [Action] ✅ AI response received {
+  "length": 7327,
+  "start": "{\n  \"questions\": [\n    {\n      \"id\": \"t1\",\n      \"question\": \"Given a dataset with a strong positive...",
+  "end": "...s might excel with clear margins and high dimensionality with careful kernel selection.\"\n    }\n  ]\n}"
+}
+[2026-02-10T14:12:42.771Z] [Action] 💾 Saving questions to DB... {
+  "count": 10
+}
+[2026-02-10T14:14:47.754Z] [Evaluation] Starting score calculation for Round 2 (TECHNICAL) {
+  "answerCount": 10,
+  "questionCount": 10
+}
+[2026-02-10T14:14:47.756Z] [Evaluation] MCQ Round Complete {
+  "correctCount": 0,
+  "total": 10,
+  "score": 0
+}
+[2026-02-10T14:14:48.004Z] [Evaluation] Round 2 saved with status: FAILED
+[2026-02-10T14:25:53.191Z] [Evaluation] Starting score calculation for Round 1 (APTITUDE) {
+  "answerCount": 20,
+  "questionCount": 20
+}
+[2026-02-10T14:25:53.199Z] [Evaluation] MCQ Round Complete {
+  "totalCorrect": 9,
+  "total": 20,
+  "finalScore": 45
+}
+[2026-02-10T14:25:53.777Z] [Evaluation] Round 1 saved with status: FAILED, Score: 45%
+[2026-02-10T14:26:11.897Z] [Evaluation] Calculating Final Result {
+  "id": "cmlgo30a6000vdimgzmxgm3u7",
+  "aptScore": 45,
+  "techScore": 0,
+  "hrScore": 0,
+  "overallScore": 18,
+  "status": "IN_PROGRESS"
+}
+[2026-02-10T14:26:11.899Z] [Env] Initializing Gemini with key: AIzaSyAb... (Length: 39)
+[2026-02-10T14:26:11.902Z] [Evaluation] 🤖 Requesting Final AI Review...
+[2026-02-10T14:26:13.298Z] [Evaluation] ✅ Final AI Review complete {
+  "readiness": "Needs Improvement",
+  "strengths": [],
+  "improvements": [
+    "Technical Skills",
+    "Aptitude",
+    "HR Interview Skills"
+  ],
+  "feedback": "While the candidate's overall score was low, it's important to focus on developing foundational technical skills and improving performance in aptitude assessments. Continued practice and targeted learning in these areas will be crucial for future success in data science roles. Further engagement with HR-style questions will also build confidence and communication effectiveness."
+}
+[2026-02-10T14:26:15.141Z] [Evaluation] Calculating Final Result {
+  "id": "cmlgo30a6000vdimgzmxgm3u7",
+  "aptScore": 45,
+  "techScore": 0,
+  "hrScore": 0,
+  "overallScore": 18,
+  "status": "IN_PROGRESS"
+}
+[2026-02-10T14:26:15.143Z] [Env] Initializing Gemini with key: AIzaSyAb... (Length: 39)
+[2026-02-10T14:26:15.145Z] [Evaluation] 🤖 Requesting Final AI Review...
+[2026-02-10T14:26:16.730Z] [Evaluation] ✅ Final AI Review complete {
+  "readiness": "Needs Improvement",
+  "strengths": [
+    "Potential for growth",
+    "Willingness to learn",
+    "Enthusiasm for data science"
+  ],
+  "improvements": [
+    "Technical proficiency in core data science concepts",
+    "Understanding of aptitude assessment metrics",
+    "Interview preparation and presentation skills"
+  ],
+  "feedback": "While the candidate showed enthusiasm, the performance across all assessment rounds, particularly the technical and HR rounds, was significantly below expectations. Further development in fundamental technical skills and interview strategies is strongly recommended before reapplying. We encourage focusing on strengthening core data science knowledge and practicing interview scenarios to improve future outcomes."
+}
+[2026-02-10T14:28:28.992Z] [Action] Starting mock interview {
+  "role": "software-engineer",
+  "userId": "22115541-0298-4d0c-b8ff-6eae6647ff24"
+}
+[2026-02-10T14:28:28.994Z] [DEBUG] Available DB models [
+  "$extends",
+  "user",
+  "question",
+  "testCase",
+  "submission",
+  "assessment",
+  "resume",
+  "coverLetter",
+  "industryInsight",
+  "aTSAnalysis",
+  "mockInterview",
+  "mockRound",
+  "$parent"
+]
+[2026-02-10T14:28:34.681Z] [Env] Initializing Gemini with key: AIzaSyAb... (Length: 39)
+[2026-02-10T14:28:34.684Z] [Action] 🤖 Generating questions for APTITUDE Round... {
+  "interviewId": "cmlgp4q870010dimglmx8dsjz",
+  "round": 1,
+  "candidate": "Candidate",
+  "role": "software-engineer"
+}
+[2026-02-10T14:29:35.994Z] [Action] ✅ AI response received {
+  "length": 64431,
+  "start": "{\n  \"questions\": [\n    {\n      \"id\": \"q1\",\n      \"section\": \"Quantitative\",\n      \"question\": \"A tra...",
+  "end": "...eak a leg' is commonly used to wish someone good luck, especially before a performance.\"\n    }\n  ]\n}"
+}
+[2026-02-10T14:29:35.996Z] ⚠️ [AI] Direct JSON parse failed, attempting cleanup...
+[2026-02-10T14:29:35.999Z] ❌ [AI] JSON Cleanup failed {
+  "rawPreview": "{\n  \"questions\": [\n    {\n      \"id\": \"q1\",\n      \"section\": \"Quantitative\",\n      \"question\": \"A train travels at 72 km/hr. How many seconds will it take to cover a distance of 180 meters?\",\n      \"options\": [\"20\", \"25\", \"30\", \"35\"],\n      \"correctAnswer\": \"b\",\n      \"explanation\": \"Convert the speed to m/s: 72 km/hr = (72 * 1000) / 3600 m/s = 20 m/s. Time = Distance / Speed = 180m / 20 m/s = 9 seconds. Correction: 72 km/hr = 20 m/s. Time = 180m / 20 m/s = 9 seconds. The provided options are inc"
+}
+[2026-02-10T14:29:38.637Z] [Env] Initializing Gemini with key: AIzaSyAb... (Length: 39)
+[2026-02-10T14:29:38.639Z] [Action] 🤖 Generating questions for APTITUDE Round... {
+  "interviewId": "cmlgp4q870010dimglmx8dsjz",
+  "round": 1,
+  "candidate": "Candidate",
+  "role": "software-engineer"
+}
+[2026-02-10T14:30:00.988Z] [Action] ✅ AI response received {
+  "length": 19310,
+  "start": "{\n  \"questions\": [\n    {\n      \"id\": \"q1\",\n      \"section\": \"Quantitative\",\n      \"question\": \"A tra...",
+  "end": "... - 14 = 126. Profit = SP - CP = 126 - 100 = 26. Profit Percentage = (26/100)*100 = 26%.\"\n    }\n  ]\n}"
+}
+[2026-02-10T14:30:00.990Z] [Action] 💾 Saving questions to DB... {
+  "count": 20
+}

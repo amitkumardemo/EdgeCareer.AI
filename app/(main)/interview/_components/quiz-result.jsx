@@ -6,15 +6,15 @@ import { CardContent, CardFooter } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { BUTTONS_MENUS } from "@/lib/constants";
 import { toast } from "sonner";
-import { useUser } from "@clerk/nextjs";
+import { useAuth } from "@/context/auth-context";
 
 export default function QuizResult({
   result,
   hideStartNew = false,
   onStartNew,
 }) {
-  const { user } = useUser();
-  const userName = user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : user?.firstName || user?.username || 'Valued User';
+  const { user } = useAuth();
+  const userName = user?.displayName || user?.email?.split('@')[0] || 'Valued User';
 
   if (!result) return null;
 

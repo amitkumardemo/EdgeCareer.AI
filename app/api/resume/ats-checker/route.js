@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import { getFirebaseUser } from "@/lib/auth-utils";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export const runtime = "nodejs"; // ✅ Prevents Edge runtime errors
@@ -10,13 +10,14 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 export async function POST(request) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    const firebaseUser = await getFirebaseUser();
+    if (!firebaseUser) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const uid = firebaseUser.uid;
 
     const user = await db.user.findUnique({
-      where: { clerkUserId: userId },
+      where: { uid: uid },
     });
 
     if (!user) {

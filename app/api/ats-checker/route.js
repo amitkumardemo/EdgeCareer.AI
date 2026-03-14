@@ -1,25 +1,25 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import { getFirebaseUser } from "@/lib/auth-utils";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { checkUser } from "@/lib/checkUser";
 
 export const runtime = "nodejs"; // ✅ Prevents Edge runtime errors
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 export async function POST(request) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    const firebaseUser = await getFirebaseUser();
+    if (!firebaseUser) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const user = await db.user.upsert({
-      where: { clerkUserId: userId },
-      update: {},
-      create: { clerkUserId: userId },
-    });
+    const user = await checkUser();
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
 
     const formData = await request.formData();
     const file = formData.get("resume");
@@ -55,7 +55,7 @@ export async function POST(request) {
 
       // Parse JSON safely
       try {
-        analysis = JSON.parse(responseText);
+        analysis = JSON.parse(responseText.replace(/```json|```/g, ""));
       } catch {
         // Fallback if Gemini returns non-JSON text
         const scoreMatch = responseText.match(/(\d{1,3})/);
@@ -83,20 +83,30 @@ export async function POST(request) {
     }
 
     // Save in DB
-    await db.resume.upsert({
+    const existingResume = await db.resume.findFirst({
       where: { userId: user.id },
-      update: {
-        atsScore: analysis.score,
-        feedback: analysis.feedback,
-        content: resumeText,
-      },
-      create: {
-        userId: user.id,
-        atsScore: analysis.score,
-        feedback: analysis.feedback,
-        content: resumeText,
-      },
     });
+
+    if (existingResume) {
+      await db.resume.update({
+        where: { id: existingResume.id },
+        data: {
+          atsScore: analysis.score,
+          feedback: analysis.feedback,
+          content: resumeText,
+        },
+      });
+    } else {
+      await db.resume.create({
+        data: {
+          userId: user.id,
+          atsScore: analysis.score,
+          feedback: analysis.feedback,
+          content: resumeText,
+          name: "ATS Analysis Resume",
+        },
+      });
+    }
 
     return NextResponse.json({
       atsScore: analysis.score,

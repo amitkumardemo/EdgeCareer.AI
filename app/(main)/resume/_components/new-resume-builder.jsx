@@ -15,12 +15,15 @@ import { EntryForm } from "./entry-form";
 import ResumePreview from "./resume-preview";
 import useFetch from "@/hooks/use-fetch";
 import { saveResume, improveWithAI } from "@/actions/resume";
-import { useUser } from "@clerk/nextjs";
+import { trackResumeDownload } from "@/actions/resume-analytics";
+import { useAuth } from "@/context/auth-context";
+import { useRouter } from "next/navigation";
 import { CharacterCounter } from "./character-counter";
 import { ResumeLimitInfo } from "./resume-limit-info";
 
 export default function NewResumeBuilder({ initialContent, initialName, resumeId }) {
-  const { user } = useUser();
+  const { user } = useAuth();
+  const router = useRouter();
   const [showPreview, setShowPreview] = useState(true);
   const [aiSuggestions, setAiSuggestions] = useState([]);
   const [selectedJobTitle, setSelectedJobTitle] = useState("");
@@ -38,8 +41,8 @@ export default function NewResumeBuilder({ initialContent, initialName, resumeId
     resolver: zodResolver(resumeSchema),
     defaultValues: {
       contactInfo: {
-        name: user?.fullName || "",
-        email: user?.primaryEmailAddress?.emailAddress || "",
+        name: user?.displayName || "",
+        email: user?.email || "",
       },
       summary: "",
       skills: "",
@@ -145,50 +148,48 @@ export default function NewResumeBuilder({ initialContent, initialName, resumeId
     try {
       const html2pdf = (await import("html2pdf.js/dist/html2pdf.min.js")).default;
       const element = document.getElementById("resume-preview");
-      
+
       if (!element) {
         toast.error("Resume preview not found");
         return;
       }
-      
+
       const opt = {
         margin: [10, 10],
         filename: `${formValues.contactInfo?.name || 'Resume'}_Resume.pdf`,
         image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { 
+        html2canvas: {
           scale: 2,
           useCORS: true,
           logging: false,
           windowHeight: element.scrollHeight,
           height: element.scrollHeight
         },
-        jsPDF: { 
-          unit: "mm", 
-          format: "a4", 
+        jsPDF: {
+          unit: "mm",
+          format: "a4",
           orientation: "portrait",
           compress: true
         },
-        pagebreak: { 
+        pagebreak: {
           mode: ['avoid-all', 'css', 'legacy'],
           avoid: ['div', 'p', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
         }
       };
 
       await html2pdf().set(opt).from(element).save();
-      
+
       // Track download analytics
-      if (saveResult?.resume?.id) {
+      if (saveResult?.resume?.id || resumeId) {
         try {
-          await fetch('/api/track-download', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ resumeId: saveResult.resume.id })
-          });
+          const id = saveResult?.resume?.id || resumeId;
+          await trackResumeDownload(id);
+          router.refresh();
         } catch (err) {
           console.error("Failed to track download:", err);
         }
       }
-      
+
       toast.success("PDF downloaded successfully! (One page, ATS-optimized)");
     } catch (error) {
       console.error("PDF generation error:", error);
@@ -486,11 +487,10 @@ export default function NewResumeBuilder({ initialContent, initialName, resumeId
                       <div className="space-y-1">
                         <Textarea
                           {...field}
-                          className={`h-32 ${
-                            field.value?.length >= 200
+                          className={`h-32 ${field.value?.length >= 200
                               ? "border-red-500 focus:border-red-500 focus:ring-red-500"
                               : ""
-                          }`}
+                            }`}
                           placeholder="Write a compelling professional summary..."
                           maxLength={200}
                         />
@@ -539,11 +539,10 @@ export default function NewResumeBuilder({ initialContent, initialName, resumeId
                       <div className="space-y-1">
                         <Textarea
                           {...field}
-                          className={`h-32 ${
-                            field.value?.length >= 300
+                          className={`h-32 ${field.value?.length >= 300
                               ? "border-red-500 focus:border-red-500 focus:ring-red-500"
                               : ""
-                          }`}
+                            }`}
                           placeholder="List your key skills (e.g., React, Node.js, Python, AWS)"
                           maxLength={300}
                         />
@@ -636,11 +635,10 @@ export default function NewResumeBuilder({ initialContent, initialName, resumeId
                       <div className="space-y-1">
                         <Textarea
                           {...field}
-                          className={`h-32 ${
-                            field.value?.length >= 300
+                          className={`h-32 ${field.value?.length >= 300
                               ? "border-red-500 focus:border-red-500 focus:ring-red-500"
                               : ""
-                          }`}
+                            }`}
                           placeholder="• Achievement 1 (max 100 chars)&#10;• Achievement 2 (max 100 chars)&#10;• Achievement 3 (max 100 chars)"
                           maxLength={300}
                         />
@@ -670,11 +668,10 @@ export default function NewResumeBuilder({ initialContent, initialName, resumeId
                       <div className="space-y-1">
                         <Textarea
                           {...field}
-                          className={`h-32 ${
-                            field.value?.length >= 220
+                          className={`h-32 ${field.value?.length >= 220
                               ? "border-red-500 focus:border-red-500 focus:ring-red-500"
                               : ""
-                          }`}
+                            }`}
                           placeholder="• Leadership position 1 (max 110 chars)&#10;• Leadership position 2 (max 110 chars)"
                           maxLength={220}
                         />
@@ -704,11 +701,10 @@ export default function NewResumeBuilder({ initialContent, initialName, resumeId
                       <div className="space-y-1">
                         <Textarea
                           {...field}
-                          className={`h-32 ${
-                            field.value?.length >= 300
+                          className={`h-32 ${field.value?.length >= 300
                               ? "border-red-500 focus:border-red-500 focus:ring-red-500"
                               : ""
-                          }`}
+                            }`}
                           placeholder="• Reason 1 (max 100 chars)&#10;• Reason 2 (max 100 chars)&#10;• Reason 3 (max 100 chars)"
                           maxLength={300}
                         />

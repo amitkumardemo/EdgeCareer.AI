@@ -1,17 +1,23 @@
 "use server";
 
-import { db } from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import db from "@/lib/prisma";
+import { getFirebaseUser } from "@/lib/auth-utils";
+import { checkUser } from "@/lib/checkUser";
 import { revalidatePath } from "next/cache";
 import { generateAIInsights } from "./dashboard";
 
 export async function updateUser(data) {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) throw new Error("Unauthorized");
+  const userId = firebaseUser.uid;
 
-  const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+  let user = await db.user.findUnique({
+    where: { uid: userId },
   });
+
+  if (!user) {
+    user = await checkUser();
+  }
 
   if (!user) throw new Error("User not found");
 
@@ -66,25 +72,22 @@ export async function updateUser(data) {
 }
 
 export async function getUserOnboardingStatus() {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) throw new Error("Unauthorized");
+  const userId = firebaseUser.uid;
 
   try {
     let user = await db.user.findUnique({
-      where: { clerkUserId: userId },
+      where: { uid: userId },
     });
 
-    // If user doesn't exist, create them with a unique email
+    // If user doesn't exist, create them
     if (!user) {
-      const clerkUser = await auth();
-      const email = clerkUser.user?.primaryEmailAddress?.emailAddress || `temp-${userId}@example.com`;
-      const name = clerkUser.user?.firstName + " " + clerkUser.user?.lastName || "User";
-
       user = await db.user.create({
         data: {
-          clerkUserId: userId,
-          email: email,
-          name: name,
+          uid: userId,
+          email: firebaseUser.email,
+          name: firebaseUser.name || "User",
         },
       });
     }
@@ -99,12 +102,13 @@ export async function getUserOnboardingStatus() {
 }
 
 export async function getUserData() {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  const firebaseUser = await getFirebaseUser();
+  if (!firebaseUser) throw new Error("Unauthorized");
+  const userId = firebaseUser.uid;
 
   try {
-    const user = await db.user.findUnique({
-      where: { clerkUserId: userId },
+    let user = await db.user.findUnique({
+      where: { uid: userId },
       select: {
         name: true,
         industry: true,
@@ -113,6 +117,20 @@ export async function getUserData() {
         skills: true,
       },
     });
+
+    if (!user) {
+      await checkUser();
+      user = await db.user.findUnique({
+        where: { uid: userId },
+        select: {
+          name: true,
+          industry: true,
+          experience: true,
+          bio: true,
+          skills: true,
+        },
+      });
+    }
 
     if (!user) throw new Error("User not found");
 

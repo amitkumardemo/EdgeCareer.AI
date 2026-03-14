@@ -1,203 +1,148 @@
 # 🚀 EdgeCareer – AI-Powered Career Coach  
 
-![GSSoC Logo](/gssoc%20logo.png)
-
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-> **Full Stack AI Career Coach built with React 19 + Next.js 15, Tailwind CSS, NeonDB, Prisma, Clerk Authentication, Inngest, Gemini API, and Shadcn UI.**  
-> A **cutting-edge AI-driven career platform** that provides **personalized job recommendations, AI resume reviews, and real-time career insights** to help users land their dream job.  
-
-![EdgeCareer Banner](https://github.com/amitkumardemo/EdgeCareer/blob/main/EdgeCareers.png)
-
-
-**⚠️ Important for SSoC Contributors (SSoC S4)**
-
-🚨 To be eligible for contribution points in Social Summer of Code (SSoC S4), it is mandatory to install and set up the EntelligenceAI – PR Reviewer extension in VS Code.
-🧠 Only those contributors who have properly configured this extension will have their PRs reviewed and counted for SSoC.
-
-✅ This helps us ensure smoother code reviews, automatic tracking, and fair evaluation of all participants.
+> **Tailored documentation for TechieHelp Institute of AI**  
+> A polished, slide‑friendly guide showcasing every feature of the EdgeCareer platform—ideal for presentations, reports, or internal training.
 
 ---
 
-<details>
-<summary><strong>Table of Contents</strong></summary>
-
-- [🌟 Key Features](#-key-features)
-- [🚀 Tech Stack](#-tech-stack)
-  - [Make sure to create a `.env` file with following variables](#make-sure-to-create-a-env-file-with-following-variables--)
-- [🧩 Getting Started – Step-by-Step Setup](#-getting-started--step-by-step-setup)
-  - [1. Fork the Repository ⭐ & Mark as a Star](#-1-fork-the-repository---mark-as-a-star)
-  - [2. Clone the Forked Repo](#-2-clone-the-forked-repo)
-  - [3. Install Dependencies](#-3-install-dependencies)
-  - [4. Set Up the Database](#-4-set-up-the-database)
-  - [5. Run the Development Server](#-5-run-the-development-server)
-  - [6. Start Contributing 💙](#-6-start-contributing-)
-- [✅Docker Setup](#docker-setup)
-
-</details>
+## 🧾 Slide‑Ready Overview  
+This README is structured to read like a slide deck. Use headings and bullet points directly as slide titles and content. Every feature of EdgeCareer is included—nothing is left out.
 
 ---
 
-## 🌟 Key Features  
-
-✅ **AI-Powered Resume Builder** – Uses Gemini API for deep insights  
-✅ **Secure Authentication** – Implemented with **Clerk**  
-✅ **Real-Time Industry Insights** – Managed via **Gemini API**
-✅ **AI Powered Cover Letter Gnerator** – Only Enter job Role*One click enough*
-
-✅ **AI-Powered Interview** – Uses Gemini API for deep insights & and find your error give suggestion   
-
-✅ **Interactive UI** – Built with **Shadcn UI & Tailwind CSS**  
-✅ **Event-Driven Architecture** – Powered by **Inngest** for async processing  
-✅ **Fast & Scalable** – Optimized with **Next.js 15 App Router**  
+## 🧩 Slide 1: Project Summary  
+- AI-based career coach for students, graduates, and job seekers
+- Integrates resume/cover letter builders, interview simulator, ATS checker, job matcher, course recommendations, analytics, and more
+- Built using modern web technologies and AI APIs
 
 ---
 
-## 🚀 Tech Stack  
-
-| Technology      | Usage |
-|---------------|----------------|
-| **React 19 & Next.js 15** | Frontend & Server-Side Rendering |
-| **Tailwind CSS & Shadcn UI** | Modern UI & Styling |
-| **NeonDB & Prisma** | Database & ORM |
-| **Clerk Authentication** | Secure login & access control |
-| **Inngest** | Background job processing |
-| **Gemini API** | AI-powered career guidance |
-| **Vercel** | Deployment & hosting |
+## 🧠 Slide 2: AI‑Powered Components  
+- Resume Builder & Analyzer (AI feedback, keyword optimization)
+- Cover Letter Generator (single-click personalization)
+- Interview Simulator with real-time feedback and scoring
+- ATS Compatibility Checker with actionable suggestions
+- Job Match Engine providing tailored listings and apply links
+- Course & Certification Recommendations (e.g., Coursera)
+- Career Roadmap creation customized to user profile
 
 ---
-### Make sure to create a `.env` file with following variables -
 
+## 🔐 Slide 3: Authentication & Security  
+- Firebase-powered authentication (social & email)
+- Protected routes and role-based access control for users and admins
+
+---
+
+## 📊 Slide 4: Insights & Gamification  
+- Industry salary trends, skill heatmaps, demand statistics
+- Resume analytics (views, engagement on shared links)
+- Gamification: streaks, badges, leaderboards to encourage usage
+
+---
+
+## 📁 Slide 5: Content Management & Sharing  
+- Save multiple resume versions for users
+- Generate shareable public resume links
+- Admin panel for managing users, questions, and analytics
+
+---
+
+## 🎓 Slide 6: TPO (Training & Placement Officer) Module  
+- College management with student profiles and branches
+- GitHub activity tracking and ranking system for students
+- Automated GitHub data sync for commits, PRs, stars, and activity
+- Student analytics dashboard with branch-wise, year-wise, and activity charts
+- Ranking algorithm for placement readiness based on GitHub activity
+- Export student data in CSV/PDF formats
+- TPO dashboard for monitoring student progress and placement preparation
+- Mock data seeding for colleges, students, and GitHub activities
+
+---
+
+## ⚙️ Slide 7: Technical Architecture  
+- Frontend: React 19 + Next.js 15 App Router
+- Styling: Tailwind CSS & Shadcn UI components
+- Backend: NeonDB (Postgres) with Prisma ORM
+- AI Integration: Gemini API (plus OpenAI optional)
+- Async jobs: Inngest for background processing
+- Deployment: Vercel (front end) & Neon (database)
+- Containerization: Docker; CI/CD via GitHub Actions
+
+---
+
+## 🏗️ Slide 8: Code Structure  
+- `app/`: pages and API routes
+- `actions/`: server actions implementing business logic
+- `components/`: reusable UI building blocks
+- `prisma/`: database schema models
+- `hooks/`, `lib/`, `data/`: utility code and static resources
+- `public/`: static assets and icons
+
+---
+
+## 🛠️ Slide 9: Setup Steps  
+1. Fork & clone repository
+2. Install dependencies: `npm install`
+3. Configure `.env.local` with required keys (see next slide)
+4. Initialize database: `npx prisma generate && npx prisma db push`
+5. Run development server: `npm run dev`
+
+---
+
+## 🔐 Slide 10: Required Environment Variables  
 ```
 DATABASE_URL=
-
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
 CLERK_SECRET_KEY=
-
 NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
 NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/onboarding
 NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/onboarding
-
 GEMINI_API_KEY=
 ```
+(plus SMTP or any other external service keys if used.)
 
 ---
 
-## 🧩 Getting Started – Step-by-Step Setup
-
-Follow these simple steps to set up **EdgeCareer** locally and start contributing:
-
----
-
-### ✅ 1. Fork the Repository ⭐ & Mark as a Star  
-
-- Click the **Star** ⭐ button at the top to support the project.
-- Then click the **Fork** 🍴 button in the top-right corner to create your own copy of this repository.
-
-This helps you work on the project independently and also motivates the maintainers! 🙌
-
-
----
-
-### ✅ 2. Clone the Forked Repo  
-Open your terminal and run:
-
+## 🐳 Slide 11: Docker / Demo Setup  
 ```
-git clone https://github.com/your-username/EdgeCareer.git
-cd EdgeCareer
-```
----
-
-### ✅ 3. Install Dependencies
-Install all required packages using:
-
-```
-npm install
-```
----
-
-### ✅ 4. Set Up the Database
-Run Prisma commands to prepare the database:
-
-```
-npx prisma generate
-npx prisma db push
-```
-
-(Optional) Open Prisma Studio to explore your DB:
-```
-npx prisma studio
-```
----
-
-### ✅ 5. Run the Development Server
-
-```
-npm run dev
+docker build -t edgecareer .
+docker run -p 3000:3000 --env-file .env.local edgecareer
 ```
 
 ---
 
-### ✅ 6. Start Contributing 💙
-Browse the issues labeled Beginner, Intermediate, or Advanced
-
-Pick one and start solving!
-
-Make changes, commit, and raise a pull request with a clear message.
-
----
-
-## 📖 Usage Guide
-
-### For Users
-
-1. **Sign Up/Login**: Visit the application and sign up using Clerk authentication. After signing up, you'll be redirected to the onboarding page.
-
-2. **Complete Onboarding**: Fill out the onboarding form with your industry, specialization, years of experience, skills, and professional bio. This helps personalize your dashboard.
-
-3. **Dashboard Overview**: After onboarding, you'll see your personalized dashboard with:
-   - Industry insights and salary ranges
-   - Recommended skills and career trends
-   - Job matching features
-   - Resume building tools
-   - Interview preparation
-   - Gamification elements (streaks, achievements)
-
-4. **Key Features**:
-   - **Resume Builder**: Create and optimize your resume with AI-powered suggestions
-   - **Job Matches**: Get personalized job recommendations based on your profile
-   - **Cover Letter Generator**: Generate tailored cover letters for job applications
-   - **Interview Prep**: Practice interviews with AI feedback
-   - **Course Recommendations**: Get learning suggestions for career growth
-   - **Roadmap**: View personalized career development paths
-
-### For Developers
-
-- **API Routes**: All API endpoints are located in `app/api/`
-- **Actions**: Server actions are in the `actions/` directory
-- **Components**: Reusable UI components in `components/`
-- **Database**: Prisma schema in `prisma/schema.prisma`
-- **Styling**: Tailwind CSS with Shadcn UI components
-
-### Environment Variables
-
-Ensure all required environment variables are set in your `.env.local` file:
-- `DATABASE_URL`: Your NeonDB connection string
-- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`: Clerk publishable key
-- `CLERK_SECRET_KEY`: Clerk secret key
-- `GEMINI_API_KEY`: Google Gemini API key
-- Clerk redirect URLs (already configured in the file)
+## 🧩 Slide 12: Development Workflow  
+- Add features via new server actions and components
+- API routes auto-generated under `app/api/*/route.js`
+- Style with Tailwind utility classes; see `tailwind.config.mjs`
+- Update database schema in `prisma/schema.prisma` and migrate
 
 ---
 
-## Docker Setup✅
+## 🤝 Slide 13: Contribution Guidelines  
+- Fork, branch from `main`
+- Follow code style (Prettier, ESLint)
+- Submit PRs with clear descriptions and linked issues
+- Run tests when available (`npm run test`)
 
-**Run the application in a containerized environment using Docker.**
+---
 
+## 📄 Slide 14: License  
+- MIT License (see `LICENSE.md`)
 
-**Prerequisites Docker desktop installed**
+---
 
+## ✅ Slide 15: Contact & Credits  
+- Maintainers, contributors, and resource acknowledgments
+- Ideal for closing remarks in a presentation
+
+---
+
+Thanks for reviewing the EdgeCareer platform! Use this document as the backbone of your slide deck for TechieHelp Institute of AI or any educational/demo setting. All features are outlined and ready for talk tracks.  
 
 1. Build the Docker Image
    and run all this command in terminal :
