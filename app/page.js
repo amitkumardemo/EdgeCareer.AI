@@ -423,7 +423,7 @@ export default function LandingPage() {
               {/* First set of items */}
               <div className="flex items-center space-x-12 md:space-x-16 flex-shrink-0">
                 <Image
-                  src="/internship (1).png"
+                  src="/internship-1.png"
                   alt="Internship Partner"
                   width={140}
                   height={70}
@@ -471,7 +471,7 @@ export default function LandingPage() {
               {/* Duplicate set for seamless loop */}
               <div className="flex items-center space-x-12 md:space-x-16 flex-shrink-0">
                 <Image
-                  src="/internship (1).png"
+                  src="/internship-1.png"
                   alt="Internship Partner"
                   width={140}
                   height={70}

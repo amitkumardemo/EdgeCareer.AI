@@ -1,10 +1,17 @@
 import { getFirebaseUser } from "@/lib/auth-utils";
+import { getUserOnboardingStatus } from "@/actions/user";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 
 export default async function InternshipRootPage() {
   const firebaseUser = await getFirebaseUser();
   if (!firebaseUser) redirect("/sign-in?redirect_url=/internship");
+
+  // Check onboarding status
+  const { isOnboarded } = await getUserOnboardingStatus();
+  if (!isOnboarded) {
+    redirect("/onboarding");
+  }
 
   const user = await prisma.user.findUnique({
     where: { uid: firebaseUser.uid },

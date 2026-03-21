@@ -6,6 +6,7 @@ import Image from "next/image";
 import {
   LayoutDashboard, FileText, Users, BookOpen, CalendarDays,
   Award, Megaphone, BarChart3, GraduationCap, Settings, Menu, X, LogOut, Building2,
+  CalendarClock, ClipboardList, Plane
 } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/context/auth-context";
@@ -21,6 +22,7 @@ const ADMIN_LINKS = [
   { href: "/internship/admin/certificates", label: "Certificates", icon: Award },
   { href: "/internship/admin/announcements", label: "Announcements", icon: Megaphone },
   { href: "/internship/admin/reports", label: "Reports", icon: BarChart3 },
+  { href: "/internship/admin/leave", label: "Leave Requests", icon: CalendarClock },
 ];
 
 const STUDENT_LINKS = [
@@ -31,6 +33,7 @@ const STUDENT_LINKS = [
   { href: "/internship/student/attendance", label: "Attendance", icon: CalendarDays },
   { href: "/internship/student/leaderboard", label: "Leaderboard", icon: BarChart3 },
   { href: "/internship/student/notifications", label: "Notifications", icon: Megaphone },
+  { href: "/internship/student/leave", label: "Apply Leave", icon: Plane },
 ];
 
 const COLLEGE_LINKS = [
@@ -78,14 +81,14 @@ export default function InternshipSidebar({ user }) {
               key={href}
               href={href}
               onClick={() => setOpen(false)}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 group ${
                 active
-                  ? "bg-primary/15 text-primary border border-primary/25"
-                  : "text-gray-500 hover:text-white hover:bg-white/5"
+                  ? "bg-primary/15 text-primary border border-primary/25 translate-x-1 shadow-[4px_0_15px_-5px_rgba(37,99,235,0.3)]"
+                  : "text-gray-500 hover:text-white hover:bg-white/5 hover:translate-x-1"
               }`}
             >
-              <Icon className="h-4 w-4 flex-shrink-0" />
-              {label}
+              <Icon className={`h-4 w-4 flex-shrink-0 transition-transform duration-300 ${active ? "scale-110" : "group-hover:scale-110 group-hover:rotate-3"}`} />
+              <span className="transition-all duration-300 group-hover:tracking-wide">{label}</span>
             </Link>
           );
         })}

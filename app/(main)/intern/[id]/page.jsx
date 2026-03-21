@@ -24,7 +24,6 @@ export default async function PublicInternProfilePage({ params }) {
         include: {
           batch: { include: { program: true } },
           progress: { include: { certificate: true } },
-          tasks: { include: { task: true } },
         },
       },
     },

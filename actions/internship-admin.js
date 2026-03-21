@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { getFirebaseUser } from "@/lib/auth-utils";
 import { revalidatePath } from "next/cache";
 
-async function requireAdmin() {
+export async function requireAdmin() {
   const firebaseUser = await getFirebaseUser();
   if (!firebaseUser) throw new Error("Unauthorized");
   const user = await prisma.user.findUnique({ where: { uid: firebaseUser.uid } });
@@ -75,7 +75,7 @@ export async function getBatchDetail(batchId) {
       announcements: { orderBy: { createdAt: "desc" } },
       applications: {
         include: {
-          user: { select: { id: true, name: true, email: true, imageUrl: true, branch: true, rollNumber: true } },
+          user: { select: { id: true, name: true, email: true, imageUrl: true, branch: true, rollNumber: true, collegeName: true } },
           progress: true,
         },
         orderBy: { appliedAt: "desc" },
@@ -100,7 +100,25 @@ export async function getAllApplications(filters = {}) {
   return prisma.internshipApplication.findMany({
     where,
     include: {
-      user: { select: { id: true, name: true, email: true, imageUrl: true, branch: true, college: { select: { name: true } } } },
+      user: { 
+        select: { 
+          id: true, 
+          name: true, 
+          email: true, 
+          imageUrl: true, 
+          branch: true, 
+          phone: true,
+          city: true,
+          year: true,
+          githubUsername: true,
+          linkedinLink: true,
+          portfolioLink: true,
+          leetcodeLink: true,
+          resumeLink: true,
+          collegeName: true,
+          college: { select: { name: true } } 
+        } 
+      },
       batch: { include: { program: { select: { title: true } } } },
       progress: true,
     },
@@ -246,11 +264,21 @@ export async function markInternshipComplete(applicationId) {
     where: { applicationId },
     data: { completed: true, completedAt: new Date() },
   });
+  
+  // Initialize certificate
   await prisma.internshipCertificate.upsert({
     where: { progressId: progress.id },
     create: { progressId: progress.id },
     update: {},
   });
+
+  // Initialize report record
+  await prisma.internshipReport.upsert({
+    where: { progressId: progress.id },
+    create: { progressId: progress.id },
+    update: {},
+  });
+
   revalidatePath("/internship/admin/certificates");
   return progress;
 }
@@ -335,7 +363,7 @@ export async function getStudentsForAdmin() {
       user: {
         select: {
           id: true, name: true, email: true, imageUrl: true,
-          branch: true, role: true,
+          branch: true, role: true, collegeName: true,
           college: { select: { name: true } },
         },
       },

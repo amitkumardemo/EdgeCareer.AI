@@ -32,6 +32,12 @@ import {
   Download,
   Share2,
   Clock,
+  ExternalLink,
+  GraduationCap,
+  Globe,
+  Github,
+  Linkedin,
+  Code
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import {
@@ -141,27 +147,90 @@ const DashboardView = ({
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                 Welcome back, {userData.name}!
-              </h1>
-              {userData.industry && (
-                <p className="text-lg text-gray-600 dark:text-gray-300 mt-1">
-                  {userData.industry.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} Professional
-                </p>
-              )}
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-                {userData.experience || 0} years of experience • {safeJSONParse(userData.skills, []).length} skills
-              </p>
-            </div>
-            <div className="text-right">
-              <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                Level {gamification.level}
-              </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">
-                {gamification.points} points
-              </div>
+                </h1>
+                <div className="flex flex-col gap-1 mt-1">
+                  {userData.industry && (
+                    <p className="text-lg text-gray-600 dark:text-gray-300 flex items-center gap-2">
+                      <BriefcaseIcon className="h-4 w-4 text-primary" />
+                      {userData.industry.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                    </p>
+                  )}
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    {userData.department} • {userData.experience || 0} years exp • {safeJSONParse(userData.skills, []).length} skills
+                  </p>
+                </div>
             </div>
           </div>
         </CardContent>
       </Card>
+
+      {/* Academic & Professional Profiles */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card className="border-white/10 overflow-hidden relative group hover:border-primary/30 transition-colors">
+          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+            <GraduationCap size={120} />
+          </div>
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <GraduationCap className="h-5 w-5 text-primary" />
+              Academic Details
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="grid grid-cols-2 gap-4">
+            <div className="p-3 rounded-xl bg-muted/30">
+              <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">College</p>
+              <p className="font-semibold text-sm truncate">{userData.college?.name || userData.collegeName || "Not provided"}</p>
+            </div>
+            <div className="p-3 rounded-xl bg-muted/30">
+              <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Year of Study</p>
+              <p className="font-semibold text-sm">{userData.year || "?"}{userData.year === 1 ? "st" : userData.year === 2 ? "nd" : userData.year === 3 ? "rd" : "th"} Year</p>
+            </div>
+            <div className="p-3 rounded-xl bg-muted/30">
+              <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Branch</p>
+              <p className="font-semibold text-sm truncate">{userData.branch || "N/A"}</p>
+            </div>
+            <div className="p-3 rounded-xl bg-muted/30">
+              <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Department</p>
+              <p className="font-semibold text-sm truncate">{userData.department || "N/A"}</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-white/10 relative overflow-hidden group hover:border-primary/30 transition-colors">
+          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+            <Globe size={120} />
+          </div>
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Globe className="h-5 w-5 text-primary" />
+              Professional Presence
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="grid grid-cols-3 gap-3">
+            {[
+              { id: 'resume', label: 'Resume', icon: FileText, url: userData.resumeLink, color: 'text-red-400' },
+              { id: 'github', label: 'GitHub', icon: Github, url: userData.githubUsername ? `https://github.com/${userData.githubUsername}` : null, color: 'text-white' },
+              { id: 'linkedin', label: 'LinkedIn', icon: Linkedin, url: userData.linkedinLink, color: 'text-blue-500' },
+              { id: 'leetcode', label: 'LeetCode', icon: Code, url: userData.leetcodeLink, color: 'text-orange-500' },
+              { id: 'portfolio', label: 'Portfolio', icon: Globe, url: userData.portfolioLink, color: 'text-emerald-400' },
+              { id: 'cv', label: 'CV', icon: Download, url: userData.cvLink, color: 'text-gray-400' },
+            ].map((link) => (
+              <a 
+                key={link.id}
+                href={link.url || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`p-3 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 transition-all flex flex-col items-center gap-2 group ${!link.url && 'opacity-20 cursor-not-allowed grayscale'}`}
+                onClick={(e) => !link.url && e.preventDefault()}
+              >
+                <link.icon className={`h-5 w-5 ${link.color} group-hover:scale-110 transition-transform`} />
+                <span className="text-[10px] font-bold uppercase tracking-tight">{link.label}</span>
+                {link.url && <ExternalLink className="absolute top-2 right-2 h-2.5 w-2.5 opacity-0 group-hover:opacity-40" />}
+              </a>
+            ))}
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Market Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

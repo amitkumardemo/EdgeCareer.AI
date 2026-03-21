@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getOpenBatches, applyToInternship } from "@/actions/internship-student";
+import { getOpenBatches, applyToInternship, getStudentProfile } from "@/actions/internship-student";
 import { toast } from "sonner";
 import { BookOpen, Calendar, Users, Star, ChevronRight, X, Briefcase, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,20 +11,59 @@ export default function ApplyPage() {
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState(null);
   const [applying, setApplying] = useState(false);
-  const [coverNote, setCoverNote] = useState("");
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    collegeName: "",
+    branch: "",
+    year: "",
+    city: "",
+    githubProfile: "",
+    linkedinProfile: "",
+    portfolioWebsite: "",
+    leetcodeHackerRank: "",
+    resumeLink: "",
+    declarationCorrect: false,
+    declarationGuidelines: false,
+    coverNote: "",
+  });
 
   useEffect(() => {
     getOpenBatches().then((b) => { setBatches(b); setLoading(false); });
+    // Fetch profile to pre-fill
+    getStudentProfile().then(user => {
+      if (user) {
+        setFormData(prev => ({
+          ...prev,
+          fullName: user.name || "",
+          email: user.email || "",
+          phone: user.phone || "",
+          collegeName: user.collegeName || "",
+          branch: user.branch || "",
+          year: user.year?.toString() || "",
+          city: user.city || "",
+          githubProfile: user.githubUsername ? `https://github.com/${user.githubUsername}` : "",
+          linkedinProfile: user.linkedinLink || "",
+          portfolioWebsite: user.portfolioLink || "",
+          leetcodeHackerRank: user.leetcodeLink || "",
+        }));
+      }
+    });
   }, []);
 
   async function handleApply() {
     if (!selected) return;
+    if (!formData.declarationCorrect || !formData.declarationGuidelines) {
+      return toast.error("Please accept the declarations before applying");
+    }
     setApplying(true);
     try {
-      await applyToInternship(selected.id, coverNote);
+      await applyToInternship(selected.id, formData);
       toast.success("Application submitted successfully!");
       setSelected(null);
-      setCoverNote("");
+      setStep(1);
       getOpenBatches().then(setBatches);
     } catch (e) {
       toast.error(e.message);
@@ -33,6 +72,8 @@ export default function ApplyPage() {
     }
   }
 
+  const updateForm = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
+
   return (
     <div className="space-y-6">
       <div>
@@ -40,42 +81,236 @@ export default function ApplyPage() {
         <p className="text-gray-500 text-sm mt-0.5">Browse open batches and submit your application</p>
       </div>
 
-      {/* Apply modal */}
+      {/* Application Modal */}
       {selected && (
-        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
-          <div className="bg-[#0d1117] border border-white/10 rounded-xl p-6 w-full max-w-md">
-            <div className="flex items-center justify-between mb-5">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-[#0f1117] border border-white/10 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
+            {/* Modal Header */}
+            <div className="p-6 border-b border-white/5 flex items-center justify-between bg-white/[0.02]">
               <div>
-                <h2 className="text-base font-bold text-white">{selected.program?.title}</h2>
-                <p className="text-xs text-gray-500">{selected.name}</p>
-              </div>
-              <button onClick={() => setSelected(null)}><X className="h-4 w-4 text-gray-400" /></button>
-            </div>
-            <div className="grid grid-cols-3 gap-3 mb-5 text-center">
-              {[
-                { label: "Duration", value: `${selected.program?.duration}w` },
-                { label: "Stipend", value: selected.program?.stipend ? `₹${selected.program.stipend}` : "Unpaid" },
-                { label: "Seats Left", value: selected.maxStudents - selected._count.applications },
-              ].map(({ label, value }) => (
-                <div key={label} className="bg-white/5 rounded-lg p-2.5">
-                  <p className="text-sm font-bold text-white">{value}</p>
-                  <p className="text-[10px] text-gray-500">{label}</p>
+                <h2 className="text-lg font-bold text-white">{selected.program?.title}</h2>
+                <div className="flex items-center gap-2 text-xs text-gray-500 mt-0.5">
+                  <span className="bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">{selected.name}</span>
+                  <span>•</span>
+                  <span>Step {step} of 3</span>
                 </div>
-              ))}
+              </div>
+              <button 
+                onClick={() => { setSelected(null); setStep(1); }}
+                className="p-2 hover:bg-white/5 rounded-full transition-colors"
+              >
+                <X className="h-5 w-5 text-gray-400" />
+              </button>
             </div>
-            <div className="mb-4">
-              <label className="text-xs text-gray-400 block mb-1.5">Cover Note (optional)</label>
-              <textarea
-                rows={4}
-                value={coverNote}
-                onChange={(e) => setCoverNote(e.target.value)}
-                placeholder="Tell us why you want to join this internship..."
-                className="bg-white/5 border border-white/10 rounded-lg text-white text-sm p-3 w-full focus:border-primary outline-none resize-none"
-              />
+
+            {/* Modal Content - Scrollable Form */}
+            <div className="p-8 overflow-y-auto custom-scrollbar flex-1">
+              {step === 1 && (
+                <div className="space-y-5 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-1 h-5 bg-primary rounded-full" />
+                    <h3 className="font-bold text-white uppercase tracking-wider text-sm">Basic Information</h3>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label className="text-xs text-gray-400 font-medium">Full Name</label>
+                      <input 
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-primary/50 outline-none transition-all"
+                        placeholder="Aditya Kumar"
+                        value={formData.fullName}
+                        onChange={(e) => updateForm("fullName", e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-xs text-gray-400 font-medium">Email Address</label>
+                      <input 
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white/50 outline-none cursor-not-allowed"
+                        value={formData.email}
+                        readOnly
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-xs text-gray-400 font-medium">Phone Number</label>
+                      <input 
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-primary/50 outline-none transition-all"
+                        placeholder="+91 00000 00000"
+                        value={formData.phone}
+                        onChange={(e) => updateForm("phone", e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-xs text-gray-400 font-medium">City / Location</label>
+                      <input 
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-primary/50 outline-none transition-all"
+                        placeholder="Enter City"
+                        value={formData.city}
+                        onChange={(e) => updateForm("city", e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-1.5 md:col-span-2">
+                      <label className="text-xs text-gray-400 font-medium">College Name</label>
+                      <input 
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-primary/50 outline-none transition-all"
+                        placeholder="University Name"
+                        value={formData.collegeName}
+                        onChange={(e) => updateForm("collegeName", e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-xs text-gray-400 font-medium">Course / Branch</label>
+                      <input 
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-primary/50 outline-none transition-all"
+                        placeholder="e.g. B.Tech (CSE)"
+                        value={formData.branch}
+                        onChange={(e) => updateForm("branch", e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-xs text-gray-400 font-medium">Current Year</label>
+                      <select 
+                        className="w-full bg-[#1a1c23] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-primary/50 outline-none transition-all appearance-none"
+                        value={formData.year}
+                        onChange={(e) => updateForm("year", e.target.value)}
+                      >
+                        <option value="" disabled>Select Year</option>
+                        <option value="1">1st Year</option>
+                        <option value="2">2nd Year</option>
+                        <option value="3">3rd Year</option>
+                        <option value="4">4th Year</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {step === 2 && (
+                <div className="space-y-5 animate-in fade-in slide-in-from-right-2 duration-300">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-1 h-5 bg-primary rounded-full" />
+                    <h3 className="font-bold text-white uppercase tracking-wider text-sm">Professional Profiles</h3>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label className="text-xs text-gray-400 font-medium font-inter">GitHub Profile</label>
+                      <input 
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-primary/50 outline-none transition-all"
+                        placeholder="https://github.com/..."
+                        value={formData.githubProfile}
+                        onChange={(e) => updateForm("githubProfile", e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-xs text-gray-400 font-medium">LinkedIn Profile</label>
+                      <input 
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-primary/50 outline-none transition-all"
+                        placeholder="https://linkedin.com/in/..."
+                        value={formData.linkedinProfile}
+                        onChange={(e) => updateForm("linkedinProfile", e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-xs text-gray-400 font-medium">Portfolio / Website</label>
+                      <input 
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-primary/50 outline-none transition-all"
+                        placeholder="https://yourwebsite.com"
+                        value={formData.portfolioWebsite}
+                        onChange={(e) => updateForm("portfolioWebsite", e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-xs text-gray-400 font-medium">LeetCode / HackerRank (optional)</label>
+                      <input 
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-primary/50 outline-none transition-all"
+                        placeholder="Profile Link"
+                        value={formData.leetcodeHackerRank}
+                        onChange={(e) => updateForm("leetcodeHackerRank", e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-1.5 md:col-span-2">
+                      <label className="text-xs text-gray-400 font-medium">Resume / Drive Link</label>
+                      <input 
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:border-primary/50 outline-none transition-all"
+                        placeholder="https://drive.google.com/..."
+                        value={formData.resumeLink}
+                        onChange={(e) => updateForm("resumeLink", e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {step === 3 && (
+                <div className="space-y-6 animate-in fade-in slide-in-from-right-2 duration-300">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-1 h-5 bg-primary rounded-full" />
+                    <h3 className="font-bold text-white uppercase tracking-wider text-sm">Final Submission</h3>
+                  </div>
+                  
+                  <div className="bg-white/[0.02] border border-white/5 rounded-xl p-5 space-y-4">
+                    <div className="flex gap-3">
+                      <input 
+                        type="checkbox" 
+                        id="correct" 
+                        className="mt-1 accent-primary"
+                        checked={formData.declarationCorrect}
+                        onChange={(e) => updateForm("declarationCorrect", e.target.checked)}
+                      />
+                      <label htmlFor="correct" className="text-sm text-gray-300 cursor-pointer">
+                        I confirm that all the information provided above is correct and true to the best of my knowledge.
+                      </label>
+                    </div>
+                    <div className="flex gap-3">
+                      <input 
+                        type="checkbox" 
+                        id="guidelines" 
+                        className="mt-1 accent-primary"
+                        checked={formData.declarationGuidelines}
+                        onChange={(e) => updateForm("declarationGuidelines", e.target.checked)}
+                      />
+                      <label htmlFor="guidelines" className="text-sm text-gray-300 cursor-pointer">
+                        I am ready to follow all the internship guidelines and institute protocols during the program.
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs text-gray-400 font-medium font-inter">Cover Note / Why should we hire you? (optional)</label>
+                    <textarea 
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-primary/50 outline-none transition-all resize-none"
+                      rows={4}
+                      placeholder="Share your motivation..."
+                      value={formData.coverNote}
+                      onChange={(e) => updateForm("coverNote", e.target.value)}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
-            <Button className="w-full h-10 text-sm" onClick={handleApply} disabled={applying}>
-              {applying ? "Submitting..." : "Submit Application"}
-            </Button>
+
+            {/* Modal Footer */}
+            <div className="p-6 border-t border-white/5 flex items-center justify-between bg-white/[0.02]">
+              {step > 1 ? (
+                <Button variant="outline" className="border-white/10 text-white px-6 h-11" onClick={() => setStep(step - 1)}>
+                  Back
+                </Button>
+              ) : (
+                <div />
+              )}
+              
+              {step < 3 ? (
+                <Button className="px-8 h-11 shadow-lg shadow-primary/20" onClick={() => setStep(step + 1)}>
+                  Next Step <ChevronRight className="ml-2 h-4 w-4" />
+                </Button>
+              ) : (
+                <Button 
+                  className="px-8 h-11 shadow-lg shadow-green-500/20 bg-green-600 hover:bg-green-700 text-white font-bold"
+                  onClick={handleApply}
+                  disabled={applying}
+                >
+                  {applying ? "Submitting..." : "Complete Application"}
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       )}

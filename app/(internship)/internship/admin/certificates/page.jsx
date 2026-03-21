@@ -1,5 +1,6 @@
 import { getAllApplications, markInternshipComplete } from "@/actions/internship-admin";
-import { Award, Download, CheckCircle2 } from "lucide-react";
+import { Award, Download, CheckCircle2, Eye } from "lucide-react";
+import Link from "next/link";
 import CertificateActions from "./CertificateActions";
 
 export default async function CertificatesPage() {
@@ -56,7 +57,14 @@ export default async function CertificatesPage() {
                     Completed {app.progress?.completedAt ? new Date(app.progress.completedAt).toLocaleDateString("en-IN") : "—"}
                   </p>
                 </div>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-green-400/10 text-green-400 border border-green-400/20">Issued</span>
+                <div className="flex gap-2">
+                  <Link href={`/internship/student/report/${app.id}`} target="_blank">
+                    <button className="flex items-center gap-1 text-[10px] px-2 py-1 rounded-lg bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-all">
+                      <Eye className="h-3 w-3" /> Report
+                    </button>
+                  </Link>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-green-400/10 text-green-400 border border-green-400/20">Issued</span>
+                </div>
               </div>
             ))}
             {completed.length === 0 && <p className="text-xs text-gray-600 text-center py-4">No certificates issued yet.</p>}
