@@ -69,7 +69,9 @@ function SignInContent() {
       if (redirectUrl === "/dashboard" || redirectUrl === "/internship") {
         if (userData?.role === "ADMIN") finalRedirect = "/internship/admin/dashboard";
         else if (userData?.role === "TPO") finalRedirect = "/internship/college/dashboard";
-        else if (userData?.role === "STUDENT") finalRedirect = "/internship/student/dashboard";
+        else if (userData?.role === "STUDENT") {
+          finalRedirect = userData?.onboardingCompleted ? "/internship/student/dashboard" : "/onboarding";
+        }
       }
 
       toast.success("Successfully signed in!");
@@ -102,7 +104,9 @@ function SignInContent() {
       if (redirectUrl === "/dashboard" || redirectUrl === "/internship") {
         if (userData?.role === "ADMIN") finalRedirect = "/internship/admin/dashboard";
         else if (userData?.role === "TPO") finalRedirect = "/internship/college/dashboard";
-        else if (userData?.role === "STUDENT") finalRedirect = "/internship/student/dashboard";
+        else if (userData?.role === "STUDENT") {
+          finalRedirect = userData?.onboardingCompleted ? "/internship/student/dashboard" : "/onboarding";
+        }
       }
 
       toast.success("Successfully signed in with Google!");

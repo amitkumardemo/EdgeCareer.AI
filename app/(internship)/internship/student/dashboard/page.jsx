@@ -7,6 +7,7 @@ import {
 } from "@/actions/internship-student";
 import { getFirebaseUser } from "@/lib/auth-utils";
 import { checkUser } from "@/lib/checkUser";
+import { getUserOnboardingStatus } from "@/actions/user";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
@@ -20,10 +21,18 @@ import { NotificationsPanel } from "./_components/NotificationsPanel";
 import { SkillScoreCard } from "./_components/SkillScoreCard";
 import { CertificatesSection } from "./_components/CertificatesSection";
 import { PublicProfileLink } from "./_components/PublicProfileLink";
+import { ProfessionalProfile } from "./_components/ProfessionalProfile";
+import { ReportsSection } from "./_components/ReportsSection";
 
 export default async function StudentDashboardPage() {
   const firebaseUser = await getFirebaseUser();
   if (!firebaseUser) redirect("/sign-in?redirect_url=/internship/student/dashboard");
+
+  // Ensure user is onboarded
+  const { isOnboarded } = await getUserOnboardingStatus();
+  if (!isOnboarded) {
+    redirect("/onboarding");
+  }
 
   // Ensure user exists in DB & Sync
   await checkUser();
@@ -36,7 +45,7 @@ export default async function StudentDashboardPage() {
   const [applications, openBatches, notifications] = await Promise.all([
     getMyApplications(),
     getOpenBatches(),
-    getMyNotifications(dbUser.id)
+    getMyNotifications(dbUser?.id)
   ]);
 
   const selectedApp = applications.find((a) => a.status === "SELECTED");
@@ -79,7 +88,7 @@ export default async function StudentDashboardPage() {
             {/* Leaderboard */}
             <LeaderboardSection 
               leaderboard={leaderboard} 
-              currentUserId={dbUser.id} 
+              currentUserId={dbUser?.id} 
             />
 
             {/* Notifications */}
@@ -87,6 +96,12 @@ export default async function StudentDashboardPage() {
 
             {/* Certificates */}
             <CertificatesSection applications={applications} />
+
+            {/* Internship Reports */}
+            <ReportsSection applications={applications} />
+
+            {/* Professional Profile Links */}
+            <ProfessionalProfile dbUser={dbUser} />
 
             {/* Public Profile Link Preview */}
             <PublicProfileLink dbUser={dbUser} />

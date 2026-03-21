@@ -48,35 +48,35 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <AuthProvider>
-      <html lang="en" suppressHydrationWarning className="dark">
-        <head>
-          <Script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" strategy="beforeInteractive" />
-          <Script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" strategy="beforeInteractive" />
-          <link rel="icon" href="/skill.png" sizes="any" />
-          {/* SEO Meta Tags */}
-          <meta name="description" content={metadata.description} />
-          <meta
-            name="keywords"
-            content="AI career assistant, job search, resume optimization, mock interviews, industry insights, career growth, AI interview prep, job application tools"
-          />
-          <meta name="author" content="EdgeCareer" />
-          <meta name="robots" content="index, follow" />
+    <html lang="en" suppressHydrationWarning className="dark">
+      <head>
+        <Script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" strategy="beforeInteractive" />
+        <Script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" strategy="beforeInteractive" />
+        <link rel="icon" href="/skill.png" sizes="any" />
+        {/* SEO Meta Tags */}
+        <meta name="description" content={metadata.description} />
+        <meta
+          name="keywords"
+          content="AI career assistant, job search, resume optimization, mock interviews, industry insights, career growth, AI interview prep, job application tools"
+        />
+        <meta name="author" content="EdgeCareer" />
+        <meta name="robots" content="index, follow" />
 
-          {/* Open Graph Meta Tags */}
-          <meta property="og:title" content={metadata.title} />
-          <meta property="og:description" content={metadata.description} />
-          <meta property="og:type" content="website" />
-          <meta property="og:url" content="https://edgecareer.com" />
-          <meta property="og:image" content="https://edgecareer.com/og-image.png" />
+        {/* Open Graph Meta Tags */}
+        <meta property="og:title" content={metadata.title} />
+        <meta property="og:description" content={metadata.description} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://edgecareer.com" />
+        <meta property="og:image" content="https://edgecareer.com/og-image.png" />
 
-          {/* Twitter Card Meta Tags */}
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content={metadata.title} />
-          <meta name="twitter:description" content={metadata.description} />
-          <meta name="twitter:image" content="https://edgecareer.com/og-image.png" />
-        </head>
-        <body className={`${inter.className}`} >
+        {/* Twitter Card Meta Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={metadata.title} />
+        <meta name="twitter:description" content={metadata.description} />
+        <meta name="twitter:image" content="https://edgecareer.com/og-image.png" />
+      </head>
+      <body className={`${inter.className}`} >
+        <AuthProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
@@ -108,8 +108,8 @@ export default function RootLayout({ children }) {
               }}
             />
           </ThemeProvider>
-        </body>
-      </html>
-    </AuthProvider>
+        </AuthProvider>
+      </body>
+    </html>
   );
 }

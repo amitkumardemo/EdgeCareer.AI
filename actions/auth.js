@@ -16,6 +16,7 @@ export async function getUserRole(uid) {
         id: true,
         role: true,
         email: true,
+        onboardingCompleted: true,
       }
     });
     return user;

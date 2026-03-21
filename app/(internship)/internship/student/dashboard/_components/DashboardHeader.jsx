@@ -5,10 +5,30 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Edit3, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 
 export function DashboardHeader({ dbUser, selectedApp }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const firstName = dbUser?.name?.split(" ")[0] || "Intern";
   const role = selectedApp?.batch?.program?.title || dbUser?.industry?.replace(/-/g, " ") || "Intern";
+
+  if (!mounted) {
+    return (
+      <div className="relative group overflow-hidden bg-gradient-to-br from-[#0f172a] to-[#020617] border border-white/5 rounded-3xl p-8 mb-8">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="flex items-center gap-6">
+            <div className="w-24 h-24 rounded-2xl bg-slate-800 animate-pulse" />
+            <div className="space-y-2">
+              <div className="h-8 w-48 bg-slate-800 animate-pulse rounded" />
+              <div className="h-4 w-32 bg-slate-800 animate-pulse rounded" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <motion.div 

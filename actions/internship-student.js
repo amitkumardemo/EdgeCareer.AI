@@ -20,14 +20,57 @@ async function getStudentApp() {
       imageUrl: picture || null,
       role: "STUDENT",
     },
-    update: {}, // no overwrites on subsequent calls
+    update: {},
+    include: {
+      internApplications: {
+        where: { status: "SELECTED" },
+        include: { batch: { select: { id: true, name: true } } }
+      }
+    }
   });
-
   return user;
 }
 
-export async function applyToInternship(batchId, coverNote = "", resumeUrl = "") {
+export async function getStudentProfile() {
+  return getStudentApp();
+}
+
+export async function applyToInternship(batchId, studentDetails) {
+  const {
+    fullName,
+    phone,
+    collegeName,
+    branch,
+    year,
+    city,
+    githubProfile,
+    linkedinProfile,
+    portfolioWebsite,
+    leetcodeHackerRank,
+    resumeLink,
+    coverNote = "",
+  } = studentDetails;
+
   const user = await getStudentApp();
+
+  // Update user profile with the latest information from the application
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      name: fullName || user.name,
+      phone,
+      collegeName,
+      branch,
+      year: parseInt(year),
+      city,
+      githubUsername: githubProfile?.replace("https://github.com/", "").replace("/", ""),
+      linkedinLink: linkedinProfile,
+      portfolioLink: portfolioWebsite,
+      leetcodeLink: leetcodeHackerRank,
+      resumeLink: resumeLink,
+    },
+  });
+
   const existing = await prisma.internshipApplication.findUnique({
     where: { userId_batchId: { userId: user.id, batchId } },
   });
@@ -37,12 +80,19 @@ export async function applyToInternship(batchId, coverNote = "", resumeUrl = "")
   if (!batch || batch.status === "COMPLETED" || batch.status === "CANCELLED") {
     throw new Error("This batch is not accepting applications");
   }
+
   const count = await prisma.internshipApplication.count({ where: { batchId } });
   if (count >= batch.maxStudents) throw new Error("Batch is full");
 
   const application = await prisma.internshipApplication.create({
-    data: { userId: user.id, batchId, coverNote, resumeUrl, status: "APPLIED" },
+    data: {
+      userId: user.id,
+      batchId,
+      coverNote,
+      status: "APPLIED",
+    },
   });
+
   revalidatePath("/internship/student/status");
   return application;
 }
