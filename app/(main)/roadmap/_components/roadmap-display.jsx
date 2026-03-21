@@ -13,12 +13,12 @@ const iconMap = {
 };
 
 const colors = [
-  "from-blue-500 to-blue-600",
-  "from-green-500 to-green-600",
-  "from-purple-500 to-purple-600",
-  "from-orange-500 to-orange-600",
-  "from-pink-500 to-pink-600",
-  "from-indigo-500 to-indigo-600",
+  "from-blue-500 to-indigo-600",
+  "from-emerald-500 to-teal-600",
+  "from-purple-500 to-indigo-600",
+  "from-orange-500 to-red-600",
+  "from-cyan-500 to-blue-600",
+  "from-pink-500 to-purple-600",
 ];
 
 export default function RoadmapDisplay({ roadmap }) {
@@ -31,19 +31,19 @@ export default function RoadmapDisplay({ roadmap }) {
 
     // Background
     const gradient = ctx.createLinearGradient(0, 0, 1200, 1600);
-    gradient.addColorStop(0, '#f8fafc');
-    gradient.addColorStop(1, '#e2e8f0');
+    gradient.addColorStop(0, '#0a0a0a');
+    gradient.addColorStop(1, '#171717');
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, 1200, 1600);
 
     // Title
-    ctx.fillStyle = '#1e293b';
+    ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 48px Arial';
     ctx.textAlign = 'center';
     ctx.fillText(roadmap.title, 600, 80);
 
     // Subtitle
-    ctx.fillStyle = '#64748b';
+    ctx.fillStyle = '#94a3b8';
     ctx.font = '24px Arial';
     ctx.fillText('Career Development Roadmap', 600, 120);
 
@@ -62,13 +62,13 @@ export default function RoadmapDisplay({ roadmap }) {
       ctx.fillText((index + 1).toString(), 100, yPosition - 5);
 
       // Step title
-      ctx.fillStyle = '#1e293b';
+      ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 28px Arial';
       ctx.textAlign = 'left';
       ctx.fillText(step.title, 160, yPosition);
 
       // Step description
-      ctx.fillStyle = '#475569';
+      ctx.fillStyle = '#94a3b8';
       ctx.font = '18px Arial';
       const words = step.description.split(' ');
       let line = '';
@@ -100,10 +100,10 @@ export default function RoadmapDisplay({ roadmap }) {
 
       // Resources
       if (step.resources.length > 0) {
-        ctx.fillStyle = '#059669';
+        ctx.fillStyle = '#10b981';
         ctx.font = 'bold 16px Arial';
         ctx.fillText('Resources:', 160, lineY + 95);
-        ctx.fillStyle = '#475569';
+        ctx.fillStyle = '#94a3b8';
         ctx.font = '14px Arial';
         step.resources.forEach((resource, idx) => {
           ctx.fillText(`• ${resource}`, 180, lineY + 120 + (idx * 20));
@@ -144,106 +144,145 @@ export default function RoadmapDisplay({ roadmap }) {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-center mb-4">
-        <Button onClick={downloadRoadmap} className="flex items-center gap-2">
-          <Download className="h-4 w-4" />
+    <div className="space-y-16 py-10">
+      <div className="flex flex-col items-center gap-6 mb-12">
+        <h2 className="text-5xl font-black tracking-tighter text-center bg-clip-text text-transparent bg-gradient-to-r from-white via-blue-200 to-white/40 drop-shadow-2xl">
+           {roadmap.title}
+        </h2>
+        <Button 
+          onClick={downloadRoadmap} 
+          className="h-14 px-10 rounded-full bg-white text-black font-black hover:bg-blue-400 transition-all shadow-[0_20px_40px_-15px_rgba(255,255,255,0.3)] flex items-center gap-3 border-none"
+        >
+          <Download className="h-5 w-5" />
           Download Roadmap
         </Button>
       </div>
-      <h2 className="text-3xl font-bold text-center">{roadmap.title}</h2>
-      <div className="relative max-w-4xl mx-auto">
+
+      <div className="relative max-w-5xl mx-auto px-4 md:px-0">
+        {/* Central Vertical Connector Line */}
+        <div className="absolute left-[31px] md:left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-blue-500/80 via-purple-500/40 to-transparent md:-translate-x-1/2 opacity-20 pointer-events-none" />
+
         {roadmap.steps.map((step, index) => {
           const Icon = iconMap[step.category] || iconMap.default;
+          const isEven = index % 2 === 0;
           const colorClass = colors[index % colors.length];
+
           return (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.3 }}
-              className="flex items-center mb-12"
-            >
-              <div className="flex flex-col items-center mr-8">
-                <motion.div
-                  className={`w-16 h-16 bg-gradient-to-r ${colorClass} rounded-full flex items-center justify-center text-white shadow-lg`}
-                  whileHover={{ scale: 1.1, rotate: 360 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <Icon size={32} />
-                </motion.div>
-                {index < roadmap.steps.length - 1 && (
-                  <motion.div
-                    className="w-1 h-20 bg-gradient-to-b from-gray-300 to-gray-500 mt-4 rounded-full"
-                    initial={{ scaleY: 0 }}
-                    animate={{ scaleY: 1 }}
-                    transition={{ delay: index * 0.3 + 0.5, duration: 0.5 }}
-                  ></motion.div>
-                )}
+            <div key={index} className="relative mb-24 md:mb-32">
+              {/* Timeline Center Badge */}
+              <div className="absolute left-0 md:left-1/2 top-0 -translate-y-1/2 md:-translate-x-1/2 z-10 flex flex-col items-center">
+                 <motion.div
+                    initial={{ scale: 0, rotate: -180 }}
+                    whileInView={{ scale: 1, rotate: 0 }}
+                    viewport={{ once: true }}
+                    className={`w-16 h-16 rounded-[22px] bg-gradient-to-br ${colorClass} flex items-center justify-center p-0.5 shadow-[0_0_30px_rgba(59,130,246,0.2)]`}
+                 >
+                    <div className="w-full h-full bg-black/40 rounded-[20px] backdrop-blur-3xl flex items-center justify-center">
+                       <Icon className="w-8 h-8 text-white" />
+                    </div>
+                 </motion.div>
+                 <div className="mt-4 px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-black tracking-widest text-muted-foreground uppercase backdrop-blur-xl">
+                   PHASE {index + 1}
+                 </div>
               </div>
-              <motion.div
-                className={`flex-1 bg-gradient-to-r ${colorClass} p-6 rounded-xl shadow-xl text-white`}
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.2 }}
-              >
-                <h3 className="text-2xl font-bold mb-3">{step.title}</h3>
-                <p className="mb-4 opacity-90">{step.description}</p>
-                <div className="flex flex-wrap items-center gap-4 text-sm opacity-80">
-                  <span className="bg-white/20 px-3 py-1 rounded-full">Duration: {step.duration}</span>
-                  {step.prerequisites.length > 0 && (
-                    <span className="bg-white/20 px-3 py-1 rounded-full">Prerequisites: {step.prerequisites.join(", ")}</span>
-                  )}
-                </div>
-                {step.resources.length > 0 && (
-                  <div className="mt-4">
-                    <h4 className="font-semibold mb-2">Resources:</h4>
-                    <ul className="list-disc list-inside space-y-1">
-                      {step.resources.map((resource, idx) => (
-                        <li key={idx} className="text-sm">{resource}</li>
-                      ))}
-                    </ul>
+
+              {/* Step Content */}
+              <div className={`flex flex-col md:flex-row items-center w-full ${isEven ? 'md:flex-row-reverse' : ''}`}>
+                <div className="hidden md:block w-1/2" />
+                <motion.div
+                  initial={{ opacity: 0, x: isEven ? -50 : 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                  className={`w-full md:w-1/2 pt-12 md:pt-0 ${isEven ? 'md:pr-16 lg:pr-24' : 'md:pl-16 lg:pl-24'}`}
+                >
+                  <div className={`group relative p-8 lg:p-10 bg-white/5 border border-white/10 rounded-[40px] backdrop-blur-2xl hover:border-white/20 hover:bg-white/[0.08] transition-all duration-500 shadow-2xl overflow-hidden`}>
+                    {/* Decorative Gradient Glow */}
+                    <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${colorClass} blur-[60px] opacity-0 group-hover:opacity-20 transition-opacity`} />
+                    
+                    <div className="relative z-10">
+                       <h3 className="text-3xl font-black mb-4 tracking-tighter text-white group-hover:text-blue-200 transition-colors">
+                         {step.title}
+                       </h3>
+                       <p className="text-muted-foreground mb-8 leading-relaxed font-medium">
+                         {step.description}
+                       </p>
+
+                       <div className="flex flex-wrap items-center gap-3 mb-8 text-sm font-bold">
+                          <span className="bg-blue-500/10 border border-blue-500/20 text-blue-400 px-4 py-1.5 rounded-xl">Duration: {step.duration}</span>
+                          {step.prerequisites.length > 0 && (
+                            <span className="bg-purple-500/10 border border-purple-500/20 text-purple-400 px-4 py-1.5 rounded-xl">Prerequisites: {step.prerequisites.join(", ")}</span>
+                          )}
+                       </div>
+
+                       {step.resources.length > 0 && (
+                         <div className="space-y-4 mb-8">
+                            <h4 className="text-xs uppercase tracking-[0.3em] font-black text-white/40">Resources:</h4>
+                            <ul className="space-y-3">
+                               {step.resources.map((resource, idx) => (
+                                 <li key={idx} className="flex items-start gap-3 group/item text-sm font-medium text-white/70">
+                                    <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-emerald-400/50 group-hover/item:scale-125 transition-transform" />
+                                    {resource}
+                                 </li>
+                               ))}
+                            </ul>
+                         </div>
+                       )}
+
+                       {step.videoLink && (
+                         <a
+                           href={step.videoLink}
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           className="inline-flex items-center px-6 py-3 bg-red-500 hover:bg-red-400 text-white rounded-2xl text-xs font-black uppercase tracking-widest transition-all shadow-[0_10px_20px_-5px_rgba(239,68,68,0.3)] hover:scale-[1.02] active:scale-95 group/btn"
+                         >
+                           <svg className="w-4 h-4 mr-2 group-hover/btn:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                           </svg>
+                           Watch Video Tutorial
+                         </a>
+                       )}
+                    </div>
                   </div>
-                )}
-                {step.videoLink && (
-                  <div className="mt-4">
-                    <a
-                      href={step.videoLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium transition-colors"
-                    >
-                      <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                      </svg>
-                      Watch Video Tutorial
-                    </a>
-                  </div>
-                )}
-              </motion.div>
-            </motion.div>
+                </motion.div>
+              </div>
+            </div>
           );
         })}
       </div>
+
       {roadmap.selfGrowthTips && (
         <motion.div
           initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: roadmap.steps.length * 0.3 + 0.5 }}
-          className="mt-12 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 p-8 rounded-xl shadow-lg"
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="container mx-auto max-w-5xl px-4"
         >
-          <h3 className="text-2xl font-bold mb-6 text-center">Self-Growth Tips</h3>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md">
-              <h4 className="text-xl font-semibold mb-3 text-blue-600">How to Complete the Roadmap</h4>
-              <p className="text-muted-foreground">{roadmap.selfGrowthTips.howToComplete}</p>
-            </div>
-            <div className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md">
-              <h4 className="text-xl font-semibold mb-3 text-green-600">Stay Motivated</h4>
-              <p className="text-muted-foreground">{roadmap.selfGrowthTips.motivationTips}</p>
-            </div>
+          <div className="p-10 lg:p-14 bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-[48px] backdrop-blur-2xl shadow-2xl relative overflow-hidden">
+             
+             <h3 className="text-4xl font-black mb-12 text-center tracking-tighter">Self-Growth Tips</h3>
+             
+             <div className="grid md:grid-cols-2 gap-10">
+               <div className="p-8 bg-blue-500/5 border border-blue-500/10 rounded-[32px] hover:bg-blue-500/10 transition-colors">
+                     <h4 className="text-xl font-black tracking-tight mb-4 text-blue-400">How to Complete the Roadmap</h4>
+                  <p className="text-muted-foreground leading-relaxed font-medium">{roadmap.selfGrowthTips.howToComplete}</p>
+               </div>
+               
+               <div className="p-8 bg-emerald-500/5 border border-emerald-500/10 rounded-[32px] hover:bg-emerald-500/10 transition-colors">
+                     <h4 className="text-xl font-black tracking-tight mb-4 text-emerald-400">Stay Motivated</h4>
+                  <p className="text-muted-foreground leading-relaxed font-medium">{roadmap.selfGrowthTips.motivationTips}</p>
+               </div>
+             </div>
           </div>
         </motion.div>
       )}
+
+      {/* Footer Branding Overlay */}
+      <div className="flex justify-center pt-20">
+         <div className="inline-flex items-center gap-3 px-8 py-3 rounded-full bg-white/5 border border-white/10 backdrop-blur-xl">
+            <span className="text-[10px] uppercase tracking-[0.4em] font-black text-muted-foreground/40 italic">Generated by TechieHelp <span className="text-blue-500">Institute of AI</span></span>
+         </div>
+      </div>
     </div>
   );
 }

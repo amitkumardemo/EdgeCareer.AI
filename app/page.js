@@ -1022,7 +1022,7 @@ export default function LandingPage() {
                 ))}
               </motion.ul>
               <motion.div variants={fadeIn}>
-                <Link href="/dashboard">
+                <Link href="/prep-resources">
                   <Button size="lg" className="px-10 h-14 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow-xl shadow-indigo-200">
                     Access Career Resources
                   </Button>

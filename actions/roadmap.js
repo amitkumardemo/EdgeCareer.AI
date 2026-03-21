@@ -5,7 +5,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { updateGamification } from "./gamification";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 
@@ -108,6 +108,6 @@ export async function generateRoadmap(currentSkills, targetRole, timeFrame) {
     return { roadmap: roadmapData.roadmap, gamification };
   } catch (error) {
     console.error("Error generating roadmap:", error);
-    throw new Error("Failed to generate roadmap");
+    throw new Error(`Failed to generate roadmap: ${error.message}`);
   }
 }
