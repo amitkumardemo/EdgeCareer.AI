@@ -73,6 +73,11 @@ export function DashboardHeader({ dbUser, selectedApp }) {
                   🎓 {dbUser.branch}
                 </span>
               )}
+              {dbUser?.techieId && (
+                <span className="px-3 py-1 bg-indigo-500/15 border border-indigo-500/30 rounded-full text-[10px] uppercase font-bold text-indigo-300 tracking-widest">
+                  🪪 {dbUser.techieId}
+                </span>
+              )}
             </div>
           </div>
         </div>

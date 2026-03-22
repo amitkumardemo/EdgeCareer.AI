@@ -137,6 +137,7 @@ export async function getUserData() {
           githubUsername: true,
           leetcodeLink: true,
           linkedinLink: true,
+          techieId: true,
         },
       });
     }

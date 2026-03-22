@@ -276,13 +276,14 @@ export default function AdminAttendancePage() {
           <select
             value={selectedBatchId}
             onChange={(e) => setSelectedBatchId(e.target.value)}
-            className="bg-white/5 border border-white/10 text-white text-sm rounded-lg px-3 py-2 focus:border-primary outline-none w-full"
+            className="bg-black border border-white/20 text-white text-sm rounded-lg px-3 py-2 focus:border-primary outline-none w-full"
+            style={{ colorScheme: "dark" }}
           >
-            <option value="">— Select a Batch —</option>
+            <option value="" style={{ backgroundColor: "#000", color: "#fff" }}>— Select a Batch —</option>
             {batches
               .filter((b) => b.status === "ACTIVE" || b.status === "UPCOMING")
               .map((b) => (
-                <option key={b.id} value={b.id}>
+                <option key={b.id} value={b.id} style={{ backgroundColor: "#000", color: "#fff" }}>
                   {b.program?.title} — {b.name} ({b.status})
                 </option>
               ))}

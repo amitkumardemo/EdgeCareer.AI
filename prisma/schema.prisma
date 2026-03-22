@@ -52,6 +52,7 @@ model User {
   collegeName            String?
   city                   String?
   phone                  String?
+  techieId               String?                 @unique
   atsAnalyses            ATSAnalysis[]
   assessments            Assessment[]
   coverLetter            CoverLetter[]
