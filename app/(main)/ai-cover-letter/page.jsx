@@ -1,26 +1,22 @@
 import { getCoverLetters } from "@/actions/cover-letter";
-import Link from "next/link";
-import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { BUTTONS_MENUS } from "@/lib/constants";
-import CoverLetterList from "./_components/cover-letter-list";
+import CoverLetterView from "./_components/cover-letter-view";
+import CoverLetterLoading from "./loading";
+import { Suspense } from "react";
 
-export default async function CoverLetterPage() {
-  const coverLetters = await getCoverLetters();
-
+export default function CoverLetterPage() {
   return (
-    <div>
-      <div className="flex flex-col md:flex-row gap-2 items-center justify-between mb-5">
-        <h1 className="text-6xl font-bold gradient-title">My Cover Letters</h1>
-        <Link href="/ai-cover-letter/new">
-          <Button>
-            <Plus className="h-4 w-4 mr-2" />
-            {BUTTONS_MENUS.CREATE_NEW}
-          </Button>
-        </Link>
-      </div>
-
-      <CoverLetterList coverLetters={coverLetters} />
-    </div>
+    <Suspense fallback={<CoverLetterLoading />}>
+      <CoverLetterContent />
+    </Suspense>
   );
+}
+
+async function CoverLetterContent() {
+  // Add a small delay to ensure the premium loading animation is visible
+  const [coverLetters] = await Promise.all([
+    getCoverLetters(),
+    new Promise((resolve) => setTimeout(resolve, 1500)),
+  ]);
+
+  return <CoverLetterView coverLetters={coverLetters} />;
 }

@@ -21,15 +21,27 @@ export default async function DashboardPage() {
     redirect("/onboarding");
   }
 
-  const insights = await getIndustryInsights();
-  const gamification = await getUserGamification();
-  const userData = await getUserData();
-  const atsAnalytics = await getATSAnalytics();
-  const resumeAnalytics = await getResumeAnalytics();
-  const resumeTimeline = await getResumeTimeline();
-  const resumeStatusDistribution = await getResumeStatusDistribution();
-  const recentResumeActivity = await getRecentResumeActivity();
-  const internships = await getMyApplications().catch(() => []);
+  const [
+    insights,
+    gamification,
+    userData,
+    atsAnalytics,
+    resumeAnalytics,
+    resumeTimeline,
+    resumeStatusDistribution,
+    recentResumeActivity,
+    internships
+  ] = await Promise.all([
+    getIndustryInsights(),
+    getUserGamification(),
+    getUserData(),
+    getATSAnalytics(),
+    getResumeAnalytics(),
+    getResumeTimeline(),
+    getResumeStatusDistribution(),
+    getRecentResumeActivity(),
+    getMyApplications().catch(() => [])
+  ]);
 
   return (
     <div className="container mx-auto">

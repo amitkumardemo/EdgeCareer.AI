@@ -25,10 +25,10 @@ export default function RoadmapPage() {
   const [showGenerator, setShowGenerator] = useState(false);
 
   const stats = [
-    { icon: Users, label: "Active Learners", value: "10,000+", color: "text-blue-600" },
-    { icon: Target, label: "Roadmaps Generated", value: "50,000+", color: "text-green-600" },
-    { icon: Award, label: "Success Rate", value: "95%", color: "text-purple-600" },
-    { icon: Clock, label: "Avg. Completion", value: "6 months", color: "text-orange-600" }
+    { icon: Users, label: "Active Learners", value: "10,000+", color: "text-blue-400" },
+    { icon: Target, label: "Roadmaps Generated", value: "50,000+", color: "text-emerald-400" },
+    { icon: Award, label: "Success Rate", value: "95%", color: "text-purple-400" },
+    { icon: Clock, label: "Avg. Completion", value: "6 months", color: "text-orange-400" }
   ];
 
   const features = [
@@ -79,30 +79,31 @@ export default function RoadmapPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="min-h-screen bg-black text-white selection:bg-blue-500/30 overflow-x-hidden">
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-20 px-4">
-        <div className="absolute inset-0 bg-grid-small-black/[0.2] dark:bg-grid-small-white/[0.05]" />
-        <div className="absolute inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
+      <section className="relative pt-32 pb-24 overflow-hidden px-4">
+        {/* Deep Mesh Gradients */}
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-[140px] -mr-40 -mt-40 animate-pulse" />
+        <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-purple-600/10 rounded-full blur-[140px] -ml-40 -mb-40" />
 
-        <div className="relative max-w-7xl mx-auto text-center">
+        <div className="relative max-w-7xl mx-auto text-center z-10">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.8 }}
             className="mb-8"
           >
-            <Badge variant="secondary" className="mb-4 px-4 py-2 text-sm font-medium">
-              🚀 AI-Powered Career Acceleration
+            <Badge variant="outline" className="mb-8 px-6 py-2 rounded-full border-blue-500/30 bg-blue-500/5 text-blue-400 font-bold uppercase tracking-widest text-[10px]">
+               🚀 AI-Powered Career Acceleration
             </Badge>
-            <h1 className="text-5xl md:text-7xl font-bold gradient-title mb-6">
+            <h1 className="text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-[0.95] lg:leading-[0.9]">
               Your Career
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 drop-shadow-[0_0_20px_rgba(59,130,246,0.2)]">
                 Roadmap Awaits
               </span>
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8 leading-relaxed">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-12 leading-relaxed font-medium">
               Transform your career with personalized AI-generated roadmaps. From beginner to expert,
               get a clear path to your dream job with industry-leading guidance and resources.
             </p>
@@ -112,45 +113,45 @@ export default function RoadmapPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
+            className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-24"
           >
             <Button
               size="lg"
               onClick={() => setShowGenerator(true)}
-              className="px-8 py-4 text-lg font-semibold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+              className="h-16 px-12 rounded-[24px] bg-white text-black text-lg font-black hover:bg-blue-400 transition-all shadow-[0_20px_40px_-15px_rgba(255,255,255,0.2)] group"
             >
-              <Target className="mr-2 h-5 w-5" />
+              <Target className="mr-3 h-6 w-6 group-hover:scale-110 transition-transform" />
               Generate My Roadmap
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <ArrowRight className="ml-3 h-6 w-6" />
             </Button>
             <Button
               variant="outline"
               size="lg"
-              className="px-8 py-4 text-lg font-semibold border-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300"
+              className="h-16 px-10 rounded-[24px] border-white/10 bg-white/5 backdrop-blur-xl text-lg font-black hover:bg-white/10 transition-all text-white"
             >
-              <BookOpen className="mr-2 h-5 w-5" />
+              <BookOpen className="mr-3 h-5 w-5" />
               View Examples
             </Button>
           </motion.div>
 
-          {/* Stats */}
+          {/* Stats Grid */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto px-4"
           >
             {stats.map((stat, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, scale: 0.8 }}
+                initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
-                className="text-center"
+                transition={{ duration: 0.6, delay: 0.6 + index * 0.1 }}
+                className="p-8 rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-2xl hover:border-white/20 hover:scale-[1.05] transition-all duration-500 group"
               >
-                <stat.icon className={`h-8 w-8 mx-auto mb-2 ${stat.color}`} />
-                <div className="text-3xl font-bold text-gray-900 dark:text-white">{stat.value}</div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
+                <stat.icon className={`h-8 w-8 mx-auto mb-4 ${stat.color} group-hover:scale-110 transition-transform`} />
+                <div className="text-4xl font-black mb-1">{stat.value}</div>
+                <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-black">{stat.label}</div>
               </motion.div>
             ))}
           </motion.div>
@@ -158,17 +159,17 @@ export default function RoadmapPage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-4 bg-white/50 dark:bg-gray-800/50">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-32 bg-white/[0.02] border-y border-white/5 relative px-4">
+        <div className="max-w-7xl mx-auto relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-24"
           >
-            <h2 className="text-4xl font-bold mb-4">Why Choose Our Roadmap Generator?</h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-4">Why Choose Our Roadmap Generator?</h2>
+            <p className="text-muted-foreground uppercase tracking-[0.4em] font-bold text-xs">
               Experience the future of career development with cutting-edge AI technology
             </p>
           </motion.div>
@@ -177,16 +178,21 @@ export default function RoadmapPage() {
             {features.map((feature, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className="h-full hover:shadow-lg transition-shadow duration-300 border-0 shadow-md bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
-                  <CardContent className="p-6 text-center">
-                    <feature.icon className="h-12 w-12 mx-auto mb-4 text-blue-600" />
-                    <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-                    <p className="text-muted-foreground">{feature.description}</p>
+                <Card className="h-full border-white/10 bg-white/5 backdrop-blur-2xl hover:border-blue-500/30 hover:bg-white/[0.08] transition-all duration-500 group rounded-[40px] overflow-hidden">
+                  <CardContent className="p-10 text-center flex flex-col justify-between h-full">
+                    <div className="relative mb-8">
+                       <div className="absolute inset-0 bg-blue-500/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                       <feature.icon className="h-12 w-12 mx-auto relative z-10 text-blue-400 group-hover:scale-110 transition-transform duration-500" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-black mb-4 tracking-tight">{feature.title}</h3>
+                      <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
+                    </div>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -196,42 +202,47 @@ export default function RoadmapPage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 px-4">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-32 relative px-4">
+        <div className="max-w-7xl mx-auto relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-24"
           >
-            <h2 className="text-4xl font-bold mb-4">Success Stories</h2>
-            <p className="text-xl text-muted-foreground">
+            <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-4">Success Stories</h2>
+            <p className="text-muted-foreground uppercase tracking-[0.4em] font-bold text-xs">
               Real people, real results
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-10">
             {testimonials.map((testimonial, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className="h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-0 shadow-lg">
-                  <CardContent className="p-6">
-                    <div className="flex mb-4">
+                <Card className="h-full bg-white/5 border-white/10 backdrop-blur-2xl rounded-[40px] hover:border-emerald-500/30 transition-all duration-500 shadow-2xl">
+                  <CardContent className="p-10">
+                    <div className="flex mb-8 gap-1">
                       {[...Array(testimonial.rating)].map((_, i) => (
-                        <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                        <Star key={i} className="h-4 w-4 text-emerald-400 fill-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.5)]" />
                       ))}
                     </div>
-                    <p className="text-muted-foreground mb-6 italic">"{testimonial.content}"</p>
-                    <div>
-                      <div className="font-semibold">{testimonial.name}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {testimonial.role} at {testimonial.company}
+                    <p className="text-lg font-medium mb-10 leading-relaxed italic text-white/90 font-medium">"{testimonial.content}"</p>
+                    <div className="flex items-center gap-4 pt-6 border-t border-white/5">
+                      <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center font-black text-xl shadow-lg">
+                         {testimonial.name[0]}
+                      </div>
+                      <div>
+                        <div className="font-black text-lg tracking-tight">{testimonial.name}</div>
+                        <div className="text-[10px] uppercase tracking-widest font-bold text-blue-400">
+                          {testimonial.role} at {testimonial.company}
+                        </div>
                       </div>
                     </div>
                   </CardContent>
@@ -243,64 +254,72 @@ export default function RoadmapPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-gradient-to-r from-blue-600 to-purple-600">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-4xl font-bold text-white mb-6">
-              Ready to Transform Your Career?
-            </h2>
-            <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Join thousands of professionals who have accelerated their careers with our AI-powered roadmap generator.
-            </p>
-            <Button
-              size="lg"
-              onClick={() => setShowGenerator(true)}
-              className="px-8 py-4 text-lg font-semibold bg-white text-blue-600 hover:bg-gray-100 shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              <Zap className="mr-2 h-5 w-5" />
-              Start Your Journey Now
-            </Button>
-          </motion.div>
+      <section className="py-24 px-4 overflow-hidden">
+        <div className="max-w-4xl mx-auto relative group">
+          <Card className="border-none bg-gradient-to-r from-blue-600/20 via-indigo-600/20 to-purple-600/20 backdrop-blur-3xl rounded-[48px] overflow-hidden relative">
+            <div className="absolute inset-0 bg-grid-white/[0.02]" />
+            <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/20 blur-[120px] rounded-full -mr-20 -mt-20 group-hover:scale-110 transition-transform duration-700" />
+            
+            <CardContent className="p-16 lg:p-24 text-center relative z-10">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+              >
+                <h2 className="text-5xl md:text-7xl font-black mb-8 tracking-tighter text-white">
+                  Ready to Transform Your Career?
+                </h2>
+                <p className="text-xl text-blue-100/70 mb-12 max-w-2xl mx-auto font-medium">
+                  Join thousands of professionals who have accelerated their careers with our AI-powered roadmap generator.
+                </p>
+                <Button
+                  size="lg"
+                  onClick={() => setShowGenerator(true)}
+                  className="h-20 px-16 rounded-[32px] bg-white text-blue-600 text-2xl font-black hover:bg-gray-100 transition-all shadow-[0_30px_60px_-15px_rgba(59,130,246,0.3)] hover:scale-105 active:scale-95 group"
+                >
+                  <Zap className="mr-3 h-8 w-8 text-blue-600 group-hover:rotate-12 transition-transform" />
+                  Start Your Journey Now
+                </Button>
+              </motion.div>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
-      {/* Generator Modal/Section */}
+      {/* Generator Modal */}
       {showGenerator && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        <div
+          className="fixed inset-0 bg-black/80 backdrop-blur-2xl z-[100] flex items-center justify-center p-4 md:p-8"
           onClick={() => setShowGenerator(false)}
         >
           <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            className="bg-zinc-950 border border-white/10 rounded-[40px] shadow-[0_0_80px_rgba(0,0,0,1)] max-w-5xl w-full max-h-[90vh] overflow-y-auto relative"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-6 border-b">
-              <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold">Generate Your Roadmap</h2>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowGenerator(false)}
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  ✕
-                </Button>
+            <div className="sticky top-0 z-20 p-10 bg-zinc-950/80 backdrop-blur-xl border-b border-white/5 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                 <div className="p-3 bg-blue-500/10 rounded-2xl">
+                    <Target className="h-6 w-6 text-blue-400" />
+                 </div>
+                 <h2 className="text-3xl font-black tracking-tight uppercase tracking-widest">Generate Your Roadmap</h2>
               </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowGenerator(false)}
+                className="rounded-full h-12 w-12 hover:bg-white/10 text-muted-foreground hover:text-white"
+              >
+                ✕
+              </Button>
             </div>
-            <div className="p-6">
+            <div className="p-10">
               <RoadmapGenerator />
             </div>
           </motion.div>
-        </motion.div>
+        </div>
       )}
     </div>
   );

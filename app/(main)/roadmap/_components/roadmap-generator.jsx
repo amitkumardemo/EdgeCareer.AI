@@ -12,7 +12,9 @@ import { generateRoadmap } from "@/actions/roadmap";
 import useFetch from "@/hooks/use-fetch";
 import RoadmapDisplay from "./roadmap-display";
 import { BUTTONS_MENUS } from "@/lib/constants";
-import { BarLoader } from "react-spinners";
+import { motion, AnimatePresence } from "framer-motion";
+import { BarLoader, PulseLoader } from "react-spinners";
+import { BrainCircuit, Target, Clock, Zap, Cpu, RefreshCw, Sparkles, Loader2 } from "lucide-react";
 
 export default function RoadmapGenerator() {
   const [currentSkills, setCurrentSkills] = useState("");
@@ -43,70 +45,138 @@ export default function RoadmapGenerator() {
 
   if (generating) {
     return (
-      <div className="max-w-4xl mx-auto flex flex-col items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
-        <p className="text-muted-foreground">Generating your personalized roadmap...</p>
-        <p className="text-sm text-muted-foreground mt-2">This may take a moment as we craft a tailored learning path just for you!</p>
-        <BarLoader className="mt-4" width="200px" color="#3b82f6" />
-      </div>
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="max-w-4xl mx-auto flex flex-col items-center justify-center py-20 text-center"
+      >
+        <div className="relative mb-12">
+           <div className="absolute inset-0 bg-blue-500/20 blur-[60px] rounded-full animate-pulse" />
+           <div className="relative w-32 h-32 rounded-[40px] bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
+              <Loader2 className="h-16 w-16 text-blue-400 animate-spin" />
+              <div className="absolute inset-0 bg-gradient-to-t from-blue-500/20 to-transparent animate-pulse" />
+           </div>
+        </div>
+        
+        <h3 className="text-3xl font-black mb-4 tracking-tighter uppercase">Generating your personalized roadmap...</h3>
+        <p className="text-muted-foreground max-w-md mx-auto font-medium leading-relaxed">
+           This may take a moment as we craft a tailored learning path just for you!
+        </p>
+        
+        <div className="mt-12 flex flex-col items-center gap-4">
+           <BarLoader width={200} color="#3b82f6" />
+           <p className="text-[10px] uppercase tracking-[0.4em] font-black text-blue-400/60 animate-pulse">Neural Path Synthesis in Progress</p>
+        </div>
+      </motion.div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <Card>
-        <CardHeader>
-          <CardTitle>Create Your Personalized Roadmap</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {!resultData ? (
-            <>
-              <div className="space-y-2">
-                <Label htmlFor="skills">Current Skills</Label>
-                <Textarea
-                  id="skills"
-                  value={currentSkills}
-                  onChange={(e) => setCurrentSkills(e.target.value)}
-                  placeholder="List your current skills and experience (e.g., Basic JavaScript, React basics)"
-                  rows={4}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="role">Target Role</Label>
-                <Input
-                  id="role"
-                  value={targetRole}
-                  onChange={(e) => setTargetRole(e.target.value)}
-                  placeholder="e.g., Senior Frontend Developer"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="timeframe">Time Frame</Label>
-                <Select value={timeFrame} onValueChange={setTimeFrame}>
-                  <SelectTrigger id="timeframe">
-                    <SelectValue placeholder="Select time frame" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="3 months">3 months</SelectItem>
-                    <SelectItem value="6 months">6 months</SelectItem>
-                    <SelectItem value="12 months">12 months</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <Button onClick={handleGenerate} disabled={generating} className="w-full">
-                {BUTTONS_MENUS.GENERATE_ROADMAP || "Generate Roadmap"}
-              </Button>
-            </>
-          ) : (
-            <>
-              <RoadmapDisplay roadmap={resultData.roadmap} />
-              <Button onClick={startNew} variant="outline" className="w-full">
-                Generate New Roadmap
-              </Button>
-            </>
-          )}
-        </CardContent>
-      </Card>
+    <div className="max-w-5xl mx-auto pb-12">
+      <AnimatePresence mode="wait">
+        {!resultData ? (
+          <motion.div
+            key="form"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+          >
+            <Card className="border-white/10 bg-white/5 backdrop-blur-2xl shadow-2xl rounded-[48px] overflow-hidden">
+               <div className="absolute top-0 right-0 p-10 pointer-events-none opacity-20">
+                  <BrainCircuit className="w-32 h-32 text-blue-400" />
+               </div>
+               
+               <CardHeader className="p-10 lg:p-14 pb-0">
+                  <div className="flex items-center gap-4 mb-4">
+                     <div className="p-3 bg-blue-500/10 rounded-2xl">
+                        <Cpu className="h-6 w-6 text-blue-400" />
+                     </div>
+                  </div>
+                  <CardTitle className="text-4xl font-black tracking-tighter mb-2">Create Your Personalized Roadmap</CardTitle>
+               </CardHeader>
+
+               <CardContent className="p-10 lg:p-14 space-y-10">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                     <div className="space-y-8">
+                        <div className="space-y-3">
+                           <Label htmlFor="skills" className="text-xs uppercase tracking-widest font-black text-muted-foreground flex items-center gap-2">
+                             Current Skills
+                           </Label>
+                           <Textarea
+                             id="skills"
+                             value={currentSkills}
+                             onChange={(e) => setCurrentSkills(e.target.value)}
+                             placeholder="List your current skills and experience (e.g., Basic JavaScript, React basics)"
+                             className="bg-white/5 border-white/10 rounded-[24px] p-6 focus:border-blue-500/50 focus:ring-blue-500/20 text-white min-h-[160px] text-lg font-medium transition-all"
+                             rows={4}
+                           />
+                        </div>
+                     </div>
+
+                     <div className="space-y-8">
+                        <div className="space-y-3">
+                           <Label htmlFor="role" className="text-xs uppercase tracking-widest font-black text-muted-foreground flex items-center gap-2">
+                             Target Role
+                           </Label>
+                           <Input
+                             id="role"
+                             value={targetRole}
+                             onChange={(e) => setTargetRole(e.target.value)}
+                             placeholder="e.g., Senior Frontend Developer"
+                             className="h-16 bg-white/5 border-white/10 rounded-[20px] px-6 focus:border-blue-500/50 focus:ring-blue-500/20 text-white text-lg font-black transition-all"
+                           />
+                        </div>
+
+                        <div className="space-y-3">
+                           <Label htmlFor="timeframe" className="text-xs uppercase tracking-widest font-black text-muted-foreground flex items-center gap-2">
+                             Time Frame
+                           </Label>
+                           <Select value={timeFrame} onValueChange={setTimeFrame}>
+                             <SelectTrigger id="timeframe" className="h-16 bg-white/5 border-white/10 rounded-[20px] px-6 focus:border-blue-500/50 focus:ring-blue-500/20 text-white font-bold text-lg">
+                               <SelectValue placeholder="Select time frame" />
+                             </SelectTrigger>
+                             <SelectContent className="bg-zinc-950 border-white/10 rounded-2xl">
+                               <SelectItem value="3 months" className="focus:bg-blue-500/10 focus:text-blue-400 py-3 font-bold">3 months</SelectItem>
+                               <SelectItem value="6 months" className="focus:bg-blue-500/10 focus:text-blue-400 py-3 font-bold">6 months</SelectItem>
+                               <SelectItem value="12 months" className="focus:bg-blue-500/10 focus:text-blue-400 py-3 font-bold">12 months</SelectItem>
+                             </SelectContent>
+                           </Select>
+                        </div>
+                     </div>
+                  </div>
+
+                  <Button 
+                    onClick={handleGenerate} 
+                    disabled={generating} 
+                    className="w-full h-20 rounded-[32px] bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-500 hover:to-blue-300 text-white text-xl font-black transition-all shadow-[0_20px_40px_-15px_rgba(59,130,246,0.5)] group"
+                  >
+                    <Sparkles className="mr-3 h-6 w-6 group-hover:rotate-12 transition-transform" />
+                    {BUTTONS_MENUS.GENERATE_ROADMAP || "Generate Roadmap"}
+                  </Button>
+               </CardContent>
+            </Card>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="result"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="space-y-12"
+          >
+            <RoadmapDisplay roadmap={resultData.roadmap} />
+            <div className="flex justify-center">
+               <Button 
+                 onClick={startNew} 
+                 variant="outline" 
+                 className="h-16 px-12 rounded-[24px] border-white/10 bg-white/5 hover:bg-white/10 text-white text-lg font-black uppercase tracking-widest flex items-center gap-3"
+               >
+                 <RefreshCw className="h-5 w-5" />
+                 Generate New Roadmap
+               </Button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

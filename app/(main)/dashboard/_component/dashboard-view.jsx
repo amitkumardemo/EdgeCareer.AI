@@ -179,19 +179,27 @@ const DashboardView = ({
           <CardContent className="grid grid-cols-2 gap-4">
             <div className="p-3 rounded-xl bg-muted/30">
               <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">College</p>
-              <p className="font-semibold text-sm truncate">{userData.college?.name || userData.collegeName || "Not provided"}</p>
+              <p className="font-semibold text-sm truncate" title={userData.college?.name || userData.collegeName}>
+                {userData.college?.name || userData.collegeName || "Not provided"}
+              </p>
             </div>
             <div className="p-3 rounded-xl bg-muted/30">
               <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Year of Study</p>
-              <p className="font-semibold text-sm">{userData.year || "?"}{userData.year === 1 ? "st" : userData.year === 2 ? "nd" : userData.year === 3 ? "rd" : "th"} Year</p>
+              <p className="font-semibold text-sm">
+                {userData.year ? `${userData.year}${userData.year === 1 ? "st" : userData.year === 2 ? "nd" : userData.year === 3 ? "rd" : "th"} Year` : "Not set"}
+              </p>
             </div>
             <div className="p-3 rounded-xl bg-muted/30">
               <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Branch</p>
-              <p className="font-semibold text-sm truncate">{userData.branch || "N/A"}</p>
+              <p className="font-semibold text-sm truncate" title={userData.branch}>
+                {userData.branch || "N/A"}
+              </p>
             </div>
             <div className="p-3 rounded-xl bg-muted/30">
               <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Department</p>
-              <p className="font-semibold text-sm truncate">{userData.department || "N/A"}</p>
+              <p className="font-semibold text-sm truncate" title={userData.department}>
+                {userData.department || "N/A"}
+              </p>
             </div>
           </CardContent>
         </Card>

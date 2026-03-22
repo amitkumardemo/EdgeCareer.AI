@@ -10,10 +10,10 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { 
-  Loader2, 
-  CheckCircle2, 
-  FileText, 
+import {
+  Loader2,
+  CheckCircle2,
+  FileText,
   Upload,
   Target,
   TrendingUp,
@@ -39,11 +39,11 @@ import {
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { 
-  RadarChart, 
-  PolarGrid, 
-  PolarAngleAxis, 
-  PolarRadiusAxis, 
+import {
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
   Radar,
   BarChart,
   Bar,
@@ -53,6 +53,7 @@ import {
   PieChart,
   Pie,
   Cell,
+  ResponsiveContainer
 } from "recharts";
 
 const steps = [
@@ -64,12 +65,12 @@ const steps = [
 
 // Mock data for visualizations (UI only)
 const scoreBreakdownData = [
-  { category: "Keywords", score: 75, fullMark: 100 },
-  { category: "Skills", score: 85, fullMark: 100 },
-  { category: "Formatting", score: 90, fullMark: 100 },
-  { category: "Experience", score: 70, fullMark: 100 },
-  { category: "Projects", score: 65, fullMark: 100 },
-  { category: "ATS Compatible", score: 88, fullMark: 100 },
+  { category: "Keywords", score: 75 },
+  { category: "Skills", score: 85 },
+  { category: "Formatting", score: 90 },
+  { category: "Experience", score: 70 },
+  { category: "Projects", score: 65 },
+  { category: "Compatibility", score: 88 },
 ];
 
 const keywordMatchData = [
@@ -245,817 +246,482 @@ export default function ATSChecker() {
   };
 
   const getScoreStatus = (score) => {
-    if (score >= 81) return { 
-      label: "Excellent", 
-      color: "text-green-500", 
-      bgColor: "bg-green-500/10", 
-      borderColor: "border-green-500/30",
-      glowColor: "shadow-green-500/50"
+    if (score >= 81) return {
+      label: "Elite",
+      color: "text-emerald-400",
+      bgColor: "bg-emerald-500/10",
+      borderColor: "border-emerald-500/20",
+      glowColor: "shadow-emerald-500/30"
     };
-    if (score >= 66) return { 
-      label: "Good", 
-      color: "text-blue-500", 
-      bgColor: "bg-blue-500/10", 
-      borderColor: "border-blue-500/30",
-      glowColor: "shadow-blue-500/50"
+    if (score >= 66) return {
+      label: "Strong",
+      color: "text-blue-400",
+      bgColor: "bg-blue-500/10",
+      borderColor: "border-blue-500/20",
+      glowColor: "shadow-blue-500/30"
     };
-    if (score >= 41) return { 
-      label: "Average", 
-      color: "text-yellow-500", 
-      bgColor: "bg-yellow-500/10", 
-      borderColor: "border-yellow-500/30",
-      glowColor: "shadow-yellow-500/50"
+    if (score >= 41) return {
+      label: "Average",
+      color: "text-yellow-400",
+      bgColor: "bg-yellow-500/10",
+      borderColor: "border-yellow-500/20",
+      glowColor: "shadow-yellow-500/30"
     };
-    return { 
-      label: "Poor", 
-      color: "text-red-500", 
-      bgColor: "bg-red-500/10", 
-      borderColor: "border-red-500/30",
-      glowColor: "shadow-red-500/50"
+    return {
+      label: "Critical",
+      color: "text-red-400",
+      bgColor: "bg-red-500/10",
+      borderColor: "border-red-500/20",
+      glowColor: "shadow-red-500/30"
     };
   };
 
   const getImpactColor = (impact) => {
-    if (impact === "High") return "bg-red-500/10 text-red-500 border-red-500/30";
-    if (impact === "Medium") return "bg-yellow-500/10 text-yellow-500 border-yellow-500/30";
-    return "bg-green-500/10 text-green-500 border-green-500/30";
+    if (impact === "High") return "bg-red-500/10 text-red-400 border-red-500/20";
+    if (impact === "Medium") return "bg-yellow-500/10 text-yellow-400 border-yellow-500/20";
+    return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
   };
 
+  const status = atsScore !== null ? getScoreStatus(atsScore) : null;
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/20">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden border-b">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-primary/10 to-secondary/5"></div>
-        <div className="absolute inset-0 bg-grid-white/[0.02]"></div>
+    <div className="min-h-screen bg-black text-white selection:bg-emerald-500/30 overflow-x-hidden">
+      {/* 1. Hero Section */}
+      <section className="relative pt-20 pb-16 overflow-hidden">
+        {/* Animated Background Gradients */}
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[120px] -mr-40 -mt-40 animate-pulse" />
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-emerald-600/10 rounded-full blur-[120px] -ml-40 -mb-40" />
         
-        <div className="container mx-auto px-4 py-16 md:py-24 relative">
+        <div className="container mx-auto px-4 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
-            {/* TechieHelp Branding */}
-            <div className="flex items-center justify-center gap-2 mb-6">
-              <Image
-                src="/skill.png"
-                alt="TechieHelp Logo"
-                width={40}
-                height={40}
-                className="h-10 w-auto"
-              />
+            <div className="flex items-center justify-center gap-3 mb-8">
+              <div className="p-3 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl">
+                 <Image src="/skill.png" alt="Logo" width={40} height={40} className="h-10 w-auto" />
+              </div>
               <div className="text-left">
-                <h3 className="text-lg font-bold">TechieHelp Institute of AI</h3>
-                <p className="text-xs text-muted-foreground">Building Careers with AI & Innovation</p>
+                <h3 className="text-xl font-black tracking-tighter text-white">TECHIEHELP <span className="text-emerald-400">AI</span></h3>
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold">Industry Readiness Engine</p>
               </div>
             </div>
 
-            <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-primary via-purple-500 to-secondary bg-clip-text text-transparent">
-              ATS Resume Analyzer
+            <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tight leading-[1.1]">
+              Master the <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400">Digital Gatekeeper</span>
             </h1>
-            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              AI-powered resume analysis to beat Applicant Tracking Systems
+            
+            <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed">
+              Our AI-driven ATS engine deconstructs your resume using enterprise-grade algorithms to ensure you rank #1 in any recruiter&apos;s dashboard.
             </p>
 
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
-              <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
-                <CardContent className="p-6 text-center">
-                  <Users className="h-8 w-8 mx-auto mb-2 text-primary" />
-                  <div className="text-3xl font-bold mb-1">10K+</div>
-                  <div className="text-sm text-muted-foreground">Resumes Analyzed</div>
-                </CardContent>
-              </Card>
-              <Card className="bg-gradient-to-br from-green-500/10 to-green-500/5 border-green-500/20">
-                <CardContent className="p-6 text-center">
-                  <TrendingUp className="h-8 w-8 mx-auto mb-2 text-green-500" />
-                  <div className="text-3xl font-bold mb-1">95%</div>
-                  <div className="text-sm text-muted-foreground">Success Rate</div>
-                </CardContent>
-              </Card>
-              <Card className="bg-gradient-to-br from-purple-500/10 to-purple-500/5 border-purple-500/20">
-                <CardContent className="p-6 text-center">
-                  <Sparkles className="h-8 w-8 mx-auto mb-2 text-purple-500" />
-                  <div className="text-3xl font-bold mb-1">AI-Powered</div>
-                  <div className="text-sm text-muted-foreground">Smart Analysis</div>
-                </CardContent>
-              </Card>
+            {/* Premium Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+              {[
+                { label: "Resumes Optimized", val: "10K+", icon: Users, color: "text-blue-400", bg: "bg-blue-500/5" },
+                { label: "Success Velocity", val: "95%", icon: TrendingUp, color: "text-emerald-400", bg: "bg-emerald-500/5" },
+                { label: "Elite Insights", val: "AI Power", icon: Sparkles, color: "text-purple-400", bg: "bg-purple-500/5" }
+              ].map((stat, i) => (
+                <Card key={i} className={`border-white/10 ${stat.bg} backdrop-blur-xl transition-all duration-500 hover:border-white/20 hover:scale-[1.02] group`}>
+                  <CardContent className="p-8 text-center">
+                    <stat.icon className={`h-8 w-8 mx-auto mb-4 ${stat.color} group-hover:scale-110 transition-transform`} />
+                    <div className="text-4xl font-black mb-1 text-white">{stat.val}</div>
+                    <div className="text-xs uppercase tracking-widest text-muted-foreground font-bold">{stat.label}</div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </motion.div>
         </div>
       </section>
 
-      <div className="container mx-auto px-4 py-12">
-        {/* Upload & Initial Results Section */}
-        {!atsScore && (
-          <div className="max-w-6xl mx-auto mb-16">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Upload Section */}
-              <Card className="shadow-lg">
-                <CardContent className="p-8">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <Upload className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <h2 className="text-2xl font-bold">Upload Resume</h2>
-                      <p className="text-sm text-muted-foreground">Get instant ATS feedback</p>
-                    </div>
-                  </div>
-
-                  <div
-                    className={`border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 ${
-                      dragActive
-                        ? "border-primary bg-primary/5 scale-[1.02]"
-                        : "border-border hover:border-primary/50 hover:bg-muted/50"
-                    }`}
-                    onDragEnter={handleDrag}
-                    onDragLeave={handleDrag}
-                    onDragOver={handleDrag}
-                    onDrop={handleDrop}
-                  >
-                    <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-                      <FileText className="w-8 h-8 text-primary" />
-                    </div>
-                    <p className="text-lg font-semibold mb-2">
-                      Drag & drop your resume here
-                    </p>
-                    <p className="text-muted-foreground mb-4">or</p>
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      onClick={handleChooseFile}
-                      className="mb-2"
-                    >
-                      Choose File
-                    </Button>
-                    <p className="text-xs text-muted-foreground">PDF files only (Max 5MB)</p>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept=".pdf"
-                      onChange={handleFileChange}
-                      className="hidden"
-                    />
-                    {file && (
-                      <div className="mt-4 p-3 bg-primary/5 rounded-lg border border-primary/20">
-                        <p className="text-sm">
-                          <strong className="text-primary">Selected:</strong> {file.name}
-                        </p>
+      {/* 2. Upload Area */}
+      <section className="py-20 bg-white/[0.02] border-y border-white/5 relative z-10">
+        <div className="container mx-auto px-4">
+          {!atsScore && (
+            <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+              {/* Uploader Card */}
+              <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}>
+                <Card className="border-white/10 bg-white/5 backdrop-blur-2xl overflow-hidden group">
+                  <CardContent className="p-10">
+                    <div className="flex items-center gap-4 mb-10">
+                      <div className="p-3 rounded-2xl bg-emerald-500/10 text-emerald-400">
+                        <Upload className="h-6 w-6" />
                       </div>
-                    )}
-                  </div>
-
-                  <Button
-                    onClick={handleSubmit}
-                    disabled={loading || !file}
-                    className="mt-6 w-full"
-                    size="lg"
-                  >
-                    {loading ? (
-                      <>
-                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                        Analyzing Resume...
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="mr-2 h-5 w-5" />
-                        Analyze Resume
-                      </>
-                    )}
-                  </Button>
-                </CardContent>
-              </Card>
-
-              {/* Analysis Progress */}
-              <Card className="shadow-lg">
-                <CardContent className="p-8">
-                  <AnimatePresence mode="wait">
-                    {loading || currentStep < steps.length ? (
-                      <motion.div
-                        key="loading"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                      >
-                        <div className="flex items-center gap-3 mb-6">
-                          <div className="p-2 bg-primary/10 rounded-lg">
-                            <Loader2 className="h-6 w-6 text-primary animate-spin" />
-                          </div>
-                          <div>
-                            <h2 className="text-2xl font-bold">Analyzing</h2>
-                            <p className="text-sm text-muted-foreground">Please wait...</p>
-                          </div>
-                        </div>
-                        <div className="space-y-3">
-                          {steps.map((step, index) => (
-                            <div
-                              key={index}
-                              className="flex items-center gap-3 p-3 bg-muted rounded-lg"
-                            >
-                              {index < currentStep ? (
-                                <CheckCircle2 className="h-5 w-5 text-green-500" />
-                              ) : index === currentStep ? (
-                                <div className="h-5 w-5 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
-                              ) : (
-                                <div className="h-5 w-5 border-2 border-muted-foreground/30 rounded-full"></div>
-                              )}
-                              <span
-                                className={`text-sm font-medium ${
-                                  index === currentStep
-                                    ? "text-primary"
-                                    : index < currentStep
-                                    ? "text-green-500"
-                                    : "text-muted-foreground"
-                                }`}
-                              >
-                                {step}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </motion.div>
-                    ) : (
-                      <motion.div
-                        key="initial"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="text-center py-12"
-                      >
-                        <div className="w-16 h-16 bg-muted rounded-xl flex items-center justify-center mx-auto mb-4">
-                          <FileCheck className="w-8 h-8 text-muted-foreground" />
-                        </div>
-                        <h3 className="text-xl font-semibold mb-2">Ready to Analyze</h3>
-                        <p className="text-muted-foreground text-sm">
-                          Upload your resume to get detailed ATS feedback
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        )}
-
-        {/* ENHANCED POST-ANALYSIS UI */}
-        {atsScore !== null && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="max-w-7xl mx-auto space-y-8"
-          >
-            {/* 1. ENHANCED ATS SCORE OVERVIEW */}
-            <Card className="shadow-xl overflow-hidden">
-              <div className="bg-gradient-to-r from-primary/10 via-purple-500/10 to-secondary/10 p-8">
-                <div className="text-center">
-                  <h2 className="text-3xl font-bold mb-8">Your ATS Score</h2>
-
-                  {/* Animated Circular Gauge with Glow */}
-                  <div className="relative w-64 h-64 mx-auto mb-6">
-                    <motion.div
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ duration: 0.6, type: "spring" }}
-                      className={`absolute inset-0 rounded-full blur-2xl ${getScoreStatus(atsScore).glowColor} shadow-2xl`}
-                      style={{ transform: 'scale(1.1)' }}
-                    />
-                    <svg className="w-64 h-64 transform -rotate-90 relative z-10" viewBox="0 0 100 100">
-                      <circle
-                        cx="50"
-                        cy="50"
-                        r="45"
-                        stroke="currentColor"
-                        strokeWidth="8"
-                        fill="transparent"
-                        className="text-muted/30"
-                      />
-                      <motion.circle
-                        cx="50"
-                        cy="50"
-                        r="45"
-                        stroke="currentColor"
-                        strokeWidth="8"
-                        fill="transparent"
-                        strokeDasharray={`${2 * Math.PI * 45}`}
-                        initial={{ strokeDashoffset: 2 * Math.PI * 45 }}
-                        animate={{ strokeDashoffset: 2 * Math.PI * 45 * (1 - atsScore / 100) }}
-                        transition={{ duration: 2, ease: "easeOut" }}
-                        className={`${getScoreStatus(atsScore).color}`}
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="text-center">
-                        <motion.div
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ delay: 0.5, type: "spring" }}
-                          className={`text-6xl font-bold ${getScoreStatus(atsScore).color}`}
-                        >
-                          {atsScore}
-                        </motion.div>
-                        <div className="text-muted-foreground text-lg">/100</div>
+                      <div>
+                        <h2 className="text-2xl font-black tracking-tight">Deploy Resume</h2>
+                        <p className="text-sm text-muted-foreground">PDF Protocol Only • Max 5MB</p>
                       </div>
                     </div>
-                  </div>
 
-                  <Badge className={`${getScoreStatus(atsScore).bgColor} ${getScoreStatus(atsScore).color} border ${getScoreStatus(atsScore).borderColor} text-base px-4 py-2`}>
-                    {getScoreStatus(atsScore).label} Profile
-                  </Badge>
-
-                  <p className="text-lg text-muted-foreground mt-4 max-w-2xl mx-auto">
-                    {atsScore >= 81 ? "Strong Profile with Optimization Potential – Your resume is ATS-ready and competitive!" :
-                     atsScore >= 66 ? "Good Foundation with Room for Improvement – A few tweaks will make you stand out." :
-                     atsScore >= 41 ? "Average Score – Strategic optimization needed for better ATS performance." :
-                     "Needs Significant Improvement – Let's rebuild your resume for ATS success."}
-                  </p>
-                </div>
-              </div>
-            </Card>
-
-            {/* 2. ATS SCORE BREAKDOWN - RADAR CHART */}
-            <Card className="shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Activity className="h-6 w-6 text-primary" />
-                  ATS Score Breakdown
-                </CardTitle>
-                <CardDescription>
-                  Detailed analysis of each scoring factor
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                  {/* Radar Chart */}
-                  <div className="h-80">
-                    <ChartContainer
-                      config={{
-                        score: {
-                          label: "Score",
-                          color: "hsl(var(--primary))",
-                        },
-                      }}
-                      className="w-full h-full"
-                    >
-                      <RadarChart data={scoreBreakdownData}>
-                        <PolarGrid stroke="hsl(var(--border))" />
-                        <PolarAngleAxis 
-                          dataKey="category" 
-                          tick={{ fill: 'hsl(var(--foreground))', fontSize: 12 }}
-                        />
-                        <PolarRadiusAxis angle={90} domain={[0, 100]} tick={{ fill: 'hsl(var(--muted-foreground))' }} />
-                        <Radar
-                          name="Score"
-                          dataKey="score"
-                          stroke="hsl(var(--primary))"
-                          fill="hsl(var(--primary))"
-                          fillOpacity={0.3}
-                        />
-                      </RadarChart>
-                    </ChartContainer>
-                  </div>
-
-                  {/* Score Details */}
-                  <div className="space-y-4">
-                    {scoreBreakdownData.map((item, index) => (
-                      <motion.div
-                        key={item.category}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="space-y-2"
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="font-medium">{item.category}</span>
-                          <span className={`font-bold ${
-                            item.score >= 80 ? 'text-green-500' :
-                            item.score >= 60 ? 'text-blue-500' :
-                            item.score >= 40 ? 'text-yellow-500' : 'text-red-500'
-                          }`}>
-                            {item.score}%
-                          </span>
-                        </div>
-                        <Progress value={item.score} className="h-2" />
-                        <p className="text-xs text-muted-foreground">
-                          {item.category === "Keywords" && "Alignment with job description keywords"}
-                          {item.category === "Skills" && "Relevance of technical and soft skills"}
-                          {item.category === "Formatting" && "Resume structure and readability"}
-                          {item.category === "Experience" && "Work history quality and impact"}
-                          {item.category === "Projects" && "Project descriptions and achievements"}
-                          {item.category === "ATS Compatible" && "System readability and parsing"}
-                        </p>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* 3. KEYWORD MATCH ANALYSIS - DONUT CHART */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card className="shadow-lg">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Target className="h-6 w-6 text-primary" />
-                    Keyword Match Insights
-                  </CardTitle>
-                  <CardDescription>
-                    Recruiters' ATS systems prioritize keyword alignment
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-64 mb-6">
-                    <ChartContainer
-                      config={{
-                        matched: {
-                          label: "Matched",
-                          color: "hsl(142, 76%, 36%)",
-                        },
-                        missing: {
-                          label: "Missing",
-                          color: "hsl(24, 100%, 50%)",
-                        },
-                      }}
-                      className="w-full h-full"
-                    >
-                      <PieChart>
-                        <Pie
-                          data={keywordMatchData}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={60}
-                          outerRadius={90}
-                          paddingAngle={5}
-                          dataKey="value"
-                        >
-                          {keywordMatchData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                          ))}
-                        </Pie>
-                        <ChartTooltip content={<ChartTooltipContent />} />
-                      </PieChart>
-                    </ChartContainer>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4 text-center">
-                    <div className="p-4 bg-green-500/10 rounded-lg border border-green-500/20">
-                      <div className="text-3xl font-bold text-green-500">65%</div>
-                      <div className="text-sm text-muted-foreground">Matched</div>
-                    </div>
-                    <div className="p-4 bg-orange-500/10 rounded-lg border border-orange-500/20">
-                      <div className="text-3xl font-bold text-orange-500">35%</div>
-                      <div className="text-sm text-muted-foreground">Missing</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Keyword Tags */}
-              <Card className="shadow-lg">
-                <CardHeader>
-                  <CardTitle>Keywords Analysis</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {/* Matched Keywords */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <CheckCircle className="h-5 w-5 text-green-500" />
-                      <span className="font-semibold">Matched Keywords</span>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {matchedKeywords.map((keyword, index) => (
-                        <Badge key={index} variant="outline" className="bg-green-500/10 text-green-600 border-green-500/30">
-                          {keyword}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Missing Keywords */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <AlertCircle className="h-5 w-5 text-orange-500" />
-                      <span className="font-semibold">Missing / Recommended Keywords</span>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {missingKeywords.map((keyword, index) => (
-                        <Badge key={index} variant="outline" className="bg-orange-500/10 text-orange-600 border-orange-500/30">
-                          {keyword}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* 4. SKILLS & TECH STACK VISUALIZATION */}
-            <Card className="shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Zap className="h-6 w-6 text-primary" />
-                  Skills Alignment with Industry
-                </CardTitle>
-                <CardDescription>
-                  Your technical skills compared to industry standards
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {skillsData.map((skill, index) => (
-                    <motion.div
-                      key={skill.skill}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="space-y-2"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="font-medium">{skill.skill}</span>
-                        <span className={`font-bold ${
-                          skill.level >= 80 ? 'text-green-500' :
-                          skill.level >= 60 ? 'text-blue-500' : 'text-yellow-500'
-                        }`}>
-                          {skill.level}%
-                        </span>
-                      </div>
-                      <div className="relative">
-                        <Progress value={skill.level} className="h-3" />
-                        <div className="absolute inset-0 flex items-center px-2">
-                          <div 
-                            className="h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent rounded-full"
-                            style={{ width: `${skill.level}%` }}
-                          />
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-
-                <div className="mt-6 p-4 bg-blue-500/10 rounded-lg border border-blue-500/20">
-                  <p className="text-sm text-blue-600 flex items-center gap-2">
-                    <Sparkles className="h-4 w-4" />
-                    <strong>Pro Tip:</strong> Add proficiency levels to your skills section (Beginner, Intermediate, Advanced)
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* 5. ATS COMPATIBILITY CHECK */}
-            <Card className="shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Shield className="h-6 w-6 text-primary" />
-                  ATS Compatibility Check
-                </CardTitle>
-                <CardDescription>
-                  Technical requirements for ATS systems
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3 mb-6">
-                  {atsCompatibilityChecks.map((item, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                      className={`flex items-center gap-3 p-3 rounded-lg border ${
-                        item.passed 
-                          ? 'bg-green-500/5 border-green-500/20' 
-                          : 'bg-red-500/5 border-red-500/20'
+                    <div
+                      onDragEnter={handleDrag}
+                      onDragLeave={handleDrag}
+                      onDragOver={handleDrag}
+                      onDrop={handleDrop}
+                      className={`relative border-2 border-dashed rounded-[32px] p-12 transition-all duration-500 group/drop ${
+                        dragActive ? "border-emerald-500 bg-emerald-500/5 scale-[1.02]" : "border-white/10 hover:border-emerald-500/50 hover:bg-white/[0.02]"
                       }`}
                     >
-                      {item.passed ? (
-                        <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
-                      ) : (
-                        <X className="h-5 w-5 text-red-500 flex-shrink-0" />
-                      )}
-                      <span className={item.passed ? 'text-foreground' : 'text-muted-foreground'}>
-                        {item.check}
-                      </span>
-                    </motion.div>
-                  ))}
-                </div>
-
-                <div className="p-4 bg-muted rounded-lg">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-semibold">ATS Readability Score</span>
-                    <span className="text-2xl font-bold text-green-500">88%</span>
-                  </div>
-                  <Progress value={88} className="h-2" />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* 6. EXPERIENCE & PROJECT IMPACT GRAPH */}
-            <Card className="shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="h-6 w-6 text-primary" />
-                  Experience & Project Impact
-                </CardTitle>
-                <CardDescription>
-                  How well your experience is presented for ATS
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="h-80">
-                  <ChartContainer
-                    config={{
-                      score: {
-                        label: "Score",
-                        color: "hsl(var(--primary))",
-                      },
-                    }}
-                    className="w-full h-full"
-                  >
-                    <BarChart data={experienceImpactData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis 
-                        dataKey="category" 
-                        tick={{ fill: 'hsl(var(--foreground))', fontSize: 11 }}
-                        angle={-15}
-                        textAnchor="end"
-                        height={80}
-                      />
-                      <YAxis tick={{ fill: 'hsl(var(--muted-foreground))' }} />
-                      <ChartTooltip 
-                        content={({ active, payload }) => {
-                          if (active && payload && payload.length) {
-                            return (
-                              <div className="bg-background border rounded-lg p-3 shadow-lg">
-                                <p className="font-semibold">{payload[0].payload.category}</p>
-                                <p className="text-primary font-bold">{payload[0].value}%</p>
-                                <p className="text-xs text-muted-foreground mt-1">
-                                  {payload[0].payload.category === "Quantified Results" && 
-                                    "Projects with metrics perform better in ATS scans"}
-                                </p>
-                              </div>
-                            );
-                          }
-                          return null;
-                        }}
-                      />
-                      <Bar 
-                        dataKey="score" 
-                        fill="hsl(var(--primary))" 
-                        radius={[8, 8, 0, 0]}
-                      />
-                    </BarChart>
-                  </ChartContainer>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* 7. IMPROVEMENT PRIORITY TIMELINE */}
-            <Card className="shadow-lg border-2 border-primary/20">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Rocket className="h-6 w-6 text-primary" />
-                  What to Fix First
-                </CardTitle>
-                <CardDescription>
-                  Prioritized action plan to boost your ATS score
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {improvementPriorities.map((item, index) => (
-                    <motion.div
-                      key={item.priority}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="relative"
-                    >
-                      <div className="flex gap-4">
-                        {/* Priority Number */}
-                        <div className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl ${
-                          item.priority === 1 ? 'bg-red-500 text-white' :
-                          item.priority === 2 ? 'bg-orange-500 text-white' :
-                          item.priority === 3 ? 'bg-yellow-500 text-white' :
-                          'bg-green-500 text-white'
-                        }`}>
-                          {item.priority}
+                      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover/drop:opacity-100 transition-opacity rounded-[30px]" />
+                      
+                      <div className="relative z-10">
+                        <div className="w-20 h-20 bg-white/5 rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover/drop:scale-110 transition-transform">
+                          <FileText className="w-10 h-10 text-emerald-400" />
                         </div>
+                        <p className="text-xl font-bold mb-2">Drop your blueprint here</p>
+                        <p className="text-muted-foreground mb-8">or click to browse filesystem</p>
+                        
+                        <Button 
+                          onClick={handleChooseFile}
+                          className="h-12 px-8 rounded-2xl bg-white text-black font-black hover:bg-emerald-400 transition-colors"
+                        >
+                          Choose PDF
+                        </Button>
+                        <input ref={fileInputRef} type="file" accept=".pdf" onChange={handleFileChange} className="hidden" />
+                      </div>
 
-                        {/* Content */}
-                        <div className="flex-1 pb-8 border-l-2 border-dashed border-muted pl-6 -ml-6">
-                          <div className="bg-muted/50 rounded-lg p-4 hover:bg-muted transition-colors">
-                            <div className="flex items-start justify-between gap-4 mb-2">
-                              <h3 className="font-semibold text-lg">{item.title}</h3>
-                              <Badge className={`${getImpactColor(item.impact)} border`}>
-                                {item.impact} Impact
-                              </Badge>
-                            </div>
-                            <p className="text-sm text-muted-foreground">{item.description}</p>
+                      {file && (
+                        <div className="mt-8 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 animate-in fade-in slide-in-from-bottom-2">
+                           <p className="text-sm font-bold text-emerald-400 flex items-center justify-center gap-2">
+                             <CheckCircle className="h-4 w-4" />
+                             Blueprint Ready: {file.name}
+                           </p>
+                        </div>
+                      )}
+                    </div>
+
+                    <Button
+                      onClick={handleSubmit}
+                      disabled={loading || !file}
+                      className="mt-10 w-full h-16 rounded-[24px] bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-500 hover:to-emerald-500 text-white text-lg font-black transition-all shadow-[0_20px_40px_-15px_rgba(37,99,235,0.3)] disabled:opacity-50"
+                    >
+                      {loading ? (
+                        <span className="flex items-center gap-3">
+                          <Loader2 className="h-6 w-6 animate-spin" />
+                          ENGAGING AI ANALYZER...
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-3">
+                          <Sparkles className="h-6 w-6" />
+                          LAUNCH ANALYSIS
+                        </span>
+                      )}
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              {/* Progress Card */}
+              <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}>
+                <Card className="border-white/10 bg-white/5 backdrop-blur-2xl h-full">
+                  <CardContent className="p-10 flex flex-col h-full">
+                    <h2 className="text-2xl font-black mb-8 flex items-center gap-3">
+                      <Activity className="h-6 w-6 text-blue-400" />
+                      Analysis Stream
+                    </h2>
+
+                    <AnimatePresence mode="wait">
+                      {loading || currentStep < steps.length ? (
+                        <div className="space-y-6 flex-1">
+                          {steps.map((step, index) => (
+                            <motion.div
+                              key={index}
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: index * 0.1 }}
+                              className={`flex items-center gap-4 p-5 rounded-2xl border transition-all duration-500 ${
+                                index === currentStep ? "bg-white/10 border-blue-500/50 shadow-[0_0_20px_rgba(59,130,246,0.1)]" : "bg-transparent border-white/5 opcity-40"
+                              }`}
+                            >
+                              {index < currentStep ? (
+                                <div className="bg-emerald-500/20 p-1.5 rounded-full">
+                                  <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+                                </div>
+                              ) : index === currentStep ? (
+                                <Loader2 className="h-6 w-6 text-blue-400 animate-spin" />
+                              ) : (
+                                <div className="h-6 w-6 rounded-full border border-white/20" />
+                              )}
+                              <span className={`text-sm font-bold tracking-tight ${index === currentStep ? "text-white" : "text-muted-foreground"}`}>
+                                {step}
+                              </span>
+                            </motion.div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center flex-1 py-10 text-center">
+                          <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mb-6 animate-bounce">
+                            <Rocket className="w-12 h-12 text-blue-400 " />
                           </div>
+                          <h3 className="text-2xl font-black mb-2">Ready for Lift-off</h3>
+                          <p className="text-muted-foreground max-w-xs">Upload your resume and our AI will begin the deep-scan sequence.</p>
+                        </div>
+                      )}
+                    </AnimatePresence>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* 3. Post-Analysis Results Dashboard */}
+      <AnimatePresence>
+        {atsScore !== null && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="pb-32"
+          >
+            <div className="container mx-auto px-4">
+              {/* Score Header Card */}
+              <Card className="border-white/10 bg-white/5 backdrop-blur-2xl overflow-hidden mb-12 shadow-2xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-emerald-500/5" />
+                <CardContent className="p-12 relative z-10 flex flex-col md:flex-row items-center gap-16">
+                  
+                  {/* Gauge */}
+                  <div className="relative w-64 h-64 lg:w-80 lg:h-80 flex-shrink-0">
+                    <motion.div
+                      initial={{ scale: 0.5, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ delay: 0.3, duration: 0.8 }}
+                      className={`absolute inset-0 rounded-full blur-[80px] ${status.bgColor} ${status.glowColor} opacity-40`}
+                    />
+                    <svg className="w-full h-full transform -rotate-90 relative z-10" viewBox="0 0 100 100">
+                      <circle cx="50" cy="50" r="42" stroke="currentColor" strokeWidth="6" fill="transparent" className="text-white/5" />
+                      <motion.circle
+                        cx="50" cy="50" r="42" stroke="currentColor" strokeWidth="6" fill="transparent" strokeDasharray="263.89"
+                        initial={{ strokeDashoffset: 263.89 }}
+                        animate={{ strokeDashoffset: 263.89 * (1 - atsScore / 100) }}
+                        transition={{ duration: 2.5, ease: "easeOut", delay: 0.5 }}
+                        className={status.color} strokeLinecap="round"
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }} className={`text-8xl font-black ${status.color}`}>
+                        {atsScore}
+                      </motion.div>
+                      <div className="text-lg font-bold text-muted-foreground -mt-2 uppercase tracking-[0.2em]">SCORE</div>
+                    </div>
+                  </div>
+
+                  {/* Verdict Info */}
+                  <div className="text-center md:text-left space-y-6 flex-1">
+                    <Badge className={`${status.bgColor} ${status.color} border ${status.borderColor} px-4 py-1.5 rounded-xl text-xs font-black uppercase tracking-widest`}>
+                      {status.label} RATING DETECTED
+                    </Badge>
+                    <h2 className="text-4xl lg:text-5xl font-black tracking-tighter leading-[1.1]">
+                      Your Professional Blueprint <br />
+                      <span className={status.color}>Performance Analysis</span>
+                    </h2>
+                    <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl">
+                      {atsScore >= 81 ? "Your profile is engineered for elite enterprise standards. Minor structural refinements will cement your status." : 
+                       atsScore >= 66 ? "Strong foundation. Focus on high-density keyword integration and quantify your business impact to ascend." :
+                       "Strategic intervention required. Your narrative is strong, but the digital filters are failing to parse your value."}
+                    </p>
+                    <div className="flex flex-wrap gap-4 pt-4">
+                       <div className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white/5 border border-white/10 text-sm font-bold">
+                         <Clock className="h-4 w-4 text-blue-400" />
+                         SCAN COMPLETE: 1.2s
+                       </div>
+                       <div className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white/5 border border-white/10 text-sm font-bold text-emerald-400">
+                         <FileCheck className="h-4 w-4" />
+                         ATS COMPATIBLE
+                       </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Data Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                {/* Radar Comparison */}
+                <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+                  <Card className="border-white/10 bg-white/5 backdrop-blur-2xl h-full">
+                    <CardHeader className="p-8">
+                      <CardTitle className="flex items-center gap-3">
+                        <div className="p-2 rounded-xl bg-purple-500/10 text-purple-400"><Activity className="h-5 w-5" /></div>
+                        Multidimensional Profile
+                      </CardTitle>
+                      <CardDescription>Industry standard vs. your performance</CardDescription>
+                    </CardHeader>
+                    <CardContent className="h-80 pb-12">
+                       <ResponsiveContainer width="100%" height="100%">
+                         <RadarChart data={scoreBreakdownData}>
+                           <PolarGrid stroke="rgba(255,255,255,0.05)" />
+                           <PolarAngleAxis dataKey="category" tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 10, fontWeight: 700 }} />
+                           <Radar name="You" dataKey="score" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.2} />
+                         </RadarChart>
+                       </ResponsiveContainer>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+
+                {/* Keyword Match PIE */}
+                <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+                  <Card className="border-white/10 bg-white/5 backdrop-blur-2xl h-full">
+                    <CardHeader className="p-8">
+                      <CardTitle className="flex items-center gap-3">
+                        <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400"><Target className="h-5 w-5" /></div>
+                        Keyword Density Match
+                      </CardTitle>
+                      <CardDescription>Relevance to your target sector</CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-8 pt-0 flex items-center justify-around h-full">
+                       <div className="h-56 w-56 relative">
+                         <ResponsiveContainer width="100%" height="100%">
+                           <PieChart>
+                             <Pie data={keywordMatchData} innerRadius={60} outerRadius={85} paddingAngle={10} dataKey="value">
+                                {keywordMatchData.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />)}
+                             </Pie>
+                           </PieChart>
+                         </ResponsiveContainer>
+                         <div className="absolute inset-0 flex flex-col items-center justify-center">
+                            <div className="text-3xl font-black text-white">65%</div>
+                            <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">MATCH</div>
+                         </div>
+                       </div>
+                       <div className="space-y-4">
+                          <div className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-emerald-400" /> <span className="text-sm font-bold">Identified (65%)</span></div>
+                          <div className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-orange-400" /> <span className="text-sm font-bold">Missing (35%)</span></div>
+                       </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+
+                {/* Skill Vectors */}
+                <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="lg:col-span-2">
+                  <Card className="border-white/10 bg-white/5 backdrop-blur-2xl">
+                    <CardHeader className="p-8">
+                      <CardTitle className="flex items-center gap-3">
+                        < Zap className="h-5 w-5 text-yellow-400" />
+                        Technological Proficiency Vectors
+                      </CardTitle>
+                      <CardDescription>How the machine sees your capabilities</CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-10 pt-0">
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10">
+                          {skillsData.map((skill, index) => (
+                            <div key={index} className="space-y-3">
+                              <div className="flex justify-between items-center text-sm">
+                                <span className="font-bold tracking-tight">{skill.skill}</span>
+                                <span className="text-blue-400 font-black">{skill.level}%</span>
+                              </div>
+                              <div className="h-2 rounded-full bg-white/5 overflow-hidden border border-white/5">
+                                <motion.div initial={{ width: 0 }} animate={{ width: `${skill.level}%` }} transition={{ duration: 1.5, delay: 0.5 + index * 0.1 }} className="h-full bg-gradient-to-r from-blue-600 to-blue-400" />
+                              </div>
+                            </div>
+                          ))}
+                       </div>
+                       
+                       <div className="mt-16 p-8 rounded-3xl bg-blue-500/5 border border-blue-500/10 flex flex-col md:flex-row items-center gap-8">
+                         <div className="p-4 rounded-2xl bg-blue-500/10"><Sparkles className="h-8 w-8 text-blue-400" /></div>
+                         <div className="flex-1">
+                            <h4 className="text-lg font-black mb-1">Strategic AI Insight</h4>
+                            <p className="text-muted-foreground">Integrating <span className="text-white font-bold">TypeScript</span> and <span className="text-white font-bold">CI/CD</span> into your project narratives would likely boost your match score for Fintech and E-commerce sectors by <span className="text-emerald-400 font-bold">+14%</span>.</p>
+                         </div>
+                         <Button className="h-14 px-10 rounded-2xl bg-white text-black font-black hover:bg-blue-400 transition-colors shrink-0">
+                           Optimize Blueprint
+                         </Button>
+                       </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+
+                {/* Keyword Analysis Tags */}
+                <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+                  <Card className="border-white/10 bg-white/5 backdrop-blur-2xl">
+                    <CardHeader className="p-8"><CardTitle>Keyword Intelligence</CardTitle></CardHeader>
+                    <CardContent className="p-8 pt-0 space-y-10">
+                      <div>
+                        <div className="flex items-center gap-2 mb-5">
+                          <CheckCircle className="h-5 w-5 text-emerald-400" />
+                          <span className="text-xs uppercase font-black tracking-widest text-muted-foreground">DETECTED NEURAL MATCHES</span>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {matchedKeywords.map((tag, i) => (
+                            <Badge key={i} className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 px-3 py-1.5 rounded-xl font-bold">#{tag}</Badge>
+                          ))}
                         </div>
                       </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                      <div>
+                        <div className="flex items-center gap-2 mb-5">
+                          <AlertCircle className="h-5 w-5 text-orange-400" />
+                          <span className="text-xs uppercase font-black tracking-widest text-muted-foreground">RECOMMENDED SYNERGIES</span>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {missingKeywords.map((tag, i) => (
+                            <Badge key={i} className="bg-orange-500/10 text-orange-400 border-orange-500/20 px-3 py-1.5 rounded-xl font-bold">+{tag}</Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
 
-            {/* 8. HIGH-CONVERSION CTA SECTION */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="shadow-lg hover:shadow-xl transition-shadow border-2 border-primary/20 hover:border-primary/40">
-                <CardContent className="p-6 text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-primary to-purple-500 rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <Sparkles className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="font-bold text-lg mb-2">Build ATS-Optimized Resume</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Use our AI Resume Builder with ATS templates
-                  </p>
-                  <Button className="w-full gap-2" onClick={() => window.location.href = '/resume'}>
-                    Start Building
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </CardContent>
-              </Card>
+                {/* Compatibility Checks */}
+                <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
+                  <Card className="border-white/10 bg-white/5 backdrop-blur-2xl">
+                    <CardHeader className="p-8"><CardTitle>Structural Protocol Check</CardTitle></CardHeader>
+                    <CardContent className="p-8 pt-0 space-y-4">
+                      {atsCompatibilityChecks.map((check, i) => (
+                        <div key={i} className={`flex items-center justify-between p-4 rounded-2xl border ${check.passed ? "bg-emerald-500/5 border-emerald-500/20" : "bg-red-500/5 border-red-500/20"}`}>
+                           <span className="text-sm font-bold">{check.check}</span>
+                           {check.passed ? <Check className="h-5 w-5 text-emerald-400" /> : <X className="h-5 w-5 text-red-400" />}
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
+                </motion.div>
+                
+                {/* Improvement Roadmap */}
+                <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="lg:col-span-2">
+                  <Card className="border-white/10 bg-white/5 backdrop-blur-2xl overflow-hidden relative">
+                    <div className="absolute top-0 right-0 p-8 w-64 h-64 bg-blue-600/10 blur-[60px] rounded-full" />
+                    <CardHeader className="p-8 relative z-10">
+                      <CardTitle className="flex items-center gap-3">
+                         <Rocket className="h-6 w-6 text-blue-400" />
+                         Optimization Roadmap
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-10 pt-0 relative z-10">
+                       <div className="relative space-y-8 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-blue-500/40 before:via-blue-500/10 before:to-transparent">
+                          {improvementPriorities.map((item, i) => (
+                            <div key={i} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                               <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white/10 bg-black group-[.is-active]:bg-blue-600 group-[.is-active]:text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
+                                  {item.priority}
+                               </div>
+                               <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl hover:border-blue-500/50 transition-colors">
+                                  <div className="flex items-center justify-between mb-2">
+                                     <h3 className="font-black text-white">{item.title}</h3>
+                                     <Badge className={getImpactColor(item.impact)}>{item.impact}</Badge>
+                                  </div>
+                                  <p className="text-sm text-muted-foreground italic">&ldquo;{item.description}&rdquo;</p>
+                               </div>
+                            </div>
+                          ))}
+                       </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              </div>
 
-              <Card className="shadow-lg hover:shadow-xl transition-shadow border-2 border-green-500/20 hover:border-green-500/40">
-                <CardContent className="p-6 text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <Zap className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="font-bold text-lg mb-2">Fix Resume with AI</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Get personalized fixes powered by TechieHelp AI
-                  </p>
-                  <Button variant="outline" className="w-full gap-2 border-green-500/30 hover:bg-green-500/10">
-                    Get AI Fixes
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </CardContent>
-              </Card>
-
-              <Card className="shadow-lg hover:shadow-xl transition-shadow border-2 border-blue-500/20 hover:border-blue-500/40">
-                <CardContent className="p-6 text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <Upload className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="font-bold text-lg mb-2">Re-analyze After Changes</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Upload updated resume to track improvements
-                  </p>
-                  <Button variant="outline" className="w-full gap-2 border-blue-500/30 hover:bg-blue-500/10" onClick={() => window.location.reload()}>
-                    Upload Again
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </CardContent>
-              </Card>
+              {/* Branding Footer */}
+              <div className="mt-20 text-center">
+                 <div className="inline-flex items-center gap-4 px-8 py-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-xl">
+                    <Image src="/skill.png" alt="Logo" width={24} height={24} />
+                    <span className="text-xs uppercase tracking-[0.3em] font-black text-muted-foreground">Powered by TechieHelp <span className="text-emerald-400">Intelligent Analysis</span> Core</span>
+                 </div>
+              </div>
             </div>
-
-            {/* TechieHelp Branding Footer */}
-            <Card className="bg-gradient-to-br from-primary/5 to-secondary/5 border-primary/20 shadow-lg">
-              <CardContent className="p-8 text-center">
-                <div className="flex items-center justify-center gap-3 mb-4">
-                  <Image
-                    src="/skill.png"
-                    alt="TechieHelp Logo"
-                    width={48}
-                    height={48}
-                    className="h-12 w-auto"
-                  />
-                  <div className="text-left">
-                    <h3 className="text-xl font-bold">Powered by TechieHelp Institute of AI</h3>
-                    <p className="text-sm text-muted-foreground">Building Careers with AI, Innovation & Industry Readiness</p>
-                  </div>
-                </div>
-
-                <div className="mt-6 p-4 bg-background/50 rounded-lg border border-border max-w-3xl mx-auto">
-                  <p className="text-sm text-muted-foreground">
-                    <strong className="text-foreground">Disclaimer:</strong> This ATS score is generated using AI-based analysis aligned with industry hiring systems. 
-                    Final recruiter decisions may vary based on specific company requirements and job descriptions. 
-                    Use this tool as a guide to optimize your resume for better ATS compatibility.
-                  </p>
-                </div>
-
-                <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm text-muted-foreground">
-                  <div className="flex items-center gap-2">
-                    <Shield className="h-4 w-4 text-primary" />
-                    <span>Secure & Private</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Zap className="h-4 w-4 text-primary" />
-                    <span>Instant Analysis</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Award className="h-4 w-4 text-primary" />
-                    <span>Industry-Grade</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           </motion.div>
         )}
-      </div>
+      </AnimatePresence>
     </div>
   );
 }

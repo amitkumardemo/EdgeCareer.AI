@@ -13,8 +13,6 @@ import { Badge } from "@/components/ui/badge";
 import { resumeSchema } from "@/app/lib/schema";
 import { EntryForm } from "./entry-form";
 import ResumePreview from "./resume-preview";
-import ModeSelector from "./mode-selector";
-import AIModeSection from "./ai-mode-section";
 import useFetch from "@/hooks/use-fetch";
 import { saveResume, improveWithAI } from "@/actions/resume";
 import { trackResumeDownload, shareResume } from "@/actions/resume-analytics";
@@ -129,64 +127,9 @@ export default function DualModeResumeBuilder({ initialContent, initialName, res
   }, [formValues, mode]);
 
   const handleModeChange = (newMode) => {
-    if (mode === newMode) return;
-    setMode(newMode);
-    toast.success(`Switched to ${newMode === 'manual' ? 'Manual' : 'AI'} mode`);
+    setMode("manual");
   };
 
-  const handleAIGenerate = async (jobDetails, resumeInput) => {
-    setIsGenerating(true);
-
-    try {
-      const apiFormData = new FormData();
-      apiFormData.append("companyName", jobDetails.companyName);
-      apiFormData.append("jobRole", jobDetails.jobRole);
-      apiFormData.append("jobDescription", jobDetails.jobDescription);
-
-      if (resumeInput.file) {
-        apiFormData.append("resumeFile", resumeInput.file);
-      } else {
-        apiFormData.append("resumeText", resumeInput.text);
-      }
-
-      const response = await fetch("/api/ai-resume-generator", {
-        method: "POST",
-        body: apiFormData,
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to generate resume");
-      }
-
-      // Convert AI generated data to form format
-      const generatedResume = data.resume;
-      setAiGeneratedData(generatedResume);
-
-      // Auto-fill the form with AI data
-      reset({
-        contactInfo: generatedResume.contactInfo || {},
-        summary: generatedResume.summary || "",
-        skills: generatedResume.skills || "",
-        experience: generatedResume.experience || [],
-        education: generatedResume.education || [],
-        projects: generatedResume.projects || [],
-        achievements: generatedResume.achievements || "",
-        positions: generatedResume.positions || "",
-        whyIFit: generatedResume.whyIFit || "",
-      });
-
-      toast.success(`Resume generated with ${generatedResume.atsScore}% ATS compatibility!`);
-
-      // Switch to manual mode to show the filled form
-      setMode("manual");
-    } catch (error) {
-      toast.error(error.message || "Failed to generate resume. Please try again.");
-    } finally {
-      setIsGenerating(false);
-    }
-  };
 
   const handleImproveWithAI = async (type, currentContent) => {
     if (!currentContent?.trim()) {
@@ -424,8 +367,6 @@ export default function DualModeResumeBuilder({ initialContent, initialName, res
         </div>
       </div>
 
-      {/* Mode Selector */}
-      <ModeSelector mode={mode} onModeChange={handleModeChange} />
 
       {/* AI Generated Data Info */}
       {aiGeneratedData && mode === "manual" && (
@@ -470,17 +411,11 @@ export default function DualModeResumeBuilder({ initialContent, initialName, res
       <ResumeLimitInfo />
 
       {/* Content Based on Mode */}
-      {mode === "ai" ? (
-        <AIModeSection
-          onGenerate={handleAIGenerate}
-          isGenerating={isGenerating}
-        />
-      ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left: Manual Form */}
           <div className="order-2 lg:order-1">
             <div className="h-[calc(100vh-400px)] overflow-y-auto pr-2">
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 pr-4">
+              <form suppressHydrationWarning onSubmit={handleSubmit(onSubmit)} className="space-y-6 pr-4">
                 {/* Contact Information */}
                 <Card>
                   <CardHeader>
@@ -819,9 +754,8 @@ export default function DualModeResumeBuilder({ initialContent, initialName, res
                 </CardContent>
               </Card>
             </div>
-          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

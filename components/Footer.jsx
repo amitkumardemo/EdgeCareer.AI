@@ -6,9 +6,9 @@ export default function Footer() {
     <footer className="bg-muted/50 border-t border-gray-200 dark:border-gray-800 pt-16 pb-8">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          {/* FEATURES */}
+          {/* CAREER TOOLS */}
           <div>
-            <h3 className="font-bold text-lg mb-4 text-foreground">Features</h3>
+            <h3 className="font-bold text-lg mb-4 text-foreground">Career Tools</h3>
             <ul className="space-y-3">
               <li>
                 <Link
@@ -16,6 +16,14 @@ export default function Footer() {
                   className="text-muted-foreground hover:text-primary transition-colors text-sm"
                 >
                   AI Resume Builder
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/ai-cover-letter"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  AI Cover Letter
                 </Link>
               </li>
               <li>
@@ -28,6 +36,21 @@ export default function Footer() {
               </li>
               <li>
                 <Link
+                  href="/career-branding-lab"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  Career Branding Lab
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* GROWTH & LEARNING */}
+          <div>
+            <h3 className="font-bold text-lg mb-4 text-foreground">Growth & Learning</h3>
+            <ul className="space-y-3">
+              <li>
+                <Link
                   href="/interview"
                   className="text-muted-foreground hover:text-primary transition-colors text-sm"
                 >
@@ -36,57 +59,65 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/career-branding-lab"
+                  href="/roadmap"
                   className="text-muted-foreground hover:text-primary transition-colors text-sm"
                 >
-                  Career Branding Lab
+                  Roadmap Generator
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/internships"
+                  href="/course-recommendation"
                   className="text-muted-foreground hover:text-primary transition-colors text-sm"
                 >
-                  Internship Programs
+                  Course Recommendation
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/dashboard"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  Industry Insights
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* PLATFORM */}
+          {/* JOB SEARCH */}
           <div>
-            <h3 className="font-bold text-lg mb-4 text-foreground">Platform</h3>
+            <h3 className="font-bold text-lg mb-4 text-foreground">Job Search</h3>
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/dashboard"
+                  href="/internships"
                   className="text-muted-foreground hover:text-primary transition-colors text-sm"
                 >
-                  Dashboard
+                  Find Internships
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/resume"
+                  href="/internship"
                   className="text-muted-foreground hover:text-primary transition-colors text-sm"
                 >
-                  Resume History
+                  Internship Portal
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/dashboard"
+                  href="/latest-jobs"
                   className="text-muted-foreground hover:text-primary transition-colors text-sm"
                 >
-                  Analytics
+                  Latest Jobs
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/dashboard"
+                  href="/job-matches"
                   className="text-muted-foreground hover:text-primary transition-colors text-sm"
                 >
-                  AI Tools
+                  Job Matches
                 </Link>
               </li>
             </ul>
@@ -101,7 +132,7 @@ export default function Footer() {
                   href="/about"
                   className="text-muted-foreground hover:text-primary transition-colors text-sm"
                 >
-                  About TechieHelp Institute of AI
+                  About TechieHelp
                 </Link>
               </li>
               <li>
@@ -126,45 +157,6 @@ export default function Footer() {
                   className="text-muted-foreground hover:text-primary transition-colors text-sm"
                 >
                   Terms & Conditions
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* RESOURCES */}
-          <div>
-            <h3 className="font-bold text-lg mb-4 text-foreground">Resources</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link
-                  href="/career-guidance"
-                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
-                >
-                  Career Guidance
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/placement-preparation"
-                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
-                >
-                  Placement Preparation
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/interview-tips"
-                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
-                >
-                  Interview Tips
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/resume-optimization"
-                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
-                >
-                  Resume Optimization
                 </Link>
               </li>
             </ul>

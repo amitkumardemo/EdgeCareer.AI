@@ -4,11 +4,12 @@ import db from "@/lib/prisma";
 import { getFirebaseUser } from "@/lib/auth-utils";
 import { checkUser } from "@/lib/checkUser";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { generateAIInsights } from "./dashboard";
 
 export async function updateUser(data) {
   const firebaseUser = await getFirebaseUser();
-  if (!firebaseUser) throw new Error("Unauthorized");
+  if (!firebaseUser) redirect("/sign-in");
   const userId = firebaseUser.uid;
 
   let user = await db.user.findUnique({
@@ -73,7 +74,7 @@ export async function updateUser(data) {
 
 export async function getUserOnboardingStatus() {
   const firebaseUser = await getFirebaseUser();
-  if (!firebaseUser) throw new Error("Unauthorized");
+  if (!firebaseUser) redirect("/sign-in");
   const userId = firebaseUser.uid;
 
   try {
@@ -103,30 +104,14 @@ export async function getUserOnboardingStatus() {
 
 export async function getUserData() {
   const firebaseUser = await getFirebaseUser();
-  if (!firebaseUser) throw new Error("Unauthorized");
+  if (!firebaseUser) redirect("/sign-in");
   const userId = firebaseUser.uid;
 
   try {
     let user = await db.user.findUnique({
       where: { uid: userId },
-      select: {
-        name: true,
-        industry: true,
-        experience: true,
-        bio: true,
-        skills: true,
-        collegeId: true,
-        college: { select: { name: true } },
-        collegeName: true,
-        department: true,
-        branch: true,
-        year: true,
-        resumeLink: true,
-        cvLink: true,
-        portfolioLink: true,
-        githubUsername: true,
-        leetcodeLink: true,
-        linkedinLink: true,
+      include: {
+        college: true,
       },
     });
 
