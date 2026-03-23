@@ -37,7 +37,8 @@ import {
   Globe,
   Github,
   Linkedin,
-  Code
+  Code,
+  IdCard
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import {
@@ -140,7 +141,6 @@ const DashboardView = ({
         <Badge variant="outline">Last updated: {lastUpdatedDate}</Badge>
       </div>
 
-      {/* Welcome Section */}
       <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950">
         <CardContent className="pt-6">
           <div className="flex items-center justify-between">
@@ -158,6 +158,12 @@ const DashboardView = ({
                   <p className="text-sm text-gray-500 dark:text-gray-400">
                     {userData.department} • {userData.experience || 0} years exp • {safeJSONParse(userData.skills, []).length} skills
                   </p>
+                  {userData.techieId && (
+                    <div className="mt-2 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-600/20 border border-indigo-500/40 w-fit">
+                      <IdCard className="h-3.5 w-3.5 text-indigo-400" />
+                      <span className="text-xs font-bold tracking-widest text-indigo-300 uppercase">Student ID: {userData.techieId}</span>
+                    </div>
+                  )}
                 </div>
             </div>
           </div>

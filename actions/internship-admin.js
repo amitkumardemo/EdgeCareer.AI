@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 import { getFirebaseUser } from "@/lib/auth-utils";
 import { revalidatePath } from "next/cache";
+import { sendNotificationEmail, sendBulkNotificationEmails } from "@/lib/email-service";
 
 export async function requireAdmin() {
   const firebaseUser = await getFirebaseUser();
@@ -147,6 +148,17 @@ export async function reviewApplication(applicationId, status, notes = "") {
       create: { applicationId, validUntil: application.batch.endDate },
       update: {},
     });
+
+    try {
+      if (application.user && application.user.email) {
+        await sendNotificationEmail({
+          to: application.user.email,
+          subject: "🎉 Congratulations! You are Selected",
+          username: application.user.name,
+          message: `We're thrilled to inform you that you have been officially selected for the <strong>${application.batch.program.title}</strong> internship program.<br/><br/>Your Offer Letter is now available.`,
+        });
+      }
+    } catch (e) {}
   }
 
   revalidatePath("/internship/admin/applications");
@@ -224,6 +236,22 @@ export async function markAttendance(applicationId, date, present) {
     where: { applicationId },
     data: { attendancePct: total ? Math.round((presentCount / total) * 100) : 0 },
   });
+
+  try {
+    const appInfo = await prisma.internshipApplication.findUnique({
+      where: { id: applicationId },
+      include: { user: true },
+    });
+    if (appInfo?.user?.email) {
+      await sendNotificationEmail({
+        to: appInfo.user.email,
+        subject: "📅 Attendance Marked",
+        username: appInfo.user.name,
+        message: `Your attendance for <strong>${new Date(date).toLocaleDateString()}</strong> has been marked as <strong>${present ? "Present" : "Absent"}</strong>.`,
+      });
+    }
+  } catch (e) {}
+
   return record;
 }
 
@@ -252,6 +280,23 @@ export async function createAnnouncement(data) {
       createdBy: admin.id,
     },
   });
+
+  if (ann.batchId) {
+    try {
+      const students = await prisma.internshipApplication.findMany({
+        where: { batchId: ann.batchId, status: "SELECTED" },
+        include: { user: { select: { email: true, name: true } } }
+      });
+      const usersArray = students.map((s) => s.user).filter((u) => u && u.email);
+      await sendBulkNotificationEmails(
+        usersArray,
+        "📢 New Announcement Posted",
+        () => `A new update has been posted in your batch: <strong>${data.title}</strong><br/><br/>${data.body}`,
+        "View Announcement"
+      );
+    } catch (e) {}
+  }
+
   revalidatePath("/internship/admin/announcements");
   return ann;
 }
@@ -278,6 +323,21 @@ export async function markInternshipComplete(applicationId) {
     create: { progressId: progress.id },
     update: {},
   });
+
+  try {
+    const progressWithUser = await prisma.internProgress.findUnique({
+      where: { applicationId },
+      include: { application: { include: { user: true } } },
+    });
+    if (progressWithUser?.application?.user?.email) {
+      await sendNotificationEmail({
+        to: progressWithUser.application.user.email,
+        subject: "🎉 Certificate Issued",
+        username: progressWithUser.application.user.name,
+        message: "Congratulations on successfully completing your internship! Your official certificate of completion is now available for download.",
+      });
+    }
+  } catch (e) {}
 
   revalidatePath("/internship/admin/certificates");
   return progress;
@@ -327,6 +387,29 @@ export async function markAttendanceWithStatus(applicationId, date, status) {
       data: { attendancePct: total ? Math.round((presentCount / total) * 100) : 0 },
     });
   }
+
+  // Send attendance email notification
+  try {
+    const appInfo = await prisma.internshipApplication.findUnique({
+      where: { id: applicationId },
+      include: { user: { select: { email: true, name: true } } },
+    });
+    if (appInfo?.user?.email) {
+      const statusLabel = {
+        PRESENT: "✅ Present",
+        ABSENT: "❌ Absent",
+        LATE: "⏰ Late",
+        LEAVE: "🌴 On Leave",
+      }[status] || status;
+
+      await sendNotificationEmail({
+        to: appInfo.user.email,
+        subject: "📅 Attendance Marked - TechieHelp",
+        username: appInfo.user.name,
+        message: `Your attendance for <strong>${new Date(date).toLocaleDateString("en-IN", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</strong> has been recorded as <strong>${statusLabel}</strong>.<br/><br/>Log in to your dashboard to view your full attendance history.`,
+      });
+    }
+  } catch (e) {}
 
   revalidatePath("/internship/admin/attendance");
   return record;

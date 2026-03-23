@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 import { getFirebaseUser } from "@/lib/auth-utils";
 import { revalidatePath } from "next/cache";
+import { sendNotificationEmail, sendBulkNotificationEmails } from "@/lib/email-service";
 
 async function requireAdmin() {
   const firebaseUser = await getFirebaseUser();
@@ -148,6 +149,21 @@ export async function createTaskExtended(data) {
   } catch {
     // Non-critical – ignore announcement failures
   }
+
+  try {
+    const apps = await prisma.internshipApplication.findMany({
+      where: { batchId: data.batchId, status: "SELECTED" },
+      include: { user: { select: { email: true, name: true } } },
+    });
+    
+    const usersArray = apps.map(app => app.user).filter(u => u && u.email);
+    await sendBulkNotificationEmails(
+      usersArray,
+      "📌 New Task Assigned - TechieHelp",
+      (user) => `You have been assigned a new task: <strong>${data.title}</strong>.<br/><br/>Please review the instructions and complete it before the deadline: <strong>${new Date(data.dueDate).toLocaleDateString("en-IN")}</strong>.`,
+      "View Task"
+    );
+  } catch (e) {}
 
   revalidatePath("/internship/admin/tasks");
   return task;
@@ -298,11 +314,12 @@ export async function evaluateTaskSubmission(submissionId, status, score, feedba
     include: {
       application: {
         include: {
+          user: true,
           progress: true,
           attendance: { orderBy: { date: "desc" }, take: 1 },
         },
       },
-      task: { select: { batchId: true } },
+      task: { select: { batchId: true, title: true } },
     },
   });
 
@@ -374,6 +391,17 @@ export async function evaluateTaskSubmission(submissionId, status, score, feedba
       // Non-critical
     }
   }
+
+  try {
+    if (sub.application?.user?.email) {
+      await sendNotificationEmail({
+        to: sub.application.user.email,
+        subject: "📝 Task Submission Evaluated",
+        username: sub.application.user.name,
+        message: `Your recent submission for <strong>${sub.task?.title || "a task"}</strong> has been evaluated.<br/><br/><strong>Status:</strong> ${status}<br/><strong>Score:</strong> ${score || "N/A"} / ${sub.task?.maxScore || 100}<br/><strong>Feedback:</strong> ${feedback || "No additional feedback."}<br/><br/>Please log in to your dashboard to view the details.`,
+      });
+    }
+  } catch(e) {}
 
   revalidatePath("/internship/admin/tasks");
   return sub;
