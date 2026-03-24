@@ -1,9 +1,10 @@
 import { getMyApplications } from "@/actions/internship-student";
-import { Download, FileText } from "lucide-react";
+import { Download, FileText, Linkedin } from "lucide-react";
 
 export default async function OfferLetterPage({ searchParams }) {
+  const awaitedParams = await searchParams;
   const apps = await getMyApplications();
-  const appId = searchParams?.appId;
+  const appId = awaitedParams?.appId;
   
   // If no specific app ID, find the first selected one with an offer letter
   const app = appId 
@@ -66,11 +67,30 @@ export default async function OfferLetterPage({ searchParams }) {
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+        <div className="flex flex-col gap-3 justify-center items-center mt-6">
           {offer.pdfUrl ? (
-            <a href={offer.pdfUrl} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 text-sm font-semibold px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-all">
-              <Download className="h-4 w-4" /> Download Official PDF
-            </a>
+            <>
+              <a 
+                href={offer.pdfUrl} 
+                download={`TechieHelp-OfferLetter-${app.user?.name ? app.user.name.replace(/\s+/g, "_") : "Student"}.pdf`}
+                target="_blank" 
+                rel="noreferrer" 
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 text-sm font-semibold px-8 py-3.5 bg-black text-white rounded-xl hover:bg-gray-900 transition-all shadow-lg hover:shadow-xl border border-white/10"
+              >
+                <Download className="h-4 w-4" /> Download Offer Letter
+              </a>
+              <a 
+                href={`https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(`I am thrilled to announce my selection as a ${app.batch?.program?.title || "Intern"} at TechieHelp Institute of AI! 🚀\n\nLooking forward to this amazing opportunity to learn, innovate, and grow my career.\n\n#TechieHelp #Internship #AI #CareerGrowth #TechieHelpInstituteofAI`)}`}
+                target="_blank" 
+                rel="noreferrer" 
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 text-sm font-semibold px-8 py-3.5 bg-[#0A66C2] text-white rounded-xl hover:bg-[#004182] transition-all shadow-lg hover:shadow-xl mt-2"
+              >
+                <Linkedin className="h-4 w-4" /> Share on LinkedIn
+              </a>
+              <p className="text-xs text-gray-500 mt-2 text-center max-w-sm">
+                Don't forget to attach your downloaded Offer Letter PDF when posting on LinkedIn!
+              </p>
+            </>
           ) : (
             <button disabled className="inline-flex items-center justify-center gap-2 text-sm font-semibold px-6 py-3 bg-white/10 text-gray-500 rounded-xl cursor-not-allowed">
               PDF Generating...

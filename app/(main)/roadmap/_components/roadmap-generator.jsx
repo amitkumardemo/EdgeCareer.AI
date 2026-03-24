@@ -58,7 +58,7 @@ export default function RoadmapGenerator() {
            </div>
         </div>
         
-        <h3 className="text-3xl font-black mb-4 tracking-tighter uppercase">Generating your personalized roadmap...</h3>
+        <h3 className="text-2xl font-bold mb-4 tracking-tight uppercase">Generating your personalized roadmap...</h3>
         <p className="text-muted-foreground max-w-md mx-auto font-medium leading-relaxed">
            This may take a moment as we craft a tailored learning path just for you!
         </p>
@@ -92,7 +92,7 @@ export default function RoadmapGenerator() {
                         <Cpu className="h-6 w-6 text-blue-400" />
                      </div>
                   </div>
-                  <CardTitle className="text-4xl font-black tracking-tighter mb-2">Create Your Personalized Roadmap</CardTitle>
+                  <CardTitle className="text-2xl font-bold tracking-tight mb-2">Create Your Personalized Roadmap</CardTitle>
                </CardHeader>
 
                <CardContent className="p-10 lg:p-14 space-y-10">
@@ -107,7 +107,7 @@ export default function RoadmapGenerator() {
                              value={currentSkills}
                              onChange={(e) => setCurrentSkills(e.target.value)}
                              placeholder="List your current skills and experience (e.g., Basic JavaScript, React basics)"
-                             className="bg-white/5 border-white/10 rounded-[24px] p-6 focus:border-blue-500/50 focus:ring-blue-500/20 text-white min-h-[160px] text-lg font-medium transition-all"
+                             className="bg-white/5 border-white/10 rounded-[20px] p-4 focus:border-blue-500/50 focus:ring-blue-500/20 text-white min-h-[140px] text-base font-medium transition-all"
                              rows={4}
                            />
                         </div>
@@ -123,19 +123,19 @@ export default function RoadmapGenerator() {
                              value={targetRole}
                              onChange={(e) => setTargetRole(e.target.value)}
                              placeholder="e.g., Senior Frontend Developer"
-                             className="h-16 bg-white/5 border-white/10 rounded-[20px] px-6 focus:border-blue-500/50 focus:ring-blue-500/20 text-white text-lg font-black transition-all"
+                             className="h-14 bg-white/5 border-white/10 rounded-xl px-4 focus:border-blue-500/50 focus:ring-blue-500/20 text-white text-base font-bold transition-all"
                            />
                         </div>
 
-                        <div className="space-y-3">
+                        <div className="space-y-3 relative z-50">
                            <Label htmlFor="timeframe" className="text-xs uppercase tracking-widest font-black text-muted-foreground flex items-center gap-2">
                              Time Frame
                            </Label>
-                           <Select value={timeFrame} onValueChange={setTimeFrame}>
-                             <SelectTrigger id="timeframe" className="h-16 bg-white/5 border-white/10 rounded-[20px] px-6 focus:border-blue-500/50 focus:ring-blue-500/20 text-white font-bold text-lg">
+                           <Select value={timeFrame} defaultValue={timeFrame} onValueChange={(val) => setTimeFrame(val)}>
+                             <SelectTrigger id="timeframe" className="h-14 bg-white/5 border-white/10 rounded-xl px-4 focus:border-blue-500/50 focus:ring-blue-500/20 text-white font-bold text-base">
                                <SelectValue placeholder="Select time frame" />
                              </SelectTrigger>
-                             <SelectContent className="bg-zinc-950 border-white/10 rounded-2xl">
+                             <SelectContent className="bg-zinc-950 border-white/10 rounded-2xl z-[100]">
                                <SelectItem value="3 months" className="focus:bg-blue-500/10 focus:text-blue-400 py-3 font-bold">3 months</SelectItem>
                                <SelectItem value="6 months" className="focus:bg-blue-500/10 focus:text-blue-400 py-3 font-bold">6 months</SelectItem>
                                <SelectItem value="12 months" className="focus:bg-blue-500/10 focus:text-blue-400 py-3 font-bold">12 months</SelectItem>
@@ -148,7 +148,7 @@ export default function RoadmapGenerator() {
                   <Button 
                     onClick={handleGenerate} 
                     disabled={generating} 
-                    className="w-full h-20 rounded-[32px] bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-500 hover:to-blue-300 text-white text-xl font-black transition-all shadow-[0_20px_40px_-15px_rgba(59,130,246,0.5)] group"
+                    className="w-full h-16 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-500 hover:to-blue-300 text-white text-lg font-bold transition-all shadow-[0_20px_40px_-15px_rgba(59,130,246,0.5)] group"
                   >
                     <Sparkles className="mr-3 h-6 w-6 group-hover:rotate-12 transition-transform" />
                     {BUTTONS_MENUS.GENERATE_ROADMAP || "Generate Roadmap"}
@@ -168,7 +168,7 @@ export default function RoadmapGenerator() {
                <Button 
                  onClick={startNew} 
                  variant="outline" 
-                 className="h-16 px-12 rounded-[24px] border-white/10 bg-white/5 hover:bg-white/10 text-white text-lg font-black uppercase tracking-widest flex items-center gap-3"
+                 className="h-14 px-8 rounded-full border-white/10 bg-white/5 hover:bg-white/10 text-white text-base font-bold uppercase tracking-widest flex items-center gap-2"
                >
                  <RefreshCw className="h-5 w-5" />
                  Generate New Roadmap

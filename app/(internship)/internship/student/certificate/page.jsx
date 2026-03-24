@@ -30,9 +30,17 @@ export default async function CertificatePage() {
                     <p className="text-[10px] text-gray-500">Issued: {new Date(cert.issuedAt).toLocaleDateString("en-IN")}</p>
                   </div>
                 </div>
-                <button className="flex items-center gap-2 text-sm px-4 py-2 bg-amber-400/15 text-amber-400 border border-amber-400/25 rounded-lg hover:bg-amber-400/25 transition-all self-start sm:self-center">
-                  <Download className="h-4 w-4" /> Download
-                </button>
+                {cert.pdfUrl ? (
+                  <a href={cert.pdfUrl} target="_blank" rel="noreferrer" download>
+                    <button className="flex items-center gap-2 text-sm px-4 py-2 bg-amber-400/15 text-amber-400 border border-amber-400/25 rounded-lg hover:bg-amber-400/25 transition-all self-start sm:self-center">
+                      <Download className="h-4 w-4" /> Download
+                    </button>
+                  </a>
+                ) : (
+                  <button disabled className="flex items-center gap-2 text-sm px-4 py-2 bg-white/5 text-gray-400 border border-white/10 rounded-lg opacity-50 cursor-not-allowed self-start sm:self-center">
+                    Generating...
+                  </button>
+                )}
               </div>
             );
           })}

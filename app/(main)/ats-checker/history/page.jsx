@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getUserATSAnalyses } from "@/actions/ats";
 import ATSHistoryView from "../_components/ats-history-view";
 import ATSNav from "../_components/ats-nav";

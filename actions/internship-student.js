@@ -107,6 +107,7 @@ export async function getMyApplications() {
           program: { select: { title: true, domain: true, duration: true } },
         },
       },
+      user: { select: { name: true } },
       progress: { include: { certificate: true } },
       offerLetter: true,
     },

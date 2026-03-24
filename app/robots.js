@@ -1,11 +1,11 @@
 export default function robots() {
-    const baseUrl = "https://techiehelpinstitute.com"; // Replace with actual domain
+    const baseUrl = "https://techiehelpinstituteofai.in"; 
 
     return {
         rules: {
             userAgent: "*",
             allow: "/",
-            disallow: ["/api/", "/dashboard/private"], // Adjust private routes as needed
+            disallow: ["/api/", "/dashboard/", "/admin/", "/internship/admin/"],
         },
         sitemap: `${baseUrl}/sitemap.xml`,
     };

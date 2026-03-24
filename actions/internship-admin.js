@@ -121,7 +121,30 @@ export async function getAllApplications(filters = {}) {
         } 
       },
       batch: { include: { program: { select: { title: true } } } },
-      progress: true,
+      progress: { include: { certificate: true } },
+      offerLetter: true,
+    },
+    orderBy: { appliedAt: "desc" },
+  });
+}
+
+// Hyper-Optimized dedicated query solely filtering payload data necessary for the Certificate view, bypassing heavy sub-selects.
+export async function getCertificatePipelineApps() {
+  await requireAdmin();
+  return prisma.internshipApplication.findMany({
+    where: { status: "SELECTED" },
+    select: {
+      id: true,
+      user: { select: { name: true } },
+      batch: { select: { name: true } },
+      progress: {
+        select: {
+          progressPct: true,
+          completed: true,
+          completedAt: true,
+          certificate: { select: { pdfUrl: true } }
+        }
+      }
     },
     orderBy: { appliedAt: "desc" },
   });
@@ -156,6 +179,31 @@ export async function reviewApplication(applicationId, status, notes = "") {
           subject: "🎉 Congratulations! You are Selected",
           username: application.user.name,
           message: `We're thrilled to inform you that you have been officially selected for the <strong>${application.batch.program.title}</strong> internship program.<br/><br/>Your Offer Letter is now available.`,
+        });
+      }
+    } catch (e) {}
+  } else if (status === "WAITLISTED") {
+    try {
+      if (application.user && application.user.email) {
+        await sendNotificationEmail({
+          to: application.user.email,
+          subject: "⏳ Application Waitlisted - TechieHelp",
+          username: application.user.name,
+          message: `Thank you for applying to the <strong>${application.batch.program.title}</strong> program. Your application has been placed on the waitlist.<br/><br/>We will notify you immediately if a spot opens up in this or future batches.`,
+          buttonText: "View Dashboard"
+        });
+      }
+    } catch (e) {}
+  } else if (status === "REJECTED") {
+    try {
+      if (application.user && application.user.email) {
+        await sendNotificationEmail({
+          to: application.user.email,
+          subject: "📝 Application Status Update - TechieHelp",
+          username: application.user.name,
+          message: `Thank you for your interest in the <strong>${application.batch.program.title}</strong> program. After careful consideration, we are unable to move forward with your application at this time.<br/><br/>We encourage you to apply again for future opportunities. Keep learning and growing!`,
+          buttonText: "Explore Courses",
+          buttonLink: "https://techiehelpinstituteofai.in"
         });
       }
     } catch (e) {}

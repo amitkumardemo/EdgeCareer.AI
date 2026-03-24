@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
+import { useAuth } from "@/context/auth-context";
 import {
   FileText, CheckCircle2, BookOpen, Award, Building2,
   Users, CalendarDays, Clock, BarChart3, GraduationCap,
@@ -193,6 +194,8 @@ export default function AdminDashboardPage() {
   const [reviewing, setReviewing] = useState(null);
   const [showAnnounce, setShowAnnounce] = useState(false);
   const [batches, setBatches] = useState([]);
+  
+  const { user } = useAuth();
 
   const loadData = useCallback(async () => {
     // Keep internal loading state separate if we're refreshing
@@ -244,7 +247,9 @@ export default function AdminDashboardPage() {
       {/* 1. Dashboard Overview Cards */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Admin Dashboard</h1>
+          <h1 className="text-2xl font-bold text-white tracking-tight">
+            {user?.email === "hr@techiehelp.in" ? "Welcome Back Hr Mrs. Ananaya Sharma Ji" : "Admin Dashboard"}
+          </h1>
           <p className="text-gray-400 text-sm">TechieHelp – Institute of AI Control Panel</p>
         </div>
         <div className="flex items-center gap-2">

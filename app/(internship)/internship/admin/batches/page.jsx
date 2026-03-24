@@ -160,7 +160,10 @@ export default function BatchesPage() {
                 <span className="flex items-center gap-1"><BookOpen className="h-3 w-3" /> {batch._count.tasks} tasks</span>
               </div>
               <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/5">
-                <span className="text-[10px] text-gray-600 flex items-center gap-1"><Calendar className="h-3 w-3" /> {new Date(batch.startDate).toLocaleDateString("en-IN")}</span>
+                <span className="text-[10px] text-gray-600 flex items-center gap-1">
+                  <Calendar className="h-3 w-3" /> 
+                  {new Date(batch.startDate).toLocaleDateString("en-IN", { day: 'numeric', month: 'short', year: 'numeric' })} - {new Date(batch.endDate).toLocaleDateString("en-IN", { day: 'numeric', month: 'short', year: 'numeric' })}
+                </span>
                 <ChevronRight className="h-3.5 w-3.5 text-gray-600 group-hover:text-primary transition-colors" />
               </div>
             </Link>

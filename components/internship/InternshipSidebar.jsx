@@ -13,7 +13,8 @@ import { useAuth } from "@/context/auth-context";
 import { useRouter } from "next/navigation";
 
 const ADMIN_LINKS = [
-  { href: "/internship/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/dashboard", label: "Main Dashboard", icon: LayoutDashboard },
+  { href: "/internship/admin/dashboard", label: "Admin Dashboard", icon: LayoutDashboard },
   { href: "/internship/admin/applications", label: "Applications", icon: FileText },
   { href: "/internship/admin/batches", label: "Batches", icon: BookOpen },
   { href: "/internship/admin/students", label: "Students", icon: Users },

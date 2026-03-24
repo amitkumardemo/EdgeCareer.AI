@@ -9,40 +9,53 @@ import { AuthProvider } from "@/context/auth-context";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "TechieHelp Institute of AI - Your AI-Powered Career Tutor",
-  description:
-    "Build one-page, ATS-optimized resumes using AI with TechieHelp Institute of AI. Your AI-powered career tutor for job search, resume optimization, mock interviews, and career growth.",
-  keywords:
-    "TechieHelp Institute of AI, AI career assistant, job search, resume optimization, mock interviews, industry insights, career growth, AI interview prep, job application tools, ATS resume builder",
+  metadataBase: new URL("https://techiehelpinstituteofai.in"),
+  title: {
+    default: "TechieHelp Institute of AI - Your AI-Powered Career Tutor",
+    template: "%s | TechieHelp Institute of AI"
+  },
+  description: "Build one-page, ATS-optimized resumes using AI with TechieHelp Institute of AI. Your AI-powered career tutor for job search, resume optimization, mock interviews, and career growth.",
+  keywords: ["TechieHelp Institute of AI", "AI career assistant", "job search", "resume optimization", "mock interviews", "industry insights", "career growth", "AI interview prep", "job application tools", "ATS resume builder"],
   authors: [{ name: "TechieHelp Institute of AI" }],
+  creator: "EdgeCareer",
   openGraph: {
     title: "TechieHelp Institute of AI - Your AI-Powered Career Tutor",
-    description:
-      "Build one-page, ATS-optimized resumes using AI with TechieHelp Institute of AI.",
-    url: "https://techiehelpinstitute.com", // Assuming domain, or keep dynamic if unknown, but better to set a placeholder
+    description: "Build one-page, ATS-optimized resumes using AI with TechieHelp Institute of AI.",
+    url: "https://techiehelpinstituteofai.in",
     siteName: "TechieHelp Institute of AI",
     images: [
       {
-        url: "https://techiehelpinstitute.com/og-image.png", // Placeholder for new OG image
+        url: "/og-image.png", // Next.js will auto-resolve this against metadataBase
         width: 1200,
         height: 630,
-        alt: "TechieHelp Institute of AI",
+        alt: "TechieHelp Institute of AI Platform",
       },
     ],
-    locale: "en_US",
+    locale: "en_IN",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "TechieHelp Institute of AI - Your AI-Powered Career Tutor",
-    description:
-      "Build one-page, ATS-optimized resumes using AI with TechieHelp Institute of AI.",
-    images: ["https://techiehelpinstitute.com/og-image.png"], // Placeholder
+    description: "Build one-page, ATS-optimized resumes using AI with TechieHelp Institute of AI.",
+    images: ["/og-image.png"],
+    creator: "@techiehelp",
   },
   icons: {
-    icon: "/icons/favicon.ico",
-    shortcut: "/icons/favicon.ico",
-    apple: "/icons/apple-touch-icon.png",
+    icon: "/skill.png",
+    shortcut: "/skill.png",
+    apple: "/skill.png",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 };
 
@@ -52,28 +65,6 @@ export default function RootLayout({ children }) {
       <head>
         <Script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" strategy="beforeInteractive" />
         <Script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" strategy="beforeInteractive" />
-        <link rel="icon" href="/skill.png" sizes="any" />
-        {/* SEO Meta Tags */}
-        <meta name="description" content={metadata.description} />
-        <meta
-          name="keywords"
-          content="AI career assistant, job search, resume optimization, mock interviews, industry insights, career growth, AI interview prep, job application tools"
-        />
-        <meta name="author" content="EdgeCareer" />
-        <meta name="robots" content="index, follow" />
-
-        {/* Open Graph Meta Tags */}
-        <meta property="og:title" content={metadata.title} />
-        <meta property="og:description" content={metadata.description} />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://edgecareer.com" />
-        <meta property="og:image" content="https://edgecareer.com/og-image.png" />
-
-        {/* Twitter Card Meta Tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={metadata.title} />
-        <meta name="twitter:description" content={metadata.description} />
-        <meta name="twitter:image" content="https://edgecareer.com/og-image.png" />
       </head>
       <body className={`${inter.className}`} >
         <AuthProvider>
@@ -93,15 +84,15 @@ export default function RootLayout({ children }) {
                   "@context": "https://schema.org",
                   "@type": "Organization",
                   name: "TechieHelp Institute of AI",
-                  url: "https://techiehelpinstitute.com",
-                  logo: "https://techiehelpinstitute.com/skill.png",
+                  url: "https://techiehelpinstituteofai.in",
+                  logo: "https://techiehelpinstituteofai.in/skill.png",
                   sameAs: [
-                    "https://twitter.com/techiehelp",
-                    "https://linkedin.com/company/techiehelp",
+                    "https://www.linkedin.com/company/techiehelp",
+                    "https://www.instagram.com/techiehelp_ai"
                   ],
                   contactPoint: {
                     "@type": "ContactPoint",
-                    telephone: "+1-555-555-5555",
+                    telephone: "+91-111-111-1111", // Placeholder, can be updated later
                     contactType: "customer service",
                   },
                 }),

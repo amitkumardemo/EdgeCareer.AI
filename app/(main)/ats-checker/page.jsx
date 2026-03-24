@@ -3,6 +3,12 @@ import ATSNav from "./_components/ats-nav";
 import ATSLoading from "./loading";
 import { Suspense } from "react";
 
+export const metadata = {
+  title: "Free AI ATS Resume Checker & Scanner",
+  description: "Check your resume ATS score instantly. Our AI ATS Resume Scanner analyzes your resume keywords against job descriptions to ensure you pass Applicant Tracking Systems seamlessly.",
+  keywords: ["ATS Resume Checker", "ATS Resume Scanner", "Free ATS Checker", "ATS Score", "Resume Keyword Optimization", "Check ATS Score Online"],
+};
+
 export default function ATSCheckerPage() {
   return (
     <Suspense fallback={<ATSLoading />}>

@@ -1,10 +1,11 @@
-import { getAllApplications, markInternshipComplete } from "@/actions/internship-admin";
+import { getCertificatePipelineApps, markInternshipComplete } from "@/actions/internship-admin";
 import { Award, Download, CheckCircle2, Eye } from "lucide-react";
 import Link from "next/link";
 import CertificateActions from "./CertificateActions";
+import IssueCertificateButton from "./IssueCertificateButton";
 
 export default async function CertificatesPage() {
-  const selected = await getAllApplications({ status: "SELECTED" });
+  const selected = await getCertificatePipelineApps();
   const completed = selected.filter((a) => a.progress?.completed);
   const pending = selected.filter((a) => !a.progress?.completed);
 
@@ -63,7 +64,10 @@ export default async function CertificatesPage() {
                       <Eye className="h-3 w-3" /> Report
                     </button>
                   </Link>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-green-400/10 text-green-400 border border-green-400/20">Issued</span>
+                  <IssueCertificateButton 
+                    applicationId={app.id} 
+                    certificatePdfUrl={app.progress?.certificate?.pdfUrl}
+                  />
                 </div>
               </div>
             ))}

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import {
   BarChart,
   Bar,
@@ -38,7 +39,15 @@ import {
   Github,
   Linkedin,
   Code,
-  IdCard
+  IdCard,
+  PenBox, 
+  Route, 
+  BookOpen, 
+  BriefcaseBusiness, 
+  Search, 
+  Sparkles, 
+  CheckCircle, 
+  ArrowRight
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import {
@@ -51,6 +60,21 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import StreakCalendar from "@/components/streak-calendar";
+
+const GROWTH_TOOLS = [
+  { name: "Build Resume", path: "/resume", icon: FileText, color: "text-blue-500", bg: "bg-blue-500/10" },
+  { name: "AI Cover Letter", path: "/ai-cover-letter", icon: PenBox, color: "text-indigo-500", bg: "bg-indigo-500/10" },
+  { name: "ATS Checker", path: "/ats-checker", icon: CheckCircle, color: "text-emerald-500", bg: "bg-emerald-500/10" },
+  { name: "Interview Prep", path: "/interview", icon: GraduationCap, color: "text-orange-500", bg: "bg-orange-500/10" },
+  { name: "Roadmap Generator", path: "/roadmap", icon: Route, color: "text-purple-500", bg: "bg-purple-500/10" },
+  { name: "Course Recommendation", path: "/course-recommendation", icon: BookOpen, color: "text-red-500", bg: "bg-red-500/10" },
+  { name: "Prep Resources", path: "/prep-resources", icon: BookOpen, color: "text-cyan-500", bg: "bg-cyan-500/10" },
+  { name: "Find Internships", path: "/internships", icon: BriefcaseBusiness, color: "text-pink-500", bg: "bg-pink-500/10" },
+  { name: "Internship Portal", path: "/internship", icon: BookOpen, color: "text-teal-500", bg: "bg-teal-500/10" },
+  { name: "Latest Jobs", path: "/latest-jobs", icon: BriefcaseIcon, color: "text-amber-500", bg: "bg-amber-500/10" },
+  { name: "Job Matches", path: "/job-matches", icon: Search, color: "text-violet-500", bg: "bg-violet-500/10" },
+  { name: "Career Branding", path: "/career-branding-lab", icon: Sparkles, color: "text-fuchsia-500", bg: "bg-fuchsia-500/10" },
+];
 
 const DashboardView = ({ 
   insights, 
@@ -169,6 +193,45 @@ const DashboardView = ({
           </div>
         </CardContent>
       </Card>
+
+      {/* GROWTH TOOLS SLIDER */}
+      <div className="space-y-4">
+        <div className="flex flex-col gap-1 mb-2">
+          <h2 className="text-2xl font-bold flex items-center gap-2">
+            <Sparkles className="h-6 w-6 text-primary" />
+            Start Your Placement Journey
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Leverage these AI-powered tools to build your resume, prepare for interviews, and land your dream role.
+          </p>
+        </div>
+        <style dangerouslySetInnerHTML={{__html: `
+          .hide-scroll::-webkit-scrollbar { display: none; }
+          .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        `}} />
+        <div className="flex gap-4 overflow-x-auto pb-4 snap-x hide-scroll">
+          {GROWTH_TOOLS.map((tool, idx) => {
+            const Icon = tool.icon;
+            return (
+              <Link href={tool.path} key={idx} className="min-w-[200px] sm:min-w-[240px] snap-start">
+                <Card className="h-full hover:border-primary/50 transition-all hover:shadow-md cursor-pointer group bg-white/5 backdrop-blur-sm border-white/10 dark:hover:bg-white/5">
+                  <CardContent className="p-5 flex justify-between h-full flex-col gap-4">
+                    <div className="flex items-center justify-between">
+                      <div className={`p-3 rounded-xl ${tool.bg}`}>
+                        <Icon className={`h-6 w-6 ${tool.color} group-hover:scale-110 transition-transform`} />
+                      </div>
+                      <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-sm sm:text-base group-hover:text-primary transition-colors">{tool.name}</h3>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
 
       {/* Academic & Professional Profiles */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -725,20 +788,27 @@ const DashboardView = ({
       </div>
 
       {/* Salary Ranges Chart */}
-      <Card className="col-span-4">
+      <Card className="col-span-4 overflow-hidden">
         <CardHeader>
           <CardTitle>Salary Ranges by Role</CardTitle>
           <CardDescription>
             Displaying minimum, median, and maximum salaries in INR (lakhs)
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="h-[400px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={salaryData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
+        <CardContent className="px-2 sm:px-6">
+          <div className="overflow-x-auto pb-4">
+            <div className="h-[400px] min-w-[600px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={salaryData} margin={{ top: 20, right: 30, left: 0, bottom: 60 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis 
+                    dataKey="name" 
+                    tick={{ fontSize: 11, fill: 'currentColor', opacity: 0.8 }} 
+                    angle={-35} 
+                    textAnchor="end" 
+                    interval={0}
+                  />
+                  <YAxis tick={{ fontSize: 12 }} />
                 <Tooltip
                   content={({ active, payload, label }) => {
                     if (active && payload && payload.length) {
@@ -761,6 +831,7 @@ const DashboardView = ({
                 <Bar dataKey="max" fill="#475569" name="Max Salary (K)" />
               </BarChart>
             </ResponsiveContainer>
+            </div>
           </div>
         </CardContent>
       </Card>

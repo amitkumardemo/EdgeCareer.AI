@@ -31,9 +31,22 @@ export function CertificatesSection({ applications }) {
                   </p>
                 </div>
               </div>
-              <Button size="sm" variant="ghost" className="h-8 px-3 rounded-lg bg-primary/5 text-primary hover:bg-primary/20 gap-2 text-[10px] font-black uppercase">
-                <Download className="h-3 w-3" /> Download
-              </Button>
+              {app.progress?.certificate?.pdfUrl ? (
+                <a 
+                  href={app.progress.certificate.pdfUrl} 
+                  target="_blank" 
+                  rel="noreferrer"
+                  download
+                >
+                  <Button size="sm" variant="ghost" className="h-8 px-3 rounded-lg bg-primary/5 text-primary hover:bg-primary/20 gap-2 text-[10px] font-black uppercase">
+                    <Download className="h-3 w-3" /> Download
+                  </Button>
+                </a>
+              ) : (
+                <Button disabled size="sm" variant="ghost" className="h-8 px-3 rounded-lg bg-white/5 text-gray-400 gap-2 text-[10px] font-black uppercase opacity-50">
+                  Pending
+                </Button>
+              )}
             </div>
           ))
         ) : (

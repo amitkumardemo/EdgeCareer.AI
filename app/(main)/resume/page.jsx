@@ -5,6 +5,12 @@ import { ResumeHistory } from "./_components/resume-history";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText, Brain, Download, Share2 } from "lucide-react";
 
+export const metadata = {
+  title: "AI Resume Builder & ATS CV Maker",
+  description: "Create professional, ATS-optimized resumes in minutes with our AI Resume Builder. Get real-time AI suggestions, templates, and analytics to boost your job applications.",
+  keywords: ["AI Resume Builder", "Free Resume Maker", "ATS Resume Template", "Make Resume with AI", "CV Builder Online"],
+};
+
 export default async function ResumePage({ searchParams }) {
   const params = await searchParams;
   const resumeId = params?.id;

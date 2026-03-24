@@ -85,7 +85,7 @@ const ContactPage = () => {
                   </div>
                   <div>
                     <h3 className="text-white font-semibold">Email Us</h3>
-                    <p className="text-gray-400">support@techiehelpinstitute.com</p>
+                    <p className="text-gray-400">support@techiehelpinstituteofai.in</p>
                     <p className="text-gray-500 text-sm">Response time: Within 24 hours</p>
                   </div>
                 </div>
