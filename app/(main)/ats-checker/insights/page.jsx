@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getATSInsights } from "@/actions/ats";
 import ATSInsightsView from "../_components/ats-insights-view";
 import ATSNav from "../_components/ats-nav";

@@ -126,6 +126,12 @@ export default async function Header() {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
+                    <Link href="/prep-resources" className="flex items-center gap-2">
+                      <BookOpen className="h-4 w-4" />
+                      Prep Resources
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
                     <Link href="/internships" className="flex items-center gap-2">
                       <BriefcaseBusiness className="h-4 w-4" />
                       Find Internships

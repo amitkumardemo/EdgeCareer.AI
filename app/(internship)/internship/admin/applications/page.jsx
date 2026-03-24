@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { getAllApplications, reviewApplication } from "@/actions/internship-admin";
 import { getBatches } from "@/actions/internship-admin";
+import { issueOfferLetter } from "@/actions/offer-letter";
 import { toast } from "sonner";
 import { 
   CheckCircle2, XCircle, Eye, Filter, Clock, Github, Linkedin, 
@@ -25,6 +26,7 @@ export default function ApplicationsPage() {
   const [loading, setLoading] = useState(true);
   const [reviewing, setReviewing] = useState(null);
   const [selectedApp, setSelectedApp] = useState(null);
+  const [issuingOffer, setIssuingOffer] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -54,6 +56,22 @@ export default function ApplicationsPage() {
       toast.error(e.message);
     } finally {
       setReviewing(null);
+    }
+  }
+
+  async function handleIssueOffer(id) {
+    setIssuingOffer(true);
+    try {
+      const res = await issueOfferLetter(id);
+      if (res.success) {
+        toast.success("Offer Letter Issued & Emailed Successfully!");
+        await loadData();
+        setSelectedApp(null);
+      }
+    } catch (e) {
+      toast.error(e.message || "Failed to issue offer letter");
+    } finally {
+      setIssuingOffer(false);
     }
   }
 
@@ -355,8 +373,34 @@ export default function ApplicationsPage() {
             </div>
 
             {/* Modal Footer (Actions) */}
-            <div className="p-6 border-t border-white/5 flex gap-3 bg-white/[0.01]">
-              <div className="flex-1 flex gap-2">
+            <div className="p-6 border-t border-white/5 flex flex-col gap-3 bg-white/[0.01]">
+              {selectedApp.status === "SELECTED" && (
+                <div className="flex w-full">
+                  <Button 
+                    onClick={() => handleIssueOffer(selectedApp.id)}
+                    disabled={issuingOffer}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-6"
+                  >
+                    {issuingOffer ? (
+                      <span className="flex items-center gap-2">
+                        <span className="h-4 w-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                        Generating & Sending Offer Letter...
+                      </span>
+                    ) : selectedApp.offerLetter?.pdfUrl ? (
+                      <span className="flex items-center gap-2">
+                        <Mail className="h-5 w-5" /> 
+                        Re-Issue Offer Letter PDF
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-2">
+                        <Mail className="h-5 w-5" /> 
+                        Issue Offer Letter PDF
+                      </span>
+                    )}
+                  </Button>
+                </div>
+              )}
+              <div className="flex w-full gap-2">
                 <Button 
                   onClick={() => { handleReview(selectedApp.id, "SELECTED"); setSelectedApp(null); }}
                   disabled={reviewing === selectedApp.id || selectedApp.status === "SELECTED"}

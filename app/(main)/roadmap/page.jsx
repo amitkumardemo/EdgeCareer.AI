@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 
 export default function RoadmapPage() {
-  const [showGenerator, setShowGenerator] = useState(false);
+  // Removed showGenerator state since it's displayed on page
 
   const stats = [
     { icon: Users, label: "Active Learners", value: "10,000+", color: "text-blue-400" },
@@ -96,7 +96,7 @@ export default function RoadmapPage() {
             <Badge variant="outline" className="mb-8 px-6 py-2 rounded-full border-blue-500/30 bg-blue-500/5 text-blue-400 font-bold uppercase tracking-widest text-[10px]">
                🚀 AI-Powered Career Acceleration
             </Badge>
-            <h1 className="text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-[0.95] lg:leading-[0.9]">
+            <h1 className="text-5xl md:text-6xl font-black mb-8 tracking-tighter leading-[1.05]">
               Your Career
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 drop-shadow-[0_0_20px_rgba(59,130,246,0.2)]">
@@ -117,8 +117,11 @@ export default function RoadmapPage() {
           >
             <Button
               size="lg"
-              onClick={() => setShowGenerator(true)}
-              className="h-16 px-12 rounded-[24px] bg-white text-black text-lg font-black hover:bg-blue-400 transition-all shadow-[0_20px_40px_-15px_rgba(255,255,255,0.2)] group"
+              onClick={() => {
+                const el = document.getElementById('generator');
+                if(el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="h-14 px-8 md:px-12 rounded-full bg-white text-black text-base font-bold hover:bg-blue-400 transition-all shadow-[0_20px_40px_-15px_rgba(255,255,255,0.2)] group"
             >
               <Target className="mr-3 h-6 w-6 group-hover:scale-110 transition-transform" />
               Generate My Roadmap
@@ -127,7 +130,7 @@ export default function RoadmapPage() {
             <Button
               variant="outline"
               size="lg"
-              className="h-16 px-10 rounded-[24px] border-white/10 bg-white/5 backdrop-blur-xl text-lg font-black hover:bg-white/10 transition-all text-white"
+              className="h-14 px-8 md:px-10 rounded-full border-white/10 bg-white/5 backdrop-blur-xl text-base font-bold hover:bg-white/10 transition-all text-white"
             >
               <BookOpen className="mr-3 h-5 w-5" />
               View Examples
@@ -158,6 +161,13 @@ export default function RoadmapPage() {
         </div>
       </section>
 
+      {/* Roadmap Generator Section */}
+      <section id="generator" className="py-24 relative px-4 z-20">
+        <div className="max-w-7xl mx-auto">
+          <RoadmapGenerator />
+        </div>
+      </section>
+
       {/* Features Section */}
       <section className="py-32 bg-white/[0.02] border-y border-white/5 relative px-4">
         <div className="max-w-7xl mx-auto relative z-10">
@@ -168,7 +178,7 @@ export default function RoadmapPage() {
             viewport={{ once: true }}
             className="text-center mb-24"
           >
-            <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-4">Why Choose Our Roadmap Generator?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Why Choose Our Roadmap Generator?</h2>
             <p className="text-muted-foreground uppercase tracking-[0.4em] font-bold text-xs">
               Experience the future of career development with cutting-edge AI technology
             </p>
@@ -190,7 +200,7 @@ export default function RoadmapPage() {
                        <feature.icon className="h-12 w-12 mx-auto relative z-10 text-blue-400 group-hover:scale-110 transition-transform duration-500" />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-black mb-4 tracking-tight">{feature.title}</h3>
+                      <h3 className="text-xl font-bold mb-4 tracking-tight">{feature.title}</h3>
                       <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
                     </div>
                   </CardContent>
@@ -211,7 +221,7 @@ export default function RoadmapPage() {
             viewport={{ once: true }}
             className="text-center mb-24"
           >
-            <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-4">Success Stories</h2>
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Success Stories</h2>
             <p className="text-muted-foreground uppercase tracking-[0.4em] font-bold text-xs">
               Real people, real results
             </p>
@@ -267,7 +277,7 @@ export default function RoadmapPage() {
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
               >
-                <h2 className="text-5xl md:text-7xl font-black mb-8 tracking-tighter text-white">
+                <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight text-white">
                   Ready to Transform Your Career?
                 </h2>
                 <p className="text-xl text-blue-100/70 mb-12 max-w-2xl mx-auto font-medium">
@@ -275,8 +285,11 @@ export default function RoadmapPage() {
                 </p>
                 <Button
                   size="lg"
-                  onClick={() => setShowGenerator(true)}
-                  className="h-20 px-16 rounded-[32px] bg-white text-blue-600 text-2xl font-black hover:bg-gray-100 transition-all shadow-[0_30px_60px_-15px_rgba(59,130,246,0.3)] hover:scale-105 active:scale-95 group"
+                  onClick={() => {
+                    const el = document.getElementById('generator');
+                    if(el) el.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="h-16 px-10 rounded-full bg-white text-blue-600 text-xl font-bold hover:bg-gray-100 transition-all shadow-[0_30px_60px_-15px_rgba(59,130,246,0.3)] hover:scale-105 active:scale-95 group"
                 >
                   <Zap className="mr-3 h-8 w-8 text-blue-600 group-hover:rotate-12 transition-transform" />
                   Start Your Journey Now
@@ -287,40 +300,7 @@ export default function RoadmapPage() {
         </div>
       </section>
 
-      {/* Generator Modal */}
-      {showGenerator && (
-        <div
-          className="fixed inset-0 bg-black/80 backdrop-blur-2xl z-[100] flex items-center justify-center p-4 md:p-8"
-          onClick={() => setShowGenerator(false)}
-        >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            className="bg-zinc-950 border border-white/10 rounded-[40px] shadow-[0_0_80px_rgba(0,0,0,1)] max-w-5xl w-full max-h-[90vh] overflow-y-auto relative"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="sticky top-0 z-20 p-10 bg-zinc-950/80 backdrop-blur-xl border-b border-white/5 flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                 <div className="p-3 bg-blue-500/10 rounded-2xl">
-                    <Target className="h-6 w-6 text-blue-400" />
-                 </div>
-                 <h2 className="text-3xl font-black tracking-tight uppercase tracking-widest">Generate Your Roadmap</h2>
-              </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setShowGenerator(false)}
-                className="rounded-full h-12 w-12 hover:bg-white/10 text-muted-foreground hover:text-white"
-              >
-                ✕
-              </Button>
-            </div>
-            <div className="p-10">
-              <RoadmapGenerator />
-            </div>
-          </motion.div>
-        </div>
-      )}
+      {/* Generator Modal Removed */}
     </div>
   );
 }

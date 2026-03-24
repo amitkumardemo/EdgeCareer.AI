@@ -3,6 +3,12 @@ import StatsCards from "./_components/stats-cards";
 import PerformanceChart from "./_components/performace-chart";
 import QuizList from "./_components/quiz-list";
 
+export const metadata = {
+  title: "AI Mock Interviews & Tech Prep",
+  description: "Practice your technical and HR interviews with our AI Mock Interview simulator. Get instant feedback, score analytics, and improve your confidence for placements.",
+  keywords: ["AI Mock Interview", "Tech Interview Prep", "Practice Interview Online", "AI Interview Simulator", "Placement Preparation"],
+};
+
 export default async function InterviewPrepPage() {
   const assessments = await getAssessments();
 

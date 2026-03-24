@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { getStudentProfile } from "./internship-student";
 import { requireAdmin } from "./internship-admin";
 import { revalidatePath } from "next/cache";
+import { sendNotificationEmail } from "@/lib/email-service";
 
 /**
  * Creates a new leave request for the logged-in user.
@@ -90,7 +91,23 @@ export async function updateLeaveStatus(requestId, status, adminNotes = "") {
       status,
       adminNotes,
     },
+    include: {
+      user: { select: { email: true, name: true } },
+    }
   });
+
+  try {
+    if (leave.user?.email && (status === "APPROVED" || status === "REJECTED")) {
+      const isApproved = status === "APPROVED";
+      await sendNotificationEmail({
+        to: leave.user.email,
+        subject: `📅 Leave Request ${isApproved ? "Approved" : "Rejected"} - TechieHelp`,
+        username: leave.user.name,
+        message: `Your leave request from <strong>${new Date(leave.startDate).toLocaleDateString("en-IN")}</strong> to <strong>${new Date(leave.endDate).toLocaleDateString("en-IN")}</strong> has been <strong>${status}</strong>.<br/><br/>${adminNotes ? `<strong>Admin Notes:</strong> ${adminNotes}` : ""}`,
+        buttonText: "View Dashboard"
+      });
+    }
+  } catch(e) {}
 
   revalidatePath("/internship/admin/leave");
   return leave;
