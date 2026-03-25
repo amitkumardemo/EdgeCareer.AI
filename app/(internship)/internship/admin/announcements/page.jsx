@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getBatches, createAnnouncement } from "@/actions/internship-admin";
+import { getBatches, createAnnouncement, getAdminAnnouncements } from "@/actions/internship-admin";
 import prisma from "@/lib/prisma";
 import { toast } from "sonner";
 import { Plus, Megaphone, Globe, X } from "lucide-react";
@@ -22,8 +22,12 @@ export default function AnnouncementsPage() {
   }, []);
 
   async function loadAnnouncements() {
-    const res = await fetch("/api/internship/announcements").catch(() => null);
-    if (res?.ok) setAnnouncements(await res.json());
+    try {
+      const data = await getAdminAnnouncements();
+      setAnnouncements(data);
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   async function handleCreate(e) {

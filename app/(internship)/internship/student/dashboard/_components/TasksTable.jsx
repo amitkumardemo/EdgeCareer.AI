@@ -40,7 +40,7 @@ export function TasksTable({ tasks }) {
               return (
                 <TableRow key={task.id} className="border-white/5 hover:bg-white/3 transition-colors">
                   <TableCell className="py-4">
-                    <p className="text-sm font-semibold text-white truncate max-w-[200px]">{task.title}</p>
+                    <p className="text-sm font-semibold text-white truncate max-w-[200px]" title={task.title}>{task.title}</p>
                   </TableCell>
                   <TableCell className="py-4">
                     <div className="flex items-center gap-2 text-xs text-gray-500 font-medium">

@@ -290,15 +290,35 @@ export async function markAttendance(applicationId, date, present) {
       where: { id: applicationId },
       include: { user: true },
     });
+    
     if (appInfo?.user?.email) {
+      const formattedDate = new Date(date).toLocaleDateString("en-IN", { 
+        weekday: "long", year: "numeric", month: "long", day: "numeric" 
+      });
+
+      let statusMessage = "";
+      let subjectIcon = "";
+
+      if (present) {
+        subjectIcon = "✅";
+        statusMessage = `Your attendance for <strong>${formattedDate}</strong> has been successfully marked as <strong>Present</strong>.<br/>Keep up the good work!`;
+      } else {
+        subjectIcon = "❌";
+        statusMessage = `You have been marked <strong>Absent</strong> for <strong>${formattedDate}</strong>.<br/><br/>If you believe this is an error or need to provide a reason, please reach out to your HR/Mentor immediately. Continuous unexcused absences may affect your internship status.`;
+      }
+
       await sendNotificationEmail({
         to: appInfo.user.email,
-        subject: "📅 Attendance Marked",
+        subject: `${subjectIcon} Attendance Update - TechieHelp`,
         username: appInfo.user.name,
-        message: `Your attendance for <strong>${new Date(date).toLocaleDateString()}</strong> has been marked as <strong>${present ? "Present" : "Absent"}</strong>.`,
+        message: `${statusMessage}<br/><br/>You can view your full attendance history on your dashboard.`,
+        buttonText: "View Dashboard",
+        buttonLink: "https://techiehelpinstituteofai.in/dashboard"
       });
     }
-  } catch (e) {}
+  } catch (e) {
+    console.error("Failed to send attendance email:", e);
+  }
 
   return record;
 }
@@ -347,6 +367,14 @@ export async function createAnnouncement(data) {
 
   revalidatePath("/internship/admin/announcements");
   return ann;
+}
+
+export async function getAdminAnnouncements() {
+  await requireAdmin();
+  return prisma.announcement.findMany({
+    orderBy: { createdAt: "desc" },
+    include: { batch: { select: { name: true } } }
+  });
 }
 
 // ── Certificates ──────────────────────────────────────────────────────────────
@@ -442,22 +470,47 @@ export async function markAttendanceWithStatus(applicationId, date, status) {
       where: { id: applicationId },
       include: { user: { select: { email: true, name: true } } },
     });
+    
     if (appInfo?.user?.email) {
-      const statusLabel = {
-        PRESENT: "✅ Present",
-        ABSENT: "❌ Absent",
-        LATE: "⏰ Late",
-        LEAVE: "🌴 On Leave",
-      }[status] || status;
+      const formattedDate = parsedDate.toLocaleDateString("en-IN", { 
+        weekday: "long", year: "numeric", month: "long", day: "numeric" 
+      });
+
+      let statusMessage = "";
+      let subjectIcon = "";
+
+      switch (status) {
+        case "PRESENT":
+          subjectIcon = "✅";
+          statusMessage = `Your attendance for <strong>${formattedDate}</strong> has been successfully marked as <strong>Present</strong>.<br/>Keep up the good work!`;
+          break;
+        case "LATE":
+          subjectIcon = "⏰";
+          statusMessage = `Your attendance for <strong>${formattedDate}</strong> has been marked as <strong>Late</strong>.<br/>Please ensure you report on time for future sessions.`;
+          break;
+        case "LEAVE":
+          subjectIcon = "🌴";
+          statusMessage = `Your <strong>Leave</strong> request for <strong>${formattedDate}</strong> has been recorded.<br/>Enjoy your time off!`;
+          break;
+        case "ABSENT":
+        default:
+          subjectIcon = "❌";
+          statusMessage = `You have been marked <strong>Absent</strong> for <strong>${formattedDate}</strong>.<br/><br/>If you believe this is an error or need to provide a reason, please reach out to your HR/Mentor immediately. Continuous unexcused absences may affect your internship status.`;
+          break;
+      }
 
       await sendNotificationEmail({
         to: appInfo.user.email,
-        subject: "📅 Attendance Marked - TechieHelp",
+        subject: `${subjectIcon} Attendance Update - TechieHelp`,
         username: appInfo.user.name,
-        message: `Your attendance for <strong>${new Date(date).toLocaleDateString("en-IN", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</strong> has been recorded as <strong>${statusLabel}</strong>.<br/><br/>Log in to your dashboard to view your full attendance history.`,
+        message: `${statusMessage}<br/><br/>You can view your full attendance history on your dashboard.`,
+        buttonText: "View Dashboard",
+        buttonLink: "https://techiehelpinstituteofai.in/dashboard"
       });
     }
-  } catch (e) {}
+  } catch (e) {
+    console.error("Failed to send attendance email:", e);
+  }
 
   revalidatePath("/internship/admin/attendance");
   return record;
