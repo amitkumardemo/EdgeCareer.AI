@@ -59,6 +59,8 @@ export const metadata = {
   },
 };
 
+import { Analytics } from "@vercel/analytics/next";
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning className="dark">
@@ -98,6 +100,7 @@ export default function RootLayout({ children }) {
                 }),
               }}
             />
+            <Analytics />
           </ThemeProvider>
         </AuthProvider>
       </body>

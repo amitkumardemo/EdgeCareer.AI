@@ -109,7 +109,16 @@ export async function getMyApplications() {
       },
       user: { select: { name: true } },
       progress: { include: { certificate: true } },
-      offerLetter: true,
+      offerLetter: {
+        select: {
+          id: true,
+          applicationId: true,
+          generatedAt: true,
+          validUntil: true,
+          downloadCount: true,
+          // pdfUrl excluded — it's a large base64; fetch separately when needed
+        },
+      },
     },
     orderBy: { appliedAt: "desc" },
   });

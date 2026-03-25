@@ -2,6 +2,8 @@ import { getATSAnalytics } from "@/actions/ats";
 import ATSAnalyticsView from "../_components/ats-analytics-view";
 import ATSNav from "../_components/ats-nav";
 
+export const dynamic = "force-dynamic";
+
 export default async function ATSAnalyticsPage() {
   const analytics = await getATSAnalytics();
 
