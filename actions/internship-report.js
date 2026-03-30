@@ -43,7 +43,8 @@ export async function getReportData(applicationId) {
         orderBy: {
           task: { dueDate: "asc" }
         }
-      }
+      },
+      evaluation: true
     }
   });
 
@@ -102,7 +103,8 @@ export async function getReportData(applicationId) {
       serialNo: application.progress?.certificate?.serialNo,
       issuedAt: application.progress?.certificate?.issuedAt,
     },
-    report: application.progress?.report
+    report: application.progress?.report,
+    evaluation: application.evaluation
   };
 }
 

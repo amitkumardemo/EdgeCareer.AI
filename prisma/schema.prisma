@@ -66,6 +66,7 @@ model User {
   submissions            Submission[]
   college                College?                @relation(fields: [collegeId], references: [id])
   industryInsight        IndustryInsight?        @relation(fields: [industry], references: [industry])
+  notifications          Notification[]
 
   @@index([collegeId])
   @@index([role])
@@ -363,6 +364,7 @@ model InternshipBatch {
   program       InternshipProgram       @relation(fields: [programId], references: [id], onDelete: Cascade)
   tasks         InternshipTask[]
   leaveRequests LeaveRequest[]
+  modules       InternshipModule[]
 
   @@index([programId])
   @@index([status])
@@ -370,21 +372,23 @@ model InternshipBatch {
 }
 
 model InternshipApplication {
-  id          String             @id @default(uuid())
-  userId      String
-  batchId     String
-  status      ApplicationStatus  @default(APPLIED)
-  resumeUrl   String?
-  coverNote   String?
-  appliedAt   DateTime           @default(now())
-  reviewedAt  DateTime?
-  reviewNotes String?
-  attendance  AttendanceRecord[]
-  progress    InternProgress?
-  batch       InternshipBatch    @relation(fields: [batchId], references: [id], onDelete: Cascade)
-  user        User               @relation("InternApplications", fields: [userId], references: [id], onDelete: Cascade)
-  offerLetter OfferLetter?
-  submissions TaskSubmission[]
+  id               String                @id @default(uuid())
+  userId           String
+  batchId          String
+  status           ApplicationStatus     @default(APPLIED)
+  resumeUrl        String?
+  coverNote        String?
+  appliedAt        DateTime              @default(now())
+  reviewedAt       DateTime?
+  reviewNotes      String?
+  attendance       AttendanceRecord[]
+  progress         InternProgress?
+  batch            InternshipBatch       @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  user             User                  @relation("InternApplications", fields: [userId], references: [id], onDelete: Cascade)
+  offerLetter      OfferLetter?
+  submissions      TaskSubmission[]
+  videoCompletions VideoCompletion[]
+  evaluation       InternshipEvaluation?
 
   @@unique([userId, batchId])
   @@index([userId])
@@ -613,4 +617,97 @@ enum LeaveStatus {
   PENDING
   APPROVED
   REJECTED
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String
+  message   String
+  type      String
+  link      String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isRead])
+}
+
+model InternshipModule {
+  id          String   @id @default(uuid())
+  batchId     String
+  title       String
+  description String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  batch  InternshipBatch   @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  videos InternshipVideo[]
+
+  @@index([batchId])
+}
+
+model InternshipVideo {
+  id        String   @id @default(uuid())
+  moduleId  String
+  title     String
+  videoUrl  String
+  youtubeId String?
+  thumbnail String?
+  duration  String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  module      InternshipModule  @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  completions VideoCompletion[]
+
+  @@index([moduleId])
+}
+
+model VideoCompletion {
+  id            String   @id @default(uuid())
+  applicationId String
+  videoId       String
+  completedAt   DateTime @default(now())
+
+  application InternshipApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  video       InternshipVideo       @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
+  @@unique([applicationId, videoId])
+  @@index([applicationId])
+  @@index([videoId])
+}
+
+model InternshipEvaluation {
+  id                      String    @id @default(uuid())
+  applicationId           String    @unique
+  technicalSkills         String
+  practicalImplementation String
+  communication           String
+  teamwork                String
+  timeManagement          String
+  learningAbility         String
+  initiative              String
+  professionalEthics      String
+  technicalComments       String?
+  practicalComments       String?
+  communicationComments   String?
+  teamworkComments        String?
+  disciplineComments      String?
+  strengths               String?
+  growthAreas             String?
+  comments                String?
+  summary                 String?
+  publishedAt             DateTime?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  application InternshipApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([applicationId])
+  @@index([createdAt])
 }

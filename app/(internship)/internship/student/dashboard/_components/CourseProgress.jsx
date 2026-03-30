@@ -88,7 +88,12 @@ export function CourseProgress({ selectedApp, progress }) {
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-3 mt-6">
+          <Link href="/internship/student/lms">
+            <Button className="bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 rounded-xl px-6 h-10 text-xs font-bold">
+              <BookOpen className="mr-2 h-4 w-4" /> Go to Course LMS
+            </Button>
+          </Link>
           <Link href="/internship/student/tasks">
             <Button className="bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded-xl px-6 h-10 text-xs font-bold">
               <BookOpen className="mr-2 h-4 w-4" /> View All Tasks
