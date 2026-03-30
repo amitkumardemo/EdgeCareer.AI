@@ -1,13 +1,10 @@
-import { getAllApplications } from "@/actions/internship-admin";
+import { getCompletedInternshipsForReports } from "@/actions/internship-admin";
 import { FileText, Eye, User, Calendar, Award } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
 
 export default async function AdminReportsPage() {
-  const allApplications = await getAllApplications();
-  const completedInternships = allApplications.filter(
-    (app) => app.progress?.completed
-  );
+  const completedInternships = await getCompletedInternshipsForReports();
 
   return (
     <div className="space-y-6">

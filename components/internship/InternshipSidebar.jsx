@@ -19,6 +19,8 @@ const ADMIN_LINKS = [
   { href: "/internship/admin/batches", label: "Batches", icon: BookOpen },
   { href: "/internship/admin/students", label: "Students", icon: Users },
   { href: "/internship/admin/tasks", label: "Tasks", icon: GraduationCap },
+  { href: "/internship/admin/lms", label: "LMS Modules", icon: BookOpen },
+  { href: "/internship/admin/evaluations", label: "Evaluations", icon: FileText },
   { href: "/internship/admin/attendance", label: "Attendance", icon: CalendarDays },
   { href: "/internship/admin/certificates", label: "Certificates", icon: Award },
   { href: "/internship/admin/announcements", label: "Announcements", icon: Megaphone },
@@ -29,6 +31,8 @@ const ADMIN_LINKS = [
 const STUDENT_LINKS = [
   { href: "/internship/student/dashboard", label: "My Dashboard", icon: LayoutDashboard },
   { href: "/internship/student/apply", label: "Apply", icon: FileText },
+  { href: "/internship/student/lms", label: "Course LMS", icon: BookOpen },
+  { href: "/internship/student/evaluation", label: "My Performance", icon: FileText },
   { href: "/internship/student/status", label: "My Status", icon: Award },
   { href: "/internship/student/tasks", label: "My Tasks", icon: BookOpen },
   { href: "/internship/student/attendance", label: "Attendance", icon: CalendarDays },

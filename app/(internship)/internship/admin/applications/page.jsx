@@ -10,6 +10,7 @@ import {
   Globe, FileText, User, Mail, Phone, MapPin, School, GraduationCap, X, Star
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import EvaluationForm from "@/components/internship/EvaluationForm";
 
 const STATUS_COLORS = {
   APPLIED: "text-blue-400 bg-blue-400/10 border-blue-400/20",
@@ -27,6 +28,7 @@ export default function ApplicationsPage() {
   const [reviewing, setReviewing] = useState(null);
   const [selectedApp, setSelectedApp] = useState(null);
   const [issuingOffer, setIssuingOffer] = useState(false);
+  const [showEvaluation, setShowEvaluation] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -231,7 +233,7 @@ export default function ApplicationsPage() {
                 </div>
               </div>
               <button 
-                onClick={() => setSelectedApp(null)}
+                onClick={() => { setSelectedApp(null); setShowEvaluation(false); }}
                 className="p-2 hover:bg-white/5 rounded-full transition-colors"
               >
                 <X className="h-5 w-5 text-gray-400" />
@@ -375,48 +377,62 @@ export default function ApplicationsPage() {
             {/* Modal Footer (Actions) */}
             <div className="p-6 border-t border-white/5 flex flex-col gap-3 bg-white/[0.01]">
               {selectedApp.status === "SELECTED" && (
-                <div className="flex w-full">
+                <div className="flex w-full gap-2">
                   <Button 
                     onClick={() => handleIssueOffer(selectedApp.id)}
                     disabled={issuingOffer}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-6"
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-6"
                   >
                     {issuingOffer ? (
                       <span className="flex items-center gap-2">
                         <span className="h-4 w-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                        Generating & Sending Offer Letter...
+                        Generating...
                       </span>
                     ) : selectedApp.offerLetter?.pdfUrl ? (
                       <span className="flex items-center gap-2">
-                        <Mail className="h-5 w-5" /> 
-                        Re-Issue Offer Letter PDF
+                        <Mail className="h-5 w-5" /> Re-Issue Offer Letter
                       </span>
                     ) : (
                       <span className="flex items-center gap-2">
-                        <Mail className="h-5 w-5" /> 
-                        Issue Offer Letter PDF
+                        <Mail className="h-5 w-5" /> Issue Offer Letter
                       </span>
                     )}
                   </Button>
+                  <Button
+                    onClick={() => setShowEvaluation(!showEvaluation)}
+                    variant="outline"
+                    className="flex-1 border-primary/20 text-primary py-6"
+                  >
+                    <Star className="h-5 w-5 mr-2" /> Evaluation Report
+                  </Button>
                 </div>
               )}
-              <div className="flex w-full gap-2">
-                <Button 
-                  onClick={() => { handleReview(selectedApp.id, "SELECTED"); setSelectedApp(null); }}
-                  disabled={reviewing === selectedApp.id || selectedApp.status === "SELECTED"}
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-white"
-                >
-                  Approve Application
-                </Button>
-                <Button 
-                  onClick={() => { handleReview(selectedApp.id, "REJECTED"); setSelectedApp(null); }}
-                  disabled={reviewing === selectedApp.id || selectedApp.status === "REJECTED"}
-                  variant="outline" 
-                  className="flex-1 border-red-500/50 text-red-500 hover:bg-red-500/10"
-                >
-                  Reject
-                </Button>
-              </div>
+
+              {showEvaluation && selectedApp.status === "SELECTED" && (
+                <div className="w-full mt-2 pt-4 border-t border-white/5">
+                  <EvaluationForm applicationId={selectedApp.id} onClose={() => setShowEvaluation(false)} />
+                </div>
+              )}
+
+              {!showEvaluation && (
+                <div className="flex w-full gap-2">
+                  <Button 
+                    onClick={() => { handleReview(selectedApp.id, "SELECTED"); setSelectedApp(null); }}
+                    disabled={reviewing === selectedApp.id || selectedApp.status === "SELECTED"}
+                    className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                  >
+                    Approve Application
+                  </Button>
+                  <Button 
+                    onClick={() => { handleReview(selectedApp.id, "REJECTED"); setSelectedApp(null); }}
+                    disabled={reviewing === selectedApp.id || selectedApp.status === "REJECTED"}
+                    variant="outline" 
+                    className="flex-1 border-red-500/50 text-red-500 hover:bg-red-500/10"
+                  >
+                    Reject
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>

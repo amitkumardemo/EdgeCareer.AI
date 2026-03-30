@@ -20,7 +20,8 @@ import {
   Code2, 
   Zap,
   Download,
-  Printer
+  Printer,
+  Star
 } from "lucide-react";
 import { format } from "date-fns";
 import { Progress } from "@/components/ui/progress";
@@ -296,6 +297,49 @@ export function ReportTemplate({ data }) {
                 </table>
               </div>
             </section>
+
+            {/* Performance Evaluation */}
+            {data.evaluation && (
+            <section className="pt-2">
+              <h3 className="text-xs font-bold uppercase text-primary tracking-widest mb-4 flex items-center gap-2">
+                <Star className="w-3 h-3" /> Performance Evaluation
+              </h3>
+              <div className="rounded-3xl border border-gray-100 p-6 bg-white space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    { label: "Technical Skills", val: data.evaluation.technicalSkills },
+                    { label: "Practical Implementation", val: data.evaluation.practicalImplementation },
+                    { label: "Communication", val: data.evaluation.communication },
+                    { label: "Teamwork", val: data.evaluation.teamwork },
+                    { label: "Time Management", val: data.evaluation.timeManagement },
+                    { label: "Learning Ability", val: data.evaluation.learningAbility },
+                    { label: "Initiative", val: data.evaluation.initiative },
+                    { label: "Professional Ethics", val: data.evaluation.professionalEthics }
+                  ].map(m => (
+                    <div key={m.label} className="flex flex-col gap-1 bg-gray-50/50 p-3 rounded-xl border border-gray-100">
+                      <span className="text-[9px] font-bold text-gray-500 uppercase">{m.label}</span>
+                      <span className={`text-[10px] font-black uppercase inline-block px-2 py-0.5 rounded-md w-max ${
+                        m.val === "Strongly Agree" ? "bg-green-100 text-green-700" :
+                        m.val === "Agree" ? "bg-blue-100 text-blue-700" : "bg-orange-100 text-orange-700"
+                      }`}>{m.val}</span>
+                    </div>
+                  ))}
+                </div>
+                {data.evaluation.comments && (
+                  <div className="mt-4 pt-4 border-t border-gray-100">
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Manager Comments</p>
+                    <p className="text-xs text-gray-700 italic">"{data.evaluation.comments}"</p>
+                  </div>
+                )}
+                {data.evaluation.summary && (
+                  <div className="mt-3 pt-3 border-t border-gray-100">
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Overall Summary</p>
+                    <p className="text-sm font-black text-gray-800">{data.evaluation.summary}</p>
+                  </div>
+                )}
+              </div>
+            </section>
+            )}
           </div>
         </div>
 
