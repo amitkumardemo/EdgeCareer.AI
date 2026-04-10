@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Users, BookOpen, CheckCircle2, Clock, XCircle, CalendarDays, ArrowLeft } from "lucide-react";
 import LmsAdminSection from "@/components/internship/LmsAdminSection";
+import MentorLmsComments from "@/components/internship/MentorLmsComments";
 
 const STATUS_COLORS = {
   APPLIED: "text-blue-400 bg-blue-400/10",
@@ -121,6 +122,7 @@ export default async function BatchDetailPage({ params }) {
       </div>
 
       <LmsAdminSection batchId={batch.id} />
+      <MentorLmsComments batchId={batch.id} />
     </div>
   );
 }

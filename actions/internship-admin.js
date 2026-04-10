@@ -141,6 +141,7 @@ export async function getCertificatePipelineApps() {
         select: {
           progressPct: true,
           completed: true,
+          completedAt: true,
           certificate: { select: { pdfUrl: true } }
         }
       }

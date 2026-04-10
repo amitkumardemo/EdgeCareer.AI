@@ -54,7 +54,6 @@ export async function deleteModule(moduleId) {
 
 export async function addVideo(moduleId, data) {
   await requireAdmin();
-  // Basic youtube ID extraction
   let youtubeId = null;
   const ytRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
   const match = data.videoUrl.match(ytRegex);
@@ -62,18 +61,51 @@ export async function addVideo(moduleId, data) {
     youtubeId = match[1];
   }
 
-  // Auto-generate thumbnail based on youtube ID
-  const thumbnail = youtubeId ? `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg` : null;
+  let finalTitle = data.title;
+  let finalDuration = data.duration || null;
+  let thumbnail = youtubeId ? `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg` : null;
+
+  // Auto Fetch Details via YOUTUBE API
+  if (youtubeId && process.env.YOUTUBE_API_KEY) {
+    try {
+      const ytResponse = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${youtubeId}&key=${process.env.YOUTUBE_API_KEY}`);
+      if (ytResponse.ok) {
+        const ytData = await ytResponse.json();
+        if (ytData.items && ytData.items.length > 0) {
+          const item = ytData.items[0];
+          if (!data.title || data.title.trim() === "") {
+             finalTitle = item.snippet.title;
+          }
+          // Convert ISO 8601 duration (PT1H20M30S) to readable (1h 20m 30s)
+          const isoDuration = item.contentDetails.duration;
+          const matchTime = isoDuration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+          if (matchTime) {
+            let h = matchTime[1] || "";
+            let m = matchTime[2] || "";
+            let s = matchTime[3] || "";
+            let timeStr = "";
+            if(h) timeStr += `${h}h `;
+            if(m) timeStr += `${m}m `;
+            if(s) timeStr += `${s}s`;
+            finalDuration = timeStr.trim();
+          }
+        }
+      }
+    } catch(err) {
+      console.warn("Failed to fetch Youtube context", err);
+    }
+  }
 
   const newVideo = await prisma.internshipVideo.create({
     data: {
       moduleId,
-      title: data.title,
+      title: finalTitle || "Untitled Video",
       videoUrl: data.videoUrl,
       youtubeId,
       thumbnail,
-      duration: data.duration || null,
+      duration: finalDuration,
       order: data.order || 0,
+      resources: data.resources || "[]"
     },
   });
 
