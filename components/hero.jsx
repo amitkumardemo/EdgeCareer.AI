@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { BUTTONS_MENUS } from "@/lib/constants";
 import Link from "next/link";
+import Image from "next/image";
 import ShinyText from "./ui/blocks/ShinyText/ShinyText";
 import SplitType from "split-type";
 import { gsap } from "gsap";
@@ -214,7 +215,7 @@ const HeroSection = () => {
                 className="flex items-center gap-3 px-4 py-2 bg-white/80 backdrop-blur-md border border-slate-200/50 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(79,70,229,0.1)] transition-all duration-300"
               >
                 <div className="p-1.5 bg-slate-50 rounded-lg">
-                  <img src="/msme.png" alt="MSME" className="h-5 w-auto object-contain brightness-110" onError={(e) => e.target.style.display = 'none'} />
+                  <Image src="/msme.png" alt="MSME" width={80} height={20} className="h-5 w-auto object-contain brightness-110" onError={(e) => e.currentTarget.style.display = 'none'} />
                 </div>
                 <span className="text-[10px] font-black text-slate-500 uppercase tracking-tighter">MSME Certified</span>
               </motion.div>

@@ -3,6 +3,8 @@
 import prisma from "@/lib/prisma";
 import { sendNotificationEmail } from "@/lib/email-service";
 import { jsPDF } from "jspdf";
+import fs from "fs/promises";
+import path from "path";
 
 /**
  * Issues an offer letter using jsPDF — fully compatible with Vercel serverless.
@@ -46,6 +48,24 @@ export async function issueOfferLetter(applicationId) {
     const currentYear = new Date().getFullYear();
     const refId = `TECHIE/INT/${currentYear}/${studentId}`;
 
+    const getStaticBase64 = async (filePath) => {
+      try {
+        const file = await fs.readFile(filePath);
+        return `data:image/png;base64,${file.toString("base64")}`;
+      } catch (err) {
+        return "";
+      }
+    };
+
+    const images = {
+      logo: await getStaticBase64(path.join(process.cwd(), "public", "skill.png")),
+      msme: await getStaticBase64(path.join(process.cwd(), "public", "image (4).png")),
+      iso: await getStaticBase64(path.join(process.cwd(), "public", "image (3).png")),
+      niti: await getStaticBase64(path.join(process.cwd(), "public", "internship-1.png")),
+      signature: await getStaticBase64(path.join(process.cwd(), "public", "EdgeCareers.png")),
+      seal: await getStaticBase64(path.join(process.cwd(), "public", "seal.png")),
+    };
+
     // 3. Generate PDF with jsPDF
     const doc = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
 
@@ -54,22 +74,31 @@ export async function issueOfferLetter(applicationId) {
     const margin = 50;
     const contentWidth = pageWidth - margin * 2;
 
-    // ─── Header border ───
-    doc.setDrawColor(37, 99, 235); // blue-600
-    doc.setLineWidth(1.5);
-    doc.line(margin, 80, pageWidth - margin, 80);
+    // ─── Header ───
+    // 1. Logo (Left)
+    if (images.logo) {
+      doc.addImage(images.logo, "PNG", margin, 35, 120, 60, "", "MEDIUM");
+    }
 
-    // ─── Company name ───
+    // 2. Company Info (Right stacked)
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(16);
+    doc.setFontSize(14);
     doc.setTextColor(15, 23, 42);
-    doc.text("TechieHelp Institute of AI", margin, 55);
-
-    // ─── Contact details ───
+    doc.text("TechieHelp Institute of AI", pageWidth - margin, 50, { align: "right" });
+    
     doc.setFont("helvetica", "normal");
     doc.setFontSize(9);
     doc.setTextColor(100, 116, 139);
-    doc.text("📞 +91-7073130165  |  ✉ support@techiehelp.in  |  🌐 techiehelp.in", margin, 70);
+    // Stacked info matching image
+    doc.text("+91-7073130165", pageWidth - margin, 65, { align: "right" });
+    doc.text("JIET Incubation Center, Jodhpur", pageWidth - margin, 78, { align: "right" });
+    doc.text("support@techiehelp.in", pageWidth - margin, 91, { align: "right" });
+    doc.text("techiehelp.in", pageWidth - margin, 104, { align: "right" });
+
+    // ─── Header bottom border ───
+    doc.setDrawColor(37, 99, 235); // blue-600
+    doc.setLineWidth(1.5);
+    doc.line(margin, 120, pageWidth - margin, 120);
 
     // ─── Title ───
     doc.setFont("helvetica", "bold");
@@ -77,44 +106,39 @@ export async function issueOfferLetter(applicationId) {
     doc.setTextColor(15, 23, 42);
     const title = "INTERNSHIP OFFER LETTER";
     const titleWidth = doc.getTextWidth(title);
-    doc.text(title, (pageWidth - titleWidth) / 2, 115);
+    doc.text(title, (pageWidth - titleWidth) / 2, 160);
 
     // Underline the title
     doc.setDrawColor(15, 23, 42);
-    doc.setLineWidth(0.5);
+    doc.setLineWidth(1);
     doc.line(
       (pageWidth - titleWidth) / 2,
-      118,
+      163,
       (pageWidth - titleWidth) / 2 + titleWidth,
-      118
+      163
     );
 
     // ─── Ref ID & Date ───
     doc.setFont("helvetica", "bold");
     doc.setFontSize(10);
     doc.setTextColor(15, 23, 42);
-    doc.text(`Ref ID: ${refId}`, margin, 140);
-    doc.text(`Date: ${currentDate}`, pageWidth - margin, 140, { align: "right" });
+    doc.text(`Ref ID: ${refId}`, margin, 185);
+    doc.text(`Date: ${currentDate}`, pageWidth - margin, 185, { align: "right" });
 
-    doc.setFont("helvetica", "normal");
-    doc.text("To,", margin, 155);
-    doc.setFont("helvetica", "bold");
-    doc.text(internName, margin, 168);
+    doc.text("To,", margin, 205);
+    doc.text(internName, margin, 218);
 
     // Subject line
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(10);
-    doc.setTextColor(15, 23, 42);
-    doc.text(`Subject: Internship Offer – ${domain} Intern`, margin, 190);
+    doc.text(`Subject: Internship Offer – ${domain} Intern`, margin, 245);
     doc.setDrawColor(15, 23, 42);
-    doc.setLineWidth(0.3);
-    doc.line(margin, 193, margin + doc.getTextWidth(`Subject: Internship Offer – ${domain} Intern`), 193);
+    doc.setLineWidth(0.5);
+    doc.line(margin, 248, margin + doc.getTextWidth(`Subject: Internship Offer – ${domain} Intern`), 248);
 
     // ─── Body paragraphs ───
     doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
     doc.setTextColor(30, 41, 59);
-    let y = 215;
+    let y = 270;
     const lineH = 15;
 
     const writeWrapped = (text, x, curY, maxWidth, options = {}) => {
@@ -123,16 +147,17 @@ export async function issueOfferLetter(applicationId) {
       return curY + lines.length * lineH;
     };
 
-    y = writeWrapped(
-      `Dear ${internName},`,
-      margin, y, contentWidth
-    );
-    y += 8;
-    y = writeWrapped(
-      `Congratulations on being selected as a ${domain} Intern at TechieHelp Institute of AI.`,
-      margin, y, contentWidth
-    );
-    y += 8;
+    doc.setFont("helvetica", "normal");
+    doc.text("Dear", margin, y);
+    doc.setFont("helvetica", "bold");
+    doc.text(internName + ",", margin + doc.getTextWidth("Dear "), y);
+    y += 18;
+
+    const congratsLines = doc.splitTextToSize(`Congratulations on being selected as a ${domain} Intern at TechieHelp Institute of AI.`, contentWidth);
+    doc.setFont("helvetica", "normal");
+    doc.text(congratsLines, margin, y);
+    y += congratsLines.length * lineH + 5;
+    
     y = writeWrapped(
       "This internship will provide you with real-world exposure, structured learning, and hands-on experience aligned with industry standards. You will work on live projects and gain practical knowledge to enhance your career readiness.",
       margin, y, contentWidth
@@ -184,44 +209,53 @@ export async function issueOfferLetter(applicationId) {
       doc.setTextColor(51, 65, 85);
 
       for (const item of items) {
-        const lines = doc.splitTextToSize(`• ${item}`, contentWidth - 10);
-        // Check if we need a new page
+        const bulletOffset = 7;
+        const bodyMaxWidth = contentWidth - bulletOffset - 10;
+        const lines = doc.splitTextToSize(item, bodyMaxWidth);
+        
+        // Ensure new page won't separate bullet from text
         if (curY + lines.length * lineH > pageHeight - 120) {
           doc.addPage();
           curY = margin;
         }
-        doc.text(lines, margin + 5, curY);
+
+        // Draw bullet dot
+        doc.setFillColor(51, 65, 85);
+        doc.ellipse(margin + 5, curY - 4, 1.5, 1.5, "F");
+        
+        // Draw wrapped text
+        doc.text(lines, margin + 5 + bulletOffset, curY);
         curY += lines.length * lineH;
       }
       return curY + 8;
     };
 
-    if (y + 20 > pageHeight - 120) { doc.addPage(); y = margin; }
-    y = writeSection("Onboarding & Communication", [
+    if (y + 40 > pageHeight - 120) { doc.addPage(); y = margin; }
+    y = writeSection("ONBOARDING & COMMUNICATION", [
       "You will receive onboarding instructions before the start date.",
       "Access to the dashboard, assigned tasks, and internal communication channels will be provided.",
       "All updates will be officially managed through Email, WhatsApp, and the portal Dashboard.",
       "Regular reporting and task submissions are strictly mandatory.",
     ], y);
 
-    if (y + 20 > pageHeight - 120) { doc.addPage(); y = margin; }
-    y = writeSection("Working Culture", [
+    if (y + 40 > pageHeight - 120) { doc.addPage(); y = margin; }
+    y = writeSection("WORKING CULTURE", [
       "We offer a flexible and growth-oriented work environment.",
       "Strong focus on continuous learning and practical exposure.",
       "Collaboration, innovation, and accountability are highly encouraged.",
       "Balanced approach: 70% project work + 30% structured learning.",
     ], y);
 
-    if (y + 20 > pageHeight - 120) { doc.addPage(); y = margin; }
-    y = writeSection("Roles & Responsibilities", [
+    if (y + 40 > pageHeight - 120) { doc.addPage(); y = margin; }
+    y = writeSection("ROLES & RESPONSIBILITIES", [
       "Work proactively on real-world projects replicating client needs.",
       "Complete assigned tasks within given deadlines.",
       "Participate iteratively in technical discussions and code evaluations.",
       "Maintain absolute professionalism and responsive communication.",
     ], y);
 
-    if (y + 20 > pageHeight - 120) { doc.addPage(); y = margin; }
-    y = writeSection("Terms, Conditions & Legal Clauses", [
+    if (y + 40 > pageHeight - 120) { doc.addPage(); y = margin; }
+    y = writeSection("TERMS, CONDITIONS & LEGAL CLAUSES", [
       "This internship is primarily learning-focused.",
       "A predefined probation period may apply based on early performance metrics.",
       "Interns must adhere firmly to timelines and maintain organizational discipline.",
@@ -230,8 +264,8 @@ export async function issueOfferLetter(applicationId) {
       "All technical work and documentation produced is the exclusive intellectual property of TechieHelp.",
     ], y);
 
-    if (y + 20 > pageHeight - 120) { doc.addPage(); y = margin; }
-    y = writeSection("Benefits", [
+    if (y + 40 > pageHeight - 120) { doc.addPage(); y = margin; }
+    y = writeSection("BENEFITS", [
       "Official Verified Internship Certificate",
       "Letter of Recommendation (Performance Dependent)",
       "Direct Mentorship from seasoned developers",
@@ -243,22 +277,25 @@ export async function issueOfferLetter(applicationId) {
     y += 5;
     if (y + 60 > pageHeight - 80) { doc.addPage(); y = margin; }
     doc.setFillColor(241, 245, 249);
-    doc.setDrawColor(100, 116, 139);
+    doc.setDrawColor(203, 213, 225);
     doc.setLineWidth(0.5);
-    doc.roundedRect(margin, y, contentWidth, 50, 4, 4, "FD");
-    // Left accent
-    doc.setFillColor(100, 116, 139);
-    doc.rect(margin, y, 3, 50, "F");
+    doc.roundedRect(margin, y, contentWidth, 55, 4, 4, "FD");
+    
+    // Left blue accent exactly like image
+    doc.setFillColor(100, 116, 139); // Slate grayish blue
+    doc.rect(margin, y, 4, 55, "F");
+    
     doc.setFont("helvetica", "bold");
     doc.setFontSize(10);
     doc.setTextColor(15, 23, 42);
-    doc.text("HR Department", margin + 10, y + 15);
+    doc.text("HR Department", margin + 12, y + 18);
+    
     doc.setFont("helvetica", "normal");
     doc.setFontSize(9.5);
     doc.setTextColor(51, 65, 85);
-    doc.text("TechieHelp Institute of AI", margin + 10, y + 28);
-    doc.text("✉ hr@techiehelp.in  |  📞 +91-7073130165", margin + 10, y + 41);
-    y += 65;
+    doc.text("TechieHelp Institute of AI", margin + 12, y + 33);
+    doc.text("hr@techiehelp.in  |  +91-7073130165", margin + 12, y + 46);
+    y += 75;
 
     // ─── Closing ───
     doc.setFont("helvetica", "normal");
@@ -269,50 +306,85 @@ export async function issueOfferLetter(applicationId) {
     doc.text("Wishing you success in your journey.", margin, y);
     y += 30;
 
-    // ─── Signature ───
-    if (y + 60 > pageHeight - 80) { doc.addPage(); y = margin; }
+    // ─── Signature Layout ───
+    if (y + 100 > pageHeight - 80) { doc.addPage(); y = margin; }
+    
+    // Draw Signature Image
+    let sigWidth = 80;
+    if (images.signature) {
+      doc.addImage(images.signature, "PNG", margin, y, sigWidth, 40, "", "SLOW");
+    }
+    
     doc.setDrawColor(51, 65, 85);
     doc.setLineWidth(0.5);
-    doc.line(margin, y + 15, margin + 160, y + 15);
+    doc.line(margin, y + 45, margin + 140, y + 45); // Line under signature
+    
     doc.setFont("helvetica", "bold");
     doc.setFontSize(11);
     doc.setTextColor(15, 23, 42);
-    doc.text("Amit Kumar", margin, y + 28);
+    doc.text("Amit Kumar", margin, y + 60);
+    
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(9.5);
+    doc.setFontSize(9);
     doc.setTextColor(100, 116, 139);
-    doc.text("Founder & CEO", margin, y + 41);
-    doc.text("TechieHelp Institute of AI", margin, y + 54);
+    doc.text("Founder & CEO", margin, y + 72);
+    doc.text("TechieHelp Institute of AI", margin, y + 84);
 
-    y += 70;
+    // ─── Partner Badges ───
+    // Align them to the right, next to signature block
+    const badgeY = y + 25;
+    let badgeX = margin + 170;
+    const badgeW = 60;
+    const badgeH = 60;
+    
+    if (images.seal) {
+      doc.addImage(images.seal, "PNG", badgeX, badgeY - 15, 75, 75, "", "SLOW");
+      badgeX += 85; 
+    }
+    if (images.niti) {
+      doc.addImage(images.niti, "PNG", badgeX, badgeY, 90, 45, "", "SLOW");
+      badgeX += 100;
+    }
+    if (images.msme) {
+      doc.addImage(images.msme, "PNG", badgeX, badgeY, 70, 45, "", "SLOW");
+      badgeX += 80;
+    }
+    if (images.iso) {
+      doc.addImage(images.iso, "PNG", badgeX, badgeY, 45, 45, "", "SLOW");
+    }
 
-    // ─── Footer ───
+    y += 110;
+
+    // ─── Footer Text ───
     doc.setDrawColor(203, 213, 225);
     doc.setLineWidth(1);
-    doc.line(margin, pageHeight - 60, pageWidth - margin, pageHeight - 60);
+    doc.line(margin, pageHeight - 65, pageWidth - margin, pageHeight - 65);
+    
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(9);
+    doc.setFontSize(8.5);
     doc.setTextColor(30, 41, 59);
     doc.text(
       "TechieHelp Institute of AI  |  EdTech | AI & IT Services | Internship Programs",
       pageWidth / 2,
-      pageHeight - 45,
+      pageHeight - 50,
       { align: "center" }
     );
+    
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(8.5);
+    doc.setFontSize(8);
     doc.setTextColor(100, 116, 139);
     doc.text(
-      "📞 +91-7073130165  |  🌐 techiehelp.in",
+      "+91-7073130165  |  techiehelp.in",
       pageWidth / 2,
-      pageHeight - 32,
+      pageHeight - 38,
       { align: "center" }
     );
+    
     doc.setFont("helvetica", "italic");
     doc.text(
       '"Learning, Innovation, and Career Growth – All in One Platform"',
       pageWidth / 2,
-      pageHeight - 20,
+      pageHeight - 26,
       { align: "center" }
     );
 

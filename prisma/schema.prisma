@@ -67,6 +67,7 @@ model User {
   college                College?                @relation(fields: [collegeId], references: [id])
   industryInsight        IndustryInsight?        @relation(fields: [industry], references: [industry])
   notifications          Notification[]
+  videoComments          VideoComment[]
 
   @@index([collegeId])
   @@index([role])
@@ -659,13 +660,33 @@ model InternshipVideo {
   thumbnail String?
   duration  String?
   order     Int      @default(0)
+  resources String   @default("[]")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   module      InternshipModule  @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   completions VideoCompletion[]
+  comments    VideoComment[]
 
   @@index([moduleId])
+}
+
+model VideoComment {
+  id        String   @id @default(uuid())
+  videoId   String
+  userId    String
+  text      String
+  parentId  String? 
+  likes     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  video     InternshipVideo @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent    VideoComment?   @relation("CommentToReply", fields: [parentId], references: [id])
+  replies   VideoComment[]  @relation("CommentToReply")
+  
+  @@index([videoId])
 }
 
 model VideoCompletion {
