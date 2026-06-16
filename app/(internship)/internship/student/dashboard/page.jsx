@@ -62,7 +62,7 @@ export default async function StudentDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#030712] pb-20">
+    <div className="min-h-screen bg-transparent pb-20">
       <div className="container mx-auto px-4 pt-8 max-w-7xl">
         {/* Welcome & Profile Section */}
         <DashboardHeader dbUser={dbUser} selectedApp={selectedApp} />

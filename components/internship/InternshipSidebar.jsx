@@ -64,21 +64,17 @@ export default function InternshipSidebar({ user }) {
   };
 
   const SidebarContent = () => (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-white">
       {/* Brand */}
-      <div className="px-5 py-5 border-b border-white/5">
-        <Link href="/" className="flex items-center gap-2.5 mb-1">
-          <Image src="/skill.png" alt="TechieHelp" width={32} height={32} className="object-contain" />
-          <div>
-            <p className="text-xs font-bold text-white leading-tight">TechieHelp</p>
-            <p className="text-[10px] text-primary font-medium">Institute of AI</p>
-          </div>
+      <div className="px-5 py-5 border-b border-slate-100">
+        <Link href="/" className="flex items-center gap-2.5 mb-1 group">
+          <Image src="/thp logo.png" alt="TechieHelp Logo" width={140} height={40} className="h-8 w-auto object-contain" priority />
         </Link>
-        <span className="text-[10px] text-gray-600 uppercase tracking-widest font-semibold">{portalLabel}</span>
+        <span className="text-[10px] text-slate-400 uppercase tracking-widest font-semibold">{portalLabel}</span>
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-3 py-4 overflow-y-auto space-y-0.5">
+      <nav className="flex-1 px-3 py-4 overflow-y-auto space-y-0.5 bg-white">
         {links.map(({ href, label, icon: Icon }) => {
           const active = pathname === href || pathname.startsWith(href + "/");
           return (
@@ -88,8 +84,8 @@ export default function InternshipSidebar({ user }) {
               onClick={() => setOpen(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 group ${
                 active
-                  ? "bg-primary/15 text-primary border border-primary/25 translate-x-1 shadow-[4px_0_15px_-5px_rgba(37,99,235,0.3)]"
-                  : "text-gray-500 hover:text-white hover:bg-white/5 hover:translate-x-1"
+                  ? "bg-blue-50/80 text-blue-950 border border-blue-100/50 translate-x-1 font-semibold"
+                  : "text-slate-500 hover:text-blue-950 hover:bg-slate-50 hover:translate-x-1"
               }`}
             >
               <Icon className={`h-4 w-4 flex-shrink-0 transition-transform duration-300 ${active ? "scale-110" : "group-hover:scale-110 group-hover:rotate-3"}`} />
@@ -100,19 +96,19 @@ export default function InternshipSidebar({ user }) {
       </nav>
 
       {/* User + logout */}
-      <div className="px-3 py-4 border-t border-white/5">
+      <div className="px-3 py-4 border-t border-slate-100 bg-white">
         <div className="flex items-center gap-3 px-3 py-2 mb-1">
-          <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-bold flex-shrink-0">
+          <div className="w-8 h-8 rounded-full bg-blue-950 text-amber-500 flex items-center justify-center text-xs font-bold flex-shrink-0 shadow-sm">
             {user?.name?.[0]?.toUpperCase() || "U"}
           </div>
           <div className="overflow-hidden">
-            <p className="text-xs font-semibold text-white truncate">{user?.name || "User"}</p>
-            <p className="text-[10px] text-gray-600 truncate">{user?.email}</p>
+            <p className="text-xs font-semibold text-slate-800 truncate">{user?.name || "User"}</p>
+            <p className="text-[10px] text-slate-400 truncate">{user?.email}</p>
           </div>
         </div>
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-red-400 hover:bg-red-400/5 transition-all"
+          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-slate-500 hover:text-red-600 hover:bg-red-50 transition-all"
         >
           <LogOut className="h-4 w-4" /> Sign Out
         </button>
@@ -124,7 +120,7 @@ export default function InternshipSidebar({ user }) {
     <>
       {/* Mobile toggle */}
       <button
-        className="fixed top-4 left-4 z-50 lg:hidden p-2 bg-white/5 border border-white/10 rounded-lg text-white"
+        className="fixed top-4 left-4 z-50 lg:hidden p-2 bg-white border border-slate-200 shadow-md rounded-lg text-slate-700"
         onClick={() => setOpen(!open)}
       >
         {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -132,12 +128,12 @@ export default function InternshipSidebar({ user }) {
 
       {/* Mobile overlay */}
       {open && (
-        <div className="fixed inset-0 z-40 bg-black/60 lg:hidden" onClick={() => setOpen(false)} />
+        <div className="fixed inset-0 z-40 bg-black/40 lg:hidden" onClick={() => setOpen(false)} />
       )}
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 z-40 h-full w-64 bg-[#08090f] border-r border-white/5 transition-transform duration-300 ${
+        className={`fixed top-0 left-0 z-40 h-full w-64 bg-white border-r border-slate-200/80 transition-transform duration-300 ${
           open ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0`}
       >
