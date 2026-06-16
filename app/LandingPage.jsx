@@ -2,12 +2,12 @@
 import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import {
   ArrowRight, BarChart3, BookOpen, Briefcase, CheckCircle2,
   ChevronRight, Code2, FileText, Github, LineChart, 
   Sparkles, Target, Trophy, Users, Zap, Building, LayoutDashboard, MonitorPlay, Presentation, XCircle,
-  Sun, Moon, Menu, X
+  Sun, Moon, Menu, X, GraduationCap, Award, Star, TrendingUp, Cpu, Database, Code, Smartphone, Shield, Cloud, Layout, Megaphone, Video, Terminal, Linkedin, Map, Play
 } from "lucide-react";
 
 // Animations
@@ -47,19 +47,22 @@ const AnimatedCounter = ({ value, text }) => {
   }, [isInView, value]);
 
   return (
-    <motion.div ref={ref} variants={fadeIn} className="flex flex-col items-center justify-center p-8 rounded-2xl bg-white dark:bg-[#111] border border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/10 transition-colors shadow-lg">
-      <h3 className="text-4xl md:text-5xl font-bold bg-gradient-to-b from-slate-900 to-slate-500 dark:from-white dark:to-gray-500 bg-clip-text text-transparent mb-2">
-        {value.toString().includes("+") ? `${counter}+` : counter}
-        {value.toString().includes("%") ? "%" : ""}
-        {value.toString() === "24/7" ? "24/7" : ""}
-      </h3>
-      <p className="text-slate-500 dark:text-gray-400 font-medium text-center">{text}</p>
+    <motion.div ref={ref} variants={fadeIn} className="flex flex-col items-center justify-center p-6 lg:p-8 rounded-2xl bg-white border border-slate-100 hover:border-slate-200 transition-colors shadow-sm hover:shadow-md group relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-amber-50/50 opacity-0 group-hover:opacity-100 transition-opacity" />
+      <div className="relative z-10 text-center">
+        <h3 className="text-4xl md:text-5xl font-bold text-blue-950 mb-2">
+          {value.toString().includes("+") ? `${counter}+` : counter}
+          {value.toString().includes("%") ? "%" : ""}
+          {value.toString() === "24/7" ? "24/7" : ""}
+        </h3>
+        <p className="text-slate-500 font-medium">{text}</p>
+      </div>
     </motion.div>
   );
 };
 
 // Navbar Component
-const Navbar = ({ theme, toggleTheme }) => {
+const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -70,406 +73,545 @@ const Navbar = ({ theme, toggleTheme }) => {
   }, []);
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${isScrolled ? 'bg-white/80 dark:bg-[#0A0A0A]/80 backdrop-blur-md border-slate-200 dark:border-white/10' : 'bg-transparent border-transparent'}`}>
-      <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${isScrolled ? 'bg-white/80 backdrop-blur-md border-slate-200 shadow-sm' : 'bg-transparent border-transparent'}`}>
+      <div className="max-w-7xl mx-auto px-4 md:px-6 h-20 md:h-24 flex items-center justify-between">
         {/* Left: Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center">
-            <Sparkles className="w-5 h-5 text-white" />
+        <Link href="/" className="flex items-center gap-2 group">
+          <div className="flex items-center justify-center transition-transform duration-300 group-hover:scale-105 origin-left">
+            <Image src="/thp logo.png" alt="TechieHelp Logo" width={300} height={100} className="h-16 sm:h-20 w-auto object-contain drop-shadow-sm" priority />
           </div>
-          <span className="font-bold text-lg hidden sm:block">TechieHelp Institute of AI</span>
         </Link>
 
         {/* Center: Nav Links */}
-        <nav className="hidden md:flex items-center gap-8">
-          <Link href="#features" className="text-sm font-medium text-slate-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">Features</Link>
-          <Link href="#students" className="text-sm font-medium text-slate-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">For Students</Link>
-          <Link href="#tpo" className="text-sm font-medium text-slate-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">For TPO</Link>
-          <Link href="/dashboard" className="text-sm font-medium text-slate-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">Dashboard</Link>
+        <nav className="hidden lg:flex items-center gap-8 bg-white/50 backdrop-blur-md px-6 py-2.5 rounded-full border border-slate-200/50 shadow-sm">
+          <Link href="#programs" className="text-sm font-medium text-slate-600 hover:text-amber-500 transition-colors">Programs</Link>
+          <Link href="#internships" className="text-sm font-medium text-slate-600 hover:text-amber-500 transition-colors">Internships</Link>
+          <Link href="#preparation" className="text-sm font-medium text-slate-600 hover:text-amber-500 transition-colors">Placement Prep</Link>
+          <Link href="#tpo" className="text-sm font-medium text-slate-600 hover:text-amber-500 transition-colors">For Colleges</Link>
         </nav>
 
         {/* Right: Actions */}
-        <div className="hidden md:flex items-center gap-4">
-          <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/10 transition-colors text-slate-600 dark:text-gray-300">
-            {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-          </button>
-          <Link href="/sign-in" className="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-gray-300 dark:hover:text-white transition-colors">Login</Link>
-          <Link href="/sign-up" className="text-sm font-medium px-4 py-2 rounded-full bg-slate-900 text-white hover:bg-slate-800 dark:bg-white dark:text-black dark:hover:bg-gray-100 transition-colors">
+        <div className="hidden lg:flex items-center gap-4">
+          <Link href="/sign-in" className="text-sm font-semibold text-slate-600 hover:text-blue-950 transition-colors">Sign In</Link>
+          <Link href="/sign-up" className="text-sm font-semibold px-5 py-2.5 rounded-full bg-blue-950 text-white hover:bg-blue-900 transition-all shadow-md hover:shadow-xl hover:-translate-y-0.5">
             Get Started
           </Link>
         </div>
 
         {/* Mobile menu button */}
-        <button className="md:hidden p-2 text-slate-600 dark:text-gray-300" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        <button className="lg:hidden p-2 text-slate-600 bg-slate-100 rounded-full" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
       </div>
       
       {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-white dark:bg-[#0A0A0A] border-b border-slate-200 dark:border-white/10 px-4 py-4 space-y-4">
-          <Link href="#features" className="block text-sm font-medium text-slate-600 dark:text-gray-300">Features</Link>
-          <Link href="#students" className="block text-sm font-medium text-slate-600 dark:text-gray-300">For Students</Link>
-          <Link href="#tpo" className="block text-sm font-medium text-slate-600 dark:text-gray-300">For TPO</Link>
-          <Link href="/dashboard" className="block text-sm font-medium text-slate-600 dark:text-gray-300">Dashboard</Link>
-          <div className="pt-4 border-t border-slate-200 dark:border-white/10 flex items-center justify-between">
-            <Link href="/sign-in" className="text-sm font-medium text-slate-600 dark:text-gray-300">Login</Link>
-            <div className="flex gap-4">
-              <button onClick={toggleTheme} className="p-2 rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-gray-300">
-                {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-              </button>
-              <Link href="/sign-up" className="text-sm font-medium px-4 py-2 rounded-full bg-slate-900 text-white dark:bg-white dark:text-black">Get Started</Link>
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="lg:hidden bg-white border-b border-slate-200 px-4 py-4 space-y-4 shadow-lg overflow-hidden">
+            <Link href="#programs" className="block text-sm font-medium text-slate-600 p-2 hover:bg-slate-50 rounded-lg">Programs</Link>
+            <Link href="#internships" className="block text-sm font-medium text-slate-600 p-2 hover:bg-slate-50 rounded-lg">Internships</Link>
+            <Link href="#preparation" className="block text-sm font-medium text-slate-600 p-2 hover:bg-slate-50 rounded-lg">Placement Prep</Link>
+            <Link href="#tpo" className="block text-sm font-medium text-slate-600 p-2 hover:bg-slate-50 rounded-lg">For Colleges</Link>
+            <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-4">
+              <Link href="/sign-in" className="text-sm font-semibold text-slate-600 text-center flex-1 py-2 border border-slate-200 rounded-lg">Sign In</Link>
+              <Link href="/sign-up" className="text-sm font-semibold text-center flex-1 py-2 bg-slate-900 text-white rounded-lg">Get Started</Link>
             </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };
 
 export default function Home() {
-  const [theme, setTheme] = useState("dark");
   const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
 
+  // Force light mode
   useEffect(() => {
-    // Check local storage or system preference on mount
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) {
-      setTheme(savedTheme);
-      document.documentElement.classList.toggle('dark', savedTheme === 'dark');
-    } else {
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      setTheme(prefersDark ? "dark" : "light");
-      document.documentElement.classList.toggle('dark', prefersDark);
-    }
+    document.documentElement.classList.remove('dark');
   }, []);
 
-  const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-    document.documentElement.classList.toggle('dark', newTheme === 'dark');
-  };
-
   return (
-    <div className={`${theme} transition-colors duration-300`}>
-      <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-[#0A0A0A] dark:text-white font-sans selection:bg-indigo-500/30 overflow-hidden relative">
-        <Navbar theme={theme} toggleTheme={toggleTheme} />
+    <div className="light transition-colors duration-300">
+      <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans selection:bg-indigo-100 overflow-hidden relative">
+        <Navbar />
 
-        {/* Global Background Effects */}
+        {/* Global Premium Background Effects (Light Theme) */}
         <div className="fixed inset-0 z-0 pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] opacity-20 dark:opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-500/40 via-transparent to-transparent blur-[100px]" />
-          <div className="absolute bottom-0 right-0 w-[800px] h-[600px] opacity-10 dark:opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-500/40 via-transparent to-transparent blur-[120px]" />
-          <div className="absolute inset-0 bg-[url('/grid.svg')] dark:bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" style={{ backgroundImage: 'linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)', backgroundSize: '40px 40px', opacity: 0.03 }} />
+          <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[1200px] h-[600px] opacity-[0.08] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-600 via-blue-200 to-transparent blur-[120px]" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[800px] h-[800px] opacity-[0.1] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-400 via-transparent to-transparent blur-[120px]" />
+          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-[0.02]" style={{ backgroundImage: 'linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
         </div>
 
-        <div className="relative z-10 pt-16">
+        <div className="relative z-10 pt-20">
+          
           {/* 1. HERO SECTION */}
-          <section className="relative pt-20 pb-20 md:pt-32 md:pb-32 px-4 md:px-6 max-w-7xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+          <section className="relative pt-20 pb-20 md:pt-32 md:pb-24 px-4 md:px-6 max-w-7xl mx-auto">
+            <div className="flex flex-col lg:flex-row gap-16 items-center">
               
               {/* Left Side */}
-              <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="max-w-2xl">
-                <motion.div variants={fadeIn} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-200/50 dark:bg-white/5 border border-slate-300 dark:border-white/10 backdrop-blur-sm mb-6">
-                  <span className="text-sm font-medium text-slate-700 dark:text-gray-300">🚀 The new standard for placement prep</span>
+              <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="max-w-2xl lg:w-1/2 z-10">
+                <motion.div variants={fadeIn} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 shadow-sm mb-8 hover:shadow-md transition-shadow cursor-pointer group">
+                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                  <span className="text-sm font-semibold text-slate-700">Admissions Open 2026</span>
+                  <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all" />
                 </motion.div>
                 
-                <motion.h1 variants={fadeIn} className="text-5xl md:text-[64px] font-bold tracking-tight mb-6 leading-[1.05]">
-                  AI-Powered <br className="hidden md:block"/>
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">Career Intelligence</span> <br className="hidden md:block"/>
-                  Platform
+                <motion.h1 variants={fadeIn} className="text-5xl md:text-[72px] font-extrabold tracking-tight mb-6 leading-[1.1] text-blue-950">
+                  Build Skills. <br />
+                  <span className="relative">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-950 via-blue-800 to-amber-500">Gain Experience.</span>
+                    <motion.svg className="absolute -bottom-2 left-0 w-full h-3 text-amber-400 opacity-50" viewBox="0 0 100 10" preserveAspectRatio="none" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1, delay: 0.5 }}><path d="M0 5 Q 50 10 100 5" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" /></motion.svg>
+                  </span><br />
+                  Launch Career.
                 </motion.h1>
                 
-                <motion.h2 variants={fadeIn} className="text-xl md:text-2xl font-medium text-slate-800 dark:text-gray-200 mb-4 max-w-xl">
-                  Track your skills, improve performance, and become placement-ready with real data.
-                </motion.h2>
-
-                <motion.p variants={fadeIn} className="text-lg text-slate-600 dark:text-gray-400 mb-6 leading-relaxed max-w-xl">
-                  The ultimate AI infrastructure for students and colleges to prepare and make data-driven placement decisions.
+                <motion.p variants={fadeIn} className="text-xl text-slate-600 mb-8 leading-relaxed max-w-xl">
+                  Industry-focused Training, Real-World Internships, Professional Certifications, and Career Development Programs designed for the next generation of tech professionals.
                 </motion.p>
                 
-                <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-4 mb-6">
-                  <Link href="/dashboard" className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-slate-900 text-white dark:bg-white dark:text-black font-semibold hover:bg-slate-800 dark:hover:bg-gray-100 transition-all shadow-xl dark:shadow-[0_0_30px_-5px_rgba(255,255,255,0.3)]">
-                    Start Free with AI
+                <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-4 mb-10">
+                  <Link href="/programs" className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-amber-500 text-white font-bold hover:bg-amber-600 transition-all shadow-xl hover:shadow-amber-500/30 hover:-translate-y-1 text-lg group">
+                    Start Learning
+                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                   </Link>
-                  <Link href="/contact" className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-white dark:bg-[#111] text-slate-900 dark:text-white font-semibold border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/5 transition-all backdrop-blur-sm shadow-sm">
-                    <MonitorPlay className="w-4 h-4 mr-2" />
-                    Watch Demo
+                  <Link href="/internships" className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-white text-blue-950 font-semibold border-2 border-slate-200 hover:border-blue-950 hover:bg-slate-50 transition-all shadow-sm hover:shadow-md hover:-translate-y-1 text-lg group">
+                    Apply for Internship
                   </Link>
                 </motion.div>
 
-                <motion.div variants={fadeIn} className="flex flex-col gap-2">
-                  <p className="text-sm font-medium text-slate-500 dark:text-gray-400 flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-green-500" />
-                    No credit card required • Free access available
-                  </p>
-                  <p className="text-sm font-bold text-slate-700 dark:text-gray-300">
-                    Trusted by 5000+ students & institutions
-                  </p>
+                {/* Hero Stats */}
+                <motion.div variants={fadeIn} className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-6 border-t border-slate-200">
+                  <div>
+                    <div className="text-2xl font-bold text-slate-900">5000+</div>
+                    <div className="text-sm font-medium text-slate-500">Students</div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-slate-900">100+</div>
+                    <div className="text-sm font-medium text-slate-500">Projects</div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-slate-900">200+</div>
+                    <div className="text-sm font-medium text-slate-500">Institutions</div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-slate-900 text-indigo-600">95%</div>
+                    <div className="text-sm font-medium text-slate-500">Completion</div>
+                  </div>
                 </motion.div>
               </motion.div>
               
-              {/* Right Side: Product Image with Floating Cards */}
-              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.2 }} className="relative flex justify-center items-center w-full aspect-square md:aspect-auto md:h-[600px] mt-12 lg:mt-0">
-                {/* Underglow */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/30 to-purple-500/30 blur-[80px] rounded-full" />
+              {/* Right Side: Visuals */}
+              <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1, delay: 0.2 }} className="relative lg:w-1/2 w-full mt-12 lg:mt-0">
+                {/* Backdrop glows */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-blue-100 via-white to-amber-100 blur-3xl -z-10 rounded-full" />
                 
-                <motion.div animate={{ y: [-10, 10, -10] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} className="relative w-full max-w-lg z-10">
-                  <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-200/50 dark:border-white/10 ring-1 ring-black/5 dark:ring-white/10 bg-white/50 dark:bg-black/50 backdrop-blur-3xl">
-                    <Image
-                      src="/product.png"
-                      alt="TechieHelp Product Dashboard"
-                      width={800}
-                      height={600}
-                      className="w-full h-auto object-cover rounded-2xl"
-                      fallback={<div className="w-full h-64 bg-slate-200 dark:bg-[#111] animate-pulse rounded-2xl" />}
-                    />
+                {/* Main Dashboard Preview */}
+                <motion.div animate={{ y: [-10, 10, -10] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} className="relative z-10 rounded-3xl overflow-hidden border-[8px] border-white/50 bg-white shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] backdrop-blur-xl ring-1 ring-slate-200">
+                  <div className="bg-slate-100 px-4 py-3 flex gap-2 items-center border-b border-slate-200">
+                    <div className="w-3 h-3 rounded-full bg-red-400" />
+                    <div className="w-3 h-3 rounded-full bg-amber-400" />
+                    <div className="w-3 h-3 rounded-full bg-green-400" />
+                    <div className="ml-4 h-5 w-48 bg-white rounded-md border border-slate-200 flex items-center px-2">
+                       <span className="text-[10px] text-slate-400">techiehelp.com/dashboard</span>
+                    </div>
                   </div>
-                  
-                  {/* Floating Mini Card 1: Resume Score */}
-                  <motion.div 
-                    animate={{ y: [0, -15, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                    className="absolute -top-6 -left-8 md:-left-12 p-4 rounded-xl shadow-xl bg-white dark:bg-[#111] border border-slate-200 dark:border-white/10 flex items-center gap-4 backdrop-blur-xl"
-                  >
-                    <div className="relative w-12 h-12 rounded-full flex items-center justify-center">
-                      <svg className="w-full h-full transform -rotate-90 absolute">
-                        <circle cx="24" cy="24" r="20" className="stroke-slate-100 dark:stroke-white/10" strokeWidth="4" fill="none" />
-                        <circle cx="24" cy="24" r="20" className="stroke-green-500" strokeWidth="4" fill="none" strokeDasharray="125" strokeDashoffset="18" strokeLinecap="round" />
-                      </svg>
-                      <span className="text-xs font-bold text-slate-800 dark:text-white">85%</span>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-bold text-slate-800 dark:text-white">Resume Score</h4>
-                      <p className="text-xs text-green-500 font-medium">Excellent</p>
-                    </div>
-                  </motion.div>
+                  <div className="relative aspect-[4/3] bg-slate-50 p-6 flex flex-col gap-4">
+                     <div className="flex justify-between items-end">
+                       <div>
+                         <div className="h-4 w-24 bg-slate-200 rounded mb-2" />
+                         <div className="h-8 w-48 bg-slate-300 rounded" />
+                       </div>
+                       <div className="h-10 w-10 bg-blue-50 rounded-full flex items-center justify-center">
+                          <Users className="w-5 h-5 text-blue-950" />
+                       </div>
+                     </div>
+                     <div className="flex gap-4">
+                        <div className="flex-1 h-24 bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                           <div className="h-3 w-16 bg-slate-200 rounded mb-4" />
+                           <div className="h-6 w-12 bg-blue-200 rounded" />
+                        </div>
+                        <div className="flex-1 h-24 bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                           <div className="h-3 w-16 bg-slate-200 rounded mb-4" />
+                           <div className="h-6 w-12 bg-amber-200 rounded" />
+                        </div>
+                     </div>
+                     <div className="flex-1 bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex items-end gap-2">
+                         {[40, 70, 45, 90, 65, 100, 80].map((h, i) => (
+                             <div key={i} className="flex-1 bg-blue-50 rounded-t-sm" style={{ height: `${h}%` }}>
+                                <div className="w-full bg-blue-950 rounded-t-sm" style={{ height: '40%' }} />
+                             </div>
+                         ))}
+                     </div>
+                  </div>
+                </motion.div>
+                
+                {/* Floating Card 1: Internship Success */}
+                <motion.div 
+                  animate={{ y: [0, -20, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                  className="absolute -top-10 -right-8 p-4 rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1)] bg-white border border-slate-100 flex items-center gap-4 z-20 backdrop-blur-xl"
+                >
+                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                    <Trophy className="w-6 h-6 text-green-600" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-slate-900">Internship Secured</h4>
+                    <p className="text-xs font-medium text-slate-500">Google, Microsoft, Amazon</p>
+                  </div>
+                </motion.div>
 
-                  {/* Floating Mini Card 2: Interview Feedback */}
-                  <motion.div 
-                    animate={{ y: [0, 15, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-                    className="absolute -bottom-8 -right-4 md:-right-8 p-4 rounded-xl shadow-xl bg-white dark:bg-[#111] border border-slate-200 dark:border-white/10 flex items-start gap-3 backdrop-blur-xl max-w-[200px]"
-                  >
-                     <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center shrink-0">
-                       <Zap className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                {/* Floating Card 2: Student Growth */}
+                <motion.div 
+                  animate={{ y: [0, 20, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+                  className="absolute -bottom-8 -left-8 p-5 rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1)] bg-white border border-slate-100 flex flex-col gap-3 z-20 backdrop-blur-xl"
+                >
+                   <div className="flex items-center gap-3">
+                     <div className="relative w-10 h-10 rounded-full flex items-center justify-center bg-amber-100">
+                       <TrendingUp className="w-5 h-5 text-amber-600" />
                      </div>
                      <div>
-                       <h4 className="text-sm font-bold text-slate-800 dark:text-white">AI Feedback</h4>
-                       <p className="text-xs text-slate-500 dark:text-gray-400 mt-1 line-clamp-2">Good technical depth. Try to improve eye contact.</p>
+                       <h4 className="text-sm font-bold text-slate-900">Skill Growth</h4>
+                       <p className="text-xs font-semibold text-green-500">+124% this month</p>
                      </div>
-                  </motion.div>
-                </motion.div>
-              </motion.div>
-            </div>
-          </section>
-
-          {/* 2. PRODUCT DEMO SECTION */}
-          <section id="features" className="py-24 relative border-t border-slate-200 dark:border-white/5 bg-slate-50/50 dark:bg-[#050505]/50">
-            <div className="max-w-7xl mx-auto px-4 md:px-6">
-              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="text-center mb-16">
-                <h2 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight">See How It Works</h2>
-                <p className="text-slate-500 dark:text-gray-400 max-w-2xl mx-auto text-lg">Four powerful tools unified into one seamless experience.</p>
-              </motion.div>
-              
-              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {[
-                  { title: "Resume Builder", icon: FileText, desc: "ATS-optimized templates powered by AI." },
-                  { title: "Mock Interview", icon: Presentation, desc: "Real-time AI voice interviews & feedback." },
-                  { title: "Dashboard", icon: LayoutDashboard, desc: "Track your readiness score & progress." },
-                  { title: "TPO Analytics", icon: BarChart3, desc: "Institutional oversight & student ranking." }
-                ].map((item, i) => (
-                  <motion.div key={i} variants={fadeIn} whileHover={{ y: -5 }} className="group p-6 rounded-2xl bg-white dark:bg-[#111] border border-slate-200 dark:border-white/5 hover:border-indigo-500/30 transition-all cursor-pointer shadow-sm hover:shadow-md">
-                    <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-white/5 flex items-center justify-center mb-6 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-500/20 transition-colors">
-                      <item.icon className="w-6 h-6 text-slate-600 dark:text-gray-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors" />
-                    </div>
-                    <h3 className="text-xl font-semibold mb-2 text-slate-900 dark:text-white">{item.title}</h3>
-                    <p className="text-slate-500 dark:text-gray-400 text-sm">{item.desc}</p>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-          </section>
-
-          {/* 3. PROBLEM -> SOLUTION SECTION */}
-          <section className="py-24 relative overflow-hidden bg-white dark:bg-transparent">
-            <div className="max-w-7xl mx-auto px-4 md:px-6">
-              <div className="grid md:grid-cols-2 gap-12 lg:gap-24 items-center">
-                <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="space-y-8">
-                  <div>
-                    <h2 className="text-3xl md:text-4xl font-bold mb-4">The Old Way</h2>
-                    <p className="text-slate-500 dark:text-gray-400 text-lg">Traditional placement preparation is broken and leaves students guessing.</p>
-                  </div>
-                  <div className="space-y-4">
-                    {[
-                      "Students prepare blindly without data",
-                      "Weak, unoptimized resumes failing ATS",
-                      "Zero feedback before real interviews"
-                    ].map((text, i) => (
-                      <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-red-50 dark:bg-red-950/10 border border-red-100 dark:border-red-500/10">
-                        <XCircle className="w-5 h-5 text-red-500 dark:text-red-400 flex-shrink-0" />
-                        <span className="text-slate-700 dark:text-gray-300">{text}</span>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-
-                <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative p-8 rounded-3xl bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 border border-indigo-100 dark:border-indigo-500/20">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 blur-[80px] rounded-full pointer-events-none" />
-                  <div className="space-y-8 relative z-10">
-                    <div>
-                      <h2 className="text-3xl md:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">The Modern Way</h2>
-                      <p className="text-slate-500 dark:text-gray-400 text-lg">Data-driven preparation with instant AI feedback.</p>
-                    </div>
-                    <div className="space-y-4">
-                      {[
-                        { text: "AI Resume Builder & Scorer", icon: FileText },
-                        { text: "AI Mock Interviews (Tech & HR)", icon: Code2 },
-                        { text: "Predictive Skill Analytics Dashboard", icon: LineChart }
-                      ].map((item, i) => (
-                        <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm hover:bg-slate-50 dark:hover:bg-white/10 transition-colors">
-                          <CheckCircle2 className="w-5 h-5 text-indigo-600 dark:text-indigo-400 flex-shrink-0" />
-                          <span className="text-slate-900 dark:text-white font-medium">{item.text}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-            </div>
-          </section>
-
-          {/* 4. CORE FEATURES GRID */}
-          <section id="features-grid" className="py-24 relative bg-slate-50/50 dark:bg-[#050505]/50 border-t border-slate-200 dark:border-white/5">
-            <div className="max-w-7xl mx-auto px-4 md:px-6">
-              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="text-center mb-16">
-                <h2 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight">Everything you need to succeed</h2>
-                <p className="text-slate-500 dark:text-gray-400 max-w-2xl mx-auto text-lg">A complete toolkit designed to make you top-tier placement material.</p>
-              </motion.div>
-
-              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[
-                  { title: "AI Resume Builder", icon: FileText, desc: "Create ATS-friendly resumes instantly." },
-                  { title: "AI Mock Interviews", icon: Presentation, desc: "Practice with AI and get instant feedback." },
-                  { title: "Coding Practice", icon: Code2, desc: "Solve DSA questions with an AI mentor." },
-                  { title: "Skill Dashboard", icon: BarChart3, desc: "Visualize your strengths and weak spots." },
-                  { title: "GitHub Tracking", icon: Github, desc: "Sync open source contributions automatically." },
-                  { title: "Readiness Score", icon: Target, desc: "Know exactly when you are ready to apply." },
-                  { title: "TPO Dashboard", icon: Building, desc: "College-wide visibility and admin controls." }
-                ].map((item, i) => (
-                  <motion.div key={i} variants={fadeIn} whileHover={{ y: -5, scale: 1.02 }} className="p-6 rounded-2xl bg-white dark:bg-[#111] border border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/10 transition-all shadow-sm hover:shadow-md group">
-                    <item.icon className="w-8 h-8 text-indigo-600 dark:text-indigo-400 mb-4 group-hover:scale-110 transition-transform" />
-                    <h3 className="text-xl font-bold mb-2 text-slate-900 dark:text-white">{item.title}</h3>
-                    <p className="text-slate-500 dark:text-gray-400 text-sm leading-relaxed">{item.desc}</p>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-          </section>
-
-          {/* 5. HOW IT WORKS (STEP FLOW) */}
-          <section id="students" className="py-24 relative overflow-hidden bg-white dark:bg-transparent">
-            <div className="max-w-7xl mx-auto px-4 md:px-6">
-              <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight">The Journey to Placement</h2>
-              </div>
-              
-              <div className="relative py-10">
-                <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-slate-200 dark:bg-white/5 -translate-y-1/2 rounded-full" />
-                <div className="hidden md:block absolute top-1/2 left-0 w-2/3 h-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 -translate-y-1/2 z-0 rounded-full" />
-                
-                <div className="grid md:grid-cols-5 gap-8 relative z-10">
-                  {[
-                    { title: "Build Resume", icon: FileText },
-                    { title: "Practice Interviews", icon: Presentation },
-                    { title: "Improve Skills", icon: Zap },
-                    { title: "Track Performance", icon: LineChart },
-                    { title: "Get Placed", icon: Trophy }
-                  ].map((step, i) => (
-                    <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="flex flex-col items-center text-center relative">
-                      <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-6 border-4 border-white dark:border-[#0A0A0A] bg-slate-50 dark:bg-[#111] ${i < 4 ? 'text-indigo-600 dark:text-indigo-400 ring-2 ring-indigo-500/20 shadow-lg' : 'text-slate-400 dark:text-gray-500 border-slate-200 dark:border-white/10'}`}>
-                        <step.icon className="w-6 h-6" />
-                      </div>
-                      <h3 className="text-sm font-bold tracking-wider uppercase text-slate-700 dark:text-gray-200">{step.title}</h3>
-                      <div className="mt-2 text-xs font-bold text-slate-400 dark:text-gray-500">STEP 0{i+1}</div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
-
-
-          {/* 7. TPO SECTION */}
-          <section id="tpo" className="py-24 relative overflow-hidden bg-white dark:bg-transparent">
-            <div className="max-w-7xl mx-auto px-4 md:px-6">
-              <div className="grid lg:grid-cols-2 gap-16 items-center">
-                <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-                  <h2 className="text-sm font-bold tracking-widest text-indigo-600 dark:text-indigo-400 uppercase mb-4">For Colleges & TPOs</h2>
-                  <h3 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight leading-[1.1]">Institutional Placement Intelligence</h3>
-                  <p className="text-slate-500 dark:text-gray-400 text-lg mb-8 leading-relaxed">
-                    Empower your placement cell with data-driven insights. Track, manage, and boost student readiness across your entire campus.
-                  </p>
-                  <div className="space-y-4">
-                    {[
-                      { title: "Track student skills", icon: Target },
-                      { title: "View GitHub & coding data", icon: Code2 },
-                      { title: "Rank students automatically", icon: Trophy },
-                      { title: "Make data-driven decisions", icon: BarChart3 }
-                    ].map((item, i) => (
-                      <div key={i} className="flex items-center gap-4">
-                        <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center">
-                          <item.icon className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                        </div>
-                        <span className="text-slate-700 dark:text-gray-300 font-medium">{item.title}</span>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-                <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative h-[400px] w-full bg-slate-50 dark:bg-[#111] rounded-3xl border border-slate-200 dark:border-white/10 p-6 flex items-center justify-center shadow-xl">
-                  <div className="absolute inset-x-0 bottom-0 top-1/2 bg-gradient-to-t from-indigo-50 dark:from-indigo-500/10 to-transparent" />
-                   <div className="w-full h-full border border-slate-200 dark:border-white/5 rounded-xl bg-white dark:bg-[#0A0A0A] p-4 flex flex-col gap-2 shadow-sm relative z-10">
-                      {[1,2,3,4,5].map((i) => (
-                          <div key={i} className="w-full h-12 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-transparent rounded-md flex items-center px-4 gap-4">
-                              <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-white/10"></div>
-                              <div className="w-32 h-3 bg-slate-200 dark:bg-white/20 rounded-full"></div>
-                              <div className={`ml-auto w-16 h-3 rounded-full ${i <= 2 ? 'bg-green-400 dark:bg-green-500/50' : i === 3 ? 'bg-yellow-400 dark:bg-yellow-500/50' : 'bg-slate-200 dark:bg-white/10'}`}></div>
-                          </div>
-                      ))}
                    </div>
                 </motion.div>
-              </div>
-            </div>
-          </section>
-
-          {/* 8. SOCIAL PROOF / STATS */}
-          <section className="py-24 relative border-y border-slate-200 dark:border-white/5 bg-slate-50/80 dark:bg-[#050505]/80">
-            <div className="max-w-7xl mx-auto px-4 md:px-6">
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
-                <AnimatedCounter value="5000+" text="Students" />
-                <AnimatedCounter value="85%" text="Resume Improvement" />
-                <AnimatedCounter value="200+" text="Institutions" />
-                <AnimatedCounter value="24/7" text="AI Support" />
-              </div>
-            </div>
-          </section>
-
-          {/* 9. FINAL CTA */}
-          <section className="py-32 relative text-center bg-white dark:bg-transparent">
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl h-64 bg-indigo-500/10 dark:bg-indigo-500/20 blur-[120px] rounded-full pointer-events-none" />
-            <div className="max-w-4xl mx-auto px-4 md:px-6 relative z-10">
-              <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-4xl md:text-6xl font-bold tracking-tight mb-8">
-                Start Your AI-Powered <br className="hidden md:block"/> Career Journey
-              </motion.h2>
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link href="/dashboard" className="px-8 py-4 rounded-full bg-slate-900 text-white dark:bg-white dark:text-black font-semibold hover:bg-slate-800 dark:hover:bg-gray-100 transition-all text-lg shadow-xl dark:shadow-[0_0_30px_-5px_rgba(255,255,255,0.3)]">
-                  Start Preparing
-                </Link>
-                <Link href="/contact" className="px-8 py-4 rounded-full bg-white dark:bg-[#111] text-slate-900 dark:text-white font-semibold border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/5 transition-all text-lg shadow-sm">
-                  Request Demo
-                </Link>
               </motion.div>
+
             </div>
           </section>
+
+          {/* 2. WHY STUDENTS CHOOSE TECHIEHELP */}
+          <section className="py-24 relative bg-white">
+            <div className="max-w-7xl mx-auto px-4 md:px-6">
+              <div className="text-center mb-16 max-w-3xl mx-auto">
+                <h2 className="text-3xl md:text-5xl font-bold mb-6 text-slate-900 tracking-tight">Why Students Choose <span className="text-amber-500">TechieHelp</span></h2>
+                <p className="text-lg text-slate-600">We bridge the gap between academic learning and industry expectations with a holistic approach to career development.</p>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                  { title: "Industry-Focused Training", icon: LayoutDashboard, desc: "Learn practical skills demanded by top companies.", color: "from-blue-900 to-blue-950", bg: "bg-blue-50" },
+                  { title: "Internship Opportunities", icon: Briefcase, desc: "Work on real projects and gain industry experience.", color: "from-amber-400 to-amber-500", bg: "bg-amber-50" },
+                  { title: "Professional Certifications", icon: Award, desc: "Earn certificates that strengthen your resume.", color: "from-blue-800 to-blue-900", bg: "bg-blue-50/50" },
+                  { title: "Career Support", icon: Users, desc: "Resume building, interview preparation, and guidance.", color: "from-amber-500 to-yellow-600", bg: "bg-amber-50/50" }
+                ].map((item, i) => (
+                  <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="group p-8 rounded-3xl bg-white border border-slate-100 hover:border-slate-200 transition-all shadow-sm hover:shadow-xl hover:-translate-y-1 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br opacity-5 rounded-bl-full -z-10 group-hover:opacity-10 transition-opacity" />
+                    <div className={`w-14 h-14 rounded-2xl ${item.bg} flex items-center justify-center mb-6 shadow-sm`}>
+                      <item.icon className="w-7 h-7 text-blue-950 group-hover:scale-110 transition-transform" />
+                    </div>
+                    <h3 className="text-xl font-bold mb-3 text-slate-900">{item.title}</h3>
+                    <p className="text-slate-600 leading-relaxed">{item.desc}</p>
+                    <div className="mt-6 flex items-center text-sm font-semibold text-amber-500 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
+                      Learn More <ArrowRight className="w-4 h-4 ml-1" />
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* 3. PROGRAMS SECTION */}
+          <section id="programs" className="py-24 relative bg-slate-50 border-y border-slate-200/60">
+            <div className="max-w-7xl mx-auto px-4 md:px-6">
+              <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+                <div className="max-w-2xl">
+                  <h2 className="text-3xl md:text-5xl font-bold mb-6 text-slate-900 tracking-tight">Explore Our Programs</h2>
+                  <p className="text-lg text-slate-600">Master the most in-demand skills with our comprehensive, project-based courses taught by industry experts.</p>
+                </div>
+                <Link href="/programs" className="inline-flex items-center font-semibold text-blue-950 hover:text-blue-900 bg-amber-50 px-5 py-2.5 rounded-full transition-colors self-start md:self-end shrink-0">
+                  View All Programs <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                  { title: "AI & Machine Learning", icon: Cpu, duration: "6 Months", tag: "Most Popular" },
+                  { title: "Data Science", icon: Database, duration: "5 Months", tag: "High Demand" },
+                  { title: "Web Development", icon: Code, duration: "4 Months" },
+                  { title: "App Development", icon: Smartphone, duration: "4 Months" },
+                  { title: "Cyber Security", icon: Shield, duration: "5 Months" },
+                  { title: "Cloud Computing", icon: Cloud, duration: "3 Months" },
+                  { title: "UI/UX Design", icon: Layout, duration: "3 Months" },
+                  { title: "Digital Marketing", icon: Megaphone, duration: "2 Months" }
+                ].map((prog, i) => (
+                  <motion.div key={i} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="group bg-white border border-slate-200 rounded-3xl p-6 hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer relative overflow-hidden flex flex-col h-full">
+                    {prog.tag && (
+                      <div className="absolute top-4 right-4 bg-amber-100 text-amber-700 text-xs font-bold px-3 py-1 rounded-full">
+                        {prog.tag}
+                      </div>
+                    )}
+                    <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center mb-6 group-hover:bg-blue-950 group-hover:text-white transition-colors text-blue-950">
+                      <prog.icon className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-xl font-bold mb-2 text-slate-900 group-hover:text-blue-950 transition-colors">{prog.title}</h3>
+                    <div className="flex items-center gap-4 text-sm text-slate-500 mb-6 mt-auto">
+                      <span className="flex items-center"><CheckCircle2 className="w-4 h-4 mr-1 text-green-500" /> Certificate</span>
+                      <span className="flex items-center bg-slate-100 px-2 py-1 rounded-md text-slate-600">{prog.duration}</span>
+                    </div>
+                    <div className="w-full py-3 rounded-xl border-2 border-slate-100 text-center font-semibold text-slate-600 group-hover:bg-blue-950 group-hover:border-blue-950 group-hover:text-amber-500 transition-all">
+                      View Details
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* 4. INTERNSHIP SECTION */}
+          <section id="internships" className="py-24 relative bg-white">
+            <div className="max-w-7xl mx-auto px-4 md:px-6">
+              <div className="text-center mb-16">
+                <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-amber-50 text-amber-700 font-semibold text-sm mb-6 border border-amber-100">
+                  <Briefcase className="w-4 h-4 mr-2" /> Live Internships
+                </div>
+                <h2 className="text-3xl md:text-5xl font-bold mb-6 text-slate-900 tracking-tight">Real Internships. Real Projects. <br />Real Experience.</h2>
+                <p className="text-lg text-slate-600 max-w-2xl mx-auto">Skip the generic tutorials. Work on live industry projects and add real impact to your resume.</p>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-8">
+                {[
+                  { role: "Frontend Developer Intern", tech: ["React", "Next.js", "Tailwind"], spots: "Few Left" },
+                  { role: "Backend Developer Intern", tech: ["Node.js", "Express", "MongoDB"], spots: "Open" },
+                  { role: "Full Stack Intern", tech: ["MERN Stack", "AWS"], spots: "Hot" },
+                  { role: "AI/ML Engineer Intern", tech: ["Python", "TensorFlow", "NLP"], spots: "Closing Soon" },
+                  { role: "Data Science Intern", tech: ["Pandas", "SQL", "PowerBI"], spots: "Open" },
+                  { role: "Cyber Security Intern", tech: ["Ethical Hacking", "Networking"], spots: "Open" }
+                ].map((internship, i) => (
+                  <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm hover:shadow-xl transition-shadow flex flex-col">
+                    <div className="flex justify-between items-start mb-6">
+                      <div className="w-12 h-12 rounded-xl bg-blue-950 flex items-center justify-center">
+                        <Code2 className="w-6 h-6 text-amber-500" />
+                      </div>
+                      <span className={`text-xs font-bold px-3 py-1 rounded-full ${internship.spots === 'Hot' || internship.spots === 'Closing Soon' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
+                        {internship.spots}
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900 mb-4">{internship.role}</h3>
+                    <div className="flex flex-wrap gap-2 mb-8">
+                      {internship.tech.map(t => (
+                        <span key={t} className="px-3 py-1 bg-slate-100 text-slate-600 text-sm font-medium rounded-lg">{t}</span>
+                      ))}
+                    </div>
+                    <button className="mt-auto w-full py-3 rounded-xl bg-blue-950 text-white font-semibold hover:bg-amber-500 hover:text-blue-950 transition-colors">
+                      Apply Now
+                    </button>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* 5. CERTIFICATIONS SECTION */}
+          <section className="py-24 relative bg-gradient-to-b from-white to-slate-50 border-y border-slate-200/60 overflow-hidden">
+             {/* Decorative Background */}
+             <div className="absolute inset-0 z-0">
+               <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-300/20 blur-[100px] rounded-full" />
+               <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-amber-200/20 blur-[100px] rounded-full" />
+               <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02] bg-center" />
+             </div>
+
+             <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6">
+                <div className="grid lg:grid-cols-2 gap-16 items-center">
+                  <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 shadow-sm mb-6">
+                      <Award className="w-5 h-5 text-amber-500" />
+                      <span className="text-sm font-medium text-slate-700">Verified Credentials</span>
+                    </div>
+                    <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight text-slate-900">Earn Industry-Recognized Certifications 🏆</h2>
+                    <p className="text-lg text-slate-600 mb-8 leading-relaxed">
+                      Stand out to recruiters with premium certificates that validate your skills, project experience, and internship completion.
+                    </p>
+                    
+                    <div className="space-y-4">
+                      {["Training Certificate", "Internship Completion Certificate", "Project Completion Certificate", "Letter of Recommendation (LoR)"].map((cert, i) => (
+                        <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-white border border-slate-200 shadow-sm hover:border-amber-300 transition-colors">
+                          <CheckCircle2 className="w-6 h-6 text-blue-950 flex-shrink-0" />
+                          <span className="font-semibold text-lg text-slate-800">{cert}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+
+                  {/* Certificate Visual */}
+                  <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="relative">
+                     <div className="absolute -inset-4 bg-gradient-to-tr from-amber-400 to-blue-400 rounded-3xl blur-2xl opacity-20 animate-pulse" />
+                     <div className="relative aspect-[4/3] w-full bg-white rounded-2xl shadow-2xl overflow-hidden border-8 border-slate-100 flex flex-col p-8 items-center justify-center text-slate-900 text-center transform rotate-2 hover:rotate-0 transition-transform duration-500">
+                        <div className="w-16 h-16 mb-4">
+                           <Award className="w-full h-full text-amber-500" />
+                        </div>
+                        <h3 className="text-3xl font-serif font-bold text-slate-900 mb-2">CERTIFICATE</h3>
+                        <p className="text-sm tracking-widest text-slate-500 uppercase mb-8">Of Completion</p>
+                        <p className="text-sm text-slate-600 mb-2">This is proudly presented to</p>
+                        <h4 className="text-2xl font-bold border-b-2 border-slate-200 pb-2 mb-4 w-3/4 italic text-blue-950">Student Name</h4>
+                        <p className="text-sm text-slate-600 px-8">For successfully completing the rigorous 6-month AI & Machine Learning Internship Program.</p>
+                        
+                        <div className="absolute bottom-8 left-8 text-left">
+                           <div className="w-24 h-px bg-slate-300 mb-2" />
+                           <p className="text-[10px] font-bold">Director Signature</p>
+                        </div>
+                        <div className="absolute bottom-8 right-8 text-right">
+                           <div className="w-16 h-16 rounded-full border-4 border-amber-400 flex items-center justify-center ml-auto mb-2 opacity-50">
+                             <div className="w-12 h-12 rounded-full border border-amber-400" />
+                           </div>
+                           <p className="text-[10px] font-bold text-amber-600">Verified Badge</p>
+                        </div>
+                     </div>
+                  </motion.div>
+                </div>
+             </div>
+          </section>
+
+          {/* 6. PLACEMENT PREPARATION SECTION */}
+          <section id="preparation" className="py-24 relative bg-slate-50 border-y border-slate-200/60">
+            <div className="max-w-7xl mx-auto px-4 md:px-6">
+              <div className="text-center mb-16 max-w-3xl mx-auto">
+                <h2 className="text-3xl md:text-5xl font-bold mb-6 text-slate-900 tracking-tight">🎯 Become Placement Ready</h2>
+                <p className="text-lg text-slate-600">Our suite of AI-powered tools ensures you are 100% prepared for technical and HR interviews.</p>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[
+                  { title: "AI Resume Builder", icon: FileText, desc: "Create ATS-friendly resumes that get shortlisted.", link: "/resume" },
+                  { title: "Mock Interviews", icon: Video, desc: "Practice with AI interviewers and get instant feedback.", link: "/mock-interview" },
+                  { title: "Coding Practice", icon: Terminal, desc: "Solve DSA questions with real-time AI hints.", link: "/dsa" },
+                  { title: "GitHub Portfolio", icon: Github, desc: "Build a strong open-source profile automatically." },
+                  { title: "LinkedIn Optimization", icon: Linkedin, desc: "Make your profile magnetic to recruiters." },
+                  { title: "Career Roadmaps", icon: Map, desc: "Step-by-step guides for your target role." }
+                ].map((prep, i) => (
+                  <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="group p-8 rounded-3xl bg-white border border-slate-200 hover:border-amber-300 transition-all shadow-sm hover:shadow-lg">
+                    <div className="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform group-hover:bg-blue-950 group-hover:text-amber-500 text-blue-950">
+                      <prep.icon className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-xl font-bold mb-3 text-slate-900">{prep.title}</h3>
+                    <p className="text-slate-600 mb-6">{prep.desc}</p>
+                    {prep.link ? (
+                      <Link href={prep.link} className="inline-flex items-center text-sm font-semibold text-amber-500 hover:text-amber-600">
+                        Try Now <ChevronRight className="w-4 h-4 ml-1" />
+                      </Link>
+                    ) : (
+                      <span className="inline-flex items-center text-sm font-semibold text-slate-400">
+                        Coming Soon
+                      </span>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* 7. SUCCESS STORIES */}
+          <section className="py-24 relative bg-white">
+            <div className="max-w-7xl mx-auto px-4 md:px-6">
+               <div className="text-center mb-16">
+                <h2 className="text-3xl md:text-5xl font-bold mb-6 text-slate-900 tracking-tight">Success Stories</h2>
+                <p className="text-lg text-slate-600">Hear from students who transformed their careers with TechieHelp.</p>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-8">
+                 {[
+                   { name: "Rahul Sharma", college: "IIT Delhi", role: "SDE Intern @ Amazon", story: "The AI mock interviews and DSA practice were exactly what I needed. I felt completely confident during my actual Amazon interview.", img: "R" },
+                   { name: "Priya Singh", college: "NIT Surathkal", role: "Data Analyst @ MuSigma", story: "The Data Science internship program gave me real-world datasets to work on. That practical experience was the key to my placement.", img: "P" },
+                   { name: "Amit Kumar", college: "VIT Vellore", role: "Frontend Dev @ Swiggy", story: "TechieHelp's resume builder took my resume from zero to hero. The ATS score feature is a game-changer.", img: "A" }
+                 ].map((testimonial, i) => (
+                    <motion.div key={i} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="bg-slate-50 border border-slate-200 p-8 rounded-3xl relative">
+                       <div className="text-amber-500 flex gap-1 mb-6">
+                         {[1,2,3,4,5].map(star => <Star key={star} className="w-5 h-5 fill-current" />)}
+                       </div>
+                       <p className="text-slate-700 italic mb-8">"{testimonial.story}"</p>
+                       <div className="flex items-center gap-4 mt-auto">
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-950 to-blue-900 flex items-center justify-center text-amber-500 font-bold text-lg shadow-md border border-blue-900">
+                            {testimonial.img}
+                          </div>
+                          <div>
+                            <h4 className="font-bold text-blue-950">{testimonial.name}</h4>
+                            <p className="text-xs font-semibold text-amber-500 mb-0.5">{testimonial.role}</p>
+                            <p className="text-xs text-slate-500">{testimonial.college}</p>
+                          </div>
+                       </div>
+                    </motion.div>
+                 ))}
+              </div>
+            </div>
+          </section>
+
+          {/* 8. COLLEGE PARTNERSHIP SECTION */}
+          <section id="tpo" className="py-24 relative bg-slate-50 overflow-hidden rounded-t-[3rem]">
+             <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02] bg-center" />
+             <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
+                <div className="bg-gradient-to-br from-blue-950 to-blue-900 rounded-3xl p-1 md:p-12 lg:p-16 text-center lg:text-left flex flex-col lg:flex-row items-center justify-between gap-12 shadow-xl border border-white/10">
+                   <div className="max-w-2xl p-8 lg:p-0">
+                      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-md mb-6 font-semibold text-sm text-white border border-white/30">
+                        <Building className="w-4 h-4" /> For Colleges & Training Institutes
+                      </div>
+                      <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight text-white">🏫 Empower Your Students</h2>
+                      <p className="text-lg text-blue-100 mb-8 leading-relaxed">
+                        Partner with TechieHelp to provide your students with enterprise-grade placement preparation tools. Get detailed analytics on student readiness and streamline your TPO operations.
+                      </p>
+                      
+                      <div className="grid grid-cols-2 gap-4 mb-8 text-left">
+                        {["Student Tracking Dashboard", "Custom Internship Programs", "On-Campus Workshops", "Dedicated Career Support"].map((feature, i) => (
+                          <div key={i} className="flex items-center gap-2 text-white font-medium">
+                            <CheckCircle2 className="w-5 h-5 text-amber-400" /> {feature}
+                          </div>
+                        ))}
+                      </div>
+
+                      <button className="px-8 py-4 rounded-full bg-amber-500 text-blue-950 font-bold hover:bg-amber-600 hover:scale-105 transition-all shadow-xl">
+                        Request Partnership
+                      </button>
+                   </div>
+                   
+                   <div className="hidden lg:block w-full max-w-md relative p-8">
+                     <div className="absolute inset-0 bg-white/20 backdrop-blur-md rounded-3xl border border-white/40 transform rotate-3" />
+                     <div className="absolute inset-0 bg-white/20 backdrop-blur-md rounded-3xl border border-white/40 transform -rotate-3" />
+                     <div className="relative bg-white rounded-2xl p-6 shadow-2xl border border-slate-100">
+                        <div className="flex justify-between items-center mb-6">
+                           <h4 className="font-bold text-slate-900">Placement Cell Analytics</h4>
+                           <BarChart3 className="w-5 h-5 text-amber-500" />
+                        </div>
+                        <div className="space-y-4">
+                           <div>
+                             <div className="flex justify-between text-xs text-slate-500 mb-1"><span>Batch Readiness</span><span className="text-slate-700 font-bold">85%</span></div>
+                             <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden"><div className="w-[85%] h-full bg-green-500" /></div>
+                           </div>
+                           <div>
+                             <div className="flex justify-between text-xs text-slate-500 mb-1"><span>Resumes Approved</span><span className="text-slate-700 font-bold">92%</span></div>
+                             <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden"><div className="w-[92%] h-full bg-blue-500" /></div>
+                           </div>
+                           <div>
+                             <div className="flex justify-between text-xs text-slate-500 mb-1"><span>Mock Interviews Completed</span><span className="text-slate-700 font-bold">64%</span></div>
+                             <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden"><div className="w-[64%] h-full bg-amber-500" /></div>
+                           </div>
+                        </div>
+                     </div>
+                   </div>
+                </div>
+             </div>
+          </section>
+
+          {/* 9. FINAL CTA SECTION */}
+          <section className="py-32 relative text-center bg-white border-t border-slate-200">
+             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl h-64 bg-amber-50 blur-[100px] rounded-full pointer-events-none" />
+             <div className="max-w-4xl mx-auto px-4 md:px-6 relative z-10">
+               <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-4xl md:text-6xl font-bold tracking-tight mb-8 text-slate-900">
+                 Start Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-950 via-blue-800 to-amber-500">AI-Powered</span> <br className="hidden md:block"/> Career Journey Today
+               </motion.h2>
+               <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="text-xl text-slate-600 mb-10">
+                 Join thousands of students who have already transformed their careers.
+               </motion.p>
+               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="flex flex-col sm:flex-row justify-center gap-4">
+                 <Link href="/sign-up" className="px-10 py-4 rounded-full bg-blue-950 text-white font-bold hover:bg-blue-900 hover:-translate-y-1 transition-all text-lg shadow-xl hover:shadow-blue-900/30">
+                   Join Now
+                 </Link>
+                 <Link href="/programs" className="px-10 py-4 rounded-full bg-white text-blue-950 font-bold border-2 border-slate-200 hover:border-amber-500 hover:bg-amber-50 hover:text-amber-700 transition-all text-lg">
+                   Explore Programs
+                 </Link>
+               </motion.div>
+             </div>
+          </section>
+          
         </div>
       </div>
     </div>
