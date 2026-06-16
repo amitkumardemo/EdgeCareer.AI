@@ -5,7 +5,7 @@ import Image from "next/image";
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import {
   ArrowRight, BarChart3, BookOpen, Briefcase, CheckCircle2,
-  ChevronRight, Code2, FileText, Github, LineChart, 
+  ChevronRight, Code2, FileText, Github, LineChart,
   Sparkles, Target, Trophy, Users, Zap, Building, LayoutDashboard, MonitorPlay, Presentation, XCircle,
   Sun, Moon, Menu, X, GraduationCap, Award, Star, TrendingUp, Cpu, Database, Code, Smartphone, Shield, Cloud, Layout, Megaphone, Video, Terminal, Linkedin, Map, Play
 } from "lucide-react";
@@ -74,11 +74,11 @@ const Navbar = () => {
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${isScrolled ? 'bg-white/80 backdrop-blur-md border-slate-200 shadow-sm' : 'bg-transparent border-transparent'}`}>
-      <div className="max-w-7xl mx-auto px-4 md:px-6 h-20 md:h-24 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 md:h-24 flex items-center justify-between">
         {/* Left: Logo */}
         <Link href="/" className="flex items-center gap-2 group">
           <div className="flex items-center justify-center transition-transform duration-300 group-hover:scale-105 origin-left">
-            <Image src="/thp logo.png" alt="TechieHelp Logo" width={300} height={100} className="h-16 sm:h-20 w-auto object-contain drop-shadow-sm" priority />
+            <Image src="/thp logo.png" alt="TechieHelp Logo" width={400} height={120} className="h-20 sm:h-28 w-auto object-contain drop-shadow-sm" priority />
           </div>
         </Link>
 
@@ -103,7 +103,7 @@ const Navbar = () => {
           {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
       </div>
-      
+
       {/* Mobile Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
@@ -152,25 +152,22 @@ export default function Home() {
               
               {/* Left Side */}
               <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="max-w-2xl lg:w-1/2 z-10">
-                <motion.div variants={fadeIn} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 shadow-sm mb-8 hover:shadow-md transition-shadow cursor-pointer group">
+                <div className="flex items-center space-x-2">
                   <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                   <span className="text-sm font-semibold text-slate-700">Admissions Open 2026</span>
                   <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all" />
-                </motion.div>
-                
+</div>
+
                 <motion.h1 variants={fadeIn} className="text-5xl md:text-[72px] font-extrabold tracking-tight mb-6 leading-[1.1] text-blue-950">
                   Build Skills. <br />
-                  <span className="relative">
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-950 via-blue-800 to-amber-500">Gain Experience.</span>
-                    <motion.svg className="absolute -bottom-2 left-0 w-full h-3 text-amber-400 opacity-50" viewBox="0 0 100 10" preserveAspectRatio="none" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1, delay: 0.5 }}><path d="M0 5 Q 50 10 100 5" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" /></motion.svg>
-                  </span><br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-950 via-blue-800 to-amber-500">Gain Experience.</span><br />
                   Launch Career.
                 </motion.h1>
-                
+
                 <motion.p variants={fadeIn} className="text-xl text-slate-600 mb-8 leading-relaxed max-w-xl">
                   Industry-focused Training, Real-World Internships, Professional Certifications, and Career Development Programs designed for the next generation of tech professionals.
                 </motion.p>
-                
+
                 <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-4 mb-10">
                   <Link href="/programs" className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-amber-500 text-white font-bold hover:bg-amber-600 transition-all shadow-xl hover:shadow-amber-500/30 hover:-translate-y-1 text-lg group">
                     Start Learning
@@ -201,85 +198,32 @@ export default function Home() {
                   </div>
                 </motion.div>
               </motion.div>
-              
-              {/* Right Side: Visuals */}
-              <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1, delay: 0.2 }} className="relative lg:w-1/2 w-full mt-12 lg:mt-0">
+
+              {/* Right Side: Cover Image Visual */}
+              <motion.div 
+                initial={{ opacity: 0, x: 50 }} 
+                animate={{ opacity: 1, x: 0 }} 
+                transition={{ duration: 1, delay: 0.2 }} 
+                className="relative lg:w-1/2 w-full mt-12 lg:mt-0"
+              >
                 {/* Backdrop glows */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-blue-100 via-white to-amber-100 blur-3xl -z-10 rounded-full" />
                 
-                {/* Main Dashboard Preview */}
-                <motion.div animate={{ y: [-10, 10, -10] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} className="relative z-10 rounded-3xl overflow-hidden border-[8px] border-white/50 bg-white shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] backdrop-blur-xl ring-1 ring-slate-200">
-                  <div className="bg-slate-100 px-4 py-3 flex gap-2 items-center border-b border-slate-200">
-                    <div className="w-3 h-3 rounded-full bg-red-400" />
-                    <div className="w-3 h-3 rounded-full bg-amber-400" />
-                    <div className="w-3 h-3 rounded-full bg-green-400" />
-                    <div className="ml-4 h-5 w-48 bg-white rounded-md border border-slate-200 flex items-center px-2">
-                       <span className="text-[10px] text-slate-400">techiehelp.com/dashboard</span>
-                    </div>
-                  </div>
-                  <div className="relative aspect-[4/3] bg-slate-50 p-6 flex flex-col gap-4">
-                     <div className="flex justify-between items-end">
-                       <div>
-                         <div className="h-4 w-24 bg-slate-200 rounded mb-2" />
-                         <div className="h-8 w-48 bg-slate-300 rounded" />
-                       </div>
-                       <div className="h-10 w-10 bg-blue-50 rounded-full flex items-center justify-center">
-                          <Users className="w-5 h-5 text-blue-950" />
-                       </div>
-                     </div>
-                     <div className="flex gap-4">
-                        <div className="flex-1 h-24 bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
-                           <div className="h-3 w-16 bg-slate-200 rounded mb-4" />
-                           <div className="h-6 w-12 bg-blue-200 rounded" />
-                        </div>
-                        <div className="flex-1 h-24 bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
-                           <div className="h-3 w-16 bg-slate-200 rounded mb-4" />
-                           <div className="h-6 w-12 bg-amber-200 rounded" />
-                        </div>
-                     </div>
-                     <div className="flex-1 bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex items-end gap-2">
-                         {[40, 70, 45, 90, 65, 100, 80].map((h, i) => (
-                             <div key={i} className="flex-1 bg-blue-50 rounded-t-sm" style={{ height: `${h}%` }}>
-                                <div className="w-full bg-blue-950 rounded-t-sm" style={{ height: '40%' }} />
-                             </div>
-                         ))}
-                     </div>
-                  </div>
-                </motion.div>
-                
-                {/* Floating Card 1: Internship Success */}
-                <motion.div 
-                  animate={{ y: [0, -20, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                  className="absolute -top-10 -right-8 p-4 rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1)] bg-white border border-slate-100 flex items-center gap-4 z-20 backdrop-blur-xl"
-                >
-                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-                    <Trophy className="w-6 h-6 text-green-600" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-slate-900">Internship Secured</h4>
-                    <p className="text-xs font-medium text-slate-500">Google, Microsoft, Amazon</p>
-                  </div>
-                </motion.div>
-
-                {/* Floating Card 2: Student Growth */}
-                <motion.div 
-                  animate={{ y: [0, 20, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-                  className="absolute -bottom-8 -left-8 p-5 rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1)] bg-white border border-slate-100 flex flex-col gap-3 z-20 backdrop-blur-xl"
-                >
-                   <div className="flex items-center gap-3">
-                     <div className="relative w-10 h-10 rounded-full flex items-center justify-center bg-amber-100">
-                       <TrendingUp className="w-5 h-5 text-amber-600" />
-                     </div>
-                     <div>
-                       <h4 className="text-sm font-bold text-slate-900">Skill Growth</h4>
-                       <p className="text-xs font-semibold text-green-500">+124% this month</p>
-                     </div>
-                   </div>
-                </motion.div>
+                {/* Premium Image Container */}
+                <div className="relative aspect-[4/3] w-full rounded-3xl overflow-hidden border-[8px] border-white bg-white shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] ring-1 ring-slate-200">
+                  <Image 
+                    src="/coveri.png" 
+                    alt="Cover Image" 
+                    fill 
+                    priority 
+                    className="object-cover hover:scale-105 transition-transform duration-700" 
+                  />
+                </div>
               </motion.div>
 
             </div>
           </section>
+
 
           {/* 2. WHY STUDENTS CHOOSE TECHIEHELP */}
           <section className="py-24 relative bg-white">
@@ -405,62 +349,62 @@ export default function Home() {
 
           {/* 5. CERTIFICATIONS SECTION */}
           <section className="py-24 relative bg-gradient-to-b from-white to-slate-50 border-y border-slate-200/60 overflow-hidden">
-             {/* Decorative Background */}
-             <div className="absolute inset-0 z-0">
-               <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-300/20 blur-[100px] rounded-full" />
-               <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-amber-200/20 blur-[100px] rounded-full" />
-               <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02] bg-center" />
-             </div>
+            {/* Decorative Background */}
+            <div className="absolute inset-0 z-0">
+              <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-300/20 blur-[100px] rounded-full" />
+              <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-amber-200/20 blur-[100px] rounded-full" />
+              <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02] bg-center" />
+            </div>
 
-             <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6">
-                <div className="grid lg:grid-cols-2 gap-16 items-center">
-                  <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 shadow-sm mb-6">
-                      <Award className="w-5 h-5 text-amber-500" />
-                      <span className="text-sm font-medium text-slate-700">Verified Credentials</span>
-                    </div>
-                    <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight text-slate-900">Earn Industry-Recognized Certifications 🏆</h2>
-                    <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-                      Stand out to recruiters with premium certificates that validate your skills, project experience, and internship completion.
-                    </p>
-                    
-                    <div className="space-y-4">
-                      {["Training Certificate", "Internship Completion Certificate", "Project Completion Certificate", "Letter of Recommendation (LoR)"].map((cert, i) => (
-                        <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-white border border-slate-200 shadow-sm hover:border-amber-300 transition-colors">
-                          <CheckCircle2 className="w-6 h-6 text-blue-950 flex-shrink-0" />
-                          <span className="font-semibold text-lg text-slate-800">{cert}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </motion.div>
+            <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6">
+              <div className="grid lg:grid-cols-2 gap-16 items-center">
+                <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 shadow-sm mb-6">
+                    <Award className="w-5 h-5 text-amber-500" />
+                    <span className="text-sm font-medium text-slate-700">Verified Credentials</span>
+                  </div>
+                  <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight text-slate-900">Earn Industry-Recognized Certifications 🏆</h2>
+                  <p className="text-lg text-slate-600 mb-8 leading-relaxed">
+                    Stand out to recruiters with premium certificates that validate your skills, project experience, and internship completion.
+                  </p>
 
-                  {/* Certificate Visual */}
-                  <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="relative">
-                     <div className="absolute -inset-4 bg-gradient-to-tr from-amber-400 to-blue-400 rounded-3xl blur-2xl opacity-20 animate-pulse" />
-                     <div className="relative aspect-[4/3] w-full bg-white rounded-2xl shadow-2xl overflow-hidden border-8 border-slate-100 flex flex-col p-8 items-center justify-center text-slate-900 text-center transform rotate-2 hover:rotate-0 transition-transform duration-500">
-                        <div className="w-16 h-16 mb-4">
-                           <Award className="w-full h-full text-amber-500" />
-                        </div>
-                        <h3 className="text-3xl font-serif font-bold text-slate-900 mb-2">CERTIFICATE</h3>
-                        <p className="text-sm tracking-widest text-slate-500 uppercase mb-8">Of Completion</p>
-                        <p className="text-sm text-slate-600 mb-2">This is proudly presented to</p>
-                        <h4 className="text-2xl font-bold border-b-2 border-slate-200 pb-2 mb-4 w-3/4 italic text-blue-950">Student Name</h4>
-                        <p className="text-sm text-slate-600 px-8">For successfully completing the rigorous 6-month AI & Machine Learning Internship Program.</p>
-                        
-                        <div className="absolute bottom-8 left-8 text-left">
-                           <div className="w-24 h-px bg-slate-300 mb-2" />
-                           <p className="text-[10px] font-bold">Director Signature</p>
-                        </div>
-                        <div className="absolute bottom-8 right-8 text-right">
-                           <div className="w-16 h-16 rounded-full border-4 border-amber-400 flex items-center justify-center ml-auto mb-2 opacity-50">
-                             <div className="w-12 h-12 rounded-full border border-amber-400" />
-                           </div>
-                           <p className="text-[10px] font-bold text-amber-600">Verified Badge</p>
-                        </div>
-                     </div>
-                  </motion.div>
-                </div>
-             </div>
+                  <div className="space-y-4">
+                    {["Training Certificate", "Internship Completion Certificate", "Project Completion Certificate", "Letter of Recommendation (LoR)"].map((cert, i) => (
+                      <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-white border border-slate-200 shadow-sm hover:border-amber-300 transition-colors">
+                        <CheckCircle2 className="w-6 h-6 text-blue-950 flex-shrink-0" />
+                        <span className="font-semibold text-lg text-slate-800">{cert}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+
+                {/* Certificate Visual */}
+                <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="relative">
+                  <div className="absolute -inset-4 bg-gradient-to-tr from-amber-400 to-blue-400 rounded-3xl blur-2xl opacity-20 animate-pulse" />
+                  <div className="relative aspect-[4/3] w-full bg-white rounded-2xl shadow-2xl overflow-hidden border-8 border-slate-100 flex flex-col p-8 items-center justify-center text-slate-900 text-center transform rotate-2 hover:rotate-0 transition-transform duration-500">
+                    <div className="w-16 h-16 mb-4">
+                      <Award className="w-full h-full text-amber-500" />
+                    </div>
+                    <h3 className="text-3xl font-serif font-bold text-slate-900 mb-2">CERTIFICATE</h3>
+                    <p className="text-sm tracking-widest text-slate-500 uppercase mb-8">Of Completion</p>
+                    <p className="text-sm text-slate-600 mb-2">This is proudly presented to</p>
+                    <h4 className="text-2xl font-bold border-b-2 border-slate-200 pb-2 mb-4 w-3/4 italic text-blue-950">Student Name</h4>
+                    <p className="text-sm text-slate-600 px-8">For successfully completing the rigorous 6-month AI & Machine Learning Internship Program.</p>
+
+                    <div className="absolute bottom-8 left-8 text-left">
+                      <div className="w-24 h-px bg-slate-300 mb-2" />
+                      <p className="text-[10px] font-bold">Director Signature</p>
+                    </div>
+                    <div className="absolute bottom-8 right-8 text-right">
+                      <div className="w-16 h-16 rounded-full border-4 border-amber-400 flex items-center justify-center ml-auto mb-2 opacity-50">
+                        <div className="w-12 h-12 rounded-full border border-amber-400" />
+                      </div>
+                      <p className="text-[10px] font-bold text-amber-600">Verified Badge</p>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            </div>
           </section>
 
           {/* 6. PLACEMENT PREPARATION SECTION */}
@@ -504,114 +448,114 @@ export default function Home() {
           {/* 7. SUCCESS STORIES */}
           <section className="py-24 relative bg-white">
             <div className="max-w-7xl mx-auto px-4 md:px-6">
-               <div className="text-center mb-16">
+              <div className="text-center mb-16">
                 <h2 className="text-3xl md:text-5xl font-bold mb-6 text-slate-900 tracking-tight">Success Stories</h2>
                 <p className="text-lg text-slate-600">Hear from students who transformed their careers with TechieHelp.</p>
               </div>
 
               <div className="grid md:grid-cols-3 gap-8">
-                 {[
-                   { name: "Rahul Sharma", college: "IIT Delhi", role: "SDE Intern @ Amazon", story: "The AI mock interviews and DSA practice were exactly what I needed. I felt completely confident during my actual Amazon interview.", img: "R" },
-                   { name: "Priya Singh", college: "NIT Surathkal", role: "Data Analyst @ MuSigma", story: "The Data Science internship program gave me real-world datasets to work on. That practical experience was the key to my placement.", img: "P" },
-                   { name: "Amit Kumar", college: "VIT Vellore", role: "Frontend Dev @ Swiggy", story: "TechieHelp's resume builder took my resume from zero to hero. The ATS score feature is a game-changer.", img: "A" }
-                 ].map((testimonial, i) => (
-                    <motion.div key={i} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="bg-slate-50 border border-slate-200 p-8 rounded-3xl relative">
-                       <div className="text-amber-500 flex gap-1 mb-6">
-                         {[1,2,3,4,5].map(star => <Star key={star} className="w-5 h-5 fill-current" />)}
-                       </div>
-                       <p className="text-slate-700 italic mb-8">"{testimonial.story}"</p>
-                       <div className="flex items-center gap-4 mt-auto">
-                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-950 to-blue-900 flex items-center justify-center text-amber-500 font-bold text-lg shadow-md border border-blue-900">
-                            {testimonial.img}
-                          </div>
-                          <div>
-                            <h4 className="font-bold text-blue-950">{testimonial.name}</h4>
-                            <p className="text-xs font-semibold text-amber-500 mb-0.5">{testimonial.role}</p>
-                            <p className="text-xs text-slate-500">{testimonial.college}</p>
-                          </div>
-                       </div>
-                    </motion.div>
-                 ))}
+                {[
+                  { name: "Rahul Sharma", college: "IIT Delhi", role: "SDE Intern @ Amazon", story: "The AI mock interviews and DSA practice were exactly what I needed. I felt completely confident during my actual Amazon interview.", img: "R" },
+                  { name: "Priya Singh", college: "NIT Surathkal", role: "Data Analyst @ MuSigma", story: "The Data Science internship program gave me real-world datasets to work on. That practical experience was the key to my placement.", img: "P" },
+                  { name: "Amit Kumar", college: "VIT Vellore", role: "Frontend Dev @ Swiggy", story: "TechieHelp's resume builder took my resume from zero to hero. The ATS score feature is a game-changer.", img: "A" }
+                ].map((testimonial, i) => (
+                  <motion.div key={i} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="bg-slate-50 border border-slate-200 p-8 rounded-3xl relative">
+                    <div className="text-amber-500 flex gap-1 mb-6">
+                      {[1, 2, 3, 4, 5].map(star => <Star key={star} className="w-5 h-5 fill-current" />)}
+                    </div>
+                    <p className="text-slate-700 italic mb-8">"{testimonial.story}"</p>
+                    <div className="flex items-center gap-4 mt-auto">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-950 to-blue-900 flex items-center justify-center text-amber-500 font-bold text-lg shadow-md border border-blue-900">
+                        {testimonial.img}
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-blue-950">{testimonial.name}</h4>
+                        <p className="text-xs font-semibold text-amber-500 mb-0.5">{testimonial.role}</p>
+                        <p className="text-xs text-slate-500">{testimonial.college}</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
             </div>
           </section>
 
           {/* 8. COLLEGE PARTNERSHIP SECTION */}
           <section id="tpo" className="py-24 relative bg-slate-50 overflow-hidden rounded-t-[3rem]">
-             <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02] bg-center" />
-             <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
-                <div className="bg-gradient-to-br from-blue-950 to-blue-900 rounded-3xl p-1 md:p-12 lg:p-16 text-center lg:text-left flex flex-col lg:flex-row items-center justify-between gap-12 shadow-xl border border-white/10">
-                   <div className="max-w-2xl p-8 lg:p-0">
-                      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-md mb-6 font-semibold text-sm text-white border border-white/30">
-                        <Building className="w-4 h-4" /> For Colleges & Training Institutes
-                      </div>
-                      <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight text-white">🏫 Empower Your Students</h2>
-                      <p className="text-lg text-blue-100 mb-8 leading-relaxed">
-                        Partner with TechieHelp to provide your students with enterprise-grade placement preparation tools. Get detailed analytics on student readiness and streamline your TPO operations.
-                      </p>
-                      
-                      <div className="grid grid-cols-2 gap-4 mb-8 text-left">
-                        {["Student Tracking Dashboard", "Custom Internship Programs", "On-Campus Workshops", "Dedicated Career Support"].map((feature, i) => (
-                          <div key={i} className="flex items-center gap-2 text-white font-medium">
-                            <CheckCircle2 className="w-5 h-5 text-amber-400" /> {feature}
-                          </div>
-                        ))}
-                      </div>
+            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02] bg-center" />
+            <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
+              <div className="bg-gradient-to-br from-blue-950 to-blue-900 rounded-3xl p-1 md:p-12 lg:p-16 text-center lg:text-left flex flex-col lg:flex-row items-center justify-between gap-12 shadow-xl border border-white/10">
+                <div className="max-w-2xl p-8 lg:p-0">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-md mb-6 font-semibold text-sm text-white border border-white/30">
+                    <Building className="w-4 h-4" /> For Colleges & Training Institutes
+                  </div>
+                  <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight text-white">🏫 Empower Your Students</h2>
+                  <p className="text-lg text-blue-100 mb-8 leading-relaxed">
+                    Partner with TechieHelp to provide your students with enterprise-grade placement preparation tools. Get detailed analytics on student readiness and streamline your TPO operations.
+                  </p>
 
-                      <button className="px-8 py-4 rounded-full bg-amber-500 text-blue-950 font-bold hover:bg-amber-600 hover:scale-105 transition-all shadow-xl">
-                        Request Partnership
-                      </button>
-                   </div>
-                   
-                   <div className="hidden lg:block w-full max-w-md relative p-8">
-                     <div className="absolute inset-0 bg-white/20 backdrop-blur-md rounded-3xl border border-white/40 transform rotate-3" />
-                     <div className="absolute inset-0 bg-white/20 backdrop-blur-md rounded-3xl border border-white/40 transform -rotate-3" />
-                     <div className="relative bg-white rounded-2xl p-6 shadow-2xl border border-slate-100">
-                        <div className="flex justify-between items-center mb-6">
-                           <h4 className="font-bold text-slate-900">Placement Cell Analytics</h4>
-                           <BarChart3 className="w-5 h-5 text-amber-500" />
-                        </div>
-                        <div className="space-y-4">
-                           <div>
-                             <div className="flex justify-between text-xs text-slate-500 mb-1"><span>Batch Readiness</span><span className="text-slate-700 font-bold">85%</span></div>
-                             <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden"><div className="w-[85%] h-full bg-green-500" /></div>
-                           </div>
-                           <div>
-                             <div className="flex justify-between text-xs text-slate-500 mb-1"><span>Resumes Approved</span><span className="text-slate-700 font-bold">92%</span></div>
-                             <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden"><div className="w-[92%] h-full bg-blue-500" /></div>
-                           </div>
-                           <div>
-                             <div className="flex justify-between text-xs text-slate-500 mb-1"><span>Mock Interviews Completed</span><span className="text-slate-700 font-bold">64%</span></div>
-                             <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden"><div className="w-[64%] h-full bg-amber-500" /></div>
-                           </div>
-                        </div>
-                     </div>
-                   </div>
+                  <div className="grid grid-cols-2 gap-4 mb-8 text-left">
+                    {["Student Tracking Dashboard", "Custom Internship Programs", "On-Campus Workshops", "Dedicated Career Support"].map((feature, i) => (
+                      <div key={i} className="flex items-center gap-2 text-white font-medium">
+                        <CheckCircle2 className="w-5 h-5 text-amber-400" /> {feature}
+                      </div>
+                    ))}
+                  </div>
+
+                  <button className="px-8 py-4 rounded-full bg-amber-500 text-blue-950 font-bold hover:bg-amber-600 hover:scale-105 transition-all shadow-xl">
+                    Request Partnership
+                  </button>
                 </div>
-             </div>
+
+                <div className="hidden lg:block w-full max-w-md relative p-8">
+                  <div className="absolute inset-0 bg-white/20 backdrop-blur-md rounded-3xl border border-white/40 transform rotate-3" />
+                  <div className="absolute inset-0 bg-white/20 backdrop-blur-md rounded-3xl border border-white/40 transform -rotate-3" />
+                  <div className="relative bg-white rounded-2xl p-6 shadow-2xl border border-slate-100">
+                    <div className="flex justify-between items-center mb-6">
+                      <h4 className="font-bold text-slate-900">Placement Cell Analytics</h4>
+                      <BarChart3 className="w-5 h-5 text-amber-500" />
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <div className="flex justify-between text-xs text-slate-500 mb-1"><span>Batch Readiness</span><span className="text-slate-700 font-bold">85%</span></div>
+                        <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden"><div className="w-[85%] h-full bg-green-500" /></div>
+                      </div>
+                      <div>
+                        <div className="flex justify-between text-xs text-slate-500 mb-1"><span>Resumes Approved</span><span className="text-slate-700 font-bold">92%</span></div>
+                        <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden"><div className="w-[92%] h-full bg-blue-500" /></div>
+                      </div>
+                      <div>
+                        <div className="flex justify-between text-xs text-slate-500 mb-1"><span>Mock Interviews Completed</span><span className="text-slate-700 font-bold">64%</span></div>
+                        <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden"><div className="w-[64%] h-full bg-amber-500" /></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </section>
 
           {/* 9. FINAL CTA SECTION */}
           <section className="py-32 relative text-center bg-white border-t border-slate-200">
-             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl h-64 bg-amber-50 blur-[100px] rounded-full pointer-events-none" />
-             <div className="max-w-4xl mx-auto px-4 md:px-6 relative z-10">
-               <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-4xl md:text-6xl font-bold tracking-tight mb-8 text-slate-900">
-                 Start Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-950 via-blue-800 to-amber-500">AI-Powered</span> <br className="hidden md:block"/> Career Journey Today
-               </motion.h2>
-               <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="text-xl text-slate-600 mb-10">
-                 Join thousands of students who have already transformed their careers.
-               </motion.p>
-               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="flex flex-col sm:flex-row justify-center gap-4">
-                 <Link href="/sign-up" className="px-10 py-4 rounded-full bg-blue-950 text-white font-bold hover:bg-blue-900 hover:-translate-y-1 transition-all text-lg shadow-xl hover:shadow-blue-900/30">
-                   Join Now
-                 </Link>
-                 <Link href="/programs" className="px-10 py-4 rounded-full bg-white text-blue-950 font-bold border-2 border-slate-200 hover:border-amber-500 hover:bg-amber-50 hover:text-amber-700 transition-all text-lg">
-                   Explore Programs
-                 </Link>
-               </motion.div>
-             </div>
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl h-64 bg-amber-50 blur-[100px] rounded-full pointer-events-none" />
+            <div className="max-w-4xl mx-auto px-4 md:px-6 relative z-10">
+              <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-4xl md:text-6xl font-bold tracking-tight mb-8 text-slate-900">
+                Start Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-950 via-blue-800 to-amber-500">AI-Powered</span> <br className="hidden md:block" /> Career Journey Today
+              </motion.h2>
+              <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="text-xl text-slate-600 mb-10">
+                Join thousands of students who have already transformed their careers.
+              </motion.p>
+              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="flex flex-col sm:flex-row justify-center gap-4">
+                <Link href="/sign-up" className="px-10 py-4 rounded-full bg-blue-950 text-white font-bold hover:bg-blue-900 hover:-translate-y-1 transition-all text-lg shadow-xl hover:shadow-blue-900/30">
+                  Join Now
+                </Link>
+                <Link href="/programs" className="px-10 py-4 rounded-full bg-white text-blue-950 font-bold border-2 border-slate-200 hover:border-amber-500 hover:bg-amber-50 hover:text-amber-700 transition-all text-lg">
+                  Explore Programs
+                </Link>
+              </motion.div>
+            </div>
           </section>
-          
+
         </div>
       </div>
     </div>
