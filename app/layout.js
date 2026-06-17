@@ -1,9 +1,9 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
-import { ThemeProvider } from "@/components/theme-provider";
 import Script from "next/script";
-import { AuthProvider } from "@/context/auth-context";
+import Footer from "@/components/Footer";
+import { Providers } from "@/components/providers";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -69,40 +69,69 @@ export default function RootLayout({ children }) {
         <Script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" strategy="afterInteractive" />
       </head>
       <body className={`${inter.className}`} >
-        <AuthProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <main className="min-h-screen">{children}</main>
-            <Toaster richColors />
-            <Script
-              id="schema-markup"
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: JSON.stringify({
-                  "@context": "https://schema.org",
-                  "@type": "Organization",
-                  name: "TechieHelp Institute of AI",
-                  url: "https://techiehelpinstituteofai.in",
-                  logo: "https://techiehelpinstituteofai.in/skill.png",
-                  sameAs: [
-                    "https://www.linkedin.com/company/techiehelp",
-                    "https://www.instagram.com/techiehelp_ai"
-                  ],
-                  contactPoint: {
-                    "@type": "ContactPoint",
-                    telephone: "+91-111-111-1111", // Placeholder, can be updated later
-                    contactType: "customer service",
+        <Providers>
+          <main className="min-h-screen">{children}</main>
+          <Footer />
+          <Toaster richColors />
+          <Script
+            id="schema-markup"
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@graph": [
+                  {
+                    "@type": ["Organization", "EducationalOrganization"],
+                    "@id": "https://techiehelpinstituteofai.in/#organization",
+                    "name": "TechieHelp Institute of AI",
+                    "url": "https://techiehelpinstituteofai.in",
+                    "logo": "https://techiehelpinstituteofai.in/skill.png",
+                    "description": "TechieHelp Institute of AI is an industry-focused learning platform dedicated to helping students build in-demand skills, gain real-world experience through internships, and earn professional certifications.",
+                    "telephone": "+91-7673825079",
+                    "email": "ceo@techiehelp.in",
+                    "sameAs": [
+                      "https://www.linkedin.com/company/techiehelp",
+                      "https://www.instagram.com/techiehelp_ai",
+                      "https://github.com/amitkumardemo"
+                    ],
+                    "founder": {
+                      "@type": "Person",
+                      "name": "Amit Kumar",
+                      "jobTitle": "Founder & CEO",
+                      "sameAs": "https://www.linkedin.com/in/amit-kumar-founder-of-techiehelp"
+                    },
+                    "contactPoint": {
+                      "@type": "ContactPoint",
+                      "telephone": "+91-7673825079",
+                      "contactType": "customer service",
+                      "email": "ceo@techiehelp.in"
+                    },
+                    "knowsAbout": [
+                      "Artificial Intelligence",
+                      "Machine Learning",
+                      "Software Development",
+                      "Career Coaching",
+                      "Resume Optimization",
+                      "ATS Checking",
+                      "Technical Interview Prep"
+                    ]
                   },
-                }),
-              }}
-            />
-            <Analytics />
-          </ThemeProvider>
-        </AuthProvider>
+                  {
+                    "@type": "WebSite",
+                    "@id": "https://techiehelpinstituteofai.in/#website",
+                    "url": "https://techiehelpinstituteofai.in",
+                    "name": "TechieHelp Institute of AI",
+                    "description": "Your AI-Powered Career Tutor",
+                    "publisher": {
+                      "@id": "https://techiehelpinstituteofai.in/#organization"
+                    }
+                  }
+                ]
+              }),
+            }}
+          />
+          <Analytics />
+        </Providers>
       </body>
     </html>
   );

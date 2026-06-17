@@ -4,7 +4,6 @@ import StreakPopup from "@/components/streak-popup";
 import { updateUserStreak } from "@/actions/streak";
 import { getFirebaseUser } from "@/lib/auth-utils";
 import Header from "@/components/header";
-import Footer from "@/components/Footer";
 
 const MainLayout = async ({ children }) => {
   const firebaseUser = await getFirebaseUser();
@@ -31,11 +30,7 @@ const MainLayout = async ({ children }) => {
       {showStreakPopup && (
         <StreakPopup streak={currentStreak} />
       )}
-      <footer className="bg-muted/50 py-10">
-        <div className="container mx-auto px-4 text-center text-gray-200">
-          <Footer />
-        </div>
-      </footer>
+      {/* Footer is rendered globally in RootLayout */}
     </>
   );
 };

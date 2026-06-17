@@ -26,6 +26,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { industries } from "@/data/industries";
 import { Textarea } from "@/components/ui/textarea";
+import Link from "next/link";
+import Image from "next/image";
 
 const STEPS = [
   { id: "personal", title: "Personal Info", icon: User },
@@ -152,40 +154,47 @@ export default function OnboardingPage() {
 
   if (isRedirecting) {
     return (
-      <div className="min-h-screen bg-[#030712] flex flex-col items-center justify-center p-4">
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
         <div className="relative">
-          <div className="h-24 w-24 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
-          <Loader2 className="h-10 w-10 text-primary animate-pulse absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+          <div className="h-24 w-24 rounded-full border-4 border-blue-950/20 border-t-blue-950 animate-spin" />
+          <Loader2 className="h-10 w-10 text-blue-950 animate-pulse absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
         </div>
-        <h2 className="text-2xl font-bold text-white mt-8 animate-pulse text-center">
+        <h2 className="text-2xl font-bold text-slate-900 mt-8 animate-pulse text-center">
           Building Your Career Dashboard...
         </h2>
-        <p className="text-gray-500 mt-2 text-sm">Please wait while we personalize your experience</p>
+        <p className="text-slate-500 mt-2 text-sm">Please wait while we personalize your experience</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#030712] flex flex-col items-center justify-center p-4 py-12">
+    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4 py-12">
+      {/* Brand Logo */}
+      <div className="mb-8 flex justify-center">
+        <Link href="/">
+          <Image src="/thp logo.png" alt="TechieHelp Logo" width={240} height={70} className="h-14 w-auto object-contain" priority />
+        </Link>
+      </div>
+
       <div className="w-full max-w-2xl text-center mb-10 space-y-4">
-        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white animate-in fade-in slide-in-from-top-4 duration-1000">
-          Your Career Journey <span className="text-primary italic">Starts Here</span>
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-blue-950 animate-in fade-in slide-in-from-top-4 duration-1000">
+          Your Career Journey <span className="text-amber-500 italic">Starts Here</span>
         </h1>
-        <p className="text-gray-400 text-lg max-w-xl mx-auto leading-relaxed animate-in fade-in slide-in-from-top-4 duration-1000 delay-200">
-          Complete your profile to unlock <span className="text-white font-medium text-primary">AI-powered insights</span>, 
-          exclusive <span className="text-white font-medium text-primary">internship opportunities</span>, 
-          and a professional <span className="text-white font-medium text-primary">industry-grade dashboard</span>.
+        <p className="text-slate-600 text-lg max-w-xl mx-auto leading-relaxed animate-in fade-in slide-in-from-top-4 duration-1000 delay-200">
+          Complete your profile to unlock <span className="text-blue-950 font-semibold">AI-powered insights</span>, 
+          exclusive <span className="text-blue-950 font-semibold">internship opportunities</span>, 
+          and a professional <span className="text-blue-950 font-semibold">industry-grade dashboard</span>.
         </p>
         <div className="flex flex-wrap justify-center gap-6 pt-2 animate-in fade-in slide-in-from-top-4 duration-1000 delay-500">
-          <div className="flex items-center gap-2 text-xs text-gray-500">
+          <div className="flex items-center gap-2 text-xs text-slate-500">
             <CheckCircle2 className="h-4 w-4 text-green-500" />
             <span>AI Career Coaching</span>
           </div>
-          <div className="flex items-center gap-2 text-xs text-gray-500">
+          <div className="flex items-center gap-2 text-xs text-slate-500">
             <CheckCircle2 className="h-4 w-4 text-green-500" />
             <span>Verified Student Profile</span>
           </div>
-          <div className="flex items-center gap-2 text-xs text-gray-500">
+          <div className="flex items-center gap-2 text-xs text-slate-500">
             <CheckCircle2 className="h-4 w-4 text-green-500" />
             <span>Priority Internship Access</span>
           </div>
@@ -197,26 +206,26 @@ export default function OnboardingPage() {
         <div className="flex justify-between gap-4 mb-10 px-2">
           {STEPS.map((s, i) => (
             <div key={s.id} className="flex flex-col items-center gap-2 flex-1">
-              <div className={`h-1.5 w-full rounded-full transition-all duration-500 ${i <= step ? "bg-primary" : "bg-white/10"}`} />
+              <div className={`h-1.5 w-full rounded-full transition-all duration-500 ${i <= step ? "bg-amber-500" : "bg-slate-200"}`} />
               <div className="flex items-center gap-2">
-                <div className={`p-1.5 rounded-md ${i <= step ? "bg-primary/20 text-primary" : "bg-white/5 text-gray-500"}`}>
+                <div className={`p-1.5 rounded-md ${i <= step ? "bg-amber-500/10 text-amber-600" : "bg-slate-100 text-slate-400"}`}>
                   <s.icon className="h-4 w-4" />
                 </div>
-                <span className={`text-xs font-semibold ${i <= step ? "text-white" : "text-gray-500"}`}>{s.title}</span>
+                <span className={`text-xs font-semibold ${i <= step ? "text-slate-800" : "text-slate-400"}`}>{s.title}</span>
               </div>
             </div>
           ))}
         </div>
 
-        <Card className="bg-[#0d1117] border-white/10 shadow-2xl">
-          <CardHeader className="border-b border-white/5 pb-6">
-            <CardTitle className="text-2xl font-bold text-white">
+        <Card className="bg-white border-slate-200/80 shadow-2xl">
+          <CardHeader className="border-b border-slate-100 pb-6">
+            <CardTitle className="text-2xl font-bold text-slate-900">
               {step === 0 && "Let's get started!"}
               {step === 1 && "Academic Details"}
               {step === 2 && "Professional Presence"}
               {step === 3 && "Career Preferences"}
             </CardTitle>
-            <CardDescription className="text-gray-500">
+            <CardDescription className="text-slate-500">
               {step === 0 && "Tell us a bit about yourself to personalize your experience."}
               {step === 1 && "These details help us match you with the right internships."}
               {step === 2 && "These links will be used for your internship applications."}
@@ -228,11 +237,11 @@ export default function OnboardingPage() {
             {step === 0 && (
               <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="space-y-2">
-                  <Label htmlFor="fullName" className="text-gray-400">Full Name</Label>
+                  <Label htmlFor="fullName" className="text-slate-500">Full Name</Label>
                   <Input 
                     id="fullName" 
                     placeholder="Enter your full name" 
-                    className="bg-white/5 border-white/10 h-11 text-white"
+                    className="bg-white border-slate-200 h-11 text-slate-900 focus:border-blue-950 focus:ring-blue-950"
                     value={formData.fullName}
                     onChange={e => setFormData({...formData, fullName: e.target.value})}
                   />
@@ -244,12 +253,12 @@ export default function OnboardingPage() {
               <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-500">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label className="text-gray-400">College</Label>
+                    <Label className="text-slate-500">College</Label>
                     <Select onValueChange={(val) => setFormData({...formData, collegeId: val})}>
-                      <SelectTrigger className="bg-white/5 border-white/10 h-11 text-white">
+                      <SelectTrigger className="bg-white border-slate-200 h-11 text-slate-900 focus:border-blue-950 focus:ring-blue-950">
                         <SelectValue placeholder="Select College" />
                       </SelectTrigger>
-                      <SelectContent className="bg-[#0d1117] border-white/10 text-white">
+                      <SelectContent className="bg-white border-slate-200 text-slate-900">
                         {colleges.map(c => (
                           <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
                         ))}
@@ -259,20 +268,20 @@ export default function OnboardingPage() {
                   </div>
                   {formData.collegeId === "other" && (
                     <div className="space-y-2">
-                      <Label className="text-gray-400">Enter College Name</Label>
+                      <Label className="text-slate-500">Enter College Name</Label>
                       <Input 
                         placeholder="Type your college name" 
-                        className="bg-white/5 border-white/10 h-11 text-white"
+                        className="bg-white border-slate-200 h-11 text-slate-900 focus:border-blue-950 focus:ring-blue-950"
                         value={formData.collegeName}
                         onChange={e => setFormData({...formData, collegeName: e.target.value})}
                       />
                     </div>
                   )}
                   <div className="space-y-2">
-                    <Label className="text-gray-400">Department / Course</Label>
+                    <Label className="text-slate-500">Department / Course</Label>
                     <Input 
                       placeholder="e.g. B.Tech, MCA" 
-                      className="bg-white/5 border-white/10 h-11 text-white"
+                      className="bg-white border-slate-200 h-11 text-slate-900 focus:border-blue-950 focus:ring-blue-950"
                       value={formData.department}
                       onChange={e => setFormData({...formData, department: e.target.value})}
                     />
@@ -280,21 +289,21 @@ export default function OnboardingPage() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label className="text-gray-400">Branch</Label>
+                    <Label className="text-slate-500">Branch</Label>
                     <Input 
                       placeholder="e.g. Computer Science" 
-                      className="bg-white/5 border-white/10 h-11 text-white"
+                      className="bg-white border-slate-200 h-11 text-slate-900 focus:border-blue-950 focus:ring-blue-950"
                       value={formData.branch}
                       onChange={e => setFormData({...formData, branch: e.target.value})}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-gray-400">Year of Study</Label>
+                    <Label className="text-slate-500">Year of Study</Label>
                     <Select onValueChange={(val) => setFormData({...formData, year: val})}>
-                      <SelectTrigger className="bg-white/5 border-white/10 h-11 text-white">
+                      <SelectTrigger className="bg-white border-slate-200 h-11 text-slate-900 focus:border-blue-950 focus:ring-blue-950">
                         <SelectValue placeholder="Select Year" />
                       </SelectTrigger>
-                      <SelectContent className="bg-[#0d1117] border-white/10 text-white">
+                      <SelectContent className="bg-white border-slate-200 text-slate-900">
                         {[1, 2, 3, 4].map(y => (
                           <SelectItem key={y} value={y.toString()}>{y}{y === 1 ? "st" : y === 2 ? "nd" : y === 3 ? "rd" : "th"} Year</SelectItem>
                         ))}
@@ -309,23 +318,23 @@ export default function OnboardingPage() {
               <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-500">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label className="text-gray-400 flex items-center gap-2">
-                      <FileText className="h-3 w-3 text-red-400" /> Resume Link
+                    <Label className="text-slate-500 flex items-center gap-2">
+                      <FileText className="h-3 w-3 text-red-500" /> Resume Link
                     </Label>
                     <Input 
                       placeholder="https://drive.google.com/..." 
-                      className="bg-white/5 border-white/10 h-11 text-[10px] text-white"
+                      className="bg-white border-slate-200 h-11 text-[10px] text-slate-900 focus:border-blue-950 focus:ring-blue-950"
                       value={formData.resumeLink}
                       onChange={e => setFormData({...formData, resumeLink: e.target.value})}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-gray-400 flex items-center gap-2">
-                      <Globe className="h-3 w-3 text-blue-400" /> Portfolio Link
+                    <Label className="text-slate-500 flex items-center gap-2">
+                      <Globe className="h-3 w-3 text-blue-500" /> Portfolio Link
                     </Label>
                     <Input 
                       placeholder="https://yourportfolio.com" 
-                      className="bg-white/5 border-white/10 h-11 text-[10px] text-white"
+                      className="bg-white border-slate-200 h-11 text-[10px] text-slate-900 focus:border-blue-950 focus:ring-blue-950"
                       value={formData.portfolioLink}
                       onChange={e => setFormData({...formData, portfolioLink: e.target.value})}
                     />
@@ -333,23 +342,23 @@ export default function OnboardingPage() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label className="text-gray-400 flex items-center gap-2">
-                      <Github className="h-3 w-3" /> GitHub Profile
+                    <Label className="text-slate-500 flex items-center gap-2">
+                      <Github className="h-3 w-3 text-slate-800" /> GitHub Profile
                     </Label>
                     <Input 
                       placeholder="https://github.com/username" 
-                      className="bg-white/5 border-white/10 h-11 text-[10px] text-white"
+                      className="bg-white border-slate-200 h-11 text-[10px] text-slate-900 focus:border-blue-950 focus:ring-blue-950"
                       value={formData.githubLink}
                       onChange={e => setFormData({...formData, githubLink: e.target.value})}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-gray-400 flex items-center gap-2">
-                      <Linkedin className="h-3 w-3 text-blue-500" /> LinkedIn Profile
+                    <Label className="text-slate-500 flex items-center gap-2">
+                      <Linkedin className="h-3 w-3 text-blue-600" /> LinkedIn Profile
                     </Label>
                     <Input 
                       placeholder="https://linkedin.com/in/username" 
-                      className="bg-white/5 border-white/10 h-11 text-[10px] text-white"
+                      className="bg-white border-slate-200 h-11 text-[10px] text-slate-900 focus:border-blue-950 focus:ring-blue-950"
                       value={formData.linkedinLink}
                       onChange={e => setFormData({...formData, linkedinLink: e.target.value})}
                     />
@@ -357,23 +366,23 @@ export default function OnboardingPage() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label className="text-gray-400 flex items-center gap-2">
+                    <Label className="text-slate-500 flex items-center gap-2">
                       <Code className="h-3 w-3 text-orange-500" /> LeetCode Profile
                     </Label>
                     <Input 
                       placeholder="https://leetcode.com/username" 
-                      className="bg-white/5 border-white/10 h-11 text-[10px] text-white"
+                      className="bg-white border-slate-200 h-11 text-[10px] text-slate-900 focus:border-blue-950 focus:ring-blue-950"
                       value={formData.leetcodeLink}
                       onChange={e => setFormData({...formData, leetcodeLink: e.target.value})}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-gray-400 flex items-center gap-2">
-                      <FileText className="h-3 w-3 text-gray-400" /> CV Link (Optional)
+                    <Label className="text-slate-500 flex items-center gap-2">
+                      <FileText className="h-3 w-3 text-slate-400" /> CV Link (Optional)
                     </Label>
                     <Input 
                       placeholder="https://..." 
-                      className="bg-white/5 border-white/10 h-11 text-[10px] text-white"
+                      className="bg-white border-slate-200 h-11 text-[10px] text-slate-900 focus:border-blue-950 focus:ring-blue-950"
                       value={formData.cvLink}
                       onChange={e => setFormData({...formData, cvLink: e.target.value})}
                     />
@@ -386,12 +395,12 @@ export default function OnboardingPage() {
               <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-500">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label className="text-gray-400">Industry</Label>
+                    <Label className="text-slate-500">Industry</Label>
                     <Select onValueChange={(val) => setFormData({...formData, industry: val, subIndustry: ""})}>
-                      <SelectTrigger className="bg-white/5 border-white/10 h-11 text-white">
+                      <SelectTrigger className="bg-white border-slate-200 h-11 text-slate-900 focus:border-blue-950 focus:ring-blue-950">
                         <SelectValue placeholder="Select Industry" />
                       </SelectTrigger>
-                      <SelectContent className="bg-[#0d1117] border-white/10 text-white">
+                      <SelectContent className="bg-white border-slate-200 text-slate-900">
                         {industries.map(ind => (
                           <SelectItem key={ind.id} value={ind.id}>{ind.name}</SelectItem>
                         ))}
@@ -399,15 +408,15 @@ export default function OnboardingPage() {
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-gray-400">Specialization</Label>
+                    <Label className="text-slate-500">Specialization</Label>
                     <Select 
                       onValueChange={(val) => setFormData({...formData, subIndustry: val})}
                       disabled={!formData.industry}
                     >
-                      <SelectTrigger className="bg-white/5 border-white/10 h-11 text-white">
+                      <SelectTrigger className="bg-white border-slate-200 h-11 text-slate-900 focus:border-blue-950 focus:ring-blue-950">
                         <SelectValue placeholder="Select Specialization" />
                       </SelectTrigger>
-                      <SelectContent className="bg-[#0d1117] border-white/10 text-white">
+                      <SelectContent className="bg-white border-slate-200 text-slate-900">
                         {selectedIndustry?.subIndustries.map(sub => (
                           <SelectItem key={sub} value={sub}>{sub}</SelectItem>
                         ))}
@@ -416,29 +425,29 @@ export default function OnboardingPage() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-gray-400">Years of Experience</Label>
+                  <Label className="text-slate-500">Years of Experience</Label>
                   <Input 
                     type="number"
                     placeholder="Enter years of experience" 
-                    className="bg-white/5 border-white/10 h-11 text-white"
+                    className="bg-white border-slate-200 h-11 text-slate-900 focus:border-blue-950 focus:ring-blue-950"
                     value={formData.experience}
                     onChange={e => setFormData({...formData, experience: e.target.value})}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-gray-400">Skills (Comma separated)</Label>
+                  <Label className="text-slate-500">Skills (Comma separated)</Label>
                   <Input 
                     placeholder="e.g. Python, JavaScript, React" 
-                    className="bg-white/5 border-white/10 h-11 text-white"
+                    className="bg-white border-slate-200 h-11 text-slate-900 focus:border-blue-950 focus:ring-blue-950"
                     value={formData.skills}
                     onChange={e => setFormData({...formData, skills: e.target.value})}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-gray-400">Professional Bio</Label>
+                  <Label className="text-slate-500">Professional Bio</Label>
                   <Textarea 
                     placeholder="Tell us about yourself..." 
-                    className="bg-white/5 border-white/10 min-h-[100px] text-white"
+                    className="bg-white border-slate-200 min-h-[100px] text-slate-900 focus:border-blue-950 focus:ring-blue-950"
                     value={formData.bio}
                     onChange={e => setFormData({...formData, bio: e.target.value})}
                   />
@@ -450,20 +459,20 @@ export default function OnboardingPage() {
               {step > 0 && (
                 <Button 
                   variant="outline" 
-                  className="flex-1 bg-white/5 border-white/10 text-white hover:bg-white/10"
+                  className="flex-1 bg-white border-slate-200 text-slate-700 hover:bg-slate-50"
                   onClick={() => setStep(step - 1)}
                 >
                   Back
                 </Button>
               )}
               <Button 
-                className="flex-[2] bg-white hover:bg-white/90 text-black font-bold h-11 transition-all"
+                className="flex-[2] bg-blue-950 hover:bg-blue-900 text-white font-bold h-11 transition-all"
                 onClick={step === 3 ? handleSubmit : handleNext}
                 disabled={loading}
               >
                 {loading ? (
                   <span className="flex items-center gap-2">
-                    <span className="h-4 w-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                    <span className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                     Saving...
                   </span>
                 ) : (
@@ -477,7 +486,7 @@ export default function OnboardingPage() {
           </CardContent>
         </Card>
 
-        <p className="text-center text-gray-600 text-[10px] mt-8 flex items-center justify-center gap-4">
+        <p className="text-center text-slate-400 text-[10px] mt-8 flex items-center justify-center gap-4">
           <span>🔒 Secured Data</span>
           <span>🛡️ Verified Profiles</span>
           <span>✨ Automated Applications</span>
