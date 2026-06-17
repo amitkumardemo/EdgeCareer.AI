@@ -9,6 +9,17 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   outputFileTracingRoot: __dirname,
+  // Fix: firebase-admin uses ESM-only deps (jose, jwks-rsa) that cannot be
+  // bundled with webpack/turbopack. Mark them as external so Node.js handles
+  // them natively on Vercel, preventing ERR_REQUIRE_ESM crashes.
+  serverExternalPackages: [
+    "firebase-admin",
+    "firebase-admin/app",
+    "firebase-admin/auth",
+    "firebase-admin/firestore",
+    "jwks-rsa",
+    "jose",
+  ],
   images: {
     remotePatterns: [
       {
