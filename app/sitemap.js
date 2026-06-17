@@ -101,6 +101,12 @@ export default async function sitemap() {
       changeFrequency: "monthly",
       priority: 0.85,
     },
+    {
+      url: `${baseUrl}/privacy`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.5,
+    },
   ];
 
   // Try to fetch dynamic active internships to add to sitemap
