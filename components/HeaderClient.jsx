@@ -158,7 +158,7 @@ export default function HeaderClient({ user, streakData }) {
       label: "Resources",
       description: "Tools and resources for career growth.",
       gridCards: [
-        { title: "Blog", desc: "Read articles on tech trends and career advice.", href: "/#blog", icon: Newspaper },
+        { title: "Blog", desc: "Read articles on tech trends and career advice.", href: "/blog", icon: Newspaper },
         { title: "Coding Challenges", desc: "Solve coding problems and improve logic.", href: "/dsa", icon: Code },
         { title: "Resume Builder", desc: "Build ATS-friendly resumes using AI.", href: "/resume", icon: FileText },
         { title: "Interview Preparation", desc: "Practice mock interviews and review answers.", href: "/mock-interview", icon: MessagesSquare },
@@ -253,6 +253,7 @@ export default function HeaderClient({ user, streakData }) {
               <button
                 key={key}
                 onMouseEnter={() => handleMouseEnter(key)}
+                suppressHydrationWarning
                 className={`text-[13px] xl:text-[14px] font-bold text-slate-700 dark:text-slate-300 hover:text-[#0F4CBA] dark:hover:text-blue-400 px-4.5 py-2.5 rounded-full transition-all flex items-center gap-1.5 group ${
                   activeMenu === key ? "bg-slate-100/80 dark:bg-slate-800/80 text-[#0F4CBA] dark:text-blue-400" : "hover:bg-slate-100/50 dark:hover:bg-slate-800/50"
                 }`}
@@ -297,7 +298,7 @@ export default function HeaderClient({ user, streakData }) {
           {/* Get Started (Non-Logged in CTA) */}
           {!user && (
             <Link href="/sign-up" onClick={clearMenu}>
-              <button className="text-xs xl:text-sm font-bold px-5 py-2.5 rounded-full bg-[#0F4CBA] hover:bg-blue-700 text-white hover:text-white dark:hover:bg-blue-600 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all">
+              <button suppressHydrationWarning className="text-xs xl:text-sm font-bold px-5 py-2.5 rounded-full bg-[#0F4CBA] hover:bg-blue-700 text-white hover:text-white dark:hover:bg-blue-600 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all">
                 Get Started
               </button>
             </Link>
@@ -308,6 +309,7 @@ export default function HeaderClient({ user, streakData }) {
         <div className="flex lg:hidden items-center gap-3">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            suppressHydrationWarning
             className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors text-slate-700 dark:text-slate-300"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

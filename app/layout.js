@@ -11,24 +11,40 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   metadataBase: new URL("https://techiehelpinstituteofai.in"),
   title: {
-    default: "TechieHelp Institute of AI - Your AI-Powered Career Tutor",
+    default: "TechieHelp Institute of AI | Best AI Training & Internship Platform in Jodhpur",
     template: "%s | TechieHelp Institute of AI"
   },
-  description: "Build one-page, ATS-optimized resumes using AI with TechieHelp Institute of AI. Your AI-powered career tutor for job search, resume optimization, mock interviews, and career growth.",
-  keywords: ["TechieHelp Institute of AI", "AI career assistant", "job search", "resume optimization", "mock interviews", "industry insights", "career growth", "AI interview prep", "job application tools", "ATS resume builder"],
+  description: "TechieHelp Institute of AI offers AI & ML, Data Science, Web Development, Cyber Security, Cloud Computing, and Digital Marketing training with internships, certifications, live projects, and placement support in Jodhpur.",
+  keywords: [
+    "TechieHelp Institute of AI", 
+    "AI Training in Jodhpur", 
+    "Best Internship in Jodhpur", 
+    "Machine Learning Internship in Jodhpur", 
+    "Data Science Internship in Jodhpur", 
+    "Web Development Training in Jodhpur", 
+    "Cyber Security Training in Jodhpur", 
+    "Cloud Computing Training in Jodhpur", 
+    "Digital Marketing Internship in Jodhpur", 
+    "AI Course in Jodhpur", 
+    "Summer Internship Jodhpur", 
+    "Training and Internship Institute Jodhpur"
+  ],
   authors: [{ name: "TechieHelp Institute of AI" }],
-  creator: "EdgeCareer",
+  creator: "Amit Kumar",
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || "google-site-verification-placeholder-code",
+  },
   openGraph: {
-    title: "TechieHelp Institute of AI - Your AI-Powered Career Tutor",
-    description: "Build one-page, ATS-optimized resumes using AI with TechieHelp Institute of AI.",
+    title: "TechieHelp Institute of AI",
+    description: "TechieHelp Institute of AI offers AI & ML, Data Science, Web Development, Cyber Security, Cloud Computing, and Digital Marketing training with internships, certifications, live projects, and placement support in Jodhpur.",
     url: "https://techiehelpinstituteofai.in",
     siteName: "TechieHelp Institute of AI",
     images: [
       {
-        url: "/og-image.png", // Next.js will auto-resolve this against metadataBase
-        width: 1200,
-        height: 630,
-        alt: "TechieHelp Institute of AI Platform",
+        url: "/logo.png",
+        width: 800,
+        height: 800,
+        alt: "TechieHelp Institute of AI Logo",
       },
     ],
     locale: "en_IN",
@@ -36,9 +52,9 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "TechieHelp Institute of AI - Your AI-Powered Career Tutor",
-    description: "Build one-page, ATS-optimized resumes using AI with TechieHelp Institute of AI.",
-    images: ["/og-image.png"],
+    title: "TechieHelp Institute of AI",
+    description: "TechieHelp Institute of AI offers AI & ML, Data Science, Web Development, Cyber Security, Cloud Computing, and Digital Marketing training with internships, certifications, live projects, and placement support in Jodhpur.",
+    images: ["/logo.png"],
     creator: "@techiehelp",
   },
   icons: {
@@ -67,6 +83,22 @@ export default function RootLayout({ children }) {
       <head>
         <Script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" strategy="afterInteractive" />
         <Script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" strategy="afterInteractive" />
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+              `}
+            </Script>
+          </>
+        )}
       </head>
       <body className={`${inter.className}`} >
         <Providers>
@@ -85,20 +117,25 @@ export default function RootLayout({ children }) {
                     "@id": "https://techiehelpinstituteofai.in/#organization",
                     "name": "TechieHelp Institute of AI",
                     "url": "https://techiehelpinstituteofai.in",
-                    "logo": "https://techiehelpinstituteofai.in/skill.png",
-                    "description": "TechieHelp Institute of AI is an industry-focused learning platform dedicated to helping students build in-demand skills, gain real-world experience through internships, and earn professional certifications.",
+                    "logo": "https://techiehelpinstituteofai.in/logo.png",
+                    "description": "TechieHelp Institute of AI is an industry-focused learning platform dedicated to helping students build in-demand skills, gain real-world experience through internships, and earn professional certifications in Jodhpur, Rajasthan.",
                     "telephone": "+91-7673825079",
                     "email": "ceo@techiehelp.in",
                     "sameAs": [
                       "https://www.linkedin.com/company/techiehelp",
-                      "https://www.instagram.com/techiehelp_ai",
-                      "https://github.com/amitkumardemo"
+                      "https://youtube.com/techiehelp",
+                      "https://instagram.com/techiehelp_ai",
+                      "https://github.com/amitkumardemo",
+                      "https://facebook.com/techiehelp",
+                      "https://x.com/techiehelp"
                     ],
                     "founder": {
                       "@type": "Person",
                       "name": "Amit Kumar",
                       "jobTitle": "Founder & CEO",
-                      "sameAs": "https://www.linkedin.com/in/amit-kumar-founder-of-techiehelp"
+                      "sameAs": [
+                        "https://www.linkedin.com/in/amit-kumar-founder-of-techiehelp"
+                      ]
                     },
                     "contactPoint": {
                       "@type": "ContactPoint",
@@ -109,7 +146,11 @@ export default function RootLayout({ children }) {
                     "knowsAbout": [
                       "Artificial Intelligence",
                       "Machine Learning",
+                      "Data Science",
                       "Software Development",
+                      "Cyber Security",
+                      "Cloud Computing",
+                      "Digital Marketing",
                       "Career Coaching",
                       "Resume Optimization",
                       "ATS Checking",
@@ -121,7 +162,7 @@ export default function RootLayout({ children }) {
                     "@id": "https://techiehelpinstituteofai.in/#website",
                     "url": "https://techiehelpinstituteofai.in",
                     "name": "TechieHelp Institute of AI",
-                    "description": "Your AI-Powered Career Tutor",
+                    "description": "Best AI Training & Internship Platform in Jodhpur",
                     "publisher": {
                       "@id": "https://techiehelpinstituteofai.in/#organization"
                     }

@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import allBlogs from "@/data/blogs";
 
 export default async function sitemap() {
   const baseUrl = "https://techiehelpinstituteofai.in";
@@ -107,7 +108,76 @@ export default async function sitemap() {
       changeFrequency: "yearly",
       priority: 0.5,
     },
+    {
+      url: `${baseUrl}/blog`,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.9,
+    },
+    // 9 New Landing Pages
+    {
+      url: `${baseUrl}/ai-machine-learning-training-jodhpur`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
+    {
+      url: `${baseUrl}/data-science-training-jodhpur`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
+    {
+      url: `${baseUrl}/web-development-training-jodhpur`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
+    {
+      url: `${baseUrl}/app-development-training-jodhpur`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
+    {
+      url: `${baseUrl}/cyber-security-training-jodhpur`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
+    {
+      url: `${baseUrl}/cloud-computing-training-jodhpur`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
+    {
+      url: `${baseUrl}/digital-marketing-training-jodhpur`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
+    {
+      url: `${baseUrl}/internship-jodhpur`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
+    {
+      url: `${baseUrl}/summer-internship-jodhpur`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
   ];
+
+  // Map all 105 blogs into the sitemap
+  const blogRoutes = allBlogs.map((blog) => ({
+    url: `${baseUrl}/blog/${blog.slug}`,
+    lastModified: new Date(blog.publishedAt),
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
 
   // Try to fetch dynamic active internships to add to sitemap
   try {
@@ -123,10 +193,10 @@ export default async function sitemap() {
       priority: 0.7,
     }));
 
-    return [...routes, ...dynamicRoutes];
+    return [...routes, ...blogRoutes, ...dynamicRoutes];
   } catch (error) {
     console.error("Sitemap dynamic generation error:", error);
-    // If DB fails, still return the static routes so the sitemap doesn't break
-    return routes;
+    // If DB fails, still return static routes and blogs
+    return [...routes, ...blogRoutes];
   }
 }

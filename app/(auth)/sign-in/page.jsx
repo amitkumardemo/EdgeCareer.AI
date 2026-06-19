@@ -116,9 +116,9 @@ function SignInContent() {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col lg:flex-row bg-slate-50">
+    <div className="min-h-screen w-full flex flex-col lg:flex-row bg-white">
       {/* ── LEFT: Brand & Platform Vision ── */}
-      <div className="hidden lg:flex flex-col justify-center flex-1 px-14 py-16 bg-gradient-to-br from-blue-50/80 via-white to-amber-50/80 border-r border-slate-200/60">
+      <div className="hidden lg:flex flex-col justify-center flex-1 px-14 py-16 bg-white border-r border-slate-200/60">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 mb-12 group">
           <Image src="/thp logo.png" alt="TechieHelp Logo" width={400} height={120} className="h-20 sm:h-28 w-auto object-contain" priority />

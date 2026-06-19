@@ -139,7 +139,7 @@ export default function CampusAmbassadorClient() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50/50 text-slate-900 overflow-x-hidden pt-24 pb-0 font-sans selection:bg-blue-100">
+    <div className="min-h-screen bg-white text-slate-900 overflow-x-hidden pt-24 pb-0 font-sans selection:bg-blue-100">
       
       {/* 1. HERO SECTION */}
       <section className="relative py-20 md:py-28 px-6 max-w-7xl mx-auto overflow-hidden">

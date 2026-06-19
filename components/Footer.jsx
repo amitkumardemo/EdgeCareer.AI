@@ -254,7 +254,7 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2.5">
               {[
-                { label: "Blog", href: "/#blog" },
+                { label: "Blog", href: "/blog" },
                 { label: "Coding Challenges", href: "/dsa" },
                 { label: "Resume Builder", href: "/resume" },
                 { label: "Interview Preparation", href: "/mock-interview" },
@@ -385,15 +385,23 @@ export default function Footer() {
 
       {/* WhatsApp chat widget */}
       <a
-        href="https://wa.me/918076239106" // TechieHelp actual WhatsApp
+        href={`https://wa.me/918076239106?text=${encodeURIComponent("Hi TechieHelp Institute of AI! 👋 I'm interested in your Internship Programs. Could you please share more details about the available internships, eligibility criteria, stipend, duration, and how to apply? Thank you!")}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-20 right-6 z-50 p-3.5 rounded-full bg-[#25D366] text-white shadow-lg hover:scale-110 active:scale-95 transition-all hover:bg-[#22c35e] hover:shadow-[#25D366]/30 flex items-center justify-center"
         aria-label="Chat on WhatsApp"
+        className="fixed bottom-20 right-6 z-50 group flex items-center gap-0 hover:gap-3 overflow-hidden transition-all duration-300"
       >
-        <svg className="w-5.5 h-5.5 fill-current" viewBox="0 0 24 24">
-          <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.717-1.458L0 24zm6.59-4.846c1.6.95 3.498 1.45 5.441 1.451 5.376 0 9.761-4.383 9.764-9.76.002-2.602-1.01-5.05-2.854-6.897C17.153 2.1 14.707 1.089 12.01 1.089c-5.38 0-9.766 4.386-9.77 9.763-.001 1.832.479 3.623 1.39 5.2l-.995 3.633 3.725-.977zm12.336-5.865c-.328-.164-1.94-.959-2.241-1.07-.302-.11-.522-.164-.741.164-.22.329-.851 1.07-1.042 1.29-.19.219-.382.246-.71.082-.328-.164-1.386-.511-2.641-1.631-.977-.872-1.636-1.95-1.828-2.279-.19-.329-.02-.507.145-.671.148-.147.328-.383.493-.575.164-.19.22-.329.329-.548.11-.219.055-.411-.027-.575-.083-.164-.741-1.785-1.015-2.443-.267-.643-.538-.553-.74-.563-.191-.01-.41-.01-.628-.01-.22 0-.575.082-.876.411-.301.329-1.15 1.122-1.15 2.738 0 1.616 1.177 3.177 1.34 3.396.164.22 2.316 3.537 5.611 4.961.783.339 1.396.541 1.874.693.788.251 1.505.216 2.071.131.632-.095 1.94-.794 2.214-1.562.274-.767.274-1.424.192-1.562-.082-.138-.301-.22-.629-.383z" />
-        </svg>
+        {/* Tooltip label */}
+        <span className="opacity-0 group-hover:opacity-100 max-w-0 group-hover:max-w-[180px] overflow-hidden whitespace-nowrap transition-all duration-300 text-xs font-bold text-white bg-[#128C7E] px-3 py-2 rounded-full shadow-md">
+          Chat for Internship
+        </span>
+
+        {/* WhatsApp icon button */}
+        <span className="flex items-center justify-center w-13 h-13 rounded-full bg-[#25D366] text-white shadow-xl hover:shadow-[0_8px_30px_rgba(37,211,102,0.45)] hover:scale-110 active:scale-95 transition-all duration-200 p-3.5">
+          <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.717-1.458L0 24zm6.59-4.846c1.6.95 3.498 1.45 5.441 1.451 5.376 0 9.761-4.383 9.764-9.76.002-2.602-1.01-5.05-2.854-6.897C17.153 2.1 14.707 1.089 12.01 1.089c-5.38 0-9.766 4.386-9.77 9.763-.001 1.832.479 3.623 1.39 5.2l-.995 3.633 3.725-.977zm12.336-5.865c-.328-.164-1.94-.959-2.241-1.07-.302-.11-.522-.164-.741.164-.22.329-.851 1.07-1.042 1.29-.19.219-.382.246-.71.082-.328-.164-1.386-.511-2.641-1.631-.977-.872-1.636-1.95-1.828-2.279-.19-.329-.02-.507.145-.671.148-.147.328-.383.493-.575.164-.19.22-.329.329-.548.11-.219.055-.411-.027-.575-.083-.164-.741-1.785-1.015-2.443-.267-.643-.538-.553-.74-.563-.191-.01-.41-.01-.628-.01-.22 0-.575.082-.876.411-.301.329-1.15 1.122-1.15 2.738 0 1.616 1.177 3.177 1.34 3.396.164.22 2.316 3.537 5.611 4.961.783.339 1.396.541 1.874.693.788.251 1.505.216 2.071.131.632-.095 1.94-.794 2.214-1.562.274-.767.274-1.424.192-1.562-.082-.138-.301-.22-.629-.383z" />
+          </svg>
+        </span>
       </a>
 
     </footer>

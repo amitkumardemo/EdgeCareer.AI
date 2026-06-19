@@ -66,7 +66,7 @@ export default function AboutClient() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/50 text-slate-900 overflow-x-hidden pt-24 pb-0 font-sans selection:bg-cyan-150 transition-colors duration-300">
+    <div className="min-h-screen bg-white text-slate-900 overflow-x-hidden pt-24 pb-0 font-sans selection:bg-cyan-150 transition-colors duration-300">
       
       {/* 1. HERO SECTION */}
       <section className="relative py-24 md:py-32 px-6 max-w-7xl mx-auto overflow-hidden">
