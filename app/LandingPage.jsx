@@ -110,7 +110,7 @@ export default function Home() {
                     Start Learning
                     <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                   </Link>
-                  <Link href="/internships" className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-white text-blue-950 font-semibold border-2 border-slate-200 hover:border-blue-950 hover:bg-slate-50 transition-all shadow-sm hover:shadow-md hover:-translate-y-1 text-lg group">
+                  <Link href="/internship" className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-white text-blue-950 font-semibold border-2 border-slate-200 hover:border-blue-950 hover:bg-slate-50 transition-all shadow-sm hover:shadow-md hover:-translate-y-1 text-lg group">
                     Apply for Internship
                   </Link>
                 </motion.div>

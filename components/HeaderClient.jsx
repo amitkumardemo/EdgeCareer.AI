@@ -140,8 +140,8 @@ export default function HeaderClient({ user, streakData }) {
       description: "Practical learning and real-world experience.",
       gridCards: [
         { title: "Training Programs", desc: "Comprehensive classroom and online training.", href: "/skill-development-programs", icon: GraduationCap },
-        { title: "Internship Opportunities", desc: "Gain hands-on industry experience.", href: "/internships", icon: Briefcase },
-        { title: "Live Projects", desc: "Work on real-world industrial projects.", href: "/internships", icon: Terminal },
+        { title: "Internship Opportunities", desc: "Gain hands-on industry experience.", href: "/internship", icon: Briefcase },
+        { title: "Live Projects", desc: "Work on real-world industrial projects.", href: "/internship", icon: Terminal },
         { title: "Professional Certifications", desc: "Earn industry-recognized credentials.", href: "/prep-resources", icon: Award },
         { title: "Verify Certificate", desc: "Validate the authenticity of your certificate.", href: "/#verify", icon: CheckCircle },
         { title: "Career Opportunities", desc: "Explore open career roles at TechieHelp.", href: "/latest-jobs", icon: TrendingUp }
@@ -151,7 +151,7 @@ export default function HeaderClient({ user, streakData }) {
         title: "LEARN. INTERN. GROW.",
         desc: "Hands-on experience designed for future professionals.",
         btnText: "Apply Now",
-        href: "/internships"
+        href: "/internship"
       }
     },
     resources: {

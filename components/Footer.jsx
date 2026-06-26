@@ -18,7 +18,9 @@ export default function Footer() {
   // Exclude dashboard, admin, and auth pages from showing the global footer
   const excludedPrefixes = [
     "/admin",
-    "/internship",
+    "/internship/student",
+    "/internship/admin",
+    "/internship/college",
     "/tpo",
     "/sign-in",
     "/sign-up"
@@ -232,8 +234,8 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {[
                 { label: "Training Programs", href: "/prep-resources" },
-                { label: "Internship Opportunities", href: "/internships" },
-                { label: "Live Projects", href: "/internships" },
+                { label: "Internship Opportunities", href: "/internship" },
+                { label: "Live Projects", href: "/internship" },
                 { label: "Professional Certifications", href: "/prep-resources" },
                 { label: "Verify Certificate", href: "/#verify" },
                 { label: "Career Opportunities", href: "/latest-jobs" }

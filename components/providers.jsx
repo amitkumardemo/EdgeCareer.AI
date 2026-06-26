@@ -9,8 +9,9 @@ export function Providers({ children }) {
     <AuthProvider>
       <ThemeProvider
         attribute="class"
-        defaultTheme="dark"
-        enableSystem
+        defaultTheme="light"
+        forcedTheme="light"
+        enableSystem={false}
         disableTransitionOnChange
       >
         {children}

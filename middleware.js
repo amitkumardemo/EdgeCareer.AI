@@ -20,7 +20,9 @@ export function middleware(req) {
     "/latest-jobs",
     "/job-matches",
     "/career-branding-lab",
-    "/internship"
+    "/internship/admin",
+    "/internship/student",
+    "/internship/college"
   ];
 
   const isProtectedRoute = protectedRoutes.some((route) =>

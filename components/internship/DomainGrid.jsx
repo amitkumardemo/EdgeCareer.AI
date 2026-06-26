@@ -10,7 +10,7 @@ import {
 const domains = [
   { 
     title: "Web Development", 
-    path: "/webdevelopment",
+    path: "/internship/webdevelopment",
     category: "Development",
     icon: <Globe className="w-10 h-10 text-blue-400" />, 
     color: "from-blue-600/20 to-blue-900/10 border-blue-500/30",
@@ -20,7 +20,7 @@ const domains = [
   },
   { 
     title: "App Development", 
-    path: "/androiddevelopment",
+    path: "/internship/androiddevelopment",
     category: "Mobile",
     icon: <Smartphone className="w-10 h-10 text-[#33bbcf]" />, 
     color: "from-purple-600/20 to-purple-900/10 border-purple-500/30",
@@ -30,7 +30,7 @@ const domains = [
   },
   { 
     title: "Fullstack Developer", 
-    path: "/fullstack",
+    path: "/internship/fullstack",
     category: "Development",
     icon: <Layers className="w-10 h-10 text-orange-400" />, 
     color: "from-orange-600/20 to-orange-900/10 border-orange-500/30",
@@ -40,7 +40,7 @@ const domains = [
   },
   { 
     title: "AI & Machine Learning", 
-    path: "/aiml",
+    path: "/internship/aiml",
     category: "AI & Data",
     icon: <Cpu className="w-10 h-10 text-red-500" />, 
     color: "from-red-600/20 to-red-900/10 border-red-500/30",
@@ -50,7 +50,7 @@ const domains = [
   },
   { 
     title: "Cyber Security", 
-    path: "/cybersecurity",
+    path: "/internship/cybersecurity",
     category: "Security",
     icon: <ShieldAlert className="w-10 h-10 text-green-400" />, 
     color: "from-green-600/20 to-green-900/10 border-green-500/30",
@@ -60,7 +60,7 @@ const domains = [
   },
   { 
     title: "Data Science", 
-    path: "/datascience",
+    path: "/internship/datascience",
     category: "AI & Data",
     icon: <Database className="w-10 h-10 text-[#33bbcf]" />, 
     color: "from-blue-600/20 to-blue-900/10 border-blue-500/30",
@@ -70,7 +70,7 @@ const domains = [
   },
   { 
     title: "UI/UX Design", 
-    path: "/uiux",
+    path: "/internship/uiux",
     category: "Specialized",
     icon: <Layout className="w-10 h-10 text-pink-400" />, 
     color: "from-pink-600/20 to-pink-900/10 border-pink-500/30",
@@ -80,7 +80,7 @@ const domains = [
   },
   { 
     title: "Backend Development", 
-    path: "/backend",
+    path: "/internship/backend",
     category: "Development",
     icon: <Server className="w-10 h-10 text-gray-600 dark:text-gray-400" />, 
     color: "from-gray-600/20 to-gray-900/10 border-gray-500/30",
@@ -90,7 +90,7 @@ const domains = [
   },
   { 
     title: "Python Developer", 
-    path: "/python",
+    path: "/internship/python",
     category: "Development",
     icon: <Terminal className="w-10 h-10 text-yellow-400" />, 
     color: "from-yellow-600/20 to-yellow-900/10 border-yellow-500/30",
@@ -100,7 +100,7 @@ const domains = [
   },
   { 
     title: "DevOps", 
-    path: "/devops",
+    path: "/internship/devops",
     category: "Cloud",
     icon: <Cloud className="w-10 h-10 text-[#33bbcf]" />, 
     color: "from-indigo-600/20 to-indigo-900/10 border-indigo-500/30",
@@ -110,7 +110,7 @@ const domains = [
   },
   { 
     title: "Special Batch", 
-    path: "/special-batch",
+    path: "/internship/special-batch",
     category: "Specialized",
     icon: <Award className="w-10 h-10 text-[#33bbcf]" />, 
     color: "from-yellow-500/20 to-yellow-900/10 border-yellow-500/40",
@@ -120,7 +120,7 @@ const domains = [
   },
   { 
     title: "Placement Booster", 
-    path: "/placement-booster",
+    path: "/internship/placement-booster",
     category: "Specialized",
     icon: <Rocket className="w-10 h-10 text-blue-600" />, 
     color: "from-blue-600/30 to-purple-900/20 border-blue-400/50",
@@ -143,7 +143,7 @@ const DomainGrid = () => {
   });
 
   return (
-    <section className="py-24 bg-[#05050f] relative overflow-hidden px-6" id="domains">
+    <section className="py-24 bg-white relative overflow-hidden px-6" id="domains">
       {/* Background Gradients */}
       <div className="absolute top-0 left-0 w-full h-full -z-10 pointer-events-none">
         <motion.div 
@@ -229,31 +229,31 @@ const DomainGrid = () => {
                   exit={{ opacity: 0, scale: 0.8, y: 10 }}
                   transition={{ duration: 0.4 }}
                   whileHover={{ y: -8, scale: 1.02 }}
-                  className={`group relative flex flex-col h-full bg-[#0a0a15]/80 backdrop-blur-2xl rounded-[3rem] border border-gray-200 dark:border-white/10 p-10 overflow-hidden transition-all duration-300 hover:border-orange-500/30 ${domain.glow} shadow-[0_10px_40px_rgba(0,0,0,0.5)]`}
+                  className={`group relative flex flex-col h-full bg-slate-50 rounded-[3rem] border border-slate-100 p-10 overflow-hidden transition-all duration-300 hover:border-orange-500/30 shadow-sm`}
                 >
                   {/* Decorative Shapes */}
-                  <div className="absolute -top-10 -right-10 w-40 h-40 bg-gray-100 dark:bg-white/5 blur-3xl rounded-full group-hover:bg-orange-500/10 transition-colors duration-500" />
+                  <div className="absolute -top-10 -right-10 w-40 h-40 bg-orange-500/5 blur-3xl rounded-full group-hover:bg-orange-500/10 transition-colors duration-500" />
                   
                   {/* Highlight Badge */}
-                  <div className="absolute top-8 right-8 flex items-center gap-2 px-4 py-2 rounded-2xl bg-black/60 border border-gray-200 dark:border-white/10 backdrop-blur-md shadow-lg">
+                  <div className="absolute top-8 right-8 flex items-center gap-2 px-4 py-2 rounded-2xl bg-slate-900/90 border border-slate-800 backdrop-blur-md shadow-lg">
                      <div className="w-2 h-2 rounded-full bg-orange-400 animate-ping absolute opacity-75" />
                      <div className="w-2 h-2 rounded-full bg-orange-500 relative" />
-                     <span className="text-[10px] font-black uppercase tracking-widest text-[#e1e7ef]">{domain.highlight}</span>
+                     <span className="text-[10px] font-black uppercase tracking-widest text-white">{domain.highlight}</span>
                   </div>
 
-                  <div className="relative z-10 mb-8 w-20 h-20 rounded-3xl bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500 shadow-inner">
+                  <div className="relative z-10 mb-8 w-20 h-20 rounded-3xl bg-white border border-slate-100 flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500 shadow-inner">
                     {domain.icon}
                   </div>
                   
                   <div className="relative z-10 flex-1">
-                    <h3 className="text-3xl font-black text-gray-900 dark:text-white mb-4 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-orange-200 transition-all">
+                    <h3 className="text-3xl font-black text-gray-900 mb-4 leading-tight group-hover:text-orange-500 transition-colors">
                       {domain.title}
                     </h3>
                     <div className="flex items-center gap-1 mb-4 text-xs font-bold text-orange-400 uppercase tracking-widest opacity-80">
                       <Star className="w-3 h-3 fill-current" />
                       <span>Highly Rated Program</span>
                     </div>
-                    <p className="text-gray-600 dark:text-gray-400 text-base leading-relaxed mb-12 font-medium group-hover:text-gray-300 transition-colors">
+                    <p className="text-gray-600 text-base leading-relaxed mb-12 font-medium">
                       {domain.desc}
                     </p>
                   </div>
@@ -262,8 +262,7 @@ const DomainGrid = () => {
                     href={domain.path}
                     className="relative w-full group/btn mt-auto"
                   >
-                    <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-500 to-orange-700 rounded-2xl blur opacity-25 group-hover/btn:opacity-100 transition duration-500" />
-                    <button className="relative w-full py-4 bg-[#05050f] text-gray-900 dark:text-white font-bold text-lg rounded-xl border border-gray-200 dark:border-white/10 hover:border-orange-500/50 transition-all duration-300 flex items-center justify-center gap-3 overflow-hidden shadow-lg hover:bg-[#0a0a15]">
+                    <button className="relative w-full py-4 bg-orange-500 hover:bg-orange-600 text-white font-bold text-lg rounded-xl transition-all duration-300 flex items-center justify-center gap-3 shadow-md hover:shadow-lg">
                       <span className="relative z-10">Learn More</span>
                       <ChevronRight className="relative z-10 w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
                     </button>

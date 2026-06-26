@@ -438,7 +438,7 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-6">
             
             {/* Action 1: Apply for Internship */}
-            <Link href="/internships" className="group p-6 rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-white hover:border-[#0F4CBA] hover:shadow-md transition-all text-left space-y-4">
+            <Link href="/internship" className="group p-6 rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-white hover:border-[#0F4CBA] hover:shadow-md transition-all text-left space-y-4">
               <div className="w-10 h-10 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-[#0F4CBA] group-hover:text-[#F4B400] transition-colors shadow-sm">
                 <Briefcase className="w-5 h-5" strokeWidth={1.75} />
               </div>

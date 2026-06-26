@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Sparkles, ArrowRight, AlertTriangle, Timer } from "lucide-react";
@@ -33,6 +34,10 @@ const Internship = () => {
       setHasShownPopup(true);
     }
   }, [hasShownPopup]);
+
+  useEffect(() => {
+    document.documentElement.classList.remove('dark');
+  }, []);
 
   useEffect(() => {
     document.addEventListener("mouseleave", handleMouseLeave);
@@ -125,7 +130,7 @@ const Internship = () => {
                 </p>
                 
                 <a 
-                  href="https://forms.gle/N8kk845Lbfds6Pwj6"
+                  href="https://payments.cashfree.com/forms?code=techiehelpinternship"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full py-5 bg-white text-blue-600 font-black text-xl rounded-2xl hover:scale-105 transition-all shadow-xl flex items-center justify-center gap-3 text-center"
@@ -217,7 +222,7 @@ const Internship = () => {
                     }</span>. Don't miss your chance!
                   </p>
                   <a 
-                    href="https://forms.gle/N8kk845Lbfds6Pwj6"
+                    href="https://payments.cashfree.com/forms?code=techiehelpinternship"
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="mt-3 flex items-center gap-1 text-[10px] font-black text-blue-400 uppercase tracking-widest hover:text-blue-300 transition-colors"

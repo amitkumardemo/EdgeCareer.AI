@@ -1,10 +1,11 @@
+"use client";
 import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Star, CheckCircle, PlayCircle, Sparkles } from "lucide-react";
 
 // IMPORTANT: Ensure these two uploaded images are in the assets folder
-import confusedImg from "../../assets/confused-student.png";
-import confidentImg from "../../assets/confident-student.png";
+import confusedImg from "../assets/confused-student.png";
+import confidentImg from "../assets/confident-student.png";
 
 const Hero = () => {
   return (
@@ -49,7 +50,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg text-gray-300 mb-8 max-w-xl leading-relaxed font-medium"
+            className="text-lg text-gray-600 mb-8 max-w-xl leading-relaxed font-medium"
           >
             Join TechieHelp Institute of AI Summer Internship Program 2026 and gain hands-on experience in Web Development, Full Stack, Data Analytics, and AI/ML. Work on real-world projects, get MSME & ISO certified, and boost your career with industry mentorship.
           </motion.p>
@@ -69,7 +70,7 @@ const Hero = () => {
           >
             {/* Animated Premium Button */}
             <a
-              href="https://forms.gle/N8kk845Lbfds6Pwj6"
+              href="https://payments.cashfree.com/forms?code=techiehelpinternship"
               target="_blank"
               rel="noopener noreferrer"
               className="relative inline-flex h-16 w-full sm:w-auto overflow-hidden rounded-2xl p-[2px] focus:outline-none group shadow-[0_0_40px_rgba(249,115,22,0.3)] hover:shadow-[0_0_60px_rgba(249,115,22,0.5)] transition-shadow"
@@ -151,7 +152,7 @@ const Hero = () => {
               className="relative w-[65%] sm:w-[55%] self-start z-20 drop-shadow-2xl"
             >
               {/* Image without filters, clear and large */}
-              <img src={confusedImg} alt="Confused Flow" className="w-full h-auto object-contain relative z-10" />
+              <img src={confusedImg.src || confusedImg} alt="Confused Flow" className="w-full h-auto object-contain relative z-10" />
             </motion.div>
 
             {/* Bottom Right: Confident Student Block */}
@@ -160,7 +161,7 @@ const Hero = () => {
               className="relative w-[75%] sm:w-[65%] self-end z-20 mt-[-20px] drop-shadow-[0_20px_40px_rgba(37,99,235,0.4)]"
             >
               {/* Image without filters, clear and large */}
-              <img src={confidentImg} alt="Solution Flow" className="w-full h-auto object-contain relative z-10" />
+              <img src={confidentImg.src || confidentImg} alt="Solution Flow" className="w-full h-auto object-contain relative z-10" />
             </motion.div>
 
           </div>
