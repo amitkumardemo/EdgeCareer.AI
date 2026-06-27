@@ -1,5 +1,6 @@
 import Header from "@/components/header";
 import LandingPage from "./LandingPage";
+import { db } from "@/lib/prisma";
 
 export const metadata = {
   title: "TechieHelp Institute of AI | Best AI Training & Internship Platform in Jodhpur",
@@ -20,11 +21,27 @@ export const metadata = {
   ],
 };
 
-export default function Home() {
+export default async function Home() {
+  const latestJobs = await db.job.findMany({
+    take: 3,
+    orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      employmentType: true,
+      salary: true,
+      skills: true,
+      applyBefore: true,
+      company: { select: { name: true, logoUrl: true } },
+      location: { select: { name: true } },
+    }
+  });
+
   return (
     <>
       <Header />
-      <LandingPage />
+      <LandingPage latestJobs={latestJobs} />
     </>
   );
 }

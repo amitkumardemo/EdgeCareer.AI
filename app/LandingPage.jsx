@@ -8,7 +8,7 @@ import {
   ChevronRight, Code2, FileText, Github, LineChart,
   Sparkles, Target, Trophy, Users, Zap, Building, LayoutDashboard, MonitorPlay, Presentation, XCircle,
   Sun, Moon, Menu, X, GraduationCap, Award, Star, TrendingUp, Cpu, Database, Code, Smartphone, Shield, Cloud, Layout, Megaphone, Video, Terminal, Linkedin, Map, Play,
-  Mail, Phone, ArrowUpRight, HeartHandshake, MapPin, Settings
+  Mail, Phone, ArrowUpRight, HeartHandshake, MapPin, Settings, Clock, Banknote
 } from "lucide-react";
 
 // Animations
@@ -61,7 +61,7 @@ const AnimatedCounter = ({ value, text }) => {
     </motion.div>
   );
 };
-export default function Home() {
+export default function Home({ latestJobs = [] }) {
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
 
@@ -78,7 +78,7 @@ export default function Home() {
         <div className="fixed inset-0 z-0 pointer-events-none">
           <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[1200px] h-[600px] opacity-[0.08] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-600 via-blue-200 to-transparent blur-[120px]" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[800px] h-[800px] opacity-[0.1] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-400 via-transparent to-transparent blur-[120px]" />
-          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-[0.02]" style={{ backgroundImage: 'linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+          <div className="absolute inset-0 bg-center opacity-[0.02]" style={{ backgroundImage: 'linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
         </div>
 
         <div className="relative z-10 pt-20">
@@ -106,8 +106,8 @@ export default function Home() {
                 </motion.p>
 
                 <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-4 mb-10">
-                  <Link href="/programs" className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-amber-500 text-white font-bold hover:bg-amber-600 transition-all shadow-xl hover:shadow-amber-500/30 hover:-translate-y-1 text-lg group">
-                    Start Learning
+                  <Link href="/jobs" className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-amber-500 text-white font-bold hover:bg-amber-600 transition-all shadow-xl hover:shadow-amber-500/30 hover:-translate-y-1 text-lg group">
+                    Explore Jobs
                     <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                   </Link>
                   <Link href="/internship" className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-white text-blue-950 font-semibold border-2 border-slate-200 hover:border-blue-950 hover:bg-slate-50 transition-all shadow-sm hover:shadow-md hover:-translate-y-1 text-lg group">
@@ -152,6 +152,7 @@ export default function Home() {
                     src="/coveri.png" 
                     alt="Cover Image" 
                     fill 
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     priority 
                     className="object-cover hover:scale-105 transition-transform duration-700" 
                   />
@@ -193,93 +194,144 @@ export default function Home() {
             </div>
           </section>
 
-          {/* 3. PROGRAMS SECTION */}
-          <section id="programs" className="py-24 relative bg-slate-50 border-y border-slate-200/60">
+          {/* 3. INTERNSHIPS SECTION (Replaced Programs) */}
+          <section id="internships" className="py-24 relative bg-slate-50 border-y border-slate-200/60">
             <div className="max-w-7xl mx-auto px-4 md:px-6">
               <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
                 <div className="max-w-2xl">
-                  <h2 className="text-3xl md:text-5xl font-bold mb-6 text-slate-900 tracking-tight">Explore Our Programs</h2>
-                  <p className="text-lg text-slate-600">Master the most in-demand skills with our comprehensive, project-based courses taught by industry experts.</p>
+                  <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-amber-50 text-amber-700 font-semibold text-sm mb-6 border border-amber-100">
+                    <Briefcase className="w-4 h-4 mr-2" /> Live Internships
+                  </div>
+                  <h2 className="text-3xl md:text-5xl font-bold mb-6 text-slate-900 tracking-tight">Real Internships. Real Projects.</h2>
+                  <p className="text-lg text-slate-600">Work on live industry projects and add real impact to your resume with our premium internship programs.</p>
                 </div>
-                <Link href="/programs" className="inline-flex items-center font-semibold text-blue-950 hover:text-blue-900 bg-amber-50 px-5 py-2.5 rounded-full transition-colors self-start md:self-end shrink-0">
-                  View All Programs <ArrowRight className="w-4 h-4 ml-2" />
-                </Link>
               </div>
 
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[
-                  { title: "AI & Machine Learning", icon: Cpu, duration: "6 Months", tag: "Most Popular" },
-                  { title: "Data Science", icon: Database, duration: "5 Months", tag: "High Demand" },
-                  { title: "Web Development", icon: Code, duration: "4 Months" },
-                  { title: "App Development", icon: Smartphone, duration: "4 Months" },
-                  { title: "Cyber Security", icon: Shield, duration: "5 Months" },
-                  { title: "Cloud Computing", icon: Cloud, duration: "3 Months" },
-                  { title: "UI/UX Design", icon: Layout, duration: "3 Months" },
-                  { title: "Digital Marketing", icon: Megaphone, duration: "2 Months" }
-                ].map((prog, i) => (
-                  <motion.div key={i} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="group bg-white border border-slate-200 rounded-3xl p-6 hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer relative overflow-hidden flex flex-col h-full">
-                    {prog.tag && (
-                      <div className="absolute top-4 right-4 bg-amber-100 text-amber-700 text-xs font-bold px-3 py-1 rounded-full">
-                        {prog.tag}
-                      </div>
-                    )}
-                    <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center mb-6 group-hover:bg-blue-950 group-hover:text-white transition-colors text-blue-950">
-                      <prog.icon className="w-6 h-6" />
-                    </div>
-                    <h3 className="text-xl font-bold mb-2 text-slate-900 group-hover:text-blue-950 transition-colors">{prog.title}</h3>
-                    <div className="flex items-center gap-4 text-sm text-slate-500 mb-6 mt-auto">
-                      <span className="flex items-center"><CheckCircle2 className="w-4 h-4 mr-1 text-green-500" /> Certificate</span>
-                      <span className="flex items-center bg-slate-100 px-2 py-1 rounded-md text-slate-600">{prog.duration}</span>
-                    </div>
-                    <div className="w-full py-3 rounded-xl border-2 border-slate-100 text-center font-semibold text-slate-600 group-hover:bg-blue-950 group-hover:border-blue-950 group-hover:text-amber-500 transition-all">
-                      View Details
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* 4. INTERNSHIP SECTION */}
-          <section id="internships" className="py-24 relative bg-white">
-            <div className="max-w-7xl mx-auto px-4 md:px-6">
-              <div className="text-center mb-16">
-                <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-amber-50 text-amber-700 font-semibold text-sm mb-6 border border-amber-100">
-                  <Briefcase className="w-4 h-4 mr-2" /> Live Internships
-                </div>
-                <h2 className="text-3xl md:text-5xl font-bold mb-6 text-slate-900 tracking-tight">Real Internships. Real Projects. <br />Real Experience.</h2>
-                <p className="text-lg text-slate-600 max-w-2xl mx-auto">Skip the generic tutorials. Work on live industry projects and add real impact to your resume.</p>
-              </div>
-
-              <div className="grid md:grid-cols-3 gap-8">
-                {[
-                  { role: "Frontend Developer Intern", tech: ["React", "Next.js", "Tailwind"], spots: "Few Left" },
-                  { role: "Backend Developer Intern", tech: ["Node.js", "Express", "MongoDB"], spots: "Open" },
-                  { role: "Full Stack Intern", tech: ["MERN Stack", "AWS"], spots: "Hot" },
-                  { role: "AI/ML Engineer Intern", tech: ["Python", "TensorFlow", "NLP"], spots: "Closing Soon" },
-                  { role: "Data Science Intern", tech: ["Pandas", "SQL", "PowerBI"], spots: "Open" },
-                  { role: "Cyber Security Intern", tech: ["Ethical Hacking", "Networking"], spots: "Open" }
+                  { role: "AI & ML Intern", tech: ["Python", "TensorFlow"], spots: "Closing Soon", icon: Cpu, link: "/internship/aiml" },
+                  { role: "Data Science Intern", tech: ["Pandas", "PowerBI"], spots: "Open", icon: Database, link: "/internship/datascience" },
+                  { role: "Full Stack Intern", tech: ["MERN", "Next.js"], spots: "Hot", icon: Code, link: "/internship/fullstack" },
                 ].map((internship, i) => (
-                  <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm hover:shadow-xl transition-shadow flex flex-col">
+                  <motion.div key={i} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="group bg-white border border-slate-200 rounded-3xl p-6 hover:shadow-xl hover:-translate-y-2 transition-all relative overflow-hidden flex flex-col h-full">
                     <div className="flex justify-between items-start mb-6">
-                      <div className="w-12 h-12 rounded-xl bg-blue-950 flex items-center justify-center">
-                        <Code2 className="w-6 h-6 text-amber-500" />
+                      <div className="w-12 h-12 rounded-xl bg-blue-950 flex items-center justify-center text-amber-500">
+                        <internship.icon className="w-6 h-6" />
                       </div>
                       <span className={`text-xs font-bold px-3 py-1 rounded-full ${internship.spots === 'Hot' || internship.spots === 'Closing Soon' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
                         {internship.spots}
                       </span>
                     </div>
                     <h3 className="text-xl font-bold text-slate-900 mb-4">{internship.role}</h3>
-                    <div className="flex flex-wrap gap-2 mb-8">
+                    <div className="flex flex-wrap gap-2 mb-6 mt-auto">
                       {internship.tech.map(t => (
-                        <span key={t} className="px-3 py-1 bg-slate-100 text-slate-600 text-sm font-medium rounded-lg">{t}</span>
+                        <span key={t} className="px-3 py-1 bg-slate-100 text-slate-600 text-xs font-medium rounded-lg">{t}</span>
                       ))}
                     </div>
-                    <button className="mt-auto w-full py-3 rounded-xl bg-blue-950 text-white font-semibold hover:bg-amber-500 hover:text-blue-950 transition-colors">
-                      Apply Now
-                    </button>
+                    <Link href={internship.link} className="w-full py-3 rounded-xl bg-slate-50 border-2 border-slate-100 text-center font-semibold text-slate-600 group-hover:bg-blue-950 group-hover:border-blue-950 group-hover:text-amber-500 transition-all block">
+                      View Details
+                    </Link>
                   </motion.div>
                 ))}
+
+                {/* 4th Card: Explore More */}
+                <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="group bg-blue-950 rounded-3xl p-6 hover:shadow-xl hover:-translate-y-2 transition-all relative overflow-hidden flex flex-col h-full items-center justify-center text-center cursor-pointer">
+                  <Link href="/internship" className="absolute inset-0 z-10" />
+                  <div className="w-16 h-16 rounded-full bg-blue-900/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <ArrowRight className="w-8 h-8 text-amber-500" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-2">Explore More</h3>
+                  <p className="text-blue-200 text-sm">View all 10+ internship domains</p>
+                </motion.div>
+              </div>
+            </div>
+          </section>
+
+          {/* 4. LATEST JOBS SECTION */}
+          <section id="jobs" className="py-24 relative bg-white border-b border-slate-200/60">
+            <div className="max-w-7xl mx-auto px-4 md:px-6">
+              <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+                <div className="max-w-2xl">
+                  <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-blue-50 text-blue-700 font-semibold text-sm mb-6 border border-blue-100">
+                    <Briefcase className="w-4 h-4 mr-2" /> Latest Opportunities
+                  </div>
+                  <h2 className="text-3xl md:text-5xl font-bold mb-6 text-slate-900 tracking-tight">Recent Job Openings.</h2>
+                  <p className="text-lg text-slate-600">Apply for the latest jobs posted by top companies directly from our platform.</p>
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {latestJobs.map((job, i) => {
+                  let skillsList = [];
+                  try {
+                    skillsList = JSON.parse(job.skills || "[]").slice(0, 3);
+                  } catch(e) {}
+                  
+                  return (
+                  <motion.div key={job.id} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="group bg-white border border-slate-200 rounded-2xl p-5 hover:shadow-xl hover:-translate-y-1 transition-all relative overflow-hidden flex flex-col h-full">
+                    
+                    {/* Top Row: Logo & Tag */}
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center overflow-hidden shrink-0">
+                        {job.company?.logoUrl ? (
+                          <img src={job.company.logoUrl} alt={job.company.name} className="w-full h-full object-contain p-2" />
+                        ) : (
+                          <Briefcase className="w-6 h-6 text-slate-400" />
+                        )}
+                      </div>
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-slate-100 text-slate-600">
+                        {job.employmentType || "JOBS"}
+                      </span>
+                    </div>
+
+                    {/* Title & Company */}
+                    <h3 className="text-lg font-bold text-slate-900 mb-1 leading-snug line-clamp-2 min-h-[3rem]">{job.title}</h3>
+                    <p className="text-slate-500 text-sm font-medium mb-4">{job.company?.name || "TechieHelp Partner"}</p>
+
+                    {/* Salary & Location Tags */}
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {job.salary && (
+                        <span className="px-2.5 py-1.5 bg-green-50 text-green-700 text-xs font-semibold rounded-md flex items-center gap-1">
+                          <Banknote className="w-3 h-3" /> {job.salary}
+                        </span>
+                      )}
+                      <span className="px-2.5 py-1.5 bg-slate-50 text-slate-600 text-xs font-medium rounded-md flex items-center gap-1 border border-slate-100">
+                         {job.location?.name || "Remote"}
+                      </span>
+                    </div>
+
+                    {/* Skills */}
+                    {skillsList.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mb-6">
+                        {skillsList.map((skill, idx) => (
+                          <span key={idx} className="text-xs font-semibold text-slate-500">#{skill}</span>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Bottom Row: Apply By & Button */}
+                    <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
+                      <div className="flex items-center text-[11px] text-slate-500 font-medium">
+                        <Clock className="w-3 h-3 mr-1 shrink-0" />
+                        <span className="truncate max-w-[120px]">Apply by: {job.applyBefore ? new Date(job.applyBefore).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : "Not revealed"}</span>
+                      </div>
+                      <Link href={`/jobs/${job.slug}`} className="text-xs font-bold text-slate-700 bg-white border border-slate-200 px-4 py-1.5 rounded-full hover:bg-slate-50 transition-colors flex items-center shrink-0 group-hover:border-blue-950 group-hover:text-blue-950">
+                        View <ArrowRight className="w-3 h-3 ml-1" />
+                      </Link>
+                    </div>
+
+                  </motion.div>
+                )})}
+
+                {/* 4th Card: Explore Jobs */}
+                <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="group bg-blue-950 rounded-3xl p-6 hover:shadow-xl hover:-translate-y-2 transition-all relative overflow-hidden flex flex-col h-full items-center justify-center text-center cursor-pointer">
+                  <Link href="/jobs" className="absolute inset-0 z-10" />
+                  <div className="w-16 h-16 rounded-full bg-blue-900/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <ArrowRight className="w-8 h-8 text-amber-500" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-2">Explore Jobs</h3>
+                  <p className="text-blue-200 text-sm">View all job postings</p>
+                </motion.div>
               </div>
             </div>
           </section>
@@ -290,7 +342,7 @@ export default function Home() {
             <div className="absolute inset-0 z-0">
               <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-300/20 blur-[100px] rounded-full" />
               <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-amber-200/20 blur-[100px] rounded-full" />
-              <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02] bg-center" />
+              <div className="absolute inset-0 opacity-[0.02] bg-center" style={{ backgroundImage: 'linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
             </div>
 
             <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6">
@@ -699,7 +751,7 @@ export default function Home() {
 
           {/* 8. COLLEGE PARTNERSHIP SECTION */}
           <section id="tpo" className="py-24 relative bg-slate-50 overflow-hidden rounded-t-[3rem]">
-            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02] bg-center" />
+            <div className="absolute inset-0 opacity-[0.02] bg-center" style={{ backgroundImage: 'linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
             <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
               <div className="bg-gradient-to-br from-blue-950 to-blue-900 rounded-3xl p-1 md:p-12 lg:p-16 text-center lg:text-left flex flex-col lg:flex-row items-center justify-between gap-12 shadow-xl border border-white/10">
                 <div className="max-w-2xl p-8 lg:p-0">

@@ -69,6 +69,11 @@ model User {
   notifications          Notification[]
   videoComments          VideoComment[]
 
+  companiesAdmin         Company[]               @relation("CompanyAdmin")
+  jobApplications        JobApplication[]        @relation("JobApplications")
+  jobComments            JobComment[]            @relation("JobComments")
+  jobBookmarks           JobBookmark[]           @relation("JobBookmarks")
+
   @@index([collegeId])
   @@index([role])
   @@index([githubUsername])
@@ -731,4 +736,154 @@ model InternshipEvaluation {
 
   @@index([applicationId])
   @@index([createdAt])
+}
+
+
+// --- Job Portal Models ---
+
+model Company {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  logoUrl     String?
+  bannerUrl   String?
+  website     String?
+  industry    String?
+  size        String?
+  description String?
+  userId      String?  // The admin/recruiter who created it
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  jobs        Job[]
+  user        User?    @relation("CompanyAdmin", fields: [userId], references: [id])
+
+  @@index([slug])
+}
+
+model JobCategory {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  icon        String?
+  jobs        Job[]
+
+  @@index([slug])
+}
+
+model JobLocation {
+  id          String   @id @default(uuid())
+  name        String   @unique // e.g. "San Francisco, CA" or "Remote"
+  slug        String   @unique
+  jobs        Job[]
+
+  @@index([slug])
+}
+
+model Job {
+  id               String   @id @default(uuid())
+  title            String
+  slug             String   @unique
+  companyId        String
+  categoryId       String?
+  locationId       String?
+  salary           String?
+  experience       String?
+  employmentType   String? // Full Time, Part Time, Internship
+  department       String?
+  workMode         String? // Remote, Hybrid, Onsite
+  openPositions    Int      @default(1)
+  
+  description      String   @db.Text
+  requirements     String?  @db.Text
+  responsibilities String?  @db.Text
+  benefits         String?  @db.Text
+  selectionProcess String?  @db.Text
+  skills           String   @default("[]") // JSON string of skills
+  
+  applyLink        String?
+  applicationEmail String?
+  applyBefore      DateTime?
+  
+  thumbnailUrl     String?
+  bannerUrl        String?
+  galleryUrls      String   @default("[]") // JSON string of urls
+  
+  views            Int      @default(0)
+  isFeatured       Boolean  @default(false)
+  isTrending       Boolean  @default(false)
+  isUrgent         Boolean  @default(false)
+  status           String   @default("PUBLISHED") // DRAFT, PUBLISHED, EXPIRED
+  
+  seoTitle         String?
+  seoDescription   String?
+  seoKeywords      String?
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  publishedAt      DateTime?
+
+  company          Company      @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  category         JobCategory? @relation(fields: [categoryId], references: [id])
+  location         JobLocation? @relation(fields: [locationId], references: [id])
+  
+  applications     JobApplication[]
+  comments         JobComment[]
+  bookmarks        JobBookmark[]
+
+  @@index([slug])
+  @@index([companyId])
+  @@index([status])
+}
+
+model JobApplication {
+  id            String   @id @default(uuid())
+  jobId         String
+  userId        String
+  resumeUrl     String?
+  coverLetter   String?  @db.Text
+  aiScore       Float?
+  aiFeedback    String?  @db.Text
+  status        String   @default("APPLIED") // APPLIED, REVIEWING, SHORTLISTED, REJECTED, HIRED
+  appliedAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  job           Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  user          User     @relation("JobApplications", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, jobId])
+  @@index([jobId])
+  @@index([userId])
+}
+
+model JobComment {
+  id        String   @id @default(uuid())
+  jobId     String
+  userId    String
+  content   String   @db.Text
+  parentId  String?
+  likes     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  job       Job          @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  user      User         @relation("JobComments", fields: [userId], references: [id], onDelete: Cascade)
+  parent    JobComment?  @relation("JobCommentReplies", fields: [parentId], references: [id])
+  replies   JobComment[] @relation("JobCommentReplies")
+
+  @@index([jobId])
+}
+
+model JobBookmark {
+  id        String   @id @default(uuid())
+  userId    String
+  jobId     String
+  createdAt DateTime @default(now())
+
+  user      User     @relation("JobBookmarks", fields: [userId], references: [id], onDelete: Cascade)
+  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, jobId])
+  @@index([userId])
 }

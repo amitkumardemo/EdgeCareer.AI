@@ -143,6 +143,7 @@ export default function AboutClient() {
                 src="/coveri.png" 
                 alt="TechieHelp Showcase" 
                 fill 
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover" 
                 priority
               />
