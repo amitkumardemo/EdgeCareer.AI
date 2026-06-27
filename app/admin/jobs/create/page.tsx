@@ -18,7 +18,8 @@ export default function CreateJobPage() {
     resolver: zodResolver(jobSchema),
     defaultValues: {
       title: "",
-      companyId: "dummy-company-id", // TODO: Replace with dynamic fetched company
+      companyName: "",
+      companyLogoUrl: "",
       description: "",
       openPositions: 1,
       status: "PUBLISHED",
