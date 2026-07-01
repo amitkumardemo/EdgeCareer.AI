@@ -2,17 +2,18 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Mail, Phone, MapPin, Linkedin, Github, Youtube, Instagram, 
   User, Building2, Handshake, Briefcase, BadgeCheck, BriefcaseBusiness, 
-  BookOpen, ChevronDown, Send, ArrowRight, Sparkles, CheckCircle2 
+  BookOpen, ChevronDown, Send, ArrowRight, Sparkles, CheckCircle2, X
 } from "lucide-react";
 import { toast } from "sonner";
-import { submitContactForm } from "@/actions/contact";
+
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
   const formRef = useRef(null);
 
@@ -39,10 +40,27 @@ export default function ContactPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    
+    const payload = {
+      ...formData,
+      _captcha: "false",
+      _template: "table",
+      _subject: "🚀 New TechieHelp Contact Form Submission",
+      _autoresponse: "Thank you for contacting TechieHelp Institute of AI. Our team has received your request and will contact you shortly.",
+    };
+
     try {
-      const result = await submitContactForm(formData);
-      if (result.success) {
-        toast.success(result.message);
+      const response = await fetch("https://formsubmit.co/ajax/techiehelpinstituteofai@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      
+      if (response.ok) {
+        setShowSuccessModal(true);
         setFormData({
           userType: "Student",
           name: "",
@@ -91,10 +109,10 @@ export default function ContactPage() {
   ];
 
   return (
-    <div className="bg-slate-50/50 min-h-screen text-slate-900 overflow-x-hidden transition-colors duration-300 font-sans selection:bg-cyan-150">
+    <div className="bg-slate-50 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50/50 via-slate-50 to-slate-50 min-h-screen text-slate-900 overflow-x-hidden transition-colors duration-300 font-sans selection:bg-cyan-150 relative">
       
       {/* 1. HERO SECTION */}
-      <section className="relative py-20 px-6 max-w-7xl mx-auto overflow-hidden text-center rounded-3xl bg-white border border-slate-200/60 shadow-sm mt-6">
+      <section className="relative py-24 px-6 max-w-7xl mx-auto overflow-hidden text-center rounded-[2.5rem] bg-white/70 backdrop-blur-xl border border-white/50 shadow-2xl shadow-[#0F4CBA]/5 mt-6">
         {/* Background grid & blob */}
         <div className="absolute inset-0 opacity-[0.02] pointer-events-none z-0">
           <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg">
@@ -285,9 +303,12 @@ export default function ContactPage() {
       </section>
 
       {/* 4. CONTACT FORM */}
-      <section ref={formRef} className="py-20 px-6 max-w-4xl mx-auto">
-        <div className="bg-white border border-slate-200 rounded-3xl shadow-xl p-8 md:p-12 text-left space-y-8">
-          <div className="text-center md:text-left space-y-2">
+      <section ref={formRef} className="py-24 px-6 max-w-4xl mx-auto relative">
+        <div className="bg-white/80 backdrop-blur-xl border border-white/60 rounded-[2.5rem] shadow-2xl shadow-[#0F4CBA]/10 p-8 md:p-14 text-left space-y-8 relative overflow-hidden">
+          <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-blue-100/50 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-64 h-64 bg-cyan-100/50 rounded-full blur-3xl pointer-events-none" />
+          
+          <div className="text-center md:text-left space-y-2 relative z-10">
             <h2 className="text-3xl font-black text-blue-950 tracking-tight">How Can We Help You?</h2>
             <p className="text-slate-500 text-sm">Fill out the secure form below to connect directly with our departments.</p>
           </div>
@@ -427,7 +448,6 @@ export default function ContactPage() {
                 </>
               )}
             </button>
-
           </form>
         </div>
       </section>
@@ -548,6 +568,52 @@ export default function ContactPage() {
           Training • Internships • Certifications
         </p>
       </div>
+
+      {/* SUCCESS MODAL */}
+      <AnimatePresence>
+        {showSuccessModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+              onClick={() => setShowSuccessModal(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative bg-white rounded-3xl shadow-2xl p-8 max-w-sm w-full text-center border border-slate-100 z-10"
+            >
+              <button 
+                onClick={() => setShowSuccessModal(false)}
+                className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors p-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              
+              <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center">
+                  <CheckCircle2 className="w-8 h-8 text-green-600" />
+                </div>
+              </div>
+              
+              <h3 className="text-2xl font-black text-blue-950 mb-2">Request Sent!</h3>
+              <p className="text-slate-500 text-sm leading-relaxed mb-8">
+                Thank you for contacting TechieHelp Institute of AI. Our team has received your request and will get back to you within 24 hours.
+              </p>
+              
+              <button
+                onClick={() => setShowSuccessModal(false)}
+                className="w-full py-3.5 rounded-xl bg-[#0F4CBA] hover:bg-[#0c3d96] text-white font-bold text-sm shadow-md transition-all active:scale-[0.98]"
+              >
+                Continue
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
     </div>
   );

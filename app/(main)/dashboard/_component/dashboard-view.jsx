@@ -70,7 +70,7 @@ const GROWTH_TOOLS = [
   { name: "Course Recommendation", path: "/course-recommendation", icon: BookOpen, color: "text-red-500", bg: "bg-red-500/10" },
   { name: "Prep Resources", path: "/prep-resources", icon: BookOpen, color: "text-cyan-500", bg: "bg-cyan-500/10" },
   { name: "Find Internships", path: "/internships", icon: BriefcaseBusiness, color: "text-pink-500", bg: "bg-pink-500/10" },
-  { name: "Internship Portal", path: "/internship", icon: BookOpen, color: "text-teal-500", bg: "bg-teal-500/10" },
+  { name: "Internship Portal", path: "/internship/student/dashboard", icon: BookOpen, color: "text-teal-500", bg: "bg-teal-500/10" },
   { name: "Latest Jobs", path: "/latest-jobs", icon: BriefcaseIcon, color: "text-amber-500", bg: "bg-amber-500/10" },
   { name: "Job Matches", path: "/job-matches", icon: Search, color: "text-violet-500", bg: "bg-violet-500/10" },
   { name: "Career Branding", path: "/career-branding-lab", icon: Sparkles, color: "text-fuchsia-500", bg: "bg-fuchsia-500/10" },

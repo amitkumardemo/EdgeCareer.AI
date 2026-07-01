@@ -66,9 +66,9 @@ export default function InternshipSidebar({ user }) {
   const SidebarContent = () => (
     <div className="flex flex-col h-full bg-white">
       {/* Brand */}
-      <div className="px-5 py-5 border-b border-slate-100">
-        <Link href="/" className="flex items-center gap-2.5 mb-1 group">
-          <Image src="/thp logo.png" alt="TechieHelp Logo" width={140} height={40} className="h-8 w-auto object-contain" priority />
+      <div className="px-5 py-5 border-b border-slate-100 flex flex-col items-center">
+        <Link href="/" className="w-full mb-2 group flex justify-center">
+          <Image src="/thp logo.png" alt="TechieHelp Logo" width={220} height={70} className="w-[85%] h-auto object-contain" priority />
         </Link>
         <span className="text-[10px] text-slate-400 uppercase tracking-widest font-semibold">{portalLabel}</span>
       </div>
@@ -84,8 +84,8 @@ export default function InternshipSidebar({ user }) {
               onClick={() => setOpen(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 group ${
                 active
-                  ? "bg-blue-50/80 text-blue-950 border border-blue-100/50 translate-x-1 font-semibold"
-                  : "text-slate-500 hover:text-blue-950 hover:bg-slate-50 hover:translate-x-1"
+                  ? "bg-slate-100 text-slate-900 border border-slate-200 translate-x-1 font-semibold shadow-sm"
+                  : "text-slate-500 hover:text-slate-900 hover:bg-slate-50 hover:translate-x-1"
               }`}
             >
               <Icon className={`h-4 w-4 flex-shrink-0 transition-transform duration-300 ${active ? "scale-110" : "group-hover:scale-110 group-hover:rotate-3"}`} />
@@ -98,7 +98,7 @@ export default function InternshipSidebar({ user }) {
       {/* User + logout */}
       <div className="px-3 py-4 border-t border-slate-100 bg-white">
         <div className="flex items-center gap-3 px-3 py-2 mb-1">
-          <div className="w-8 h-8 rounded-full bg-blue-950 text-amber-500 flex items-center justify-center text-xs font-bold flex-shrink-0 shadow-sm">
+          <div className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-bold flex-shrink-0 shadow-sm">
             {user?.name?.[0]?.toUpperCase() || "U"}
           </div>
           <div className="overflow-hidden">

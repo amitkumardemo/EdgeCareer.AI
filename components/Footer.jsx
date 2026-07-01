@@ -4,15 +4,17 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Github, Linkedin, Mail, Twitter, Youtube, Facebook, Instagram, 
-  CheckCircle2, ArrowUp, ShieldCheck, Check
+  CheckCircle2, ArrowUp, ShieldCheck, Check, X
 } from "lucide-react";
 
 export default function Footer() {
   const pathname = usePathname();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState(""); // "", "loading", "success", "error"
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isScrollVisible, setIsScrollVisible] = useState(false);
 
   // Exclude dashboard, admin, and auth pages from showing the global footer
@@ -43,15 +45,42 @@ export default function Footer() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleSubscribe = (e) => {
+  const handleSubscribe = async (e) => {
     e.preventDefault();
     if (!email) return;
     setStatus("loading");
-    setTimeout(() => {
-      setStatus("success");
-      setEmail("");
+
+    const payload = {
+      email: email,
+      _captcha: "false",
+      _template: "table",
+      _subject: "🔔 New Newsletter Subscriber",
+      _autoresponse: "Thank you for subscribing to the TechieHelp Institute of AI Newsletter!",
+    };
+
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/techiehelpinstituteofai@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      
+      if (response.ok) {
+        setStatus("success");
+        setShowSuccessModal(true);
+        setEmail("");
+        setTimeout(() => setStatus(""), 4000);
+      } else {
+        setStatus("error");
+        setTimeout(() => setStatus(""), 3000);
+      }
+    } catch (error) {
+      setStatus("error");
       setTimeout(() => setStatus(""), 3000);
-    }, 1000);
+    }
   };
 
   if (shouldHideFooter) return null;
@@ -144,6 +173,8 @@ export default function Footer() {
                     <>
                       <Check className="w-4 h-4" /> Subscribed
                     </>
+                  ) : status === "error" ? (
+                    "Failed! Retry"
                   ) : (
                     "Subscribe"
                   )}
@@ -208,14 +239,14 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2.5">
               {[
-                { label: "Artificial Intelligence & Machine Learning", href: "/programs" },
-                { label: "Data Science", href: "/programs" },
-                { label: "Web Development", href: "/programs" },
-                { label: "App Development", href: "/programs" },
-                { label: "Cyber Security", href: "/programs" },
-                { label: "Cloud Computing", href: "/programs" },
-                { label: "UI/UX Design", href: "/programs" },
-                { label: "Digital Marketing", href: "/programs" }
+                { label: "Artificial Intelligence & Machine Learning", href: "/internship/aiml" },
+                { label: "Data Science", href: "/internship/datascience" },
+                { label: "Web Development", href: "/internship/webdevelopment" },
+                { label: "App Development", href: "/internship/androiddevelopment" },
+                { label: "Cyber Security", href: "/internship/cybersecurity" },
+                { label: "Cloud Computing", href: "/internship/devops" },
+                { label: "UI/UX Design", href: "/internship/uiux" },
+                { label: "Digital Marketing", href: "/internship/seo" }
               ].map((link, i) => (
                 <li key={i}>
                   <Link href={link.href} className="text-sm text-slate-500 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
@@ -237,7 +268,7 @@ export default function Footer() {
                 { label: "Internship Opportunities", href: "/internship" },
                 { label: "Live Projects", href: "/internship" },
                 { label: "Professional Certifications", href: "/prep-resources" },
-                { label: "Verify Certificate", href: "/#verify" },
+                { label: "Verify Certificate", href: "/verify-certificate" },
                 { label: "Career Opportunities", href: "/latest-jobs" }
               ].map((link, i) => (
                 <li key={i}>
@@ -405,6 +436,52 @@ export default function Footer() {
           </svg>
         </span>
       </a>
+
+      {/* SUCCESS MODAL */}
+      <AnimatePresence>
+        {showSuccessModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+              onClick={() => setShowSuccessModal(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative bg-white dark:bg-slate-900 rounded-3xl shadow-2xl p-8 max-w-sm w-full text-center border border-slate-100 dark:border-slate-800 z-10"
+            >
+              <button 
+                onClick={() => setShowSuccessModal(false)}
+                className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              
+              <div className="w-20 h-20 bg-cyan-50 dark:bg-cyan-900/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <div className="w-14 h-14 bg-cyan-100 dark:bg-cyan-800/40 rounded-full flex items-center justify-center">
+                  <CheckCircle2 className="w-8 h-8 text-cyan-600 dark:text-cyan-400" />
+                </div>
+              </div>
+              
+              <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">Welcome Aboard!</h3>
+              <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-8">
+                You will now be the first to receive all notifications and exclusive updates related to TechieHelp Institute of AI.
+              </p>
+              
+              <button
+                onClick={() => setShowSuccessModal(false)}
+                className="w-full py-3.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm shadow-md transition-all active:scale-[0.98]"
+              >
+                Continue
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
     </footer>
   );

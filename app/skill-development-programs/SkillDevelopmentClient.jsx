@@ -87,7 +87,14 @@ export default function SkillDevelopmentClient() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    let finalValue = value;
+    
+    // Restrict phone to exactly 10 digits and numbers only
+    if (name === "phone") {
+      finalValue = value.replace(/\D/g, "").slice(0, 10);
+    }
+    
+    setFormData(prev => ({ ...prev, [name]: finalValue }));
     if (formErrors[name]) {
       setFormErrors(prev => ({ ...prev, [name]: "" }));
     }
@@ -104,8 +111,8 @@ export default function SkillDevelopmentClient() {
 
     if (!formData.phone.trim()) {
       errors.phone = "Phone Number is required";
-    } else if (!/^\+?[0-9\s-]{10,15}$/.test(formData.phone.replace(/\s/g, ""))) {
-      errors.phone = "Please enter a valid phone number";
+    } else if (formData.phone.length !== 10) {
+      errors.phone = "Phone number must be exactly 10 digits";
     }
 
     if (!formData.college.trim()) errors.college = "College / Institution is required";
@@ -117,7 +124,7 @@ export default function SkillDevelopmentClient() {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) {
       toast.error("Please fill in all required fields correctly.");
@@ -126,20 +133,44 @@ export default function SkillDevelopmentClient() {
 
     setIsSubmitting(true);
     
-    setTimeout(() => {
-      setIsSubmitting(false);
-      toast.success("Enrollment request submitted successfully! We will coordinate your induction track.");
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        college: "",
-        course: "",
-        currentYear: "",
-        interestedDomain: "",
-        message: ""
+    const payload = {
+      ...formData,
+      _captcha: "false",
+      _template: "table",
+      _subject: "🚀 New Skill Development Request",
+      _autoresponse: "Thank you for contacting TechieHelp Institute of AI. We have received your Skill Development Request and our team will get back to you shortly.",
+    };
+
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/techiehelpinstituteofai@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(payload)
       });
-    }, 1500);
+      
+      if (response.ok) {
+        toast.success("Request submitted successfully! We will coordinate your induction track.");
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          college: "",
+          course: "",
+          currentYear: "",
+          interestedDomain: "",
+          message: ""
+        });
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      toast.error("Failed to submit the form. Please check your connection.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Force light mode on this page
@@ -712,6 +743,7 @@ export default function SkillDevelopmentClient() {
                 <input 
                   type="text" 
                   name="phone"
+                  maxLength="10"
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="10-digit mobile number"

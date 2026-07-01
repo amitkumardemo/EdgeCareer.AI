@@ -42,7 +42,7 @@ export default async function StudentLmsViewerPage() {
   const progressData = await getStudentLmsProgress(application.id);
 
   return (
-    <div className="min-h-screen bg-[#030712]">
+    <div className="min-h-screen bg-slate-50">
       <LmsClientView 
         applicationId={application.id} 
         batchName={application.batch?.name || "Internship Course"} 

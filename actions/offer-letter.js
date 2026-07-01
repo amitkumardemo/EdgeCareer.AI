@@ -58,7 +58,7 @@ export async function issueOfferLetter(applicationId) {
     };
 
     const images = {
-      logo: await getStaticBase64(path.join(process.cwd(), "public", "skill.png")),
+      logo: await getStaticBase64(path.join(process.cwd(), "public", "thp logo.png")),
       msme: await getStaticBase64(path.join(process.cwd(), "public", "image (4).png")),
       iso: await getStaticBase64(path.join(process.cwd(), "public", "image (3).png")),
       niti: await getStaticBase64(path.join(process.cwd(), "public", "internship-1.png")),

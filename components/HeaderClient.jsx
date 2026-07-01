@@ -118,14 +118,14 @@ export default function HeaderClient({ user, streakData }) {
       label: "Programs",
       description: "Explore industry-focused learning programs.",
       gridCards: [
-        { title: "Artificial Intelligence & ML", desc: "Master AI algorithms, deep learning, and neural networks.", href: "/skill-development-programs", icon: Brain },
-        { title: "Data Science", desc: "Learn statistics, data visualization, and predictive modeling.", href: "/skill-development-programs", icon: BarChart3 },
-        { title: "Web Development", desc: "Build responsive, high-performance web applications.", href: "/skill-development-programs", icon: Code2 },
-        { title: "App Development", desc: "Create native and cross-platform mobile apps.", href: "/skill-development-programs", icon: Smartphone },
-        { title: "Cyber Security", desc: "Protect systems, networks, and data from cyber threats.", href: "/skill-development-programs", icon: ShieldCheck },
-        { title: "Cloud Computing", desc: "Deploy and manage scalable cloud infrastructure.", href: "/skill-development-programs", icon: Cloud },
-        { title: "UI/UX Design", desc: "Craft intuitive interfaces and user experiences.", href: "/skill-development-programs", icon: Layout },
-        { title: "Digital Marketing", desc: "Grow brands and reach audiences through digital channels.", href: "/skill-development-programs", icon: Megaphone }
+        { title: "Artificial Intelligence & ML", desc: "Master AI algorithms, deep learning, and neural networks.", href: "/internship/aiml", icon: Brain },
+        { title: "Data Science", desc: "Learn statistics, data visualization, and predictive modeling.", href: "/internship/datascience", icon: BarChart3 },
+        { title: "Web Development", desc: "Build responsive, high-performance web applications.", href: "/internship/webdevelopment", icon: Code2 },
+        { title: "App Development", desc: "Create native and cross-platform mobile apps.", href: "/internship/androiddevelopment", icon: Smartphone },
+        { title: "Cyber Security", desc: "Protect systems, networks, and data from cyber threats.", href: "/internship/cybersecurity", icon: ShieldCheck },
+        { title: "Cloud Computing", desc: "Deploy and manage scalable cloud infrastructure.", href: "/internship/devops", icon: Cloud },
+        { title: "UI/UX Design", desc: "Craft intuitive interfaces and user experiences.", href: "/internship/uiux", icon: Layout },
+        { title: "Digital Marketing", desc: "Grow brands and reach audiences through digital channels.", href: "/internship/seo", icon: Megaphone }
       ],
       featured: {
         badge: "PROGRAMS",
@@ -143,7 +143,7 @@ export default function HeaderClient({ user, streakData }) {
         { title: "Internship Opportunities", desc: "Gain hands-on industry experience.", href: "/internship", icon: Briefcase },
         { title: "Live Projects", desc: "Work on real-world industrial projects.", href: "/internship", icon: Terminal },
         { title: "Professional Certifications", desc: "Earn industry-recognized credentials.", href: "/prep-resources", icon: Award },
-        { title: "Verify Certificate", desc: "Validate the authenticity of your certificate.", href: "/#verify", icon: CheckCircle },
+        { title: "Verify Certificate", desc: "Validate the authenticity of your certificate.", href: "/verify-certificate", icon: CheckCircle },
         { title: "Career Opportunities", desc: "Explore open career roles at TechieHelp.", href: "/latest-jobs", icon: TrendingUp }
       ],
       featured: {

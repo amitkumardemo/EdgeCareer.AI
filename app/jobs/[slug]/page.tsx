@@ -34,6 +34,18 @@ export default async function JobDetailsPage({ params }: { params: Promise<{ slu
 
   if (!job) notFound();
 
+  // Fetch related jobs
+  const relatedJobs = await prisma.job.findMany({
+    where: { 
+      status: "PUBLISHED", 
+      id: { not: job.id },
+      employmentType: job.employmentType 
+    },
+    include: { company: true },
+    orderBy: { createdAt: "desc" },
+    take: 3,
+  });
+
   // Increment views silently in background
   prisma.job.update({
     where: { id: job.id },
@@ -119,7 +131,7 @@ export default async function JobDetailsPage({ params }: { params: Promise<{ slu
 
             {/* About the Opportunity */}
             <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
-              <h3 className="text-sm font-extrabold text-[#0F4CBA] uppercase tracking-wider mb-4 border-b border-slate-100 pb-3">About the Opportunity</h3>
+              <h3 className="text-sm font-extrabold text-[#a855f7] uppercase tracking-wider mb-4 border-b border-slate-100 pb-3">About the Opportunity</h3>
               <div 
                 className="prose prose-slate max-w-none text-slate-700 leading-relaxed"
                 dangerouslySetInnerHTML={{ __html: job.description || "" }}
@@ -129,10 +141,10 @@ export default async function JobDetailsPage({ params }: { params: Promise<{ slu
             {/* Key Technical Competencies */}
             {skillsList.length > 0 && (
               <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
-                <h3 className="text-sm font-extrabold text-[#0F4CBA] uppercase tracking-wider mb-4 border-b border-slate-100 pb-3">Key Technical Competencies</h3>
+                <h3 className="text-sm font-extrabold text-[#a855f7] uppercase tracking-wider mb-4 border-b border-slate-100 pb-3">Key Technical Competencies</h3>
                 <div className="flex flex-wrap gap-2">
                   {skillsList.map((skill: string, i: number) => (
-                    <span key={i} className="px-3.5 py-1.5 bg-slate-50 border border-slate-200 text-slate-700 text-sm font-semibold rounded-lg hover:border-[#0F4CBA] transition-colors cursor-default">
+                    <span key={i} className="px-3.5 py-1.5 bg-slate-50 border border-slate-200 text-slate-700 text-sm font-semibold rounded-lg hover:border-[#a855f7] hover:text-[#a855f7] transition-colors cursor-default">
                       {skill}
                     </span>
                   ))}
@@ -143,11 +155,11 @@ export default async function JobDetailsPage({ params }: { params: Promise<{ slu
             {/* Eligibility (Rendered from requirements if present) */}
             {job.requirements && (
               <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
-                <h3 className="text-sm font-extrabold text-[#0F4CBA] uppercase tracking-wider mb-4 border-b border-slate-100 pb-3 flex items-center gap-2">
+                <h3 className="text-sm font-extrabold text-[#a855f7] uppercase tracking-wider mb-4 border-b border-slate-100 pb-3 flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5" /> Who is eligible to apply
                 </h3>
                 <div 
-                  className="prose prose-slate max-w-none text-slate-700 leading-relaxed prose-li:marker:text-blue-500"
+                  className="prose prose-slate max-w-none text-slate-700 leading-relaxed prose-li:marker:text-[#a855f7]"
                   dangerouslySetInnerHTML={{ __html: job.requirements }}
                 />
               </div>
@@ -156,7 +168,7 @@ export default async function JobDetailsPage({ params }: { params: Promise<{ slu
             {/* Benefits & Rewards */}
             {job.benefits && (
               <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
-                <h3 className="text-sm font-extrabold text-[#0F4CBA] uppercase tracking-wider mb-4 border-b border-slate-100 pb-3 flex items-center gap-2">
+                <h3 className="text-sm font-extrabold text-[#a855f7] uppercase tracking-wider mb-4 border-b border-slate-100 pb-3 flex items-center gap-2">
                   <Bookmark className="w-5 h-5" /> Benefits & Rewards Structure
                 </h3>
                 <div 
@@ -170,7 +182,7 @@ export default async function JobDetailsPage({ params }: { params: Promise<{ slu
 
           {/* Right Sidebar */}
           <div className="lg:col-span-4">
-            <div className="bg-white rounded-2xl shadow-md border border-slate-200 p-6 sticky top-28">
+            <div className="bg-white rounded-2xl shadow-md border border-slate-200 p-6 sticky top-28 max-h-[calc(100vh-8rem)] overflow-y-auto hide-scrollbar">
               <h3 className="text-sm font-extrabold text-slate-800 uppercase tracking-wider mb-6 pb-3 border-b border-slate-100">Assessment Details</h3>
               
               <ul className="space-y-4 mb-8">
@@ -202,12 +214,12 @@ export default async function JobDetailsPage({ params }: { params: Promise<{ slu
                     href={job.applyLink} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="w-full bg-[#0F4CBA] text-white font-bold py-3.5 px-4 rounded-xl hover:bg-blue-700 transition-all flex justify-center items-center gap-2 shadow-sm shadow-blue-500/20 active:scale-[0.98]"
+                    className="w-full bg-[#a855f7] text-white font-bold py-3.5 px-4 rounded-xl hover:bg-purple-600 transition-all flex justify-center items-center gap-2 shadow-sm shadow-purple-500/20 active:scale-[0.98]"
                   >
                     Apply Now <ArrowRight className="w-4 h-4" />
                   </a>
                 ) : (
-                  <button className="w-full bg-[#0F4CBA] text-white font-bold py-3.5 px-4 rounded-xl hover:bg-blue-700 transition-all flex justify-center items-center gap-2 shadow-sm shadow-blue-500/20 active:scale-[0.98]">
+                  <button className="w-full bg-[#a855f7] text-white font-bold py-3.5 px-4 rounded-xl hover:bg-purple-600 transition-all flex justify-center items-center gap-2 shadow-sm shadow-purple-500/20 active:scale-[0.98]">
                     Apply with TechieHelp Profile <ArrowRight className="w-4 h-4" />
                   </button>
                 )}
@@ -245,6 +257,31 @@ export default async function JobDetailsPage({ params }: { params: Promise<{ slu
                   </Link>
                 </div>
               </div>
+
+              {/* Related Opportunities */}
+              {relatedJobs.length > 0 && (
+                <div className="pt-6 border-t border-slate-100 mt-6">
+                  <h3 className="text-sm font-extrabold text-slate-800 uppercase tracking-wider mb-4">Related Opportunities</h3>
+                  <div className="space-y-3">
+                    {relatedJobs.map((rj) => (
+                      <Link key={rj.id} href={`/jobs/${rj.slug}`} className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:border-purple-200 hover:bg-purple-50 transition-colors group">
+                        <div className="w-10 h-10 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0 overflow-hidden">
+                          {rj.company.logoUrl ? (
+                            <img src={rj.company.logoUrl} alt={rj.company.name} className="w-full h-full object-contain p-1" />
+                          ) : (
+                            <span className="text-sm font-bold text-slate-400">{rj.company.name.charAt(0)}</span>
+                          )}
+                        </div>
+                        <div className="flex-1 overflow-hidden">
+                          <h4 className="text-sm font-bold text-slate-800 truncate group-hover:text-[#a855f7] transition-colors">{rj.title}</h4>
+                          <p className="text-xs text-slate-500 truncate">{rj.company.name}</p>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-purple-500" />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

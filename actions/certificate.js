@@ -62,7 +62,7 @@ export async function issueCertificate(applicationId) {
     };
 
     const images = {
-      logo: await getStaticBase64(path.join(process.cwd(), "public", "skill.png")),
+      logo: await getStaticBase64(path.join(process.cwd(), "public", "thp logo.png")),
       msme: await getStaticBase64(path.join(process.cwd(), "public", "image (4).png")),
       iso: await getStaticBase64(path.join(process.cwd(), "public", "image (3).png")),
       aicte: await getStaticBase64(path.join(process.cwd(), "public", "internship-1.png")),
@@ -153,7 +153,7 @@ export async function issueCertificate(applicationId) {
 
     // Line 3
     writeMixedCenter(405, [
-      { text: "under the mentorship of TechieHelp - India's Leading AI Software Development Company.", font: "normal" }
+      { text: "under the mentorship of TechieHelp Institute of AI - India's Leading AI Software Development Company.", font: "normal" }
     ]);
 
     // Line 4

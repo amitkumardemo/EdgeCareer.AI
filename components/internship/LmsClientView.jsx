@@ -82,27 +82,27 @@ export default function LmsClientView({ applicationId, batchName, modules, progr
   const progressPct = allVideos.length > 0 ? Math.round((completedIds.size / allVideos.length) * 100) : 0;
 
   return (
-    <div className="flex flex-col h-screen max-h-screen bg-[#030712] text-white overflow-hidden">
+    <div className="flex flex-col h-screen max-h-screen bg-slate-50 text-slate-900 overflow-hidden">
       {/* Top Navbar */}
-      <header className="flex-none h-16 border-b border-white/10 bg-black/50 backdrop-blur-md flex items-center justify-between px-6 shrink-0">
+      <header className="flex-none h-16 border-b border-slate-200 bg-white/80 backdrop-blur-md flex items-center justify-between px-6 shrink-0">
         <div className="flex items-center gap-4">
-          <Link href="/internship/student/dashboard" className="p-2 hover:bg-white/10 rounded-full transition-colors group">
-            <ArrowLeft className="h-5 w-5 text-gray-400 group-hover:text-white" />
+          <Link href="/internship/student/dashboard" className="p-2 hover:bg-slate-100 rounded-full transition-colors group">
+            <ArrowLeft className="h-5 w-5 text-slate-500 group-hover:text-slate-900" />
           </Link>
           <div>
             <h1 className="text-sm font-bold truncate max-w-[200px] md:max-w-[400px]">{batchName}</h1>
-            <p className="text-[10px] text-gray-400 uppercase tracking-widest bg-primary/20 text-primary px-2 py-0.5 rounded-full inline-block mt-0.5">LMS Course</p>
+            <p className="text-[10px] text-slate-500 uppercase tracking-widest bg-primary/10 border border-primary/20 text-primary px-2 py-0.5 rounded-full inline-block mt-0.5">LMS Course</p>
           </div>
         </div>
         <div className="flex items-center gap-4">
           <div className="hidden sm:flex flex-col items-end">
-            <span className="text-xs font-bold text-gray-300">Progress</span>
-            <span className="text-[10px] text-gray-500">{completedIds.size} of {allVideos.length} completed</span>
+            <span className="text-xs font-bold text-slate-600">Progress</span>
+            <span className="text-[10px] text-slate-500">{completedIds.size} of {allVideos.length} completed</span>
           </div>
-          <div className="w-24 md:w-32 h-2 bg-white/10 border border-white/5 rounded-full overflow-hidden">
+          <div className="w-24 md:w-32 h-2 bg-slate-200 border border-slate-300 rounded-full overflow-hidden">
             <div className="h-full bg-gradient-to-r from-primary to-blue-500 rounded-full transition-all duration-700" style={{ width: `${progressPct}%` }} />
           </div>
-          <span className="text-sm font-black text-white">{progressPct}%</span>
+          <span className="text-sm font-black text-slate-900">{progressPct}%</span>
         </div>
       </header>
 
@@ -137,12 +137,12 @@ export default function LmsClientView({ applicationId, batchName, modules, progr
               </div>
 
               {/* Enhanced Action Bar */}
-              <div className="p-6 bg-[#0B0F19] border-y border-white/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shrink-0 shadow-lg">
+              <div className="p-6 bg-white border-y border-slate-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shrink-0 shadow-sm">
                 <div>
-                  <h2 className="text-2xl md:text-3xl font-black text-white mb-2 tracking-tight">{activeVideo.title}</h2>
-                  <div className="flex items-center gap-3 text-sm font-bold text-gray-500">
+                  <h2 className="text-2xl md:text-3xl font-black text-slate-900 mb-2 tracking-tight">{activeVideo.title}</h2>
+                  <div className="flex items-center gap-3 text-sm font-bold text-slate-500">
                      <span>{activeVideo.duration || "Self-Paced"}</span>
-                     <span className="w-1 h-1 rounded-full bg-white/20" />
+                     <span className="w-1 h-1 rounded-full bg-slate-300" />
                      <span className="text-primary">{batchName}</span>
                   </div>
                 </div>
@@ -160,35 +160,35 @@ export default function LmsClientView({ applicationId, batchName, modules, progr
               </div>
 
               {/* Engagement Core: Tabs */}
-              <div className="px-6 py-4 flex items-center gap-6 border-b border-white/5 bg-[#0A0D14] sticky top-0 z-20">
-                 <button onClick={() => setActiveTab("overview")} className={`pb-4 border-b-2 font-bold text-sm transition-colors ${activeTab === "overview" ? "border-primary text-white" : "border-transparent text-gray-500 hover:text-gray-300"}`}>Overview</button>
-                 <button onClick={() => setActiveTab("resources")} className={`flex items-center gap-2 pb-4 border-b-2 font-bold text-sm transition-colors ${activeTab === "resources" ? "border-primary text-white" : "border-transparent text-gray-500 hover:text-gray-300"}`}>
-                   Resources <span className="bg-white/10 px-2 py-0.5 rounded text-[10px]">{!activeVideo.resources || activeVideo.resources === "[]" ? 0 : JSON.parse(activeVideo.resources).length}</span>
+              <div className="px-6 py-4 flex items-center gap-6 border-b border-slate-200 bg-slate-50 sticky top-0 z-20">
+                 <button onClick={() => setActiveTab("overview")} className={`pb-4 border-b-2 font-bold text-sm transition-colors ${activeTab === "overview" ? "border-primary text-slate-900" : "border-transparent text-slate-500 hover:text-slate-700"}`}>Overview</button>
+                 <button onClick={() => setActiveTab("resources")} className={`flex items-center gap-2 pb-4 border-b-2 font-bold text-sm transition-colors ${activeTab === "resources" ? "border-primary text-slate-900" : "border-transparent text-slate-500 hover:text-slate-700"}`}>
+                   Resources <span className="bg-slate-200 px-2 py-0.5 rounded text-[10px]">{!activeVideo.resources || activeVideo.resources === "[]" ? 0 : JSON.parse(activeVideo.resources).length}</span>
                  </button>
-                 <button onClick={() => setActiveTab("qa")} className={`pb-4 border-b-2 font-bold text-sm transition-colors ${activeTab === "qa" ? "border-primary text-white" : "border-transparent text-gray-500 hover:text-gray-300"}`}>Q&A Discussions</button>
+                 <button onClick={() => setActiveTab("qa")} className={`pb-4 border-b-2 font-bold text-sm transition-colors ${activeTab === "qa" ? "border-primary text-slate-900" : "border-transparent text-slate-500 hover:text-slate-700"}`}>Q&A Discussions</button>
               </div>
 
               {/* Tab Content Display */}
               <div className="p-6">
                  {activeTab === "overview" && (
-                    <div className="max-w-4xl bg-white/[0.02] border border-white/5 p-6 rounded-2xl">
-                       <h3 className="text-lg font-bold text-white mb-3">About this module</h3>
-                       <p className="text-gray-400 leading-relaxed text-sm">Please ensure you complete watching the video tutorial before marking the assignment as complete. This curriculum is designed systematically—skipping modules might impact your holistic understanding.</p>
+                    <div className="max-w-4xl bg-white border border-slate-200 shadow-sm p-6 rounded-2xl">
+                       <h3 className="text-lg font-bold text-slate-900 mb-3">About this module</h3>
+                       <p className="text-slate-500 leading-relaxed text-sm">Please ensure you complete watching the video tutorial before marking the assignment as complete. This curriculum is designed systematically—skipping modules might impact your holistic understanding.</p>
                     </div>
                  )}
                  
                  {activeTab === "resources" && (
                     <div className="max-w-4xl space-y-4">
-                       <h3 className="text-lg font-bold text-white mb-4">Attached Assets</h3>
+                       <h3 className="text-lg font-bold text-slate-900 mb-4">Attached Assets</h3>
                        {(!activeVideo.resources || activeVideo.resources === "[]" || JSON.parse(activeVideo.resources).length === 0) ? (
-                          <div className="p-10 text-center border border-dashed border-white/10 rounded-2xl bg-white/[0.02]">
-                             <File className="w-10 h-10 text-gray-600 mx-auto mb-3" />
-                             <p className="text-gray-400 text-sm font-medium">No downloadable resources attached.</p>
+                          <div className="p-10 text-center border border-dashed border-slate-300 rounded-2xl bg-slate-50">
+                             <File className="w-10 h-10 text-slate-400 mx-auto mb-3" />
+                             <p className="text-slate-500 text-sm font-medium">No downloadable resources attached.</p>
                           </div>
                        ) : (
                           <div className="grid md:grid-cols-2 gap-4">
                             {JSON.parse(activeVideo.resources).map((res, i) => (
-                               <a key={i} href={res.url || "#"} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-white/[0.03] hover:bg-white/5 border border-white/5 hover:border-primary/30 rounded-xl transition-all group">
+                               <a key={i} href={res.url || "#"} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-white hover:bg-slate-50 border border-slate-200 hover:border-primary/50 rounded-xl transition-all group shadow-sm">
                                   <div className="flex items-center gap-4">
                                      <div className="p-3 bg-primary/10 rounded-xl text-primary group-hover:scale-110 transition-transform"><FileText className="w-5 h-5"/></div>
                                      <div>
@@ -206,7 +206,7 @@ export default function LmsClientView({ applicationId, batchName, modules, progr
 
                  {activeTab === "qa" && (
                     <div className="max-w-4xl">
-                       <h3 className="text-lg font-bold text-white mb-6">Module Discussion</h3>
+                       <h3 className="text-lg font-bold text-slate-900 mb-6">Module Discussion</h3>
                        <VideoComments videoId={activeVideo.id} />
                     </div>
                  )}
@@ -214,32 +214,32 @@ export default function LmsClientView({ applicationId, batchName, modules, progr
             </div>
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
-              <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mb-6">
-                <PlayCircle className="h-8 w-8 text-gray-600" />
+              <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mb-6 border border-slate-200">
+                <PlayCircle className="h-8 w-8 text-slate-400" />
               </div>
-              <h2 className="text-xl font-bold text-gray-300">No Video Selected</h2>
-              <p className="text-sm text-gray-500 mt-2">Select a video from the syllabus to start learning.</p>
+              <h2 className="text-xl font-bold text-slate-600">No Video Selected</h2>
+              <p className="text-sm text-slate-500 mt-2">Select a video from the syllabus to start learning.</p>
             </div>
           )}
         </div>
 
         {/* Syllabus Sidebar */}
-        <div className="w-full md:w-80 lg:w-[400px] border-l border-white/10 bg-[#0A0D14] flex flex-col min-h-0 shrink-0 h-[40vh] md:h-auto overflow-y-auto custom-scrollbar">
-          <div className="p-5 border-b border-white/5 sticky top-0 bg-[#0A0D14]/90 backdrop-blur-md z-10">
-            <h3 className="text-sm font-bold text-white tracking-wide">Course Syllabus</h3>
+        <div className="w-full md:w-80 lg:w-[400px] border-l border-slate-200 bg-white flex flex-col min-h-0 shrink-0 h-[40vh] md:h-auto overflow-y-auto custom-scrollbar">
+          <div className="p-5 border-b border-slate-200 sticky top-0 bg-white/90 backdrop-blur-md z-10">
+            <h3 className="text-sm font-bold text-slate-900 tracking-wide">Course Syllabus</h3>
           </div>
           <div className="p-3">
             {modules.map((mod, idx) => (
-              <div key={mod.id} className="mb-2 bg-white/5 border border-white/5 rounded-xl overflow-hidden">
+              <div key={mod.id} className="mb-2 bg-slate-50 border border-slate-200 rounded-xl overflow-hidden">
                 <button 
                   onClick={() => toggleModule(mod.id)} 
-                  className="w-full p-4 flex items-center justify-between bg-white/[0.02] hover:bg-white/5 transition-colors"
+                  className="w-full p-4 flex items-center justify-between bg-slate-50 hover:bg-slate-100 transition-colors"
                 >
                   <div className="flex items-center gap-3 text-left">
                     <span className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md">M{idx + 1}</span>
-                    <h4 className="text-xs font-bold text-gray-200 line-clamp-1">{mod.title}</h4>
+                    <h4 className="text-xs font-bold text-slate-700 line-clamp-1">{mod.title}</h4>
                   </div>
-                  {expandedModules[mod.id] ? <ChevronDown className="h-4 w-4 text-gray-500" /> : <ChevronRight className="h-4 w-4 text-gray-500" />}
+                  {expandedModules[mod.id] ? <ChevronDown className="h-4 w-4 text-slate-500" /> : <ChevronRight className="h-4 w-4 text-slate-500" />}
                 </button>
                 
                 {expandedModules[mod.id] && (
@@ -255,18 +255,18 @@ export default function LmsClientView({ applicationId, batchName, modules, progr
                             key={vid.id}
                             onClick={() => setActiveVideo(vid)}
                             className={`w-full flex items-start gap-3 p-3 rounded-lg text-left transition-all ${
-                              isActive ? "bg-primary/10 border border-primary/20 shadow-[0_0_15px_rgba(79,70,229,0.1)]" : "hover:bg-white/5 border border-transparent"
+                              isActive ? "bg-primary/10 border border-primary/20 shadow-sm" : "hover:bg-slate-100 border border-transparent"
                             }`}
                           >
                             <div className="mt-0.5">
                               {isCompleted ? (
-                                <CheckCircle2 className="h-4 w-4 text-green-500 z-10 relative bg-black rounded-full" />
+                                <CheckCircle2 className="h-4 w-4 text-green-500 z-10 relative bg-white rounded-full" />
                               ) : (
-                                <Circle className={`h-4 w-4 ${isActive ? "text-primary" : "text-gray-600"}`} />
+                                <Circle className={`h-4 w-4 ${isActive ? "text-primary" : "text-slate-400"}`} />
                               )}
                             </div>
                             <div className="flex-1">
-                              <p className={`text-xs font-semibold line-clamp-2 ${isActive ? "text-primary hover:text-primary" : "text-gray-300"}`}>
+                              <p className={`text-xs font-semibold line-clamp-2 ${isActive ? "text-primary hover:text-primary" : "text-slate-600"}`}>
                                 {vIdx + 1}. {vid.title}
                               </p>
                               {vid.duration && (
@@ -282,9 +282,9 @@ export default function LmsClientView({ applicationId, batchName, modules, progr
               </div>
             ))}
             {modules.length === 0 && (
-              <div className="p-8 text-center bg-white/5 rounded-xl border border-white/5 mt-4">
-                <Lock className="h-6 w-6 text-gray-600 mx-auto mb-3" />
-                <p className="text-xs text-gray-500">The syllabus hasn't been uploaded yet by the organizer.</p>
+              <div className="p-8 text-center bg-slate-50 rounded-xl border border-slate-200 mt-4">
+                <Lock className="h-6 w-6 text-slate-400 mx-auto mb-3" />
+                <p className="text-xs text-slate-500">The syllabus hasn't been uploaded yet by the organizer.</p>
               </div>
             )}
           </div>

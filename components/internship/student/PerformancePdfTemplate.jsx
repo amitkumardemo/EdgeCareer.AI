@@ -13,7 +13,7 @@ export default function PerformancePdfTemplate({ data, scoreMap }) {
         {/* Header section with logos */}
         <div className="flex justify-between items-start border-b-4 border-blue-600 pb-10 mb-12">
           <div className="flex items-center gap-6">
-            <img src="/skill.png" alt="TechieHelp Logo" className="w-32 h-auto object-contain" />
+            <img src="/thp logo.png" alt="TechieHelp Logo" className="w-32 h-auto object-contain" />
             <div className="border-l-2 border-gray-300 pl-6">
               <h1 className="text-4xl font-black text-gray-900 tracking-tight leading-none mb-2">TECHIEHELP</h1>
               <p className="text-lg font-bold text-blue-600 uppercase tracking-[0.2em]">Institute of AI</p>
@@ -152,9 +152,9 @@ export default function PerformancePdfTemplate({ data, scoreMap }) {
               {data.evaluation.strengths || "The candidate demonstrated exceptional dedication and a strong learning attitude. They effectively completed assigned tasks, showed good problem-solving skills, and maintained professional conduct throughout the internship."}
             </p>
           </div>
-          <div className="p-10 bg-gray-900 text-white rounded-[40px]">
-            <h3 className="text-xl font-black uppercase tracking-widest mb-6 text-center border-b border-white/10 pb-4">Areas for Growth</h3>
-            <div className="text-lg leading-relaxed whitespace-pre-line text-center px-10 opacity-90">
+          <div className="p-10 bg-white border-2 border-gray-100 rounded-[40px]">
+            <h3 className="text-xl font-black text-gray-900 uppercase tracking-widest mb-6 text-center border-b pb-4">Areas for Growth</h3>
+            <div className="text-lg text-gray-700 leading-relaxed whitespace-pre-line text-center px-10">
               {data.evaluation.growthAreas || "1. Advanced Technical Frameworks\n2. System Architecture & Scalability\n3. Proactive Leadership in Projects"}
             </div>
           </div>

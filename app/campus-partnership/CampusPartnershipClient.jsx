@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import { 
   Sparkles, Award, Star, Users, Briefcase, GraduationCap, Trophy, 
   MapPin, Settings, Mail, Phone, BookOpen, Send, ChevronDown, 
@@ -11,7 +11,7 @@ import {
   Gift, Calendar, HelpCircle, Network, Building, Target, Compass,
   Presentation, Clock, Lightbulb, Zap, Cpu, MessagesSquare,
   LineChart, FolderGit, Globe, FileCheck, TrendingUp, Handshake,
-  Building2, Users2
+  Building2, Users2, X
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -53,6 +53,7 @@ const StatCounter = ({ value, label }) => {
 
 export default function CampusPartnershipClient() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
   const formRef = useRef(null);
 
@@ -94,7 +95,11 @@ export default function CampusPartnershipClient() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    let finalValue = value;
+    if (name === "phone") {
+      finalValue = value.replace(/\D/g, "").slice(0, 10);
+    }
+    setFormData(prev => ({ ...prev, [name]: finalValue }));
     if (formErrors[name]) {
       setFormErrors(prev => ({ ...prev, [name]: "" }));
     }
@@ -112,8 +117,8 @@ export default function CampusPartnershipClient() {
     }
     if (!formData.phone.trim()) {
       errors.phone = "Phone Number is required";
-    } else if (!/^\+?[0-9\s-]{10,15}$/.test(formData.phone.replace(/\s/g, ""))) {
-      errors.phone = "Please enter a valid phone number";
+    } else if (formData.phone.length !== 10) {
+      errors.phone = "Phone number must be exactly 10 digits";
     }
     if (!formData.location.trim()) errors.location = "City & State is required";
     if (!formData.studentCount.trim()) errors.studentCount = "Estimated Student Count is required";
@@ -123,7 +128,7 @@ export default function CampusPartnershipClient() {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) {
       toast.error("Please fill in all required fields correctly.");
@@ -132,23 +137,46 @@ export default function CampusPartnershipClient() {
 
     setIsSubmitting(true);
     
-    // Simulate API submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      toast.success("Partnership request submitted successfully! Our Institutional Lead will reach out to you within 24 hours.");
-      setFormData({
-        institutionName: "",
-        contactName: "",
-        designation: "",
-        email: "",
-        phone: "",
-        location: "",
-        studentCount: "",
-        departments: "",
-        collaborationType: "",
-        message: ""
+    const payload = {
+      ...formData,
+      _captcha: "false",
+      _template: "table",
+      _subject: "🚀 New Campus Partnership Request",
+      _autoresponse: "Thank you for contacting TechieHelp Institute of AI. We have received your Campus Partnership Request and our Institutional Lead will reach out to you within 24 hours.",
+    };
+
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/techiehelpinstituteofai@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(payload)
       });
-    }, 1500);
+      
+      if (response.ok) {
+        setShowSuccessModal(true);
+        setFormData({
+          institutionName: "",
+          contactName: "",
+          designation: "",
+          email: "",
+          phone: "",
+          location: "",
+          studentCount: "",
+          departments: "",
+          collaborationType: "",
+          message: ""
+        });
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      toast.error("Failed to submit the form. Please check your connection.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Framer Motion Variants for scroll animations
@@ -634,6 +662,7 @@ export default function CampusPartnershipClient() {
                 <input 
                   type="text" 
                   name="phone"
+                  maxLength="10"
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="10-digit mobile number"
@@ -805,6 +834,52 @@ export default function CampusPartnershipClient() {
           </div>
         </div>
       </section>
+
+      {/* SUCCESS MODAL */}
+      <AnimatePresence>
+        {showSuccessModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+              onClick={() => setShowSuccessModal(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative bg-white rounded-3xl shadow-2xl p-8 max-w-sm w-full text-center border border-slate-100 z-10"
+            >
+              <button 
+                onClick={() => setShowSuccessModal(false)}
+                className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors p-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              
+              <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center">
+                  <CheckCircle2 className="w-8 h-8 text-green-600" />
+                </div>
+              </div>
+              
+              <h3 className="text-2xl font-black text-blue-950 mb-2">Request Sent!</h3>
+              <p className="text-slate-500 text-sm leading-relaxed mb-8">
+                Thank you for contacting TechieHelp Institute of AI. Our Institutional Lead will get back to you within 24 hours.
+              </p>
+              
+              <button
+                onClick={() => setShowSuccessModal(false)}
+                className="w-full py-3.5 rounded-xl bg-[#0F4CBA] hover:bg-[#0c3d96] text-white font-bold text-sm shadow-md transition-all active:scale-[0.98]"
+              >
+                Continue
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
     </div>
   );

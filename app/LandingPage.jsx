@@ -771,9 +771,11 @@ export default function Home({ latestJobs = [] }) {
                     ))}
                   </div>
 
-                  <button className="px-8 py-4 rounded-full bg-amber-500 text-blue-950 font-bold hover:bg-amber-600 hover:scale-105 transition-all shadow-xl">
-                    Request Partnership
-                  </button>
+                  <Link href="/campus-partnership">
+                    <button suppressHydrationWarning className="px-8 py-4 rounded-full bg-amber-500 text-blue-950 font-bold hover:bg-amber-600 hover:scale-105 transition-all shadow-xl">
+                      Request Partnership
+                    </button>
+                  </Link>
                 </div>
 
                 <div className="hidden lg:block w-full max-w-md relative p-8">

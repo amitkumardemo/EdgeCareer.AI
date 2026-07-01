@@ -16,7 +16,7 @@ export default async function InternshipLayout({ children }) {
   });
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex internship-portal-root">
+    <div className="min-h-screen bg-white flex internship-portal-root text-slate-900">
       <InternshipSidebar user={dbUser} />
       <main className="flex-1 ml-0 lg:ml-64 p-6 pt-20 lg:pt-6">
         {children}

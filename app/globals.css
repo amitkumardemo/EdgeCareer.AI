@@ -85,8 +85,16 @@ body {
   .char {
     @apply inline-block text-transparent bg-clip-text gradient;
   }
-}
 
+  /* Hide scrollbar for category pills and sidebar */
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
 
 .hero-image-wrapper {
   perspective: 1000px;

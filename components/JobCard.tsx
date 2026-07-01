@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Bookmark, MapPin, Briefcase, IndianRupee, Clock, Share2 } from "lucide-react";
+import { Trophy, CheckCircle2, Bookmark, MapPin } from "lucide-react";
 import { Job, Company } from "@prisma/client";
 
 interface JobCardProps {
@@ -13,96 +13,76 @@ export default function JobCard({ job }: JobCardProps) {
   // Use new flat slug structure: /jobs/[slug]
   const jobUrl = `/jobs/${job.slug}`;
 
+  // Helper to get category text and styles
+  const getCategoryTag = () => {
+    if (job.employmentType === "Internship") {
+      return { text: "INTERNSHIPS", bg: "bg-purple-100", textCol: "text-purple-700" };
+    }
+    if (job.employmentType === "Full Time" || job.employmentType === "Contract") {
+      return { text: "JOBS", bg: "bg-blue-100", textCol: "text-blue-700" };
+    }
+    return { text: "EVENTS", bg: "bg-amber-100", textCol: "text-amber-700" };
+  };
+
+  const tag = getCategoryTag();
+
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -5 }}
-      transition={{ duration: 0.3 }}
-      className="bg-white/80 backdrop-blur-md border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-lg transition-all relative group"
-    >
-      <div className="flex justify-between items-start gap-4">
-        {/* Company Logo */}
-        <div className="w-16 h-16 rounded-lg bg-gray-50 flex items-center justify-center shrink-0 border overflow-hidden">
-          {job.company.logoUrl ? (
-            <img src={job.company.logoUrl} alt={job.company.name} className="w-full h-full object-cover" />
-          ) : (
-            <span className="text-xl font-bold text-gray-400">{job.company.name.charAt(0)}</span>
+    <Link href={jobUrl} className="block group">
+      <motion.div 
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-slate-300 transition-all relative h-full flex flex-col"
+      >
+        {/* Top Row: Logo & Pill */}
+        <div className="flex justify-between items-start mb-4">
+          <div className="w-14 h-14 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
+            {job.company.logoUrl ? (
+              <img src={job.company.logoUrl} alt={job.company.name} className="w-10 h-10 object-contain" />
+            ) : (
+              <span className="text-xl font-bold text-slate-400">{job.company.name.charAt(0)}</span>
+            )}
+          </div>
+          <div className={`px-3 py-1 rounded-full text-[10px] font-extrabold tracking-widest uppercase ${tag.bg} ${tag.textCol}`}>
+            {tag.text}
+          </div>
+        </div>
+
+        {/* Title & Company */}
+        <div className="mb-6 flex-1">
+          <h3 className="text-lg font-bold text-slate-900 leading-tight mb-2 group-hover:text-[#a855f7] transition-colors line-clamp-2">
+            {job.title}
+          </h3>
+          <p className="text-sm font-semibold text-slate-500">
+            {job.company.name}
+          </p>
+        </div>
+
+        {/* Badges/Tags Row */}
+        <div className="flex flex-wrap items-center gap-2 mt-auto">
+          {/* Example Badges based on data */}
+          {job.salary && (
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded border border-green-200 bg-green-50 text-[11px] font-bold text-green-700">
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              Paid (Competitive)
+            </div>
+          )}
+          
+          {job.workMode && (
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded border border-slate-200 bg-slate-100 text-[11px] font-bold text-slate-700">
+              <MapPin className="w-3.5 h-3.5" />
+              {job.workMode}
+            </div>
+          )}
+
+          {job.isUrgent && (
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded border border-red-200 bg-red-50 text-[11px] font-bold text-red-700">
+              <Trophy className="w-3.5 h-3.5" />
+              Official Swags
+            </div>
           )}
         </div>
-
-        {/* Details */}
-        <div className="flex-1">
-          <Link href={jobUrl} className="block group-hover:text-[#0F4CBA] transition-colors">
-            <h3 className="text-lg font-semibold text-slate-800 leading-tight mb-1">{job.title}</h3>
-          </Link>
-          <Link href={`/company/${job.company.slug}`} className="text-sm text-[#0F4CBA] hover:underline font-medium">
-            {job.company.name}
-          </Link>
-
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-3 text-sm text-gray-500">
-            {job.locationId && (
-              <div className="flex items-center gap-1">
-                <MapPin size={16} /> <span>{job.locationId}</span>
-              </div>
-            )}
-            {job.experience && (
-              <div className="flex items-center gap-1">
-                <Briefcase size={16} /> <span>{job.experience}</span>
-              </div>
-            )}
-            {job.salary && (
-              <div className="flex items-center gap-1">
-                <IndianRupee size={16} /> <span>{job.salary}</span>
-              </div>
-            )}
-            <div className="flex items-center gap-1">
-              <Clock size={16} /> <span suppressHydrationWarning>{new Date(job.createdAt).toLocaleDateString()}</span>
-            </div>
-          </div>
-
-          {/* Tags */}
-          <div className="flex flex-wrap gap-2 mt-4">
-            {job.employmentType && (
-              <span className="px-2.5 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full">
-                {job.employmentType}
-              </span>
-            )}
-            {job.workMode && (
-              <span className="px-2.5 py-1 bg-amber-50 text-amber-700 text-xs font-medium rounded-full">
-                {job.workMode}
-              </span>
-            )}
-            {job.isUrgent && (
-              <span className="px-2.5 py-1 bg-red-50 text-red-600 text-xs font-medium rounded-full">
-                Urgent Hiring
-              </span>
-            )}
-          </div>
-        </div>
-
-        {/* Actions */}
-        <div className="flex flex-col items-end gap-2 shrink-0">
-          <button className="p-2 text-gray-400 hover:text-[#F4B400] transition-colors rounded-full hover:bg-gray-50">
-            <Bookmark size={20} />
-          </button>
-          <button className="p-2 text-gray-400 hover:text-[#0F4CBA] transition-colors rounded-full hover:bg-gray-50">
-            <Share2 size={20} />
-          </button>
-        </div>
-      </div>
-
-      <div className="mt-5 pt-4 border-t border-gray-100 flex items-center justify-between">
-        <div className="text-xs text-gray-400 font-medium">
-          {job.views > 100 ? `🔥 ${job.views} views` : `Be among the first to apply`}
-        </div>
-        <Link 
-          href={jobUrl}
-          className="bg-[#0F4CBA] text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-blue-700 hover:shadow-md transition-all active:scale-95"
-        >
-          View Details
-        </Link>
-      </div>
-    </motion.div>
+      </motion.div>
+    </Link>
   );
 }
