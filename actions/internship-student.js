@@ -207,7 +207,14 @@ export async function getLeaderboard(batchId) {
 }
 
 export async function getOpenBatches() {
-  return prisma.internshipBatch.findMany({
+  let user = null;
+  try {
+    user = await getStudentApp();
+  } catch (e) {
+    // Ignore error if not logged in
+  }
+
+  const batches = await prisma.internshipBatch.findMany({
     where: { status: { in: ["UPCOMING", "ACTIVE"] } },
     include: {
       program: { select: { title: true, domain: true, duration: true, stipend: true } },
@@ -215,6 +222,21 @@ export async function getOpenBatches() {
     },
     orderBy: { startDate: "asc" },
   });
+
+  if (!user) {
+    return batches.map(b => ({ ...b, hasApplied: false }));
+  }
+
+  const myApps = await prisma.internshipApplication.findMany({
+    where: { userId: user.id },
+    select: { batchId: true },
+  });
+  const appliedBatchIds = new Set(myApps.map(a => a.batchId));
+
+  return batches.map(b => ({
+    ...b,
+    hasApplied: appliedBatchIds.has(b.id)
+  }));
 }
 
 export async function getMyNotifications(userId) {

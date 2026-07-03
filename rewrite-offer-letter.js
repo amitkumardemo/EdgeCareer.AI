@@ -1,4 +1,13 @@
-"use server";
+const fs = require('fs');
+const path = require('path');
+
+const targetPath = path.join(__dirname, 'actions', 'offer-letter.js');
+let lines = fs.readFileSync(targetPath, 'utf8').split('\n');
+
+// The file has a duplicate block injected from lines 54 down to somewhere.
+// Let's just find where the duplicate starts and ends, or we can just replace the whole file since we have it!
+
+const newContent = `"use server";
 
 import prisma from "@/lib/prisma";
 import { sendNotificationEmail } from "@/lib/email-service";
@@ -46,12 +55,12 @@ export async function issueOfferLetter(applicationId) {
       month: "long", day: "numeric", year: "numeric"
     });
     const currentYear = new Date().getFullYear();
-    const refId = `TECHIE/INT/${currentYear}/${studentId}`;
+    const refId = \`TECHIE/INT/\${currentYear}/\${studentId}\`;
 
     const getStaticBase64 = async (filePath) => {
       try {
         const file = await fs.readFile(filePath);
-        return `data:image/png;base64,${file.toString("base64")}`;
+        return \`data:image/png;base64,\${file.toString("base64")}\`;
       } catch (err) {
         return "";
       }
@@ -61,16 +70,12 @@ export async function issueOfferLetter(applicationId) {
       getStaticBase64(path.join(process.cwd(), "public", "thp logo.png")),
       getStaticBase64(path.join(process.cwd(), "public", "EdgeCareers.png")),
       getStaticBase64(path.join(process.cwd(), "public", "seal.png")),
-      getStaticBase64(path.join(process.cwd(), "public", "image (3).png")), // ISO
-      getStaticBase64(path.join(process.cwd(), "public", "image (4).png")), // MSME
     ]);
 
     const images = {
       logo: imagesData[0],
       signature: imagesData[1],
       seal: imagesData[2],
-      iso: imagesData[3],
-      msme: imagesData[4],
     };
 
     // 3. Generate PDF with jsPDF (Exact 1-Page Match)
@@ -161,7 +166,7 @@ export async function issueOfferLetter(applicationId) {
         doc.circle(x, y, 7, 'S');
         doc.setFont("helvetica", "normal");
         doc.setFontSize(9);
-        doc.text("₹", x - 2.5, y + 3); 
+        doc.text("₹", x - 2.5, y + 3); // Native font might not support ₹, fallback if needed
       } else if (type === 'user') {
         doc.circle(x, y - 3, 3, 'S');
         doc.path([
@@ -169,6 +174,9 @@ export async function issueOfferLetter(applicationId) {
           {op: 'c', c: [x - 5, y + 1, x + 5, y + 1, x + 5, y + 6]}
         ]);
         doc.stroke();
+      } else if (type === 'star') {
+        doc.triangle(x, y - 4, x - 3, y + 3, x + 3, y + 3, 'F');
+        doc.triangle(x, y + 5, x - 4, y - 2, x + 4, y - 2, 'F');
       }
     };
 
@@ -205,6 +213,7 @@ export async function issueOfferLetter(applicationId) {
     doc.text("techiehelpinstituteofai.in", rightX - 135, 86);
 
     // ─── 3. DIVIDER ───
+    // A blue shape on left, gold line extending to right
     doc.setFillColor(colors.navy[0], colors.navy[1], colors.navy[2]);
     doc.path([
       {op: 'm', c: [0, 105]},
@@ -222,20 +231,17 @@ export async function issueOfferLetter(applicationId) {
     doc.setFontSize(16);
     doc.setTextColor(colors.navy[0], colors.navy[1], colors.navy[2]);
     const title = "INTERNSHIP OFFER LETTER";
+    const titleW = doc.getTextWidth(title);
     doc.text(title, pageWidth / 2, 140, { align: "center" });
-    
-    // REPLACED STAR WITH GOLD LINE
-    doc.setDrawColor(colors.gold[0], colors.gold[1], colors.gold[2]);
-    doc.setLineWidth(1.5);
-    doc.line(pageWidth / 2 - 80, 145, pageWidth / 2 + 80, 145);
+    drawIcon('star', pageWidth / 2, 148, 0, colors.gold);
 
     // ─── 5. META INFO ───
     let y = 175;
     doc.setFont("helvetica", "bold");
     doc.setFontSize(8.5);
     doc.setTextColor(colors.textDark[0], colors.textDark[1], colors.textDark[2]);
-    doc.text(`Ref ID: ${refId}`, margin, y);
-    doc.text(`Date: ${currentDate}`, rightX, y, { align: "right" });
+    doc.text(\`Ref ID: \${refId}\`, margin, y);
+    doc.text(\`Date: \${currentDate}\`, rightX, y, { align: "right" });
 
     y += 20;
     doc.text("To,", margin, y);
@@ -246,14 +252,14 @@ export async function issueOfferLetter(applicationId) {
     doc.setTextColor(colors.gold[0], colors.gold[1], colors.gold[2]);
     doc.text("Subject:", margin, y);
     doc.setTextColor(colors.textDark[0], colors.textDark[1], colors.textDark[2]);
-    doc.text(` Internship Offer – ${domain} Intern`, margin + doc.getTextWidth("Subject:"), y);
+    doc.text(\` Internship Offer – \${domain} Intern\`, margin + doc.getTextWidth("Subject:"), y);
 
     y += 20;
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8);
-    doc.text(`Dear ${internName},`, margin, y);
+    doc.text(\`Dear \${internName},\`, margin, y);
     y += 12;
-    doc.text(`Congratulations on being selected as a ${domain} Intern at TechieHelp Institute of AI.`, margin, y);
+    doc.text(\`Congratulations on being selected as a \${domain} Intern at TechieHelp Institute of AI.\`, margin, y);
     
     y += 15;
     const introLines = doc.splitTextToSize(
@@ -263,10 +269,10 @@ export async function issueOfferLetter(applicationId) {
     doc.text(introLines, margin, y);
     y += introLines.length * 10 + 10;
 
-    // ─── 6. INFO GRID (Horizontal Layout) ───
+    // ─── 6. INFO GRID ───
     doc.setDrawColor(colors.border[0], colors.border[1], colors.border[2]);
     doc.setLineWidth(0.5);
-    doc.roundedRect(margin, y, contentWidth, 90, 4, 4, "S");
+    doc.roundedRect(margin, y, contentWidth, 75, 4, 4, "S");
 
     const col1 = margin + 15;
     const col2 = margin + contentWidth / 2;
@@ -276,31 +282,28 @@ export async function issueOfferLetter(applicationId) {
       doc.setFont("helvetica", "bold");
       doc.setFontSize(7.5);
       doc.setTextColor(colors.textDark[0], colors.textDark[1], colors.textDark[2]);
-      
-      const lblStr = `${lbl} : `;
-      doc.text(lblStr, ix + 25, iy + 9);
-      
-      const lblWidth = doc.getTextWidth(lblStr);
+      doc.text(lbl, ix + 25, iy + 6);
       doc.setFont("helvetica", "normal");
       doc.setTextColor(colors.textLight[0], colors.textLight[1], colors.textLight[2]);
-      doc.text(val, ix + 25 + lblWidth, iy + 9);
+      doc.text(val, ix + 25, iy + 16);
     };
 
-    drawInfoItem('briefcase', 'Position', `${domain} Intern`, col1, y + 5);
+    drawInfoItem('briefcase', 'Position', \`\${domain} Intern\`, col1, y + 5);
     drawInfoItem('monitor', 'Work Mode', 'Remote / Online', col1, y + 25);
     drawInfoItem('building', 'Department', 'Technology & Development', col1, y + 45);
     drawInfoItem('cap', 'College / University', collegeName.substring(0, 35), col1, y + 65);
 
-    drawInfoItem('calendar', 'Duration', `${startDate} – ${endDate}`, col2, y + 5);
+    drawInfoItem('calendar', 'Duration', \`\${startDate} – \${endDate}\`, col2, y + 5);
     drawInfoItem('rupee', 'Stipend', 'Performance-Based', col2, y + 25);
-    drawInfoItem('user', 'Reporting Mentor', 'Er. Aditya Kumar', col2, y + 45);
+    drawInfoItem('user', 'Reporting To / HR', 'Er. Aditya Kumar', col2, y + 45);
 
-    y += 105;
+    y += 90;
 
     // ─── 7. 2x2 SECTIONS ───
     const sWidth = (contentWidth / 2) - 15;
     
     const drawSection = (icon, title, items, sx, sy) => {
+      // Small icon
       doc.setDrawColor(colors.gold[0], colors.gold[1], colors.gold[2]);
       doc.setFillColor(colors.gold[0], colors.gold[1], colors.gold[2]);
       if(icon==='rocket'){
@@ -346,7 +349,7 @@ export async function issueOfferLetter(applicationId) {
       "Balanced approach: 70% project work + 30% structured learning."
     ], margin + contentWidth/2 + 5, y);
 
-    y += 75;
+    y += 65;
 
     drawSection('clipboard', 'ROLES & RESPONSIBILITIES', [
       "Work proactively on real-world projects replicating client needs.",
@@ -360,32 +363,27 @@ export async function issueOfferLetter(applicationId) {
       "A predefined probation period may apply based on early performance metrics.",
       "Interns must adhere firmly to timelines and maintain organizational discipline.",
       "Notice period: 15 days written intimation before exiting.",
-      "Any form of documented misconduct or plagiarism may result in immediate termination."
+      "Any form of documented misconduct or plagiarism may result in immediate termination.",
+      "All technical work and documentation produced is the exclusive intellectual property of TechieHelp."
     ], margin + contentWidth/2 + 5, y);
 
-    y += 85;
+    y += 75;
 
     // ─── 8. BENEFITS ───
     doc.setDrawColor(colors.gold[0], colors.gold[1], colors.gold[2]);
     doc.setFillColor(colors.bgGoldLight[0], colors.bgGoldLight[1], colors.bgGoldLight[2]);
-    doc.roundedRect(margin, y - 5, contentWidth, 45, 4, 4, "FD");
+    doc.roundedRect(margin, y, contentWidth, 45, 4, 4, "FD");
 
+    // Benefits Title
     doc.setFont("helvetica", "bold");
     doc.setFontSize(7.5);
     doc.setTextColor(colors.navy[0], colors.navy[1], colors.navy[2]);
-    // REPLACED STAR IN BENEFITS WITH NORMAL ICON OR TEXT ONLY
-    // Since user asked to remove star under title, I'll keep the star here as it was part of the original design, but I'll draw it.
-    const drawSmallStar = (x, y) => {
-      doc.triangle(x, y - 4, x - 3, y + 3, x + 3, y + 3, 'F');
-      doc.triangle(x, y + 5, x - 4, y - 2, x + 4, y - 2, 'F');
-    }
-    doc.setFillColor(colors.gold[0], colors.gold[1], colors.gold[2]);
-    drawSmallStar(margin + 25, y + 10);
+    drawIcon('star', margin + 25, y + 15, 0, colors.gold);
+    doc.text("BENEFITS", margin + 12, y + 30);
     
-    doc.text("BENEFITS", margin + 12, y + 25);
-    
+    // Line separator
     doc.setDrawColor(colors.border[0], colors.border[1], colors.border[2]);
-    doc.line(margin + 50, y, margin + 50, y + 35);
+    doc.line(margin + 50, y + 5, margin + 50, y + 40);
 
     const benefits = [
       ["Official Verified", "Internship Certificate"],
@@ -402,29 +400,22 @@ export async function issueOfferLetter(applicationId) {
     
     for(let i=0; i<benefits.length; i++){
       const bx = margin + 55 + (i * bStep) + (bStep/2);
-      // Draw a clean Lucide-style check-circle
-      doc.setDrawColor(colors.navy[0], colors.navy[1], colors.navy[2]);
-      doc.setLineWidth(1);
-      doc.circle(bx, y + 8, 6, "S");
-      // Checkmark inside
-      doc.setLineWidth(1);
-      doc.path([
-        {op: 'm', c: [bx - 2, y + 8]},
-        {op: 'l', c: [bx, y + 10]},
-        {op: 'l', c: [bx + 3, y + 5]}
-      ]);
-      doc.stroke();
+      // tiny generic square icon placeholder for benefits
+      doc.setFillColor(colors.navy[0], colors.navy[1], colors.navy[2]);
+      doc.rect(bx - 6, y + 8, 12, 10, "F");
+      doc.setFillColor(255, 255, 255);
+      doc.rect(bx - 3, y + 11, 6, 4, "F");
       
-      doc.text(benefits[i][0], bx, y + 23, {align:"center"});
-      doc.text(benefits[i][1], bx, y + 31, {align:"center"});
+      doc.text(benefits[i][0], bx, y + 28, {align:"center"});
+      doc.text(benefits[i][1], bx, y + 36, {align:"center"});
       
       if(i < benefits.length - 1) {
         doc.setDrawColor(colors.border[0], colors.border[1], colors.border[2]);
-        doc.line(margin + 55 + ((i+1)*bStep), y + 5, margin + 55 + ((i+1)*bStep), y + 30);
+        doc.line(margin + 55 + ((i+1)*bStep), y + 10, margin + 55 + ((i+1)*bStep), y + 35);
       }
     }
 
-    y += 45;
+    y += 55;
 
     // ─── 9. ACCEPTANCE OF OFFER ───
     doc.setFillColor(colors.navy[0], colors.navy[1], colors.navy[2]);
@@ -433,6 +424,7 @@ export async function issueOfferLetter(applicationId) {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(8.5);
     doc.setTextColor(255, 255, 255);
+    // Draw Handshake icon roughly
     const hx = pageWidth/2 - 70;
     doc.setFillColor(255, 255, 255);
     doc.rect(hx, y + 5, 6, 4, "F"); doc.rect(hx+8, y+7, 6, 4, "F");
@@ -474,36 +466,31 @@ export async function issueOfferLetter(applicationId) {
     doc.text("throughout this internship.", margin, y + 10);
     doc.text("Wishing you success in your journey.", margin, y + 20);
 
-    // Signature Area CENTERED
-    const sigX = pageWidth / 2;
+    // Signature Center
     if (images.signature) {
-      doc.addImage(images.signature, "PNG", sigX - 35, y - 10, 70, 35, "", "SLOW");
+      doc.addImage(images.signature, "PNG", pageWidth/2 - 40, y - 10, 60, 30, "", "SLOW");
     }
-    
-    // Founder Name and Line
-    doc.setDrawColor(colors.textDark[0], colors.textDark[1], colors.textDark[2]);
-    doc.setLineWidth(0.5);
-    doc.line(sigX - 40, y + 25, sigX + 40, y + 25);
-    
     doc.setFont("helvetica", "bold");
     doc.setFontSize(8.5);
-    doc.text("Er. Amit Kumar", sigX, y + 35, {align:"center"});
-    doc.setFont("helvetica", "normal");
+    doc.text("Amit Kumar", pageWidth/2, y + 25, {align:"center"});
     doc.setFontSize(7.5);
-    doc.text("Founder & CEO", sigX, y + 45, {align:"center"});
-    doc.text("TechieHelp Institute of AI", sigX, y + 55, {align:"center"});
+    doc.text("Founder & CEO", pageWidth/2, y + 35, {align:"center"});
+    doc.text("TechieHelp Institute of AI", pageWidth/2, y + 45, {align:"center"});
 
-    // Place ISO, MSME and Seal Logos closer to the signature
-    const logoY = y;
-    if(images.iso) {
-      doc.addImage(images.iso, "PNG", sigX + 65, logoY, 45, 45, "", "SLOW");
-    }
-    if(images.msme) {
-      doc.addImage(images.msme, "PNG", sigX + 120, logoY + 8, 55, 35, "", "SLOW");
-    }
+    // QR Code Right
     if(images.seal) {
-      doc.addImage(images.seal, "PNG", sigX + 185, logoY + 5, 40, 40, "", "SLOW");
+      doc.addImage(images.seal, "PNG", rightX - 110, y - 5, 30, 30, "", "SLOW");
+    } else {
+      doc.setDrawColor(colors.navy[0], colors.navy[1], colors.navy[2]);
+      doc.rect(rightX - 110, y - 5, 30, 30, "S"); // QR placeholder
     }
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(7);
+    doc.text("Scan to verify this letter", rightX - 75, y);
+    doc.setFont("helvetica", "normal");
+    doc.text("or visit our website", rightX - 75, y + 10);
+    doc.setTextColor(colors.navy[0], colors.navy[1], colors.navy[2]);
+    doc.text("techiehelpinstituteofai.in/verify", rightX - 75, y + 20);
 
     // ─── 11. BOTTOM BAR ───
     const fY = pageHeight - 20;
@@ -522,7 +509,7 @@ export async function issueOfferLetter(applicationId) {
     doc.setFillColor(225, 48, 108); doc.circle(smX+15, fY+10, 4, "F"); // Insta
     doc.setFillColor(255, 0, 0); doc.circle(smX+30, fY+10, 4, "F"); // YT
     
-    doc.text(`© ${currentYear} TechieHelp Institute of AI. All Rights Reserved.`, rightX - 180, fY + 12);
+    doc.text(\`© \${currentYear} TechieHelp Institute of AI. All Rights Reserved.\`, rightX - 180, fY + 12);
 
     // 4. Export PDF as base64 data URL
     const pdfBase64 = doc.output("datauristring");
@@ -543,16 +530,17 @@ export async function issueOfferLetter(applicationId) {
 
     // 6. Send email (PDF as attachment buffer)
     const pdfBuffer = Buffer.from(doc.output("arraybuffer"));
-    const emailBody = `
-      <p>Hi ${internName},</p>
-      <p>Congratulations! You have been selected for the internship at TechieHelp Institute of AI as a <strong>${domain}</strong> Intern.</p>
+    const emailBody = \`
+      <p>Hi \${internName},</p>
+      <p>Congratulations! You have been selected for the internship at TechieHelp Institute of AI as a <strong>\${domain}</strong> Intern.</p>
       <p>Your personalized official offer letter is attached to this email as a PDF.</p>
       <p>Please review the terms and start your placement journey with us.</p>
       <p>Best Regards,<br>Amit Kumar<br>Founder & CEO, TechieHelp</p>
-    `;
+    \`;
 
     let emailSent = false;
     if (user.email) {
+      // Fire and forget email logic to prevent blocking UI if SMTP timeouts
       sendNotificationEmail({
         to: user.email,
         subject: "🎉 Internship Offer Letter - TechieHelp",
@@ -586,6 +574,7 @@ export async function issueOfferLetter(applicationId) {
 
 /**
  * Fetches only the pdfUrl for a specific application's offer letter.
+ * Kept separate so list queries don't load the large base64 string.
  */
 export async function getMyOfferLetterPdf(applicationId) {
   const record = await prisma.offerLetter.findUnique({
@@ -594,3 +583,7 @@ export async function getMyOfferLetterPdf(applicationId) {
   });
   return record;
 }
+`;
+
+fs.writeFileSync(targetPath, newContent, 'utf8');
+console.log('actions/offer-letter.js has been successfully regenerated and fixed.');

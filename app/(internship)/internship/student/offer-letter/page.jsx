@@ -62,7 +62,7 @@ export default async function OfferLetterPage({ searchParams }) {
           <div className="flex justify-between border-b border-slate-200 pb-2">
             <span className="text-xs text-slate-500 font-medium">Duration</span>
             <span className="text-xs font-bold text-slate-900">
-              {app.batch?.program?.duration} Weeks
+              {app.batch?.program?.duration} Months
             </span>
           </div>
           <div className="flex justify-between border-b border-slate-200 pb-2">
@@ -116,7 +116,7 @@ export default async function OfferLetterPage({ searchParams }) {
               disabled
               className="inline-flex items-center justify-center gap-2 text-sm font-semibold px-6 py-3 bg-slate-100 text-slate-400 rounded-xl cursor-not-allowed border border-slate-200"
             >
-              PDF Generating...
+              Pending HR Issuance
             </button>
           )}
         </div>

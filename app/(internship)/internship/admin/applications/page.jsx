@@ -5,8 +5,8 @@ import { getAllApplications, reviewApplication } from "@/actions/internship-admi
 import { getBatches } from "@/actions/internship-admin";
 import { issueOfferLetter } from "@/actions/offer-letter";
 import { toast } from "sonner";
-import { 
-  CheckCircle2, XCircle, Eye, Filter, Clock, Github, Linkedin, 
+import {
+  CheckCircle2, XCircle, Eye, Filter, Clock, Github, Linkedin,
   Globe, FileText, User, Mail, Phone, MapPin, School, GraduationCap, X, Star
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -174,15 +174,14 @@ export default function ApplicationsPage() {
                         >
                           <Eye className="h-3.5 w-3.5" />
                         </button>
-                        
+
                         <div className="h-6 w-px bg-white/5 mx-1" />
 
                         <button
                           onClick={() => handleReview(app.id, "SELECTED")}
                           disabled={reviewing === app.id || app.status === "SELECTED"}
-                          className={`p-1.5 rounded-lg transition-all disabled:opacity-30 ${
-                            app.status === "SELECTED" ? "bg-green-400/20 text-green-400" : "bg-green-400/5 text-green-400/60 hover:text-green-400 hover:bg-green-400/15"
-                          }`}
+                          className={`p-1.5 rounded-lg transition-all disabled:opacity-30 ${app.status === "SELECTED" ? "bg-green-400/20 text-green-400" : "bg-green-400/5 text-green-400/60 hover:text-green-400 hover:bg-green-400/15"
+                            }`}
                           title="Select"
                         >
                           <CheckCircle2 className="h-3.5 w-3.5" />
@@ -190,9 +189,8 @@ export default function ApplicationsPage() {
                         <button
                           onClick={() => handleReview(app.id, "UNDER_REVIEW")}
                           disabled={reviewing === app.id || app.status === "UNDER_REVIEW"}
-                          className={`p-1.5 rounded-lg transition-all disabled:opacity-30 ${
-                            app.status === "UNDER_REVIEW" ? "bg-amber-400/20 text-amber-400" : "bg-amber-400/5 text-amber-400/60 hover:text-amber-400 hover:bg-amber-400/15"
-                          }`}
+                          className={`p-1.5 rounded-lg transition-all disabled:opacity-30 ${app.status === "UNDER_REVIEW" ? "bg-amber-400/20 text-amber-400" : "bg-amber-400/5 text-amber-400/60 hover:text-amber-400 hover:bg-amber-400/15"
+                            }`}
                           title="Under Review"
                         >
                           <Clock className="h-3.5 w-3.5" />
@@ -200,9 +198,8 @@ export default function ApplicationsPage() {
                         <button
                           onClick={() => handleReview(app.id, "REJECTED")}
                           disabled={reviewing === app.id || app.status === "REJECTED"}
-                          className={`p-1.5 rounded-lg transition-all disabled:opacity-30 ${
-                            app.status === "REJECTED" ? "bg-red-400/20 text-red-400" : "bg-red-400/5 text-red-400/60 hover:text-red-400 hover:bg-red-400/15"
-                          }`}
+                          className={`p-1.5 rounded-lg transition-all disabled:opacity-30 ${app.status === "REJECTED" ? "bg-red-400/20 text-red-400" : "bg-red-400/5 text-red-400/60 hover:text-red-400 hover:bg-red-400/15"
+                            }`}
                           title="Reject"
                         >
                           <XCircle className="h-3.5 w-3.5" />
@@ -216,27 +213,26 @@ export default function ApplicationsPage() {
           </table>
         </div>
       </div>
-
       {/* Student Details Modal */}
       {selectedApp && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-[#0f1117] border border-white/10 rounded-2xl w-full max-w-2xl my-auto animate-in fade-in zoom-in duration-200 shadow-2xl overflow-hidden">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white border border-gray-200 rounded-2xl w-full max-w-2xl my-auto animate-in fade-in zoom-in duration-200 shadow-2xl overflow-hidden">
             {/* Modal Header */}
-            <div className="p-6 border-b border-white/5 flex items-center justify-between bg-white/[0.02]">
+            <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-primary/15 flex items-center justify-center text-primary text-xl font-bold border border-primary/20">
+                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xl font-bold border border-primary/20">
                   {selectedApp.user?.name?.[0]?.toUpperCase()}
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-white leading-tight">{selectedApp.user?.name}</h2>
+                  <h2 className="text-xl font-bold text-gray-900 leading-tight">{selectedApp.user?.name}</h2>
                   <p className="text-sm text-gray-500">{selectedApp.user?.email}</p>
                 </div>
               </div>
               <button 
                 onClick={() => { setSelectedApp(null); setShowEvaluation(false); }}
-                className="p-2 hover:bg-white/5 rounded-full transition-colors"
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
-                <X className="h-5 w-5 text-gray-400" />
+                <X className="h-5 w-5 text-gray-400 hover:text-gray-600" />
               </button>
             </div>
 
@@ -246,39 +242,39 @@ export default function ApplicationsPage() {
                 {/* Information Sections */}
                 <div className="space-y-6">
                   <div>
-                    <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Academic & Contact</h3>
+                    <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Academic & Contact</h3>
                     <div className="space-y-3">
-                      <div className="flex items-center gap-3 text-sm text-gray-300">
-                        <School className="h-4 w-4 text-primary/60" />
+                      <div className="flex items-center gap-3 text-sm text-gray-600">
+                        <School className="h-4 w-4 text-primary/70" />
                         <span>{selectedApp.user?.college?.name || selectedApp.user?.collegeName || "College not provided"}</span>
                       </div>
-                      <div className="flex items-center gap-3 text-sm text-gray-300">
-                        <GraduationCap className="h-4 w-4 text-primary/60" />
+                      <div className="flex items-center gap-3 text-sm text-gray-600">
+                        <GraduationCap className="h-4 w-4 text-primary/70" />
                         <span>{selectedApp.user?.branch} • {selectedApp.user?.year} Year</span>
                       </div>
-                      <div className="flex items-center gap-3 text-sm text-gray-300">
-                        <Phone className="h-4 w-4 text-primary/60" />
+                      <div className="flex items-center gap-3 text-sm text-gray-600">
+                        <Phone className="h-4 w-4 text-primary/70" />
                         <span>{selectedApp.user?.phone || "No phone provided"}</span>
                       </div>
-                      <div className="flex items-center gap-3 text-sm text-gray-300">
-                        <MapPin className="h-4 w-4 text-primary/60" />
+                      <div className="flex items-center gap-3 text-sm text-gray-600">
+                        <MapPin className="h-4 w-4 text-primary/70" />
                         <span>{selectedApp.user?.city || "City not provided"}</span>
                       </div>
                     </div>
                   </div>
 
                   <div>
-                    <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Application Context</h3>
+                    <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Application Context</h3>
                     <div className="space-y-3">
-                      <div className="flex items-center gap-3 text-sm text-gray-300">
-                        <FileText className="h-4 w-4 text-primary/60" />
+                      <div className="flex items-center gap-3 text-sm text-gray-600">
+                        <FileText className="h-4 w-4 text-primary/70" />
                         <div>
-                          <p className="font-medium text-white">{selectedApp.batch?.program?.title}</p>
+                          <p className="font-medium text-gray-900">{selectedApp.batch?.program?.title}</p>
                           <p className="text-xs text-gray-500">{selectedApp.batch?.name}</p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3 text-sm text-gray-300">
-                        <Clock className="h-4 w-4 text-primary/60" />
+                      <div className="flex items-center gap-3 text-sm text-gray-600">
+                        <Clock className="h-4 w-4 text-primary/70" />
                         <span>Applied on {new Date(selectedApp.appliedAt).toLocaleDateString("en-IN", { day: 'numeric', month: 'long', year: 'numeric' })}</span>
                       </div>
                     </div>
@@ -288,46 +284,46 @@ export default function ApplicationsPage() {
                 {/* Profile Links Section */}
                 <div className="space-y-6">
                   <div>
-                    <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Professional Links</h3>
+                    <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Professional Links</h3>
                     <div className="grid grid-cols-1 gap-2">
                       {selectedApp.user?.githubUsername && (
                         <a 
                           href={`https://github.com/${selectedApp.user.githubUsername}`} 
                           target="_blank" rel="noopener noreferrer"
-                          className="flex items-center gap-3 p-3 rounded-xl bg-white/3 border border-white/5 hover:border-primary/30 hover:bg-white/5 transition-all group"
+                          className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 border border-gray-100 hover:border-primary/30 hover:bg-white transition-all shadow-sm group"
                         >
-                          <Github className="h-5 w-5 text-gray-400 group-hover:text-white" />
+                          <Github className="h-5 w-5 text-gray-600 group-hover:text-gray-900" />
                           <div className="flex-1 overflow-hidden">
-                            <p className="text-xs font-medium text-white">GitHub</p>
+                            <p className="text-xs font-medium text-gray-900">GitHub</p>
                             <p className="text-[10px] text-gray-500 truncate">github.com/{selectedApp.user.githubUsername}</p>
                           </div>
-                          <Eye className="h-3.5 w-3.5 text-gray-700 opacity-0 group-hover:opacity-100 group-hover:text-primary transition-all" />
+                          <Eye className="h-3.5 w-3.5 text-gray-400 opacity-0 group-hover:opacity-100 group-hover:text-primary transition-all" />
                         </a>
                       )}
                       {selectedApp.user?.linkedinLink && (
                         <a 
                           href={selectedApp.user.linkedinLink} 
                           target="_blank" rel="noopener noreferrer"
-                          className="flex items-center gap-3 p-3 rounded-xl bg-white/3 border border-white/5 hover:border-primary/30 hover:bg-white/5 transition-all group"
+                          className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 border border-gray-100 hover:border-primary/30 hover:bg-white transition-all shadow-sm group"
                         >
-                          <Linkedin className="h-5 w-5 text-blue-500/80 group-hover:text-blue-400" />
+                          <Linkedin className="h-5 w-5 text-blue-600/80 group-hover:text-blue-600" />
                           <div className="flex-1 overflow-hidden">
-                            <p className="text-xs font-medium text-white">LinkedIn</p>
+                            <p className="text-xs font-medium text-gray-900">LinkedIn</p>
                             <p className="text-[10px] text-gray-500 truncate">{selectedApp.user.linkedinLink}</p>
                           </div>
-                          <Eye className="h-3.5 w-3.5 text-gray-700 opacity-0 group-hover:opacity-100 group-hover:text-primary transition-all" />
+                          <Eye className="h-3.5 w-3.5 text-gray-400 opacity-0 group-hover:opacity-100 group-hover:text-primary transition-all" />
                         </a>
                       )}
                       {selectedApp.user?.resumeLink && (
                         <a 
                           href={selectedApp.user.resumeLink} 
                           target="_blank" rel="noopener noreferrer"
-                          className="flex items-center gap-3 p-3 rounded-xl bg-primary/5 border border-primary/20 hover:border-primary/40 hover:bg-primary/10 transition-all group"
+                          className="flex items-center gap-3 p-3 rounded-xl bg-primary/5 border border-primary/20 hover:border-primary/40 hover:bg-primary/10 transition-all shadow-sm group"
                         >
                           <FileText className="h-5 w-5 text-red-500/80 group-hover:text-red-500" />
                           <div className="flex-1 overflow-hidden">
                             <p className="text-xs font-bold text-primary">Resume / Drive Link</p>
-                            <p className="text-[10px] text-primary/60 truncate">{selectedApp.user.resumeLink}</p>
+                            <p className="text-[10px] text-primary/70 truncate">{selectedApp.user.resumeLink}</p>
                           </div>
                           <Eye className="h-3.5 w-3.5 text-primary/60 opacity-0 group-hover:opacity-100 transition-all" />
                         </a>
@@ -336,28 +332,28 @@ export default function ApplicationsPage() {
                         <a 
                           href={selectedApp.user.portfolioLink} 
                           target="_blank" rel="noopener noreferrer"
-                          className="flex items-center gap-3 p-3 rounded-xl bg-white/3 border border-white/5 hover:border-primary/30 hover:bg-white/5 transition-all group"
+                          className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 border border-gray-100 hover:border-primary/30 hover:bg-white transition-all shadow-sm group"
                         >
-                          <Globe className="h-5 w-5 text-green-500/80 group-hover:text-green-400" />
+                          <Globe className="h-5 w-5 text-green-600/80 group-hover:text-green-600" />
                           <div className="flex-1 overflow-hidden">
-                            <p className="text-xs font-medium text-white">Portfolio</p>
+                            <p className="text-xs font-medium text-gray-900">Portfolio</p>
                             <p className="text-[10px] text-gray-500 truncate">{selectedApp.user.portfolioLink}</p>
                           </div>
-                          <Eye className="h-3.5 w-3.5 text-gray-700 opacity-0 group-hover:opacity-100 group-hover:text-primary transition-all" />
+                          <Eye className="h-3.5 w-3.5 text-gray-400 opacity-0 group-hover:opacity-100 group-hover:text-primary transition-all" />
                         </a>
                       )}
                       {selectedApp.user?.leetcodeLink && (
                         <a 
                           href={selectedApp.user.leetcodeLink} 
                           target="_blank" rel="noopener noreferrer"
-                          className="flex items-center gap-3 p-3 rounded-xl bg-white/3 border border-white/5 hover:border-primary/30 hover:bg-white/5 transition-all group"
+                          className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 border border-gray-100 hover:border-primary/30 hover:bg-white transition-all shadow-sm group"
                         >
-                          <Star className="h-5 w-5 text-orange-500/80 group-hover:text-orange-400" />
+                          <Star className="h-5 w-5 text-orange-500/80 group-hover:text-orange-500" />
                           <div className="flex-1 overflow-hidden">
-                            <p className="text-xs font-medium text-white">LeetCode / HackRank</p>
+                            <p className="text-xs font-medium text-gray-900">LeetCode / HackRank</p>
                             <p className="text-[10px] text-gray-500 truncate">{selectedApp.user.leetcodeLink}</p>
                           </div>
-                          <Eye className="h-3.5 w-3.5 text-gray-700 opacity-0 group-hover:opacity-100 group-hover:text-primary transition-all" />
+                          <Eye className="h-3.5 w-3.5 text-gray-400 opacity-0 group-hover:opacity-100 group-hover:text-primary transition-all" />
                         </a>
                       )}
                     </div>
@@ -366,22 +362,22 @@ export default function ApplicationsPage() {
               </div>
 
               {/* Cover Note Section */}
-              <div className="pt-6 border-t border-white/5">
-                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Cover Letter / Note</h3>
-                <div className="p-4 rounded-xl bg-white/3 border border-white/5 text-sm text-gray-300 leading-relaxed italic">
+              <div className="pt-6 border-t border-gray-100">
+                <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Cover Letter / Note</h3>
+                <div className="p-4 rounded-xl bg-gray-50 border border-gray-100 text-sm text-gray-600 leading-relaxed italic">
                   {selectedApp.reviewNotes || "No cover note provided by the student."}
                 </div>
               </div>
             </div>
 
             {/* Modal Footer (Actions) */}
-            <div className="p-6 border-t border-white/5 flex flex-col gap-3 bg-white/[0.01]">
+            <div className="p-6 border-t border-gray-100 flex flex-col gap-3 bg-gray-50/50">
               {selectedApp.status === "SELECTED" && (
                 <div className="flex w-full gap-2">
                   <Button 
                     onClick={() => handleIssueOffer(selectedApp.id)}
                     disabled={issuingOffer}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-6"
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-6 shadow-sm"
                   >
                     {issuingOffer ? (
                       <span className="flex items-center gap-2">
@@ -401,7 +397,7 @@ export default function ApplicationsPage() {
                   <Button
                     onClick={() => setShowEvaluation(!showEvaluation)}
                     variant="outline"
-                    className="flex-1 border-primary/20 text-primary py-6"
+                    className="flex-1 border-primary/30 text-primary hover:bg-primary/5 py-6 shadow-sm"
                   >
                     <Star className="h-5 w-5 mr-2" /> Evaluation Report
                   </Button>
@@ -409,7 +405,7 @@ export default function ApplicationsPage() {
               )}
 
               {showEvaluation && selectedApp.status === "SELECTED" && (
-                <div className="w-full mt-2 pt-4 border-t border-white/5">
+                <div className="w-full mt-2 pt-4 border-t border-gray-200">
                   <EvaluationForm applicationId={selectedApp.id} onClose={() => setShowEvaluation(false)} />
                 </div>
               )}
@@ -419,7 +415,7 @@ export default function ApplicationsPage() {
                   <Button 
                     onClick={() => { handleReview(selectedApp.id, "SELECTED"); setSelectedApp(null); }}
                     disabled={reviewing === selectedApp.id || selectedApp.status === "SELECTED"}
-                    className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                    className="flex-1 bg-green-600 hover:bg-green-700 text-white shadow-sm"
                   >
                     Approve Application
                   </Button>
@@ -427,7 +423,7 @@ export default function ApplicationsPage() {
                     onClick={() => { handleReview(selectedApp.id, "REJECTED"); setSelectedApp(null); }}
                     disabled={reviewing === selectedApp.id || selectedApp.status === "REJECTED"}
                     variant="outline" 
-                    className="flex-1 border-red-500/50 text-red-500 hover:bg-red-500/10"
+                    className="flex-1 border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 shadow-sm"
                   >
                     Reject
                   </Button>

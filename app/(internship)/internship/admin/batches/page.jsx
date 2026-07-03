@@ -24,7 +24,7 @@ export default function BatchesPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [batchForm, setBatchForm] = useState({ programId: "", name: "", startDate: "", endDate: "", maxStudents: "100", description: "" });
-  const [progForm, setProgForm] = useState({ title: "", description: "", domain: "", duration: "8", stipend: "" });
+  const [progForm, setProgForm] = useState({ title: "", description: "", domain: "", duration: "2", stipend: "" });
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -59,7 +59,7 @@ export default function BatchesPage() {
       await createInternshipProgram(progForm);
       toast.success("Program created!");
       setShowProgForm(false);
-      setProgForm({ title: "", description: "", domain: "", duration: "8", stipend: "" });
+      setProgForm({ title: "", description: "", domain: "", duration: "2", stipend: "" });
       await load();
     } catch (err) {
       toast.error(err.message);
@@ -97,7 +97,7 @@ export default function BatchesPage() {
               <div className="grid gap-1.5"><Label className="text-xs text-gray-400">Program Title</Label><Input placeholder="e.g. Web Dev Internship" value={progForm.title} onChange={e => setProgForm({...progForm, title: e.target.value})} required className="bg-white/5 border-white/10 text-white h-9 text-sm" /></div>
               <div className="grid gap-1.5"><Label className="text-xs text-gray-400">Domain</Label><Input placeholder="e.g. Web Development, ML, Data Science" value={progForm.domain} onChange={e => setProgForm({...progForm, domain: e.target.value})} required className="bg-white/5 border-white/10 text-white h-9 text-sm" /></div>
               <div className="grid grid-cols-2 gap-3">
-                <div className="grid gap-1.5"><Label className="text-xs text-gray-400">Duration (weeks)</Label><Input type="number" value={progForm.duration} onChange={e => setProgForm({...progForm, duration: e.target.value})} required className="bg-white/5 border-white/10 text-white h-9 text-sm" /></div>
+                <div className="grid gap-1.5"><Label className="text-xs text-gray-400">Duration (months)</Label><Input type="number" value={progForm.duration} onChange={e => setProgForm({...progForm, duration: e.target.value})} required className="bg-white/5 border-white/10 text-white h-9 text-sm" /></div>
                 <div className="grid gap-1.5"><Label className="text-xs text-gray-400">Stipend (₹, optional)</Label><Input type="number" placeholder="0" value={progForm.stipend} onChange={e => setProgForm({...progForm, stipend: e.target.value})} className="bg-white/5 border-white/10 text-white h-9 text-sm" /></div>
               </div>
               <div className="grid gap-1.5"><Label className="text-xs text-gray-400">Description</Label><textarea rows={3} placeholder="Brief description..." value={progForm.description} onChange={e => setProgForm({...progForm, description: e.target.value})} required className="bg-white/5 border border-white/10 rounded-md text-white text-sm p-2 w-full focus:border-primary outline-none resize-none" /></div>

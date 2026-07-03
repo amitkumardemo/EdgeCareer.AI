@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { getFirebaseUser } from "@/lib/auth-utils";
 import { revalidatePath } from "next/cache";
 import { sendNotificationEmail, sendBulkNotificationEmails } from "@/lib/email-service";
+import { issueOfferLetter } from "@/actions/offer-letter";
 
 export async function requireAdmin() {
   const firebaseUser = await getFirebaseUser();
@@ -224,6 +225,7 @@ export async function reviewApplication(applicationId, status, notes = "") {
       create: { applicationId, totalTasks },
       update: { totalTasks },
     });
+    // Wait for the offer letter record to be created first
     await prisma.offerLetter.upsert({
       where: { applicationId },
       create: { applicationId, validUntil: application.batch.endDate },
@@ -231,15 +233,11 @@ export async function reviewApplication(applicationId, status, notes = "") {
     });
 
     try {
-      if (application.user && application.user.email) {
-        await sendNotificationEmail({
-          to: application.user.email,
-          subject: "🎉 Congratulations! You are Selected",
-          username: application.user.name,
-          message: `We're thrilled to inform you that you have been officially selected for the <strong>${application.batch.program.title}</strong> internship program.<br/><br/>Your Offer Letter is now available.`,
-        });
-      }
-    } catch (e) {}
+      // Auto-issue the actual PDF & send email via issueOfferLetter
+      await issueOfferLetter(applicationId);
+    } catch (e) {
+      console.error("Failed to auto-issue offer letter:", e);
+    }
   } else if (status === "WAITLISTED") {
     try {
       if (application.user && application.user.email) {
