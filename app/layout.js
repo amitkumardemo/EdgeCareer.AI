@@ -3,6 +3,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import Script from "next/script";
 import Footer from "@/components/Footer";
+import Chatbot from "@/components/Chatbot";
 import { Providers } from "@/components/providers";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -103,6 +104,7 @@ export default function RootLayout({ children }) {
         <Providers>
           <main className="min-h-screen">{children}</main>
           <Footer />
+          <Chatbot />
           <Toaster richColors />
           <Script
             id="schema-markup"

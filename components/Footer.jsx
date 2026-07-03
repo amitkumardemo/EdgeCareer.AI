@@ -418,7 +418,7 @@ export default function Footer() {
 
       {/* WhatsApp chat widget */}
       <a
-        href={`https://wa.me/918076239106?text=${encodeURIComponent("Hi TechieHelp Institute of AI! 👋 I'm interested in your Internship Programs. Could you please share more details about the available internships, eligibility criteria, stipend, duration, and how to apply? Thank you!")}`}
+        href={`https://wa.me/917673825079?text=${encodeURIComponent("Hi TechieHelp Institute of AI! 👋 I'm interested in your Internship Programs. Could you please share more details about the available internships, eligibility criteria, stipend, duration, and how to apply? Thank you!")}`}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat on WhatsApp"

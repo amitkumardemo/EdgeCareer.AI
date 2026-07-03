@@ -119,7 +119,7 @@ export default function SEOPageTemplate({
                 </button>
               </Link>
               <a
-                href={`https://wa.me/918076239106?text=${encodeURIComponent(`Hi TechieHelp! 👋 I'm interested in the ${title} program in Jodhpur. Please guide me.`)}`}
+                href={`https://wa.me/917673825079?text=${encodeURIComponent(`Hi TechieHelp! 👋 I'm interested in the ${title} program in Jodhpur. Please guide me.`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
