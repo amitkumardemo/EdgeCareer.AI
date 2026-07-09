@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const user = await getFirebaseUser();
-  if (!user || user.email !== "techiehelp57@gmail.com") {
+  if (!user || (user.email !== "techiehelp57@gmail.com" && user.email !== "support@techiehelp.in")) {
     redirect("/");
   }
   return (
