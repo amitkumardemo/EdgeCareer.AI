@@ -1,17 +1,22 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useSpring, useInView } from 'framer-motion';
 import {
     ShieldCheck, CheckCircle, Download, ExternalLink, ShieldAlert,
     BadgeCheck, Lock, Search, Cpu, Check, Copy, Printer, Share2,
     AlertTriangle, XCircle, ChevronDown, Clock, Building, RefreshCcw,
     FileText, ArrowRight, HelpCircle, Mail, Link as LinkIcon,
-    Fingerprint, Server, Activity, User, Award, Calendar, GraduationCap, Info, Database, Zap
+    Fingerprint, Server, Activity, User, Award, Calendar, GraduationCap, Info, Database, Zap,
+    BarChart3, CheckSquare, Presentation, SearchCode, Shield, Eye, EyeOff, Terminal,
+    MapPin, Globe, ChevronUp, Users, Target, BookOpen
 } from 'lucide-react';
 import Link from 'next/link';
+import { verifyCertificate } from '@/actions/verify';
+import confetti from 'canvas-confetti';
 
-// Helper for copy to clipboard
+// --- HELPER HOOKS ---
+
 function useCopyLink() {
     const [copiedId, setCopiedId] = useState(null);
     const copy = useCallback((text, id) => {
@@ -23,27 +28,91 @@ function useCopyLink() {
     return { copiedId, copy };
 }
 
-// FAQ Data
+function useBlobUrl(base64DataUri) {
+    const [blobUrl, setBlobUrl] = useState('');
+    useEffect(() => {
+        if (!base64DataUri) {
+            setBlobUrl('');
+            return;
+        }
+        if (!base64DataUri.startsWith('data:')) {
+            setBlobUrl(base64DataUri);
+            return;
+        }
+        try {
+            const parts = base64DataUri.split(',');
+            const byteString = atob(parts[1]);
+            const mimeString = parts[0].split(':')[1].split(';')[0];
+            const ab = new ArrayBuffer(byteString.length);
+            const ia = new Uint8Array(ab);
+            for (let i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+            const blob = new Blob([ab], { type: mimeString });
+            const url = URL.createObjectURL(blob);
+            setBlobUrl(url);
+            return () => URL.revokeObjectURL(url);
+        } catch (e) {
+            console.error('Failed to parse base64', e);
+            setBlobUrl(base64DataUri);
+        }
+    }, [base64DataUri]);
+    return blobUrl;
+}
+
+// Animated Counter Component
+const AnimatedCounter = ({ end, duration = 2, suffix = "", prefix = "" }) => {
+    const [count, setCount] = useState(0);
+    const ref = useRef(null);
+    const inView = useInView(ref, { once: true, margin: "-50px" });
+
+    useEffect(() => {
+        if (!inView) return;
+        let startTime;
+        let animationFrame;
+
+        const animate = (timestamp) => {
+            if (!startTime) startTime = timestamp;
+            const progress = (timestamp - startTime) / (duration * 1000);
+            
+            if (progress < 1) {
+                // easeOutExpo
+                const currentVal = end === 100 ? 
+                    end * (progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress)) :
+                    Math.floor(end * (progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress)));
+                
+                setCount(currentVal);
+                animationFrame = requestAnimationFrame(animate);
+            } else {
+                setCount(end);
+            }
+        };
+        animationFrame = requestAnimationFrame(animate);
+        return () => cancelAnimationFrame(animationFrame);
+    }, [end, duration, inView]);
+
+    const isFloat = end % 1 !== 0;
+    return <span ref={ref}>{prefix}{isFloat ? count.toFixed(2) : Math.floor(count)}{suffix}</span>;
+};
+
+
+// --- FAQ DATA ---
 const FAQS = [
     {
         q: "How do I verify a certificate?",
-        a: "Simply enter the unique Certificate ID exactly as printed on the certificate into the verification search bar above. Our system will instantly cross-reference it with our secure database."
+        a: "Enter the unique Student ID or Certificate ID exactly as printed on the credential into the search bar. Our system will securely cross-reference it with our immutable database."
     },
     {
-        q: "How long does verification take?",
-        a: "Verification is instantaneous. The moment you submit a valid Certificate ID, our system retrieves the official secure record."
+        q: "How does the AI Fraud Detection work?",
+        a: "Our system employs advanced algorithms to analyze the digital signature, hash integrity, and issuance timestamps to ensure the credential has not been altered or tampered with since its creation."
     },
     {
-        q: "What if my certificate cannot be found?",
-        a: "If the system returns a 'Not Found' error, double-check that the ID was entered correctly without any typos. If it still fails, the certificate may be unauthorized, revoked, or not yet published."
+        q: "Can employers use this platform for background checks?",
+        a: "Yes. This enterprise-grade portal is designed specifically for employers, HR agencies, and universities to instantly and reliably validate a candidate's credentials and performance metrics."
     },
     {
-        q: "Can employers verify credentials?",
-        a: "Yes, this portal is specifically designed for employers, HR professionals, universities, and background verification agencies to securely validate candidates' credentials."
-    },
-    {
-        q: "Can revoked certificates be detected?",
-        a: "Absolutely. If a credential is revoked due to policy violations, our real-time database immediately updates its status to 'Revoked', protecting the integrity of the certification."
+        q: "What does the Authenticity Score mean?",
+        a: "The Authenticity Score represents the confidence level of our system in the credential's validity, based on hash matching, cryptographic signatures, and revocation registry checks."
     }
 ];
 
@@ -52,9 +121,25 @@ export default function CertificateVerify() {
     const [status, setStatus] = useState('idle'); // idle, loading, success, error
     const [certData, setCertData] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
-    const [openFAQIndex, setOpenFAQIndex] = useState(null);
     const [showPolicyModal, setShowPolicyModal] = useState(false);
+    const [showHash, setShowHash] = useState(false);
+    
+    // Shield Animation States
+    const [loadingStep, setLoadingStep] = useState(0);
+    const loadingMessages = [
+        "Connecting to Secure Server...",
+        "Querying Immutable Database...",
+        "Matching Certificate Records...",
+        "Verifying Cryptographic Hash...",
+        "Finalizing Validation..."
+    ];
+
     const { copiedId, copy } = useCopyLink();
+    const pdfBlobUrl = useBlobUrl(certData?.previewUrl);
+
+    // Scroll Progress
+    const { scrollYProgress } = useScroll();
+    const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
     useEffect(() => {
         const hasAccepted = localStorage.getItem('techiehelp_verification_policy_accepted');
@@ -68,21 +153,30 @@ export default function CertificateVerify() {
         setShowPolicyModal(false);
     };
 
-    // Smooth scroll progress
-    const { scrollYProgress } = useScroll();
-    const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+    const triggerConfetti = () => {
+        const end = Date.now() + 1.5 * 1000;
+        const colors = ['#0B5FFF', '#F4B400', '#16A34A'];
 
-    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyHlcmEOufh2oqh5LEvzkrPYZ9xHOC0yDeeyJA08U0Ym5scez-yqQ6uYqJiCK_1ZUW7/exec';
+        (function frame() {
+            confetti({
+                particleCount: 4,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                colors: colors
+            });
+            confetti({
+                particleCount: 4,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                colors: colors
+            });
 
-    // Mock realistic hash generation
-    const generateHash = (str) => {
-        let hash = 0;
-        for (let i = 0; i < str.length; i++) {
-            const char = str.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
-            hash = hash & hash;
-        }
-        return Math.abs(hash).toString(16).padStart(8, '0').toUpperCase();
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
+        }());
     };
 
     const onVerify = async (e) => {
@@ -90,12 +184,7 @@ export default function CertificateVerify() {
         const id = certIdInput.trim();
 
         if (!id) {
-            setErrorMessage('Validation Error: Certificate ID is required.');
-            setStatus('error');
-            return;
-        }
-        if (id.toLowerCase().endsWith('.pdf')) {
-            setErrorMessage('Input Error: Enter the Certificate ID only (e.g. THIAI-INT-1234), excluding .pdf');
+            setErrorMessage('Validation Error: Student ID or Certificate ID is required.');
             setStatus('error');
             return;
         }
@@ -103,44 +192,36 @@ export default function CertificateVerify() {
         setStatus('loading');
         setErrorMessage('');
         setCertData(null);
+        setLoadingStep(0);
+
+        // Simulate secure multi-step verification process
+        const stepInterval = setInterval(() => {
+            setLoadingStep(prev => {
+                if (prev >= 4) {
+                    clearInterval(stepInterval);
+                    return prev;
+                }
+                return prev + 1;
+            });
+        }, 600);
 
         try {
-            const fetchUrl = `${GAS_WEB_APP_URL}?id=${encodeURIComponent(id)}`;
-            const response = await fetch(fetchUrl, { method: 'GET', mode: 'cors' });
+            const result = await verifyCertificate(id);
 
-            if (!response.ok) throw new Error('Secure Gateway Timeout');
+            setTimeout(() => {
+                clearInterval(stepInterval);
+                if (result.success) {
+                    setCertData(result.data);
+                    setStatus('success');
+                    triggerConfetti();
+                } else {
+                    setErrorMessage(result.message || 'Verification Failed: No matching record found in the registry.');
+                    setStatus('error');
+                }
+            }, 3500); // Allow animation to finish
 
-            const result = await response.json();
-
-            if (result.status === 'success') {
-                const secureHash = `THIAI-HASH-${generateHash(id)}-${generateHash(id + 'salt')}`;
-                const data = {
-                    id: id.toUpperCase(),
-                    previewUrl: result.preview,
-                    downloadUrl: result.download,
-                    // Note: In production, these should come from the API. We mock placeholders for the UI showcase.
-                    studentName: "Verified Learner",
-                    programName: "Advanced Industry Internship Program",
-                    programType: "Professional Certification",
-                    domain: "Technology & Innovation",
-                    duration: "4 - 8 Weeks",
-                    issueDate: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-                    completionDate: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-                    credentialStatus: "Active & Verified",
-                    grade: "Outstanding Performance",
-                    verificationStatus: "Authentic",
-                    verificationId: `VID-${generateHash(id)}`,
-                    hash: secureHash,
-                    issuedBy: "TechieHelp Institute of AI",
-                    timestamp: new Date().toLocaleString()
-                };
-                setCertData(data);
-                setStatus('success');
-            } else {
-                setErrorMessage(result.message || 'Identity Verification Failed: No matching record found in the secure registry.');
-                setStatus('error');
-            }
         } catch (error) {
+            clearInterval(stepInterval);
             setErrorMessage('System Error: Communication with the secure verification registry was interrupted.');
             setStatus('error');
         }
@@ -154,8 +235,8 @@ export default function CertificateVerify() {
         const url = `${window.location.origin}/verify-certificate?id=${encodeURIComponent(certData?.id || '')}`;
         if (navigator.share) {
             navigator.share({
-                title: 'Verified Credential - TechieHelp Institute of AI',
-                text: `View my verified internship credential from TechieHelp Institute of AI.`,
+                title: 'Verified Credential - TechieHelp',
+                text: `View my verified credential from TechieHelp Institute of AI.`,
                 url: url
             }).catch(console.error);
         } else {
@@ -164,45 +245,48 @@ export default function CertificateVerify() {
     };
 
     return (
-        <main className="min-h-screen bg-white font-sans text-slate-900 selection:bg-[#0F4CBA] selection:text-white pb-20">
+        <main className="min-h-screen bg-[#F8FAFC] font-sans text-slate-900 selection:bg-[#0B5FFF] selection:text-white pb-20 relative overflow-hidden">
+            
+            {/* BACKGROUND WATERMARK & SHAPES */}
+            <div className="fixed inset-0 pointer-events-none z-0 flex items-center justify-center overflow-hidden print:hidden">
+                <h1 className="text-[12vw] font-black text-slate-900 opacity-[0.02] whitespace-nowrap -rotate-12 select-none">
+                    TECHIEHELP VERIFIED
+                </h1>
+                <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-[#0B5FFF] opacity-[0.04] rounded-full blur-[100px]" />
+                <div className="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-[#16A34A] opacity-[0.03] rounded-full blur-[120px]" />
+                <div className="absolute top-[40%] right-[10%] w-[300px] h-[300px] bg-[#F4B400] opacity-[0.03] rounded-full blur-[80px]" />
+            </div>
+
             <AnimatePresence>
                 {showPolicyModal && (
                     <motion.div 
-                        initial={{ opacity: 0 }} 
-                        animate={{ opacity: 1 }} 
-                        exit={{ opacity: 0 }} 
-                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm"
+                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} 
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md"
                     >
                         <motion.div 
-                            initial={{ scale: 0.95, opacity: 0, y: 20 }} 
-                            animate={{ scale: 1, opacity: 1, y: 0 }} 
-                            exit={{ scale: 0.95, opacity: 0, y: 20 }} 
+                            initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.9, opacity: 0, y: 20 }} 
                             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                            className="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden"
+                            className="bg-white/80 backdrop-blur-xl rounded-[24px] shadow-2xl border border-white/40 w-full max-w-lg overflow-hidden"
                         >
-                            <div className="bg-gradient-to-br from-blue-50 to-white px-8 py-8 text-center border-b border-slate-100">
-                                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm border border-blue-200">
-                                    <ShieldCheck className="w-8 h-8 text-blue-700" />
+                            <div className="p-8 text-center border-b border-slate-200/50">
+                                <div className="w-20 h-20 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-inner border border-blue-100/50">
+                                    <Shield className="w-10 h-10 text-[#0B5FFF]" />
                                 </div>
-                                <h2 className="text-2xl font-black text-slate-900 mb-2">Verification Policy</h2>
+                                <h2 className="text-2xl font-black text-slate-900 mb-3 tracking-tight">Enterprise Verification Policy</h2>
                                 <p className="text-slate-600 text-sm leading-relaxed">
-                                    To ensure a secure and trusted credential environment, all verifications must comply with our official policy guidelines.
+                                    To maintain the integrity of our digital credentials, all verification requests are processed through our secure, immutable ledger system.
                                 </p>
                             </div>
-                            <div className="p-8 space-y-4">
-                                <Link 
-                                    href="/verification-policy" 
-                                    target="_blank"
-                                    className="w-full px-6 py-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 font-bold hover:bg-slate-100 transition-colors flex items-center justify-center gap-2"
-                                >
-                                    <FileText className="w-4 h-4" /> Read Verification Policy
-                                </Link>
+                            <div className="p-8 bg-slate-50/50 space-y-4">
                                 <button 
                                     onClick={handleAcceptPolicy}
-                                    className="w-full px-6 py-4 rounded-xl bg-blue-700 text-white font-bold hover:bg-blue-800 transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                                    className="w-full px-6 py-4 rounded-xl bg-[#0B5FFF] text-white font-bold hover:bg-[#094DD9] transition-all shadow-lg shadow-blue-900/20 hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2"
                                 >
-                                    <Check className="w-4 h-4" /> Accept & Continue
+                                    <Check className="w-5 h-5" /> I Understand & Accept
                                 </button>
+                                <Link href="/verification-policy" target="_blank" className="w-full px-6 py-4 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 transition-all flex items-center justify-center gap-2">
+                                    <FileText className="w-4 h-4" /> View Full Policy
+                                </Link>
                             </div>
                         </motion.div>
                     </motion.div>
@@ -211,233 +295,268 @@ export default function CertificateVerify() {
 
             {/* Scroll Progress */}
             <motion.div
-                className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#0F4CBA] to-[#F4B400] z-50 origin-left print:hidden"
+                className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#0B5FFF] via-[#16A34A] to-[#F4B400] z-50 origin-left print:hidden"
                 style={{ scaleX }}
             />
 
-            {/* HERO SECTION */}
-            <section className="relative pt-32 pb-16 md:pt-40 md:pb-24 overflow-hidden bg-slate-50 border-b border-slate-200 print:hidden">
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none mix-blend-multiply" />
-                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-[#0F4CBA]/5 to-[#F4B400]/5 rounded-full blur-[100px] transform translate-x-1/3 -translate-y-1/3 pointer-events-none" />
+            {/* HEADER HERO */}
+            <section className="relative pt-32 pb-24 md:pt-40 md:pb-32 px-4 sm:px-6 z-10 print:hidden">
+                <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12 md:gap-20">
+                    <div className="flex-1 text-center md:text-left">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50/80 backdrop-blur-sm border border-blue-100 shadow-sm mb-8"
+                        >
+                            <ShieldCheck className="w-4 h-4 text-[#0B5FFF]" />
+                            <span className="text-xs font-bold uppercase tracking-widest text-blue-900">Official Credential Registry</span>
+                        </motion.div>
+                        
+                        <motion.h1
+                            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+                            className="text-4xl md:text-6xl lg:text-7xl font-black text-slate-900 tracking-tight leading-[1.1] mb-6"
+                        >
+                            Verify Professional <br className="hidden md:block" />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0B5FFF] to-[#3B82F6]">Credentials</span>
+                        </motion.h1>
 
-                <div className="max-w-5xl mx-auto px-4 sm:px-6 relative z-10 text-center">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 shadow-sm mb-8"
-                    >
-                        <ShieldCheck className="w-4 h-4 text-[#0F4CBA]" />
-                        <span className="text-xs font-bold uppercase tracking-widest text-slate-700">Official Credential Verification Portal</span>
-                    </motion.div>
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+                            className="text-lg md:text-xl text-slate-600 leading-relaxed mb-10 max-w-2xl"
+                        >
+                            Instantly verify internship certificates, performance records, and digital credentials issued by TechieHelp Institute of AI.
+                        </motion.p>
 
-                    <motion.h1
-                        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-                        className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight leading-tight mb-6"
-                    >
-                        Verify Internship & <br className="hidden md:block" />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0F4CBA] to-[#1e6fd9]">Professional Credentials</span>
-                    </motion.h1>
-
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-                        className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed mb-10"
-                    >
-                        Instantly verify the authenticity of internship certificates and professional credentials issued by TechieHelp Institute of AI using our secure digital verification system.
-                    </motion.p>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-                        className="flex flex-wrap justify-center gap-4 md:gap-8"
-                    >
-                        {[
-                            { icon: Lock, text: "Secure Digital Verification" },
-                            { icon: ShieldCheck, text: "Tamper Detection Enabled" },
-                            { icon: Database, text: "Official Institute Records" },
-                            { icon: Zap, text: "Instant Verification" }
-                        ].map((item, i) => (
-                            <div key={i} className="flex items-center gap-2 text-sm font-semibold text-slate-700 bg-white/60 px-4 py-2 rounded-lg border border-slate-200/60 backdrop-blur-sm shadow-sm">
-                                <item.icon className="w-4 h-4 text-[#F4B400]" />
-                                {item.text}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+                            className="flex flex-wrap items-center justify-center md:justify-start gap-4"
+                        >
+                            <div className="flex items-center gap-2 text-sm font-semibold text-slate-700 bg-white px-4 py-2 rounded-xl shadow-sm border border-slate-200">
+                                <CheckCircle className="w-4 h-4 text-[#16A34A]" /> Digitally Signed
                             </div>
-                        ))}
+                            <div className="flex items-center gap-2 text-sm font-semibold text-slate-700 bg-white px-4 py-2 rounded-xl shadow-sm border border-slate-200">
+                                <Shield className="w-4 h-4 text-[#0B5FFF]" /> Tamper Detection
+                            </div>
+                            <div className="flex items-center gap-2 text-sm font-semibold text-slate-700 bg-white px-4 py-2 rounded-xl shadow-sm border border-slate-200">
+                                <Building className="w-4 h-4 text-[#F4B400]" /> Employer Ready
+                            </div>
+                        </motion.div>
+                    </div>
+
+                    {/* SEARCH CARD RIGHT */}
+                    <motion.div 
+                        initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.4 }}
+                        className="w-full max-w-md relative"
+                    >
+                        <div className="absolute -inset-1 bg-gradient-to-r from-[#0B5FFF] to-[#F4B400] rounded-[26px] blur opacity-20" />
+                        <div className="bg-white/80 backdrop-blur-xl rounded-[24px] shadow-2xl border border-white p-8 relative">
+                            <div className="mb-6 flex items-center justify-between">
+                                <h3 className="text-xl font-bold text-slate-900">Credential Lookup</h3>
+                                <Database className="w-5 h-5 text-slate-400" />
+                            </div>
+                            
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Student ID or Certificate ID</label>
+                                    <div className="relative">
+                                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                                        <input
+                                            type="text"
+                                            placeholder="e.g. TH-INT-24-XXXX"
+                                            value={certIdInput}
+                                            onChange={(e) => setCertIdInput(e.target.value)}
+                                            onKeyDown={(e) => e.key === 'Enter' && onVerify()}
+                                            className="w-full bg-slate-50 border-2 border-slate-200 text-slate-900 text-lg rounded-xl pl-12 pr-4 py-4 focus:outline-none focus:border-[#0B5FFF] focus:bg-white transition-all placeholder:text-slate-400 font-semibold"
+                                        />
+                                    </div>
+                                </div>
+                                
+                                <button
+                                    onClick={onVerify}
+                                    disabled={status === 'loading'}
+                                    className={`w-full py-4 rounded-xl font-bold text-white transition-all flex items-center justify-center gap-3 overflow-hidden relative ${
+                                        status === 'loading'
+                                            ? 'bg-slate-800 cursor-not-allowed'
+                                            : 'bg-[#0B5FFF] hover:bg-[#094DD9] shadow-lg shadow-blue-900/20 hover:-translate-y-1'
+                                    }`}
+                                >
+                                    {status === 'loading' ? (
+                                        <div className="flex items-center gap-3 relative z-10">
+                                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                            Verifying Record...
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center gap-3 relative z-10">
+                                            <BadgeCheck className="w-5 h-5" />
+                                            Verify Authenticity
+                                        </div>
+                                    )}
+                                    {/* Ripple Effect */}
+                                    <div className="absolute inset-0 bg-white/20 translate-y-full hover:translate-y-0 transition-transform duration-300 rounded-xl" />
+                                </button>
+                            </div>
+                        </div>
                     </motion.div>
                 </div>
             </section>
 
-            {/* SEARCH CARD - STICKY WRAPPER */}
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-30 -mt-10 md:-mt-12 print:hidden">
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-                    className="bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-200 p-6 md:p-10"
-                >
-                    <div className="flex flex-col md:flex-row md:items-end gap-6">
-                        <div className="flex-1">
-                            <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-2">
-                                <Search className="w-4 h-4 text-[#0F4CBA]" />
-                                Certificate ID
-                            </label>
-                            <input
-                                type="text"
-                                placeholder="Example: THIAI-INT-2026-001245"
-                                value={certIdInput}
-                                onChange={(e) => setCertIdInput(e.target.value)}
-                                className="w-full bg-slate-50 border border-slate-200 text-slate-900 text-lg rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-[#0F4CBA] focus:border-transparent transition-all placeholder:text-slate-400 font-medium tracking-wide"
-                                required
-                            />
-                            <p className="mt-3 text-xs text-slate-500 flex items-center gap-1.5">
-                                <Info className="w-3.5 h-3.5" />
-                                Enter the unique Certificate ID exactly as printed on the certificate.
-                            </p>
-                        </div>
-                        <button
-                            onClick={onVerify}
-                            disabled={status === 'loading'}
-                            className={`w-full md:w-auto px-8 py-4 rounded-2xl font-bold text-white transition-all flex items-center justify-center gap-3 shrink-0 ${status === 'loading'
-                                    ? 'bg-slate-400 cursor-not-allowed'
-                                    : 'bg-[#0F4CBA] hover:bg-[#0a3a94] shadow-lg shadow-blue-900/20 hover:shadow-xl hover:shadow-blue-900/30 hover:-translate-y-0.5 active:translate-y-0'
-                                }`}
-                        >
-                            {status === 'loading' ? (
-                                <>
-                                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                    Verifying...
-                                </>
-                            ) : (
-                                <>
-                                    <BadgeCheck className="w-5 h-5" />
-                                    Verify Credential
-                                </>
-                            )}
-                        </button>
-                    </div>
-                </motion.div>
-            </div>
-
-            {/* RESULTS SECTION */}
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 md:py-24">
+            {/* MAIN CONTENT AREA */}
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-24 z-10 relative">
                 <AnimatePresence mode="wait">
 
-                    {/* LOADING STATE */}
+                    {/* LOADING STATE - ANIMATED SHIELD */}
                     {status === 'loading' && (
                         <motion.div
-                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                            className="flex flex-col items-center justify-center py-20"
+                            key="loading"
+                            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }}
+                            className="bg-white rounded-[24px] shadow-xl border border-slate-200 p-12 flex flex-col items-center justify-center min-h-[400px]"
                         >
-                            <div className="relative w-24 h-24 mb-8">
-                                <div className="absolute inset-0 border-4 border-slate-100 rounded-full" />
-                                <div className="absolute inset-0 border-4 border-[#0F4CBA] border-t-transparent rounded-full animate-spin" />
-                                <ShieldCheck className="absolute inset-0 m-auto w-8 h-8 text-[#0F4CBA] animate-pulse" />
+                            <div className="relative mb-10">
+                                <motion.div 
+                                    animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
+                                    className="absolute -inset-8 border border-dashed border-[#0B5FFF]/30 rounded-full"
+                                />
+                                <motion.div 
+                                    animate={{ rotate: -360 }} transition={{ repeat: Infinity, duration: 6, ease: "linear" }}
+                                    className="absolute -inset-4 border-2 border-slate-100 rounded-full"
+                                />
+                                <div className="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center border-4 border-[#0B5FFF] shadow-lg shadow-blue-900/20 relative z-10">
+                                    <Shield className="w-10 h-10 text-[#0B5FFF] animate-pulse" />
+                                </div>
                             </div>
-                            <h3 className="text-xl font-bold text-slate-900 mb-2">Connecting to Secure Registry...</h3>
-                            <p className="text-slate-500">Validating digital signatures and verifying records.</p>
+                            
+                            <div className="text-center space-y-2">
+                                <h3 className="text-2xl font-black text-slate-900">{loadingMessages[loadingStep]}</h3>
+                                <p className="text-slate-500 font-mono text-sm">SECURE_VERIFICATION_PROTOCOL_V2</p>
+                            </div>
+
+                            <div className="w-64 h-2 bg-slate-100 rounded-full mt-8 overflow-hidden">
+                                <motion.div 
+                                    initial={{ width: 0 }} animate={{ width: `${(loadingStep + 1) * 20}%` }}
+                                    className="h-full bg-[#0B5FFF] rounded-full"
+                                />
+                            </div>
                         </motion.div>
                     )}
 
                     {/* ERROR STATE */}
                     {status === 'error' && (
                         <motion.div
+                            key="error"
                             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                            className="bg-red-50 border border-red-100 rounded-3xl p-8 md:p-12 text-center"
+                            className="bg-white rounded-[24px] shadow-xl border border-red-100 p-10 md:p-16 text-center"
                         >
-                            <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                                <XCircle className="w-10 h-10 text-red-600" />
+                            <div className="w-24 h-24 bg-red-50 border border-red-100 rounded-full flex items-center justify-center mx-auto mb-6 relative">
+                                <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 2 }} className="absolute inset-0 bg-red-500/10 rounded-full" />
+                                <XCircle className="w-12 h-12 text-red-500" />
                             </div>
-                            <h2 className="text-3xl font-black text-slate-900 mb-4">Certificate Not Found</h2>
-                            <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-8">
+                            <h2 className="text-3xl font-black text-slate-900 mb-4">Credential Not Found</h2>
+                            <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-10">
                                 {errorMessage}
                             </p>
 
-                            <div className="bg-white border border-red-100 rounded-2xl p-6 text-left max-w-lg mx-auto mb-8 shadow-sm">
-                                <h4 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
-                                    <HelpCircle className="w-5 h-5 text-red-500" /> Possible Reasons:
-                                </h4>
-                                <ul className="space-y-3">
-                                    {[
-                                        "Incorrect Certificate ID or typing error",
-                                        "Certificate has not yet been published to the registry",
-                                        "The credential has been revoked",
-                                        "You included the .pdf extension in the ID"
-                                    ].map((reason, i) => (
-                                        <li key={i} className="flex items-start gap-3 text-slate-600">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-red-400 mt-2 shrink-0" />
-                                            {reason}
-                                        </li>
-                                    ))}
-                                </ul>
+                            <div className="grid md:grid-cols-2 gap-4 max-w-3xl mx-auto text-left mb-10">
+                                {[
+                                    { icon: SearchCode, title: "Invalid Format", desc: "Check for typos in the ID provided." },
+                                    { icon: Clock, title: "Processing", desc: "Certificate might still be under review." },
+                                    { icon: ShieldAlert, title: "Revoked", desc: "The credential was permanently revoked." },
+                                    { icon: FileText, title: "Extension Error", desc: "Do not include .pdf in the search." }
+                                ].map((item, i) => (
+                                    <div key={i} className="flex items-start gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100">
+                                        <div className="p-2 bg-white rounded-lg shadow-sm">
+                                            <item.icon className="w-5 h-5 text-slate-500" />
+                                        </div>
+                                        <div>
+                                            <h4 className="font-bold text-slate-900 text-sm">{item.title}</h4>
+                                            <p className="text-xs text-slate-500 mt-1">{item.desc}</p>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
 
-                            <div className="flex flex-wrap justify-center gap-4">
-                                <button onClick={() => setStatus('idle')} className="px-6 py-3 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 transition-all">
-                                    Try Again
-                                </button>
-                                <Link href="/contact" className="px-6 py-3 rounded-xl bg-red-600 text-white font-bold hover:bg-red-700 transition-all shadow-md shadow-red-600/20">
-                                    Contact Support
-                                </Link>
-                            </div>
+                            <button onClick={() => setStatus('idle')} className="px-8 py-4 rounded-xl bg-slate-900 text-white font-bold hover:bg-slate-800 transition-all shadow-lg hover:-translate-y-0.5">
+                                Try Another Search
+                            </button>
                         </motion.div>
                     )}
 
-                    {/* SUCCESS STATE */}
+                    {/* SUCCESS DASHBOARD */}
                     {status === 'success' && certData && (
                         <motion.div
+                            key="success"
                             initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                            className="space-y-12"
+                            className="space-y-8"
                         >
-                            {/* SUCCESS BANNER */}
-                            <div className="bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 rounded-3xl p-8 md:p-12 text-center shadow-lg shadow-emerald-900/5 print:bg-white print:border-slate-300 print:shadow-none">
-                                <motion.div
-                                    initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                                    className="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl shadow-emerald-500/20 border-4 border-emerald-500 relative"
-                                >
-                                    <CheckCircle className="w-12 h-12 text-emerald-500" />
-                                    <div className="absolute -bottom-2 -right-2 bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider border-2 border-white">
-                                        Verified
+                            {/* TOP SUCCESS BANNER */}
+                            <div className="bg-[#16A34A] rounded-[24px] p-6 md:p-8 flex flex-col md:flex-row items-center justify-between text-white shadow-xl shadow-green-900/20 relative overflow-hidden print:bg-white print:text-black print:border print:border-slate-300">
+                                <div className="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
+                                <div className="flex items-center gap-6 z-10 relative w-full md:w-auto text-center md:text-left mb-6 md:mb-0">
+                                    <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-lg mx-auto md:mx-0 shrink-0">
+                                        <CheckCircle className="w-10 h-10 text-[#16A34A]" />
                                     </div>
-                                </motion.div>
-                                <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4 tracking-tight">
-                                    Credential Successfully Verified
-                                </h2>
-                                <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
-                                    This credential has been successfully validated against the official TechieHelp Institute of AI verification database. The certificate is authentic and has not been revoked based on our current records.
-                                </p>
+                                    <div>
+                                        <h2 className="text-3xl font-black tracking-tight mb-1">OFFICIALLY VERIFIED</h2>
+                                        <p className="text-green-100 font-medium">This credential is authentic and recorded on our ledger.</p>
+                                    </div>
+                                </div>
+                                <div className="z-10 bg-black/20 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/10 text-center flex items-center gap-4">
+                                    <div>
+                                        <p className="text-[10px] uppercase font-bold text-green-200 tracking-wider mb-1">Authenticity Score</p>
+                                        <p className="text-3xl font-black">100<span className="text-xl">%</span></p>
+                                    </div>
+                                    <div className="w-12 h-12 relative">
+                                        <svg className="w-full h-full transform -rotate-90">
+                                            <circle cx="24" cy="24" r="20" stroke="rgba(255,255,255,0.2)" strokeWidth="4" fill="none" />
+                                            <motion.circle cx="24" cy="24" r="20" stroke="white" strokeWidth="4" fill="none" strokeDasharray="125.6" initial={{ strokeDashoffset: 125.6 }} animate={{ strokeDashoffset: 0 }} transition={{ duration: 1.5, ease: "easeOut" }} />
+                                        </svg>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div className="grid lg:grid-cols-3 gap-8">
-                                {/* LEFT COLUMN: DETAILS & SECURITY */}
-                                <div className="lg:col-span-2 space-y-8">
-
-                                    {/* CREDENTIAL DETAILS */}
-                                    <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden print:border-none print:shadow-none">
-                                        <div className="px-6 py-5 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
-                                            <h3 className="font-bold text-lg text-slate-900 flex items-center gap-2">
-                                                <User className="w-5 h-5 text-[#0F4CBA]" /> Credential Details
-                                            </h3>
-                                            <span className="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full flex items-center gap-1">
-                                                <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" /> Active
-                                            </span>
+                            <div className="grid lg:grid-cols-12 gap-8">
+                                {/* LEFT COLUMN */}
+                                <div className="lg:col-span-8 space-y-8">
+                                    
+                                    {/* STUDENT PROFILE CARD */}
+                                    <div className="bg-white rounded-[24px] shadow-sm border border-slate-200 overflow-hidden relative">
+                                        <div className="h-32 bg-gradient-to-r from-slate-100 to-blue-50 relative">
+                                            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05] mix-blend-multiply" />
                                         </div>
-                                        <div className="p-6">
-                                            <div className="grid sm:grid-cols-2 gap-x-8 gap-y-6">
+                                        <div className="px-8 pb-8">
+                                            <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6 -mt-16 mb-8">
+                                                <div className="w-32 h-32 bg-white rounded-full p-2 shadow-lg border border-slate-100 relative">
+                                                    <div className="w-full h-full bg-slate-100 rounded-full flex items-center justify-center text-4xl font-black text-slate-300">
+                                                        {certData.studentName.charAt(0)}
+                                                    </div>
+                                                    <div className="absolute bottom-1 right-1 w-8 h-8 bg-[#0B5FFF] rounded-full border-2 border-white flex items-center justify-center shadow-sm">
+                                                        <BadgeCheck className="w-4 h-4 text-white" />
+                                                    </div>
+                                                </div>
+                                                <div className="text-center sm:text-left flex-1">
+                                                    <h3 className="text-2xl font-black text-slate-900">{certData.studentName}</h3>
+                                                    <p className="text-slate-500 font-medium">{certData.programName}</p>
+                                                </div>
+                                                <div className="px-4 py-2 bg-blue-50 border border-blue-100 rounded-xl text-center">
+                                                    <p className="text-[10px] font-bold text-blue-600 uppercase tracking-wider mb-0.5">Grade</p>
+                                                    <p className="text-sm font-black text-slate-900">{certData.grade}</p>
+                                                </div>
+                                            </div>
+
+                                            <div className="grid sm:grid-cols-2 gap-6 bg-slate-50 p-6 rounded-2xl border border-slate-100">
                                                 {[
-                                                    { label: "Certificate ID", val: certData.id, copyable: true },
-                                                    { label: "Student Name", val: certData.studentName },
-                                                    { label: "Program Name", val: certData.programName },
-                                                    { label: "Program Type", val: certData.programType },
-                                                    { label: "Internship Domain", val: certData.domain },
-                                                    { label: "Duration", val: certData.duration },
-                                                    { label: "Issue Date", val: certData.issueDate },
-                                                    { label: "Completion Date", val: certData.completionDate },
-                                                    { label: "Certificate Grade", val: certData.grade },
-                                                    { label: "Issued By", val: certData.issuedBy, bold: true },
+                                                    { icon: User, label: "Student ID", val: certData.techieId },
+                                                    { icon: FileText, label: "Certificate ID", val: certData.id },
+                                                    { icon: Target, label: "Domain", val: certData.domain },
+                                                    { icon: Clock, label: "Duration", val: certData.duration },
+                                                    { icon: Calendar, label: "Issue Date", val: certData.issueDate },
+                                                    { icon: CheckCircle, label: "Status", val: certData.credentialStatus }
                                                 ].map((item, idx) => (
-                                                    <div key={idx} className="space-y-1">
-                                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">{item.label}</p>
-                                                        <div className="flex items-center gap-2">
-                                                            <p className={`text-base text-slate-800 ${item.bold ? 'font-black' : 'font-medium'}`}>{item.val}</p>
-                                                            {item.copyable && (
-                                                                <button onClick={() => copy(item.val, `copy-${idx}`)} className="text-slate-400 hover:text-[#0F4CBA] transition-colors p-1 print:hidden">
-                                                                    {copiedId === `copy-${idx}` ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-                                                                </button>
-                                                            )}
+                                                    <div key={idx} className="flex items-center gap-4">
+                                                        <div className="w-10 h-10 rounded-xl bg-white shadow-sm border border-slate-200 flex items-center justify-center shrink-0">
+                                                            <item.icon className="w-4 h-4 text-slate-500" />
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">{item.label}</p>
+                                                            <p className="text-sm font-bold text-slate-900">{item.val || "N/A"}</p>
                                                         </div>
                                                     </div>
                                                 ))}
@@ -445,197 +564,304 @@ export default function CertificateVerify() {
                                         </div>
                                     </div>
 
-                                    {/* SECURITY PANEL */}
-                                    <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden print:border-none print:shadow-none">
-                                        <div className="px-6 py-5 border-b border-slate-100 bg-slate-50">
-                                            <h3 className="font-bold text-lg text-slate-900 flex items-center gap-2">
-                                                <ShieldCheck className="w-5 h-5 text-[#0F4CBA]" /> Credential Security
-                                            </h3>
-                                        </div>
-                                        <div className="p-6 space-y-6">
-                                            <p className="text-sm text-slate-600 leading-relaxed border-b border-slate-100 pb-6">
-                                                Every credential issued by TechieHelp Institute of AI contains a unique verification identifier and secure digital record that helps detect unauthorized modifications and enables employers and institutions to validate authenticity.
-                                            </p>
-
-                                            <div className="grid sm:grid-cols-2 gap-4">
-                                                {[
-                                                    { icon: Fingerprint, text: "Digitally Signed Credential" },
-                                                    { icon: Server, text: "Verified Against Official Records" },
-                                                    { icon: ShieldCheck, text: "Tamper Detection Passed" },
-                                                    { icon: Database, text: "Permanent Verification Record" }
-                                                ].map((item, i) => (
-                                                    <div key={i} className="flex items-center gap-3 bg-slate-50 border border-slate-100 rounded-xl p-4">
-                                                        <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                                                            <item.icon className="w-4 h-4 text-emerald-600" />
-                                                        </div>
-                                                        <span className="text-sm font-semibold text-slate-700">{item.text}</span>
+                                    {/* PERFORMANCE ANALYTICS */}
+                                    <div className="bg-white rounded-[24px] shadow-sm border border-slate-200 p-8">
+                                        <h3 className="text-xl font-black text-slate-900 mb-6 flex items-center gap-2">
+                                            <BarChart3 className="w-6 h-6 text-[#0B5FFF]" /> Performance Analytics
+                                        </h3>
+                                        <div className="grid md:grid-cols-3 gap-6">
+                                            {/* Attendance */}
+                                            <div className="border border-slate-100 rounded-2xl p-6 relative overflow-hidden group hover:border-[#0B5FFF]/30 transition-colors">
+                                                <div className="absolute top-0 right-0 w-20 h-20 bg-blue-50 rounded-full blur-xl -translate-y-1/2 translate-x-1/2 group-hover:bg-blue-100 transition-colors" />
+                                                <div className="relative z-10">
+                                                    <p className="text-sm font-bold text-slate-500 mb-2">Attendance</p>
+                                                    <p className="text-3xl font-black text-slate-900 mb-4">{certData.attendancePct}%</p>
+                                                    <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                                                        <motion.div initial={{ width: 0 }} animate={{ width: `${certData.attendancePct}%` }} transition={{ duration: 1, delay: 0.2 }} className="h-full bg-[#0B5FFF] rounded-full" />
                                                     </div>
-                                                ))}
+                                                </div>
+                                            </div>
+                                            
+                                            {/* Tasks */}
+                                            <div className="border border-slate-100 rounded-2xl p-6 relative overflow-hidden group hover:border-[#16A34A]/30 transition-colors">
+                                                <div className="absolute top-0 right-0 w-20 h-20 bg-green-50 rounded-full blur-xl -translate-y-1/2 translate-x-1/2 group-hover:bg-green-100 transition-colors" />
+                                                <div className="relative z-10">
+                                                    <p className="text-sm font-bold text-slate-500 mb-2">Tasks Completed</p>
+                                                    <p className="text-3xl font-black text-slate-900 mb-4">{certData.tasksCompleted} <span className="text-lg text-slate-400">/ {certData.totalTasks}</span></p>
+                                                    <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                                                        <motion.div initial={{ width: 0 }} animate={{ width: `${(certData.tasksCompleted/certData.totalTasks)*100}%` }} transition={{ duration: 1, delay: 0.3 }} className="h-full bg-[#16A34A] rounded-full" />
+                                                    </div>
+                                                </div>
                                             </div>
 
-                                            <div className="bg-[#0F4CBA]/5 border border-[#0F4CBA]/10 rounded-2xl p-5 break-all">
-                                                <p className="text-xs font-bold text-[#0F4CBA] uppercase tracking-wider mb-2">Digital Credential Hash</p>
-                                                <p className="text-sm font-mono text-slate-700 font-medium">{certData.hash}</p>
-
-                                                <div className="mt-4 pt-4 border-t border-[#0F4CBA]/10 grid sm:grid-cols-2 gap-4">
-                                                    <div>
-                                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Unique Verification ID</p>
-                                                        <p className="text-sm font-medium text-slate-900 mt-1">{certData.verificationId}</p>
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Verification Timestamp</p>
-                                                        <p className="text-sm font-medium text-slate-900 mt-1">{certData.timestamp}</p>
+                                            {/* Overall */}
+                                            <div className="border border-slate-100 rounded-2xl p-6 relative overflow-hidden group hover:border-[#F4B400]/30 transition-colors">
+                                                <div className="absolute top-0 right-0 w-20 h-20 bg-amber-50 rounded-full blur-xl -translate-y-1/2 translate-x-1/2 group-hover:bg-amber-100 transition-colors" />
+                                                <div className="relative z-10">
+                                                    <p className="text-sm font-bold text-slate-500 mb-2">Overall Score</p>
+                                                    <p className="text-3xl font-black text-slate-900 mb-4">{certData.performScore}%</p>
+                                                    <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                                                        <motion.div initial={{ width: 0 }} animate={{ width: `${certData.performScore}%` }} transition={{ duration: 1, delay: 0.4 }} className="h-full bg-[#F4B400] rounded-full" />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                {/* RIGHT COLUMN: PREVIEW & ACTIONS */}
-                                <div className="space-y-6">
-                                    {/* PREVIEW */}
-                                    <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 print:hidden">
-                                        <h3 className="font-bold text-lg text-slate-900 flex items-center gap-2 mb-4">
-                                            <FileText className="w-5 h-5 text-[#0F4CBA]" /> Certificate Preview
-                                        </h3>
-                                        <div className="w-full aspect-[1.414/1] bg-slate-100 rounded-2xl border border-slate-200 overflow-hidden relative group">
-                                            <iframe src={certData.previewUrl} className="absolute inset-0 w-full h-full border-0 pointer-events-none" title="Certificate Preview" />
-                                            <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
-                                                <a href={certData.previewUrl} target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-white text-slate-900 font-bold rounded-xl shadow-lg hover:scale-105 transition-transform flex items-center gap-2">
-                                                    <ExternalLink className="w-4 h-4" /> Open Full
-                                                </a>
+                                    {/* DIGITAL SECURITY DASHBOARD */}
+                                    <div className="bg-slate-900 rounded-[24px] shadow-sm border border-slate-800 p-8 text-white relative overflow-hidden">
+                                        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay" />
+                                        <div className="relative z-10">
+                                            <div className="flex items-center justify-between mb-8">
+                                                <h3 className="text-xl font-black flex items-center gap-2">
+                                                    <Lock className="w-6 h-6 text-[#F4B400]" /> Digital Security Record
+                                                </h3>
+                                                <span className="px-3 py-1 bg-white/10 rounded-full text-xs font-bold border border-white/10 flex items-center gap-1.5">
+                                                    <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" /> Live Ledger
+                                                </span>
+                                            </div>
+
+                                            <div className="grid md:grid-cols-2 gap-8">
+                                                <div className="space-y-6">
+                                                    <div>
+                                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verification Timestamp</p>
+                                                        <p className="font-mono text-sm">{certData.timestamp}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verification ID</p>
+                                                        <p className="font-mono text-sm bg-white/5 p-3 rounded-xl border border-white/10">{certData.verificationId}</p>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div className="space-y-4">
+                                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Cryptographic Signature (SHA-256)</p>
+                                                    <div className="bg-black/50 p-4 rounded-xl border border-white/10 relative group">
+                                                        <p className={`font-mono text-xs break-all ${showHash ? 'text-green-400' : 'text-slate-600 blur-sm select-none'}`}>
+                                                            {certData.hash}
+                                                        </p>
+                                                        <button 
+                                                            onClick={() => setShowHash(!showHash)}
+                                                            className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"
+                                                        >
+                                                            <div className="bg-white/10 backdrop-blur-md px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2">
+                                                                {showHash ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                                                {showHash ? 'Hide Hash' : 'Reveal Hash'}
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                    <button onClick={() => copy(certData.hash, 'hash')} className="text-xs font-bold text-[#0B5FFF] flex items-center gap-1 hover:text-blue-400 transition-colors">
+                                                        {copiedId === 'hash' ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                                                        {copiedId === 'hash' ? 'Copied to clipboard' : 'Copy Hash Value'}
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    {/* ACTIONS */}
-                                    <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 print:hidden">
-                                        <h3 className="font-bold text-lg text-slate-900 mb-4">Actions</h3>
-                                        <div className="space-y-3">
-                                            <a href={certData.downloadUrl} target="_blank" rel="noopener noreferrer" className="w-full px-4 py-3 rounded-xl bg-[#0F4CBA] text-white font-bold flex items-center justify-center gap-2 hover:bg-[#0a3a94] transition-colors shadow-md shadow-blue-900/10">
-                                                <Download className="w-4 h-4" /> Download PDF
-                                            </a>
-                                            <button onClick={handlePrint} className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors">
-                                                <Printer className="w-4 h-4" /> Print Verification
-                                            </button>
-                                            <button onClick={handleShare} className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors">
-                                                {copiedId === 'shareLink' ? <Check className="w-4 h-4 text-emerald-500" /> : <Share2 className="w-4 h-4" />}
-                                                {copiedId === 'shareLink' ? 'Link Copied!' : 'Share Verification Link'}
-                                            </button>
+                                </div>
+
+                                {/* RIGHT COLUMN */}
+                                <div className="lg:col-span-4 space-y-8">
+                                    
+                                    {/* AI FRAUD DETECTION */}
+                                    <div className="bg-white rounded-[24px] shadow-sm border border-slate-200 p-6 overflow-hidden relative">
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-[#0B5FFF]/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="p-2 bg-blue-50 rounded-lg">
+                                                <Cpu className="w-5 h-5 text-[#0B5FFF]" />
+                                            </div>
+                                            <h3 className="font-bold text-slate-900">AI Fraud Detection</h3>
+                                        </div>
+                                        <p className="text-sm text-slate-600 mb-6">This credential has passed AI-powered tamper detection and digital integrity validation.</p>
+                                        
+                                        <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100 flex items-center justify-between">
+                                            <span className="text-sm font-bold text-slate-700">Confidence Meter</span>
+                                            <span className="text-lg font-black text-[#16A34A]">99.98%</span>
                                         </div>
                                     </div>
+
+                                    {/* CERTIFICATE PREVIEW CARD */}
+                                    <div className="bg-white rounded-[24px] shadow-sm border border-slate-200 p-6 print:hidden">
+                                        <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                                            <FileText className="w-5 h-5 text-[#0B5FFF]" /> Official Document
+                                        </h3>
+                                        <div className="w-full aspect-[1.414/1] bg-slate-100 rounded-2xl border border-slate-200 overflow-hidden relative group mb-6">
+                                            {pdfBlobUrl ? (
+                                                <iframe src={`${pdfBlobUrl}#view=FitH`} className="absolute inset-0 w-full h-full border-0 pointer-events-none" title="Certificate Preview" />
+                                            ) : (
+                                                <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400">
+                                                    <FileText className="w-12 h-12 mb-3 opacity-50" />
+                                                    <p className="text-sm font-medium">Preview Unavailable</p>
+                                                </div>
+                                            )}
+                                            {pdfBlobUrl && (
+                                                <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center backdrop-blur-sm gap-3">
+                                                    <a href={pdfBlobUrl} target="_blank" rel="noopener noreferrer" className="px-6 py-2.5 bg-white text-slate-900 font-bold rounded-xl shadow-lg hover:scale-105 transition-transform flex items-center gap-2 text-sm">
+                                                        <ExternalLink className="w-4 h-4" /> Open Full
+                                                    </a>
+                                                </div>
+                                            )}
+                                        </div>
+                                        
+                                        <div className="space-y-3">
+                                            {pdfBlobUrl && (
+                                                <a href={pdfBlobUrl} download={`${certData.studentName.replace(/\s+/g, '_')}_Certificate.pdf`} className="w-full py-3 rounded-xl bg-[#0B5FFF] text-white font-bold flex items-center justify-center gap-2 hover:bg-[#094DD9] transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">
+                                                    <Download className="w-4 h-4" /> Download PDF
+                                                </a>
+                                            )}
+                                            <div className="grid grid-cols-2 gap-3">
+                                                <button onClick={handlePrint} className="w-full py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 font-bold flex items-center justify-center gap-2 hover:bg-slate-100 transition-colors text-sm">
+                                                    <Printer className="w-4 h-4" /> Print
+                                                </button>
+                                                <button onClick={handleShare} className="w-full py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 font-bold flex items-center justify-center gap-2 hover:bg-slate-100 transition-colors text-sm">
+                                                    {copiedId === 'shareLink' ? <Check className="w-4 h-4 text-[#16A34A]" /> : <Share2 className="w-4 h-4" />}
+                                                    Share
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* VERIFICATION TIMELINE */}
+                                    <div className="bg-white rounded-[24px] shadow-sm border border-slate-200 p-6">
+                                        <h3 className="font-bold text-slate-900 mb-6">Credential Journey</h3>
+                                        <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-[#0B5FFF] before:to-slate-200">
+                                            {[
+                                                { title: "Application Approved", active: true },
+                                                { title: "Internship Commenced", active: true },
+                                                { title: "Assessments Cleared", active: true },
+                                                { title: "Certificate Issued", active: true },
+                                                { title: "Successfully Verified", active: true, pulse: true }
+                                            ].map((step, i) => (
+                                                <div key={i} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                                                    <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-[#0B5FFF] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-sm z-10">
+                                                        {step.pulse ? (
+                                                            <CheckCircle className="w-4 h-4 text-white animate-pulse" />
+                                                        ) : (
+                                                            <Check className="w-4 h-4 text-white" />
+                                                        )}
+                                                    </div>
+                                                    <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-slate-50 p-4 rounded-xl border border-slate-100 ml-4 md:ml-0">
+                                                        <p className="font-bold text-slate-900 text-sm">{step.title}</p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
-
                         </motion.div>
                     )}
                 </AnimatePresence>
             </div>
 
             {/* LOWER SECTIONS - HIDDEN IN PRINT */}
-            <div className="print:hidden">
-                {/* FOR RECRUITERS */}
-                <section className="bg-slate-900 py-20 px-4">
-                    <div className="max-w-5xl mx-auto text-center">
-                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/10 mb-8">
-                            <Building className="w-8 h-8 text-[#F4B400]" />
+            <div className="print:hidden relative z-10 bg-white">
+                
+                {/* STATISTICS SECTION */}
+                <section className="py-20 px-4 border-t border-slate-200 bg-slate-50">
+                    <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+                        {[
+                            { label: "Students Certified", val: 5000, prefix: "", suffix: "+" },
+                            { label: "Verification Success", val: 100, prefix: "", suffix: "%" },
+                            { label: "Partner Colleges", val: 150, prefix: "", suffix: "+" },
+                            { label: "System Uptime", val: 99.99, prefix: "", suffix: "%" }
+                        ].map((stat, i) => (
+                            <div key={i} className="text-center">
+                                <h4 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-2">
+                                    <AnimatedCounter end={stat.val} suffix={stat.suffix} prefix={stat.prefix} />
+                                </h4>
+                                <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">{stat.label}</p>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                {/* EMPLOYER SECTION */}
+                <section className="py-24 px-4">
+                    <div className="max-w-6xl mx-auto">
+                        <div className="text-center mb-16 max-w-2xl mx-auto">
+                            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4">For Employers & HR Teams</h2>
+                            <p className="text-slate-600 text-lg">Streamline your background verification process with our enterprise tools designed for bulk and automated validations.</p>
                         </div>
-                        <h2 className="text-3xl md:text-4xl font-black text-white mb-6">For Recruiters & Institutions</h2>
-                        <p className="text-lg text-slate-300 max-w-3xl mx-auto leading-relaxed mb-10">
-                            Employers, HR teams, universities, and Training & Placement Offices (TPOs) can use this portal to instantly verify candidate credentials before recruitment or admissions.
-                        </p>
-                        <div className="flex flex-wrap justify-center gap-4">
-                            <button onClick={() => { setStatus('idle'); setCertIdInput(''); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="px-8 py-4 rounded-xl bg-[#F4B400] text-slate-900 font-black tracking-wide hover:bg-[#e0a600] transition-colors shadow-lg shadow-[#F4B400]/20">
-                                Verify Another Credential
-                            </button>
-                            <Link href="/contact" className="px-8 py-4 rounded-xl bg-white/10 text-white font-bold hover:bg-white/20 transition-colors border border-white/10">
-                                Contact Verification Team
+                        <div className="grid md:grid-cols-3 gap-6">
+                            {[
+                                { icon: Users, title: "Bulk Verification", desc: "Verify multiple candidates simultaneously using our secure batch processing system." },
+                                { icon: Terminal, title: "Verification API", desc: "Integrate our verification endpoint directly into your ATS or HRMS platform." },
+                                { icon: BookOpen, title: "Institution Access", desc: "Dedicated portals for universities and colleges to track alumni performance." }
+                            ].map((feature, i) => (
+                                <div key={i} className="bg-white p-8 rounded-[24px] border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all">
+                                    <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mb-6">
+                                        <feature.icon className="w-6 h-6 text-[#0B5FFF]" />
+                                    </div>
+                                    <h3 className="text-xl font-bold text-slate-900 mb-3">{feature.title}</h3>
+                                    <p className="text-slate-600 leading-relaxed">{feature.desc}</p>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="mt-12 text-center">
+                            <Link href="/contact" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-slate-900 text-white font-bold hover:bg-slate-800 transition-all shadow-lg hover:-translate-y-0.5">
+                                Contact Verification Team <ArrowRight className="w-4 h-4" />
                             </Link>
                         </div>
                     </div>
                 </section>
 
-                {/* VERIFICATION PROCESS */}
-                <section className="py-24 px-4 bg-white border-b border-slate-200">
-                    <div className="max-w-5xl mx-auto">
-                        <div className="text-center mb-16">
-                            <h2 className="text-3xl font-black text-slate-900 mb-4">Verification Process</h2>
-                            <p className="text-slate-600">How our secure credential system works.</p>
-                        </div>
-
-                        <div className="flex flex-col md:flex-row items-center justify-between relative">
-                            {/* Line connecting steps */}
-                            <div className="hidden md:block absolute top-1/2 left-0 right-0 h-0.5 bg-slate-100 -translate-y-1/2 z-0" />
-
-                            {[
-                                { title: "Certificate Issued", icon: Award },
-                                { title: "ID Generated", icon: Fingerprint },
-                                { title: "Record Created", icon: Database },
-                                { title: "Credential Published", icon: ExternalLink },
-                                { title: "Verified by Employer", icon: ShieldCheck }
-                            ].map((step, i) => (
-                                <div key={i} className="relative z-10 flex flex-col items-center text-center max-w-[150px] w-full mb-8 md:mb-0 bg-white">
-                                    <div className="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center mb-4 shadow-sm">
-                                        <step.icon className="w-6 h-6 text-[#0F4CBA]" />
-                                    </div>
-                                    <p className="text-sm font-bold text-slate-800">{step.title}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-
-                {/* IMPORTANT NOTICE */}
-                <section className="py-12 px-4 bg-slate-50">
-                    <div className="max-w-4xl mx-auto">
-                        <div className="bg-amber-50 border border-amber-200 rounded-3xl p-8 relative overflow-hidden flex items-start gap-6">
-                            <div className="absolute top-0 left-0 w-2 h-full bg-amber-500" />
-                            <div className="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center shrink-0">
-                                <AlertTriangle className="w-6 h-6 text-amber-600" />
-                            </div>
-                            <div>
-                                <h3 className="text-xl font-bold text-slate-900 mb-2">Important Notice</h3>
-                                <p className="text-slate-700 mb-3">Only certificates successfully verified through this portal should be considered authentic.</p>
-                                <p className="text-slate-700">Any credential that cannot be verified or appears altered should be treated as invalid and reported to TechieHelp Institute of AI immediately.</p>
-                            </div>
+                {/* TRUST LOGOS */}
+                <section className="py-16 px-4 border-y border-slate-200 bg-white">
+                    <div className="max-w-6xl mx-auto text-center">
+                        <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-8">Recognized & Trusted By</p>
+                        <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+                            {/* Placeholders for actual logos. Replace with <img> tags later */}
+                            <div className="flex items-center gap-2 font-black text-2xl text-slate-800"><Globe className="w-8 h-8" /> MSME</div>
+                            <div className="flex items-center gap-2 font-black text-2xl text-slate-800"><Award className="w-8 h-8" /> ISO 9001</div>
+                            <div className="flex items-center gap-2 font-black text-2xl text-slate-800"><Activity className="w-8 h-8" /> STARTUP INDIA</div>
+                            <div className="flex items-center gap-2 font-black text-2xl text-slate-800"><Cpu className="w-8 h-8" /> AICTE</div>
                         </div>
                     </div>
                 </section>
 
                 {/* FAQ */}
-                <section className="py-24 px-4 bg-white border-t border-slate-200">
+                <section className="py-24 px-4 bg-[#F8FAFC]">
                     <div className="max-w-3xl mx-auto">
                         <div className="text-center mb-16">
                             <h2 className="text-3xl font-black text-slate-900 mb-4">Frequently Asked Questions</h2>
                         </div>
-                        <div className="space-y-6">
+                        <div className="space-y-4">
                             {FAQS.map((faq, i) => (
-                                <div key={i} className="bg-slate-50 rounded-2xl p-6 border border-slate-100">
-                                    <h4 className="font-bold text-lg text-slate-900 mb-3 flex items-start gap-3">
-                                        <span className="text-[#0F4CBA]">Q.</span> {faq.q}
-                                    </h4>
-                                    <p className="text-slate-600 leading-relaxed pl-7">{faq.a}</p>
-                                </div>
+                                <details key={i} className="group bg-white rounded-2xl border border-slate-200 overflow-hidden [&_summary::-webkit-details-marker]:hidden">
+                                    <summary className="flex items-center justify-between p-6 cursor-pointer font-bold text-lg text-slate-900">
+                                        {faq.q}
+                                        <ChevronDown className="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform" />
+                                    </summary>
+                                    <div className="px-6 pb-6 text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+                                        {faq.a}
+                                    </div>
+                                </details>
                             ))}
                         </div>
                     </div>
                 </section>
 
-                {/* FOOTER CTA */}
-                <section className="py-20 px-4 bg-gradient-to-br from-[#0F4CBA] to-[#0a3a94] text-center">
-                    <div className="max-w-2xl mx-auto">
-                        <h2 className="text-3xl font-black text-white mb-6">Need Verification Assistance?</h2>
-                        <p className="text-blue-100 mb-8 text-lg">Our support team is available to help employers and institutions with bulk verification or discrepancy resolution.</p>
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                            <a href="mailto:support@techiehelp.in" className="px-8 py-4 rounded-xl bg-white text-[#0F4CBA] font-black tracking-wide shadow-xl hover:scale-105 transition-transform flex items-center gap-2">
-                                <Mail className="w-5 h-5" /> Contact Verification Team
-                            </a>
-                            <p className="text-blue-200 font-medium">support@techiehelp.in</p>
-                        </div>
-                    </div>
-                </section>
             </div>
+            
+            {/* FLOATING SUPPORT CARD */}
+            <div className="fixed bottom-6 right-6 z-50 print:hidden">
+                <div className="group relative">
+                    <button className="w-14 h-14 bg-[#0B5FFF] text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform">
+                        <HelpCircle className="w-6 h-6" />
+                    </button>
+                    <div className="absolute bottom-full right-0 mb-4 w-72 bg-white rounded-[24px] shadow-2xl border border-slate-200 p-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all origin-bottom-right scale-95 group-hover:scale-100">
+                        <h4 className="font-bold text-slate-900 mb-2">Verification Support</h4>
+                        <p className="text-sm text-slate-600 mb-4">Need help validating a credential? Our team is available 24/7.</p>
+                        <a href="mailto:support@techiehelp.in" className="flex items-center gap-3 text-sm font-bold text-[#0B5FFF] p-3 rounded-xl bg-blue-50 hover:bg-blue-100 transition-colors mb-2">
+                            <Mail className="w-4 h-4" /> support@techiehelp.in
+                        </a>
+                        <p className="text-xs text-slate-400 text-center mt-4">Average response time: &lt; 2 hours</p>
+                    </div>
+                </div>
+            </div>
+
         </main>
     );
 }
