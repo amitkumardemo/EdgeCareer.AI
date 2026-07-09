@@ -394,11 +394,24 @@ export async function evaluateTaskSubmission(submissionId, status, score, feedba
 
   try {
     if (sub.application?.user?.email) {
+      let statusColor = status;
+      if (status === "APPROVED") statusColor = "SUCCESS";
+      if (status === "REJECTED") statusColor = "FAILED";
+
       await sendNotificationEmail({
         to: sub.application.user.email,
-        subject: "📝 Task Submission Evaluated",
+        subject: `📝 Task Submission Evaluated: ${sub.task?.title || "Task"} - TechieHelp`,
         username: sub.application.user.name,
-        message: `Your recent submission for <strong>${sub.task?.title || "a task"}</strong> has been evaluated.<br/><br/><strong>Status:</strong> ${status}<br/><strong>Score:</strong> ${score || "N/A"} / ${sub.task?.maxScore || 100}<br/><strong>Feedback:</strong> ${feedback || "No additional feedback."}<br/><br/>Please log in to your dashboard to view the details.`,
+        heroTitle: "Task Evaluated",
+        statusBadge: statusColor,
+        message: `Your recent submission for <strong>${sub.task?.title || "a task"}</strong> has been evaluated.`,
+        infoCards: [
+          { label: "Status", value: status },
+          { label: "Score", value: `${score || "N/A"} / ${sub.task?.maxScore || 100}` },
+          { label: "Feedback", value: feedback || "No additional feedback." }
+        ],
+        buttonText: "View Submission Details",
+        buttonLink: "https://techiehelpinstituteofai.in/dashboard"
       });
     }
   } catch(e) {}

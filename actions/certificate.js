@@ -215,22 +215,26 @@ export async function issueCertificate(applicationId) {
     let emailSent = false;
     if (user.email) {
       const pdfBuffer = Buffer.from(doc.output("arraybuffer"));
-      const emailBody = `
-        <p>Hi ${name},</p>
-        <p>Congratulations on successfully completing your internship in <strong>${domain}</strong>.</p>
-        <p>Your official verifiable certificate is attached.</p>
-        <p>Keep growing 🚀</p>
-        <p>Best regards,<br>TechieHelp Support Team</p>
-      `;
-
       try {
          emailSent = await sendNotificationEmail({
           to: user.email,
           subject: "🎉 Internship Certificate – TechieHelp",
           username: name,
-          message: emailBody,
+          heroTitle: "Certificate of Completion",
+          statusBadge: "Verified",
+          message: `<p>Congratulations on successfully completing your internship in <strong>${domain}</strong>.</p><p>Your official verifiable certificate is attached and ready for LinkedIn.</p>`,
+          infoCards: [
+            { label: "Domain", value: domain },
+            { label: "Completion Date", value: issueDate },
+            { label: "Certificate ID", value: serialNo }
+          ],
+          certificate: {
+            id: serialNo,
+          },
           buttonText: "View Dashboard",
           buttonLink: "https://techiehelpinstituteofai.in/dashboard",
+          secondaryButtonText: "Verify Certificate",
+          secondaryButtonLink: `https://techiehelpinstituteofai.in/verify-certificate?id=${serialNo}`,
           attachments: [
             {
               filename: "Internship_Completion_Certificate.pdf",

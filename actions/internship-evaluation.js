@@ -88,7 +88,12 @@ export async function submitEvaluation(applicationId, data, sendEmail = false) {
         to: app.user.email,
         subject: "🎖️ Internship Performance Evaluation Published",
         username: app.user.name || "Student",
+        heroTitle: "Evaluation Published",
+        statusBadge: "Important",
         message: `Congratulations! Your performance evaluation for <b>${app.batch?.name || "your internship"}</b> has been officially issued by your mentor. You can now view your detailed competency breakdown and download the official report from your dashboard.`,
+        infoCards: [
+          { label: "Evaluation", value: "Available" }
+        ],
         buttonText: "View My Performance",
         buttonLink: "https://techiehelpinstituteofai.in/internship/student/evaluation"
       });
@@ -143,7 +148,12 @@ export async function issueExistingEvaluation(evaluationId) {
         to: app.user.email,
         subject: "🎖️ Official Internship Performance Report Issued",
         username: app.user.name || "Student",
+        heroTitle: "Report Issued",
+        statusBadge: "Success",
         message: `Your final performance evaluation for <b>${app.batch?.name || "your internship"}</b> is now officially issued. You have completed all requirements, and your supervisor has finalized your report. You can now view and download it from the portal.`,
+        infoCards: [
+          { label: "Status", value: "Finalized" }
+        ],
         buttonText: "View Final Report",
         buttonLink: "https://techiehelpinstituteofai.in/internship/student/evaluation"
       });

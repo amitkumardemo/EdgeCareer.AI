@@ -543,22 +543,27 @@ export async function issueOfferLetter(applicationId) {
 
     // 6. Send email (PDF as attachment buffer)
     const pdfBuffer = Buffer.from(doc.output("arraybuffer"));
-    const emailBody = `
-      <p>Hi ${internName},</p>
-      <p>Congratulations! You have been selected for the internship at TechieHelp Institute of AI as a <strong>${domain}</strong> Intern.</p>
-      <p>Your personalized official offer letter is attached to this email as a PDF.</p>
-      <p>Please review the terms and start your placement journey with us.</p>
-      <p>Best Regards,<br>Amit Kumar<br>Founder & CEO, TechieHelp</p>
-    `;
-
     let emailSent = false;
     if (user.email) {
       sendNotificationEmail({
         to: user.email,
         subject: "🎉 Internship Offer Letter - TechieHelp",
         username: internName,
-        message: emailBody,
-        buttonText: "View Dashboard",
+        heroTitle: "You're Selected!",
+        statusBadge: "Selected",
+        message: `<p>Congratulations! You have been selected for the internship at TechieHelp Institute of AI as a <strong>${domain}</strong> Intern.</p><p>Your personalized official offer letter is attached to this email as a PDF. Please review the terms and start your placement journey with us.</p>`,
+        infoCards: [
+          { label: "Role", value: `${domain} Intern` },
+          { label: "Joining Date", value: startDate },
+          { label: "Mentor", value: "Er. Aditya Kumar" }
+        ],
+        timeline: [
+          { title: "Application Reviewed", active: true },
+          { title: "Interview Passed", active: true },
+          { title: "Offer Letter Issued", active: true },
+          { title: "Awaiting Acceptance", active: false }
+        ],
+        buttonText: "Accept Offer & View Dashboard",
         buttonLink: "https://techiehelpinstituteofai.in/dashboard",
         attachments: [
           {

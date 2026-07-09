@@ -290,6 +290,27 @@ export async function createTask(data) {
     FROM "InternshipApplication" ia
     WHERE ip."applicationId" = ia.id AND ia."batchId" = ${data.batchId}
   `;
+  // Send new task email to all selected students
+  try {
+    const students = await prisma.internshipApplication.findMany({
+      where: { batchId: data.batchId, status: "SELECTED" },
+      include: { user: { select: { email: true, name: true } } }
+    });
+    const usersArray = students.map((s) => s.user).filter((u) => u && u.email);
+    
+    await sendBulkNotificationEmails(
+      usersArray,
+      `📌 New Task Assigned: ${data.title} - TechieHelp`,
+      () => `<p>A new task has been assigned to your batch.</p>
+             <p><strong>Deadline:</strong> ${new Date(data.dueDate).toLocaleDateString()}</p>
+             <p>Please log in to your dashboard to view the full details and submit your work before the deadline.</p>`,
+      "View Task",
+      "https://techiehelpinstituteofai.in/dashboard"
+    );
+  } catch (e) {
+    console.error("Failed to send new task bulk emails:", e);
+  }
+
   revalidatePath(`/internship/admin/batches/${data.batchId}`);
   return task;
 }
@@ -318,6 +339,43 @@ export async function evaluateSubmission(submissionId, score, feedback, status) 
       },
     });
   }
+
+  // Send Evaluation Email
+  try {
+    const appWithUser = await prisma.internshipApplication.findUnique({
+      where: { id: sub.applicationId },
+      include: { user: { select: { email: true, name: true } } }
+    });
+    const taskDetails = await prisma.internshipTask.findUnique({
+      where: { id: sub.taskId },
+      select: { title: true }
+    });
+
+    if (appWithUser?.user?.email) {
+      let statusColor = status;
+      if (status === "APPROVED") statusColor = "SUCCESS";
+      if (status === "REJECTED") statusColor = "FAILED";
+
+      await sendNotificationEmail({
+        to: appWithUser.user.email,
+        subject: `📝 Task Evaluated: ${taskDetails?.title} - TechieHelp`,
+        username: appWithUser.user.name,
+        heroTitle: "Task Evaluated",
+        statusBadge: statusColor,
+        message: `<p>Your submission for <strong>${taskDetails?.title}</strong> has been evaluated.</p>`,
+        infoCards: [
+          { label: "Score", value: `${score}` },
+          { label: "Status", value: status },
+          { label: "Feedback", value: feedback || "No feedback provided." }
+        ],
+        buttonText: "View Submission",
+        buttonLink: "https://techiehelpinstituteofai.in/dashboard"
+      });
+    }
+  } catch (e) {
+    console.error("Failed to send task evaluation email:", e);
+  }
+
   revalidatePath("/internship/admin/applications");
   return sub;
 }
@@ -344,30 +402,34 @@ export async function markAttendance(applicationId, date, present) {
   try {
     const appInfo = await prisma.internshipApplication.findUnique({
       where: { id: applicationId },
-      include: { user: true },
+      include: { 
+        user: true,
+        batch: { select: { name: true } }
+      },
     });
     
     if (appInfo?.user?.email) {
+      const subjectIcon = present ? "✅" : "❌";
+      const batchName = appInfo.batch?.name || "Internship";
       const formattedDate = new Date(date).toLocaleDateString("en-IN", { 
         weekday: "long", year: "numeric", month: "long", day: "numeric" 
       });
 
-      let statusMessage = "";
-      let subjectIcon = "";
+      let statusMessage = `You have been marked <strong>${present ? "Present" : "Absent"}</strong> for <strong>${formattedDate}</strong>.<br/>${present ? "Keep up the good work!" : "<br/>If you believe this is an error or need to provide a reason, please reach out to your HR/Mentor immediately. Continuous unexcused absences may affect your internship status."}`;
 
-      if (present) {
-        subjectIcon = "✅";
-        statusMessage = `Your attendance for <strong>${formattedDate}</strong> has been successfully marked as <strong>Present</strong>.<br/>Keep up the good work!`;
-      } else {
-        subjectIcon = "❌";
-        statusMessage = `You have been marked <strong>Absent</strong> for <strong>${formattedDate}</strong>.<br/><br/>If you believe this is an error or need to provide a reason, please reach out to your HR/Mentor immediately. Continuous unexcused absences may affect your internship status.`;
-      }
-
+      let badgeColor = present ? "SUCCESS" : "FAILED";
+      
       await sendNotificationEmail({
         to: appInfo.user.email,
         subject: `${subjectIcon} Attendance Update - TechieHelp`,
         username: appInfo.user.name,
-        message: `${statusMessage}<br/><br/>You can view your full attendance history on your dashboard.`,
+        heroTitle: "Attendance Update",
+        statusBadge: badgeColor,
+        message: `${statusMessage}`,
+        infoCards: [
+          { label: "Date", value: formattedDate },
+          { label: "Status", value: present ? "Present" : "Absent" }
+        ],
         buttonText: "View Dashboard",
         buttonLink: "https://techiehelpinstituteofai.in/dashboard"
       });
@@ -464,9 +526,16 @@ export async function markInternshipComplete(applicationId) {
     if (progressWithUser?.application?.user?.email) {
       await sendNotificationEmail({
         to: progressWithUser.application.user.email,
-        subject: "🎉 Certificate Issued",
+        subject: "🎉 Certificate Issued - TechieHelp",
         username: progressWithUser.application.user.name,
-        message: "Congratulations on successfully completing your internship! Your official certificate of completion is now available for download.",
+        heroTitle: "Internship Completed",
+        statusBadge: "Success",
+        message: "Congratulations on successfully completing your internship! Your official verifiable certificate of completion is now available on your dashboard.",
+        infoCards: [
+          { label: "Status", value: "Completed" }
+        ],
+        buttonText: "Download Certificate",
+        buttonLink: "https://techiehelpinstituteofai.in/dashboard"
       });
     }
   } catch (e) {}
@@ -555,11 +624,25 @@ export async function markAttendanceWithStatus(applicationId, date, status) {
           break;
       }
 
+      let badgeColor = status;
+      if (status === "PRESENT") badgeColor = "SUCCESS";
+      if (status === "LATE") badgeColor = "WARNING";
+      if (status === "LEAVE") badgeColor = "SUCCESS";
+      if (status === "ABSENT") badgeColor = "FAILED";
+
+      const batchName = appInfo.batch?.name || "Internship";
+
       await sendNotificationEmail({
         to: appInfo.user.email,
-        subject: `${subjectIcon} Attendance Update - TechieHelp`,
+        subject: `[${batchName}] ${subjectIcon} Attendance Update - TechieHelp`,
         username: appInfo.user.name,
-        message: `${statusMessage}<br/><br/>You can view your full attendance history on your dashboard.`,
+        heroTitle: "Attendance Update",
+        statusBadge: badgeColor,
+        message: `${statusMessage}`,
+        infoCards: [
+          { label: "Date", value: formattedDate },
+          { label: "Status", value: status }
+        ],
         buttonText: "View Dashboard",
         buttonLink: "https://techiehelpinstituteofai.in/dashboard"
       });
