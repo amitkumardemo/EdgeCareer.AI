@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 import { getFirebaseUser } from "@/lib/auth-utils";
 import { revalidatePath } from "next/cache";
+import { inngest } from "@/lib/inngest/client";
 
 async function getStudentApp() {
   const firebaseUser = await getFirebaseUser();
@@ -153,6 +154,13 @@ export async function submitTask(applicationId, taskId, fileUrl, notes) {
     create: { applicationId, taskId, fileUrl, notes, status: "PENDING" },
     update: { fileUrl, notes, status: "PENDING", submittedAt: new Date() },
   });
+
+  // Trigger Phase 8: AI Review
+  await inngest.send({
+    name: "internship.task.submitted",
+    data: { submissionId: submission.id }
+  });
+
   revalidatePath("/internship/student/tasks");
   return submission;
 }

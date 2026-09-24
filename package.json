@@ -63,6 +63,7 @@
     "pdfjs-dist": "^5.4.296",
     "pdfreader": "^1.2.11",
     "puppeteer": "^24.25.0",
+    "razorpay": "^2.9.8",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-email": "^6.6.8",

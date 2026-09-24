@@ -69,10 +69,10 @@ model User {
   notifications          Notification[]
   videoComments          VideoComment[]
 
-  companiesAdmin         Company[]               @relation("CompanyAdmin")
-  jobApplications        JobApplication[]        @relation("JobApplications")
-  jobComments            JobComment[]            @relation("JobComments")
-  jobBookmarks           JobBookmark[]           @relation("JobBookmarks")
+  companiesAdmin  Company[]        @relation("CompanyAdmin")
+  jobApplications JobApplication[] @relation("JobApplications")
+  jobComments     JobComment[]     @relation("JobComments")
+  jobBookmarks    JobBookmark[]    @relation("JobBookmarks")
 
   @@index([collegeId])
   @@index([role])
@@ -337,19 +337,35 @@ model StudentRanking {
 }
 
 model InternshipProgram {
-  id          String            @id @default(uuid())
-  title       String
-  description String
-  domain      String
-  duration    Int
-  stipend     Float?
-  isActive    Boolean           @default(true)
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
-  batches     InternshipBatch[]
+  id                  String                @id @default(uuid())
+  title               String
+  description         String
+  domain              String
+  duration            Int
+  stipend             Float?
+  isActive            Boolean               @default(true)
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  batches             InternshipBatch[]
+  ProgramTaskTemplate ProgramTaskTemplate[]
 
   @@index([domain])
   @@index([isActive])
+}
+
+model ProgramTaskTemplate {
+  id          String            @id @default(uuid())
+  programId   String
+  title       String
+  description String
+  weekNumber  Int               @default(1)
+  maxScore    Float             @default(100)
+  resources   String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  program     InternshipProgram @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@index([programId])
 }
 
 model InternshipBatch {
@@ -480,15 +496,31 @@ model InternProgress {
 }
 
 model InternshipCertificate {
-  id            String         @id @default(uuid())
-  progressId    String         @unique
-  pdfUrl        String?
-  issuedAt      DateTime       @default(now())
-  serialNo      String         @unique @default(cuid())
-  downloadCount Int            @default(0)
-  progress      InternProgress @relation(fields: [progressId], references: [id], onDelete: Cascade)
+  id                 String              @id @default(uuid())
+  progressId         String              @unique
+  pdfUrl             String?
+  issuedAt           DateTime            @default(now())
+  serialNo           String              @unique @default(cuid())
+  downloadCount      Int                 @default(0)
+  progress           InternProgress      @relation(fields: [progressId], references: [id], onDelete: Cascade)
+  CertificatePayment CertificatePayment?
 
   @@index([serialNo])
+}
+
+model CertificatePayment {
+  id                String                @id @default(uuid())
+  certificateId     String                @unique
+  amount            Float
+  currency          String                @default("INR")
+  status            PaymentStatus         @default(PENDING)
+  razorpayOrderId   String?               @unique
+  razorpayPaymentId String?               @unique
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt
+  certificate       InternshipCertificate @relation(fields: [certificateId], references: [id], onDelete: Cascade)
+
+  @@index([status])
 }
 
 model InternshipReport {
@@ -681,16 +713,16 @@ model VideoComment {
   videoId   String
   userId    String
   text      String
-  parentId  String? 
+  parentId  String?
   likes     Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  video     InternshipVideo @relation(fields: [videoId], references: [id], onDelete: Cascade)
-  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  parent    VideoComment?   @relation("CommentToReply", fields: [parentId], references: [id])
-  replies   VideoComment[]  @relation("CommentToReply")
-  
+  video   InternshipVideo @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  user    User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent  VideoComment?   @relation("CommentToReply", fields: [parentId], references: [id])
+  replies VideoComment[]  @relation("CommentToReply")
+
   @@index([videoId])
 }
 
@@ -738,7 +770,6 @@ model InternshipEvaluation {
   @@index([createdAt])
 }
 
-
 // --- Job Portal Models ---
 
 model Company {
@@ -751,20 +782,20 @@ model Company {
   industry    String?
   size        String?
   description String?
-  userId      String?  // The admin/recruiter who created it
+  userId      String? // The admin/recruiter who created it
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  jobs        Job[]
-  user        User?    @relation("CompanyAdmin", fields: [userId], references: [id])
+  jobs Job[]
+  user User? @relation("CompanyAdmin", fields: [userId], references: [id])
 
   @@index([slug])
 }
 
 model JobCategory {
-  id          String   @id @default(uuid())
-  name        String   @unique
-  slug        String   @unique
+  id          String  @id @default(uuid())
+  name        String  @unique
+  slug        String  @unique
   description String?
   icon        String?
   jobs        Job[]
@@ -773,64 +804,64 @@ model JobCategory {
 }
 
 model JobLocation {
-  id          String   @id @default(uuid())
-  name        String   @unique // e.g. "San Francisco, CA" or "Remote"
-  slug        String   @unique
-  jobs        Job[]
+  id   String @id @default(uuid())
+  name String @unique // e.g. "San Francisco, CA" or "Remote"
+  slug String @unique
+  jobs Job[]
 
   @@index([slug])
 }
 
 model Job {
-  id               String   @id @default(uuid())
-  title            String
-  slug             String   @unique
-  companyId        String
-  categoryId       String?
-  locationId       String?
-  salary           String?
-  experience       String?
-  employmentType   String? // Full Time, Part Time, Internship
-  department       String?
-  workMode         String? // Remote, Hybrid, Onsite
-  openPositions    Int      @default(1)
-  
-  description      String   @db.Text
-  requirements     String?  @db.Text
-  responsibilities String?  @db.Text
-  benefits         String?  @db.Text
-  selectionProcess String?  @db.Text
-  skills           String   @default("[]") // JSON string of skills
-  
+  id             String  @id @default(uuid())
+  title          String
+  slug           String  @unique
+  companyId      String
+  categoryId     String?
+  locationId     String?
+  salary         String?
+  experience     String?
+  employmentType String? // Full Time, Part Time, Internship
+  department     String?
+  workMode       String? // Remote, Hybrid, Onsite
+  openPositions  Int     @default(1)
+
+  description      String  @db.Text
+  requirements     String? @db.Text
+  responsibilities String? @db.Text
+  benefits         String? @db.Text
+  selectionProcess String? @db.Text
+  skills           String  @default("[]") // JSON string of skills
+
   applyLink        String?
   applicationEmail String?
   applyBefore      DateTime?
-  
-  thumbnailUrl     String?
-  bannerUrl        String?
-  galleryUrls      String   @default("[]") // JSON string of urls
-  
-  views            Int      @default(0)
-  isFeatured       Boolean  @default(false)
-  isTrending       Boolean  @default(false)
-  isUrgent         Boolean  @default(false)
-  status           String   @default("PUBLISHED") // DRAFT, PUBLISHED, EXPIRED
-  
-  seoTitle         String?
-  seoDescription   String?
-  seoKeywords      String?
-  
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  publishedAt      DateTime?
 
-  company          Company      @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  category         JobCategory? @relation(fields: [categoryId], references: [id])
-  location         JobLocation? @relation(fields: [locationId], references: [id])
-  
-  applications     JobApplication[]
-  comments         JobComment[]
-  bookmarks        JobBookmark[]
+  thumbnailUrl String?
+  bannerUrl    String?
+  galleryUrls  String  @default("[]") // JSON string of urls
+
+  views      Int     @default(0)
+  isFeatured Boolean @default(false)
+  isTrending Boolean @default(false)
+  isUrgent   Boolean @default(false)
+  status     String  @default("PUBLISHED") // DRAFT, PUBLISHED, EXPIRED
+
+  seoTitle       String?
+  seoDescription String?
+  seoKeywords    String?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  publishedAt DateTime?
+
+  company  Company      @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  category JobCategory? @relation(fields: [categoryId], references: [id])
+  location JobLocation? @relation(fields: [locationId], references: [id])
+
+  applications JobApplication[]
+  comments     JobComment[]
+  bookmarks    JobBookmark[]
 
   @@index([slug])
   @@index([companyId])
@@ -838,19 +869,19 @@ model Job {
 }
 
 model JobApplication {
-  id            String   @id @default(uuid())
-  jobId         String
-  userId        String
-  resumeUrl     String?
-  coverLetter   String?  @db.Text
-  aiScore       Float?
-  aiFeedback    String?  @db.Text
-  status        String   @default("APPLIED") // APPLIED, REVIEWING, SHORTLISTED, REJECTED, HIRED
-  appliedAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id          String   @id @default(uuid())
+  jobId       String
+  userId      String
+  resumeUrl   String?
+  coverLetter String?  @db.Text
+  aiScore     Float?
+  aiFeedback  String?  @db.Text
+  status      String   @default("APPLIED") // APPLIED, REVIEWING, SHORTLISTED, REJECTED, HIRED
+  appliedAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  job           Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  user          User     @relation("JobApplications", fields: [userId], references: [id], onDelete: Cascade)
+  job  Job  @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  user User @relation("JobApplications", fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, jobId])
   @@index([jobId])
@@ -867,10 +898,10 @@ model JobComment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  job       Job          @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  user      User         @relation("JobComments", fields: [userId], references: [id], onDelete: Cascade)
-  parent    JobComment?  @relation("JobCommentReplies", fields: [parentId], references: [id])
-  replies   JobComment[] @relation("JobCommentReplies")
+  job     Job          @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  user    User         @relation("JobComments", fields: [userId], references: [id], onDelete: Cascade)
+  parent  JobComment?  @relation("JobCommentReplies", fields: [parentId], references: [id])
+  replies JobComment[] @relation("JobCommentReplies")
 
   @@index([jobId])
 }
@@ -881,9 +912,15 @@ model JobBookmark {
   jobId     String
   createdAt DateTime @default(now())
 
-  user      User     @relation("JobBookmarks", fields: [userId], references: [id], onDelete: Cascade)
-  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  user User @relation("JobBookmarks", fields: [userId], references: [id], onDelete: Cascade)
+  job  Job  @relation(fields: [jobId], references: [id], onDelete: Cascade)
 
   @@unique([userId, jobId])
   @@index([userId])
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
 }

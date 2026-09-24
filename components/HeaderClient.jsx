@@ -43,7 +43,8 @@ import {
   Menu,
   X,
   ArrowRight,
-  ChevronRight
+  ChevronRight,
+  Search
 } from "lucide-react";
 
 import AuthButtons from "./AuthButtons";
@@ -118,6 +119,7 @@ export default function HeaderClient({ user, streakData }) {
       label: "Programs",
       description: "Explore industry-focused learning programs.",
       gridCards: [
+        { title: "Build2Earn (3-Month Program)", desc: "Practical 3-Month Career Program for 1st & 2nd Year Students.", href: "/build2earn", icon: Trophy },
         { title: "Artificial Intelligence & ML", desc: "Master AI algorithms, deep learning, and neural networks.", href: "/internship/aiml", icon: Brain },
         { title: "Data Science", desc: "Learn statistics, data visualization, and predictive modeling.", href: "/internship/datascience", icon: BarChart3 },
         { title: "Web Development", desc: "Build responsive, high-performance web applications.", href: "/internship/webdevelopment", icon: Code2 },
@@ -128,11 +130,11 @@ export default function HeaderClient({ user, streakData }) {
         { title: "Digital Marketing", desc: "Grow brands and reach audiences through digital channels.", href: "/internship/seo", icon: Megaphone }
       ],
       featured: {
-        badge: "PROGRAMS",
-        title: "CAREER-FOCUSED LEARNING",
-        desc: "Build industry-ready skills with practical learning.",
-        btnText: "Explore Programs",
-        href: "/skill-development-programs"
+        badge: "NEW FLAGSHIP",
+        title: "BUILD2EARN PROGRAM",
+        desc: "Learn. Build. Showcase. Earn. 3-Month practical program for 1st & 2nd year students.",
+        btnText: "Explore Build2Earn",
+        href: "/build2earn"
       }
     },
     training: {
@@ -230,7 +232,7 @@ export default function HeaderClient({ user, streakData }) {
       }`}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="max-w-7xl mx-auto px-4 lg:px-6 h-24 md:h-28 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 lg:px-6 h-16 md:h-20 flex items-center justify-between">
         {/* Left: Logo */}
         <Link href="/" onClick={clearMenu} className="flex items-center gap-2 group shrink-0">
           <div className="flex items-center justify-center transition-transform duration-300 group-hover:scale-102 origin-left">
@@ -239,7 +241,7 @@ export default function HeaderClient({ user, streakData }) {
               alt="TechieHelp Logo"
               width={520}
               height={150}
-              className="h-20 sm:h-24 md:h-28 w-auto object-contain drop-shadow-sm"
+              className="h-12 sm:h-14 md:h-16 w-auto object-contain drop-shadow-sm"
               priority
             />
           </div>
@@ -269,7 +271,16 @@ export default function HeaderClient({ user, streakData }) {
         </nav>
 
         {/* Right Actions */}
-        <div className="hidden lg:flex items-center gap-4 xl:gap-5">
+        <div className="hidden lg:flex items-center gap-3.5 xl:gap-4">
+          {/* Search Button */}
+          <button
+            aria-label="Search"
+            suppressHydrationWarning
+            className="p-2.5 rounded-full text-slate-600 hover:text-blue-600 hover:bg-slate-100 transition-colors"
+          >
+            <Search className="w-5 h-5 stroke-[2]" />
+          </button>
+
           {user && (
             <>
               {/* Streak Counter */}
@@ -298,7 +309,7 @@ export default function HeaderClient({ user, streakData }) {
           {/* Get Started (Non-Logged in CTA) */}
           {!user && (
             <Link href="/sign-up" onClick={clearMenu}>
-              <button suppressHydrationWarning className="text-xs xl:text-sm font-bold px-5 py-2.5 rounded-full bg-[#0F4CBA] hover:bg-blue-700 text-white hover:text-white dark:hover:bg-blue-600 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all">
+              <button suppressHydrationWarning className="text-xs xl:text-sm font-bold px-6 py-2.5 rounded-full bg-[#1D4ED8] hover:bg-blue-700 text-white shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all">
                 Get Started
               </button>
             </Link>

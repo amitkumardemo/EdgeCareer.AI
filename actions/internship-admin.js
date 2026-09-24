@@ -54,6 +54,35 @@ export async function createBatch(data) {
       status: "UPCOMING",
     },
   });
+
+  // Auto Project Assignment (Phase 6)
+  // Fetch templates for the program
+  const templates = await prisma.programTaskTemplate.findMany({
+    where: { programId: data.programId }
+  });
+
+  if (templates.length > 0) {
+    // Clone templates as concrete tasks for this batch
+    const startDate = new Date(data.startDate);
+    const tasksToCreate = templates.map(t => {
+      // Calculate due date based on week number
+      const dueDate = new Date(startDate);
+      dueDate.setDate(dueDate.getDate() + (t.weekNumber * 7));
+      return {
+        batchId: batch.id,
+        title: t.title,
+        description: t.description,
+        maxScore: t.maxScore,
+        resources: t.resources,
+        dueDate: dueDate
+      };
+    });
+
+    await prisma.internshipTask.createMany({
+      data: tasksToCreate
+    });
+  }
+
   revalidatePath("/internship/admin/batches");
   return batch;
 }

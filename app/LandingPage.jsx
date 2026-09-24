@@ -62,6 +62,7 @@ const AnimatedCounter = ({ value, text }) => {
   );
 };
 export default function Home({ latestJobs = [] }) {
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
 
@@ -82,84 +83,220 @@ export default function Home({ latestJobs = [] }) {
         </div>
 
         <div className="relative z-10 pt-20">
-          
-          {/* 1. HERO SECTION */}
-          <section className="relative pt-20 pb-20 md:pt-32 md:pb-24 px-4 md:px-6 max-w-7xl mx-auto">
-            <div className="flex flex-col lg:flex-row gap-16 items-center">
-              
-              {/* Left Side */}
-              <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="max-w-2xl lg:w-1/2 z-10">
-                <div className="flex items-center space-x-2">
-                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                  <span className="text-sm font-semibold text-slate-700">Admissions Open 2026</span>
-                  <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all" />
-</div>
 
-                <motion.h1 variants={fadeIn} className="text-5xl md:text-[72px] font-extrabold tracking-tight mb-6 leading-[1.1] text-blue-950">
-                  Build Skills. <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-950 via-blue-800 to-amber-500">Gain Experience.</span><br />
-                  Launch Career.
+          {/* 1. HERO SECTION (Exact Replica of Reference Design) */}
+          <section className="relative pt-8 md:pt-16 pb-12 md:pb-20 px-4 md:px-6 max-w-[1400px] mx-auto overflow-hidden">
+            <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+
+              {/* Left Side Column */}
+              <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="lg:col-span-6 z-10 space-y-6">
+
+                {/* Admissions Pill Badge */}
+                <motion.div variants={fadeIn} className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#E0F2FE]/80 border border-sky-200/80 shadow-sm">
+                  <span className="text-base">🚀</span>
+                  <span className="text-xs sm:text-sm font-bold text-[#0369A1]">Admissions Open 2026</span>
+                  <span className="text-sky-300">|</span>
+                  <span className="text-xs sm:text-sm font-semibold text-[#0284C7]">Industry-Ready Programs</span>
+                </motion.div>
+
+                {/* Main Hero Headline */}
+                <motion.h1 variants={fadeIn} className="text-4xl sm:text-6xl lg:text-[68px] xl:text-[76px] font-black tracking-tight leading-[1.08] text-[#0B192C]">
+                  From Classroom <br />
+                  to <span className="inline-flex items-center tracking-tight">
+                    <span className="text-[#1D4ED8]">C</span>
+                    <span className="text-[#F97316]">a</span>
+                    <span className="text-[#F59E0B]">r</span>
+                    <span className="text-[#EAB308]">e</span>
+                    <span className="text-[#F97316]">e</span>
+                    <span className="text-[#EF4444]">r</span>
+                    <span className="text-slate-400">.</span>
+                  </span>
                 </motion.h1>
 
-                <motion.p variants={fadeIn} className="text-xl text-slate-600 mb-8 leading-relaxed max-w-xl">
-                  Industry-focused Training, Real-World Internships, Professional Certifications, and Career Development Programs designed for the next generation of tech professionals.
+                {/* Tagline Headline */}
+                <motion.h2 variants={fadeIn} className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#0B192C] tracking-tight">
+                  Learn. Build. Intern. Get Industry Ready.
+                </motion.h2>
+
+                {/* Description */}
+                <motion.p variants={fadeIn} className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl font-normal">
+                  TechieHelp Institute of AI helps students turn academic knowledge into real-world skills through industry-led training, live projects, internships, mentorship and career preparation.
                 </motion.p>
 
-                <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-4 mb-10">
-                  <Link href="/jobs" className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-amber-500 text-white font-bold hover:bg-amber-600 transition-all shadow-xl hover:shadow-amber-500/30 hover:-translate-y-1 text-lg group">
-                    Explore Jobs
+                {/* Action Buttons */}
+                <motion.div variants={fadeIn} className="flex flex-wrap items-center gap-4 pt-2">
+                  <Link
+                    href="/skill-development-programs"
+                    className="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-[#1D4ED8] hover:bg-[#1E40AF] text-white font-bold text-base shadow-lg shadow-blue-500/25 transition-all hover:scale-[1.02] active:scale-95 group"
+                  >
+                    Explore Programs
                     <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                   </Link>
-                  <Link href="/internship" className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-white text-blue-950 font-semibold border-2 border-slate-200 hover:border-blue-950 hover:bg-slate-50 transition-all shadow-sm hover:shadow-md hover:-translate-y-1 text-lg group">
-                    Apply for Internship
+
+                  <Link
+                    href="/internship"
+                    className="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-white hover:bg-slate-50 text-[#0B192C] font-bold border-2 border-slate-200 hover:border-slate-800 transition-all text-base shadow-sm hover:scale-[1.02] active:scale-95"
+                  >
+                    Start Your Career Journey
                   </Link>
+
+                  <button
+                    onClick={() => setVideoModalOpen(true)}
+                    className="inline-flex items-center gap-3 px-3 py-2 text-slate-800 hover:text-blue-700 font-semibold transition-all group"
+                  >
+                    <div className="w-11 h-11 rounded-full bg-[#1D4ED8] text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                      <Play className="w-5 h-5 fill-white ml-0.5" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-sm font-bold text-[#0B192C] group-hover:text-blue-700">Watch Video</div>
+                      <div className="text-xs text-slate-500 font-medium">(1 min)</div>
+                    </div>
+                  </button>
                 </motion.div>
 
-                {/* Hero Stats */}
-                <motion.div variants={fadeIn} className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-6 border-t border-slate-200">
-                  <div>
-                    <div className="text-2xl font-bold text-slate-900">5000+</div>
-                    <div className="text-sm font-medium text-slate-500">Students</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-slate-900">100+</div>
-                    <div className="text-sm font-medium text-slate-500">Projects</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-slate-900">200+</div>
-                    <div className="text-sm font-medium text-slate-500">Institutions</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-slate-900 text-indigo-600">95%</div>
-                    <div className="text-sm font-medium text-slate-500">Completion</div>
-                  </div>
-                </motion.div>
               </motion.div>
 
-              {/* Right Side: Cover Image Visual */}
-              <motion.div 
-                initial={{ opacity: 0, x: 50 }} 
-                animate={{ opacity: 1, x: 0 }} 
-                transition={{ duration: 1, delay: 0.2 }} 
-                className="relative lg:w-1/2 w-full mt-12 lg:mt-0"
+              {/* Right Side Visual Column (Ultra-HD Replica Visual) */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, delay: 0.1 }}
+                className="lg:col-span-6 relative mt-8 lg:mt-0 flex justify-center items-center"
               >
-                {/* Backdrop glows */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-blue-100 via-white to-amber-100 blur-3xl -z-10 rounded-full" />
-                
-                {/* Premium Image Container */}
-                <div className="relative aspect-[4/3] w-full rounded-3xl overflow-hidden border-[8px] border-white bg-white shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] ring-1 ring-slate-200">
-                  <Image 
-                    src="/coveri.png" 
-                    alt="Cover Image" 
-                    fill 
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    priority 
-                    className="object-cover hover:scale-105 transition-transform duration-700" 
-                  />
+                {/* Backdrop Glow & Ambient Lighting */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-blue-400/20 via-sky-300/10 to-amber-300/20 rounded-[3rem] blur-2xl -z-10 transform scale-105" />
+
+                {/* Main HD Visual Container */}
+                <div className="relative w-full max-w-[650px] rounded-3xl overflow-hidden bg-white/80 backdrop-blur-sm border-4 border-white shadow-[0_25px_60px_-15px_rgba(29,78,216,0.15)] ring-1 ring-slate-200/80 group">
+
+                  {/* HD Image Visual */}
+                  <div className="relative w-full aspect-[1.75/1] overflow-hidden rounded-2xl">
+                    <Image
+                      src="/hero-visual-hd.png"
+                      alt="TechieHelp Institute of AI Hero Visual"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      priority
+                      className="object-cover object-center transform group-hover:scale-[1.015] transition-transform duration-700 ease-out filter contrast-[1.04] brightness-[1.02]"
+                    />
+                  </div>
+
+                  {/* Floating Micro-Badges for Premium Touch */}
+                  <motion.div
+                    animate={{ y: [0, -6, 0] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute top-4 left-4 z-20 hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-slate-100 shadow-md text-xs font-bold text-slate-800"
+                  >
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>Real-World Training</span>
+                  </motion.div>
+
+                  <motion.div
+                    animate={{ y: [0, 6, 0] }}
+                    transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                    className="absolute bottom-4 right-4 z-20 hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-slate-100 shadow-md text-xs font-bold text-[#1D4ED8]"
+                  >
+                    <Sparkles className="w-4 h-4 text-amber-500" />
+                    <span>AI-Powered Platform</span>
+                  </motion.div>
+
                 </div>
               </motion.div>
 
             </div>
+
+            {/* 2. HORIZONTAL FEATURE STRIP (5 Pillars Container) */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="mt-16 md:mt-24 rounded-3xl bg-slate-50/90 border border-slate-200/80 p-6 md:p-8 shadow-sm backdrop-blur-sm"
+            >
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-6 divide-y md:divide-y-0 md:divide-x divide-slate-200/60">
+                {[
+                  { icon: GraduationCap, title: "Industry Mentors", desc: "Learn from Experts", color: "text-blue-600 bg-blue-100/60" },
+                  { icon: FileText, title: "Live Projects", desc: "Build Real Products", color: "text-indigo-600 bg-indigo-100/60" },
+                  { icon: Users, title: "Internships", desc: "Gain Experience", color: "text-[#0284C7] bg-sky-100/60" },
+                  { icon: BarChart3, title: "Career Preparation", desc: "Mock Interviews & Resume", color: "text-amber-600 bg-amber-100/60" },
+                  { icon: Building, title: "College Partnerships", desc: "Training & Placement Support", color: "text-blue-800 bg-blue-100/80" }
+                ].map((item, idx) => (
+                  <div key={idx} className={`flex items-center gap-3.5 ${idx !== 0 ? 'pt-4 md:pt-0 md:pl-6' : ''}`}>
+                    <div className={`w-12 h-12 rounded-2xl ${item.color} flex items-center justify-center shrink-0 shadow-sm`}>
+                      <item.icon className="w-6 h-6 stroke-[1.8]" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-sm text-[#0B192C] leading-snug">{item.title}</h4>
+                      <p className="text-xs text-slate-500 font-medium">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* 3. TRUSTED BY LOGOS BAR */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="mt-12 flex flex-col md:flex-row items-center justify-between gap-6 pt-6 border-t border-slate-200/60"
+            >
+              <div className="text-xs sm:text-sm font-semibold text-slate-500 shrink-0 text-center md:text-left">
+                Trusted by Students, Colleges and Industry Professionals
+              </div>
+
+              {/* Logos row */}
+              <div className="flex flex-wrap items-center justify-center md:justify-end gap-6 sm:gap-8 opacity-85 grayscale hover:grayscale-0 transition-all duration-300">
+                <span className="font-bold text-lg text-slate-700 tracking-tight flex items-center gap-1.5">
+                  <span className="grid grid-cols-2 gap-0.5 w-4 h-4">
+                    <span className="bg-[#F25022] w-1.5 h-1.5" />
+                    <span className="bg-[#7FBA00] w-1.5 h-1.5" />
+                    <span className="bg-[#00A4EF] w-1.5 h-1.5" />
+                    <span className="bg-[#FFB900] w-1.5 h-1.5" />
+                  </span>
+                  Microsoft
+                </span>
+
+                <span className="font-bold text-lg tracking-tight">
+                  <span className="text-[#4285F4]">G</span>
+                  <span className="text-[#EA4335]">o</span>
+                  <span className="text-[#FBBC05]">o</span>
+                  <span className="text-[#4285F4]">g</span>
+                  <span className="text-[#34A853]">l</span>
+                  <span className="text-[#EA4335]">e</span>
+                </span>
+
+                <span className="font-bold text-base text-slate-800 tracking-tighter">
+                  aws
+                </span>
+
+                <span className="font-bold text-base text-slate-900 flex items-center gap-1">
+                  <Github className="w-5 h-5 fill-slate-900" /> GitHub
+                </span>
+
+                <span className="font-bold text-base text-[#0A66C2] flex items-center gap-1">
+                  <Linkedin className="w-5 h-5 fill-[#0A66C2]" /> LinkedIn
+                </span>
+
+                <span className="font-extrabold text-base text-[#76B900] tracking-wide">
+                  NVIDIA
+                </span>
+
+                <span className="font-black text-lg text-[#052FAD] tracking-widest">
+                  IBM
+                </span>
+
+                <span className="font-bold text-base text-[#007CC3]">
+                  Infosys
+                </span>
+
+                <span className="text-xs font-semibold text-slate-400">
+                  and more...
+                </span>
+              </div>
+            </motion.div>
+
           </section>
 
 
@@ -265,63 +402,64 @@ export default function Home({ latestJobs = [] }) {
                   let skillsList = [];
                   try {
                     skillsList = JSON.parse(job.skills || "[]").slice(0, 3);
-                  } catch(e) {}
-                  
+                  } catch (e) { }
+
                   return (
-                  <motion.div key={job.id} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="group bg-white border border-slate-200 rounded-2xl p-5 hover:shadow-xl hover:-translate-y-1 transition-all relative overflow-hidden flex flex-col h-full">
-                    
-                    {/* Top Row: Logo & Tag */}
-                    <div className="flex justify-between items-start mb-4">
-                      <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center overflow-hidden shrink-0">
-                        {job.company?.logoUrl ? (
-                          <img src={job.company.logoUrl} alt={job.company.name} className="w-full h-full object-contain p-2" />
-                        ) : (
-                          <Briefcase className="w-6 h-6 text-slate-400" />
-                        )}
-                      </div>
-                      <span className="text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-slate-100 text-slate-600">
-                        {job.employmentType || "JOBS"}
-                      </span>
-                    </div>
+                    <motion.div key={job.id} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="group bg-white border border-slate-200 rounded-2xl p-5 hover:shadow-xl hover:-translate-y-1 transition-all relative overflow-hidden flex flex-col h-full">
 
-                    {/* Title & Company */}
-                    <h3 className="text-lg font-bold text-slate-900 mb-1 leading-snug line-clamp-2 min-h-[3rem]">{job.title}</h3>
-                    <p className="text-slate-500 text-sm font-medium mb-4">{job.company?.name || "TechieHelp Partner"}</p>
-
-                    {/* Salary & Location Tags */}
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {job.salary && (
-                        <span className="px-2.5 py-1.5 bg-green-50 text-green-700 text-xs font-semibold rounded-md flex items-center gap-1">
-                          <Banknote className="w-3 h-3" /> {job.salary}
+                      {/* Top Row: Logo & Tag */}
+                      <div className="flex justify-between items-start mb-4">
+                        <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center overflow-hidden shrink-0">
+                          {job.company?.logoUrl ? (
+                            <img src={job.company.logoUrl} alt={job.company.name} className="w-full h-full object-contain p-2" />
+                          ) : (
+                            <Briefcase className="w-6 h-6 text-slate-400" />
+                          )}
+                        </div>
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-slate-100 text-slate-600">
+                          {job.employmentType || "JOBS"}
                         </span>
+                      </div>
+
+                      {/* Title & Company */}
+                      <h3 className="text-lg font-bold text-slate-900 mb-1 leading-snug line-clamp-2 min-h-[3rem]">{job.title}</h3>
+                      <p className="text-slate-500 text-sm font-medium mb-4">{job.company?.name || "TechieHelp Partner"}</p>
+
+                      {/* Salary & Location Tags */}
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {job.salary && (
+                          <span className="px-2.5 py-1.5 bg-green-50 text-green-700 text-xs font-semibold rounded-md flex items-center gap-1">
+                            <Banknote className="w-3 h-3" /> {job.salary}
+                          </span>
+                        )}
+                        <span className="px-2.5 py-1.5 bg-slate-50 text-slate-600 text-xs font-medium rounded-md flex items-center gap-1 border border-slate-100">
+                          {job.location?.name || "Remote"}
+                        </span>
+                      </div>
+
+                      {/* Skills */}
+                      {skillsList.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mb-6">
+                          {skillsList.map((skill, idx) => (
+                            <span key={idx} className="text-xs font-semibold text-slate-500">#{skill}</span>
+                          ))}
+                        </div>
                       )}
-                      <span className="px-2.5 py-1.5 bg-slate-50 text-slate-600 text-xs font-medium rounded-md flex items-center gap-1 border border-slate-100">
-                         {job.location?.name || "Remote"}
-                      </span>
-                    </div>
 
-                    {/* Skills */}
-                    {skillsList.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mb-6">
-                        {skillsList.map((skill, idx) => (
-                          <span key={idx} className="text-xs font-semibold text-slate-500">#{skill}</span>
-                        ))}
+                      {/* Bottom Row: Apply By & Button */}
+                      <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <div className="flex items-center text-[11px] text-slate-500 font-medium">
+                          <Clock className="w-3 h-3 mr-1 shrink-0" />
+                          <span className="truncate max-w-[120px]">Apply by: {job.applyBefore ? new Date(job.applyBefore).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : "Not revealed"}</span>
+                        </div>
+                        <Link href={`/jobs/${job.slug}`} className="text-xs font-bold text-slate-700 bg-white border border-slate-200 px-4 py-1.5 rounded-full hover:bg-slate-50 transition-colors flex items-center shrink-0 group-hover:border-blue-950 group-hover:text-blue-950">
+                          View <ArrowRight className="w-3 h-3 ml-1" />
+                        </Link>
                       </div>
-                    )}
 
-                    {/* Bottom Row: Apply By & Button */}
-                    <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
-                      <div className="flex items-center text-[11px] text-slate-500 font-medium">
-                        <Clock className="w-3 h-3 mr-1 shrink-0" />
-                        <span className="truncate max-w-[120px]">Apply by: {job.applyBefore ? new Date(job.applyBefore).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : "Not revealed"}</span>
-                      </div>
-                      <Link href={`/jobs/${job.slug}`} className="text-xs font-bold text-slate-700 bg-white border border-slate-200 px-4 py-1.5 rounded-full hover:bg-slate-50 transition-colors flex items-center shrink-0 group-hover:border-blue-950 group-hover:text-blue-950">
-                        View <ArrowRight className="w-3 h-3 ml-1" />
-                      </Link>
-                    </div>
-
-                  </motion.div>
-                )})}
+                    </motion.div>
+                  )
+                })}
 
                 {/* 4th Card: Explore Jobs */}
                 <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="group bg-blue-950 rounded-3xl p-6 hover:shadow-xl hover:-translate-y-2 transition-all relative overflow-hidden flex flex-col h-full items-center justify-center text-center cursor-pointer">
@@ -502,10 +640,10 @@ export default function Home({ latestJobs = [] }) {
 
               {/* Two-Column Layout */}
               <div className="grid lg:grid-cols-12 gap-16 lg:gap-24 items-start">
-                
+
                 {/* LEFT SIDE: IMAGE & FLOATING CARDS */}
                 <div className="lg:col-span-5 relative flex flex-col items-center">
-                  
+
                   {/* Founder Image Card Container */}
                   <div className="relative w-full max-w-[320px] aspect-[4/5] rounded-[2.5rem] bg-white border-[10px] border-white shadow-[0_24px_60px_rgba(15,76,186,0.12)] hover:shadow-[0_32px_72px_rgba(15,76,186,0.18)] transition-all duration-500 ease-out hover:scale-[1.02] ring-1 ring-slate-100/50 overflow-hidden z-10 group">
                     <Image
@@ -576,7 +714,7 @@ export default function Home({ latestJobs = [] }) {
 
                 {/* RIGHT SIDE: TEXT DETAILS */}
                 <div className="lg:col-span-7 space-y-8 text-left">
-                  
+
                   {/* Name & Title */}
                   <div className="space-y-2">
                     <div className="flex items-center gap-3">
@@ -638,7 +776,7 @@ export default function Home({ latestJobs = [] }) {
 
               {/* Row 2: Highlights & Contact Info aligned horizontally */}
               <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start mt-16 pt-12 border-t border-slate-100">
-                
+
                 {/* Left side (under photo): Key Highlights (4-4 paired in 2 columns) */}
                 <div className="lg:col-span-7 space-y-4">
                   <h4 className="text-sm font-extrabold text-blue-950 uppercase tracking-widest border-b border-slate-100 pb-2">Key Highlights</h4>
@@ -826,6 +964,43 @@ export default function Home({ latestJobs = [] }) {
               </motion.div>
             </div>
           </section>
+
+          {/* Video Modal Overlay */}
+          <AnimatePresence>
+            {videoModalOpen && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+                onClick={() => setVideoModalOpen(false)}
+              >
+                <motion.div
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.9, opacity: 0 }}
+                  className="relative w-full max-w-4xl bg-black rounded-3xl overflow-hidden shadow-2xl border border-slate-800"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    onClick={() => setVideoModalOpen(false)}
+                    className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/20 hover:bg-white/40 backdrop-blur-md text-white flex items-center justify-center transition-colors"
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
+
+                  <div className="relative aspect-video w-full">
+                    <video
+                      src="/intro.mp4"
+                      controls
+                      autoPlay
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
         </div>
       </div>
