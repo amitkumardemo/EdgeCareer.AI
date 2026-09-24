@@ -5,9 +5,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   outputFileTracingRoot: __dirname,
   // Fix: firebase-admin uses ESM-only deps (jose, jwks-rsa) that cannot be
   // bundled with webpack/turbopack. Mark them as external so Node.js handles
