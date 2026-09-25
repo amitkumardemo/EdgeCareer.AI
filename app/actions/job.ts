@@ -1,11 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import { jobSchema, JobFormValues } from "@/lib/validations/job";
 import { getFirebaseUser } from "@/lib/auth-utils";
-
-const prisma = new PrismaClient();
 
 // Ensure the user is an admin or recruiter
 const checkAdmin = async () => {

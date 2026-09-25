@@ -8,7 +8,7 @@ import {
   ChevronRight, Code2, FileText, Github, LineChart,
   Sparkles, Target, Trophy, Users, Zap, Building, LayoutDashboard, MonitorPlay, Presentation, XCircle,
   Sun, Moon, Menu, X, GraduationCap, Award, Star, TrendingUp, Cpu, Database, Code, Smartphone, Shield, Cloud, Layout, Megaphone, Video, Terminal, Linkedin, Map, Play,
-  Mail, Phone, ArrowUpRight, HeartHandshake, MapPin, Settings, Clock, Banknote
+  Mail, Phone, ArrowUpRight, HeartHandshake, MapPin, Settings, Clock, Banknote, Bell, Calendar
 } from "lucide-react";
 
 // Animations
@@ -63,8 +63,20 @@ const AnimatedCounter = ({ value, text }) => {
 };
 export default function Home({ latestJobs = [] }) {
   const [videoModalOpen, setVideoModalOpen] = useState(false);
+  const [whyCategory, setWhyCategory] = useState("all");
+  const [activeStep, setActiveStep] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+
+  // Auto-cycle through dashboard steps every 4.5 seconds
+  useEffect(() => {
+    if (isPaused) return;
+    const interval = setInterval(() => {
+      setActiveStep((prev) => (prev + 1) % 6);
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [isPaused]);
 
   // Force light mode
   useEffect(() => {
@@ -82,27 +94,20 @@ export default function Home({ latestJobs = [] }) {
           <div className="absolute inset-0 bg-center opacity-[0.02]" style={{ backgroundImage: 'linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
         </div>
 
-        <div className="relative z-10 pt-20">
+        <div className="relative z-10 pt-20 md:pt-22">
 
           {/* 1. HERO SECTION (Exact Replica of Reference Design) */}
-          <section className="relative pt-8 md:pt-16 pb-12 md:pb-20 px-4 md:px-6 max-w-[1400px] mx-auto overflow-hidden">
-            <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          <section className="relative pt-2 md:pt-4 pb-6 md:pb-10 px-4 md:px-6 max-w-[1400px] mx-auto overflow-hidden">
+            <div className="grid lg:grid-cols-12 gap-6 lg:gap-10 items-center">
 
               {/* Left Side Column */}
-              <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="lg:col-span-6 z-10 space-y-6">
+              <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="lg:col-span-6 z-10 space-y-5">
 
-                {/* Admissions Pill Badge */}
-                <motion.div variants={fadeIn} className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#E0F2FE]/80 border border-sky-200/80 shadow-sm">
-                  <span className="text-base">🚀</span>
-                  <span className="text-xs sm:text-sm font-bold text-[#0369A1]">Admissions Open 2026</span>
-                  <span className="text-sky-300">|</span>
-                  <span className="text-xs sm:text-sm font-semibold text-[#0284C7]">Industry-Ready Programs</span>
-                </motion.div>
 
                 {/* Main Hero Headline */}
-                <motion.h1 variants={fadeIn} className="text-4xl sm:text-6xl lg:text-[68px] xl:text-[76px] font-black tracking-tight leading-[1.08] text-[#0B192C]">
+                <motion.h1 variants={fadeIn} className="text-4xl sm:text-5xl lg:text-[62px] xl:text-[70px] font-black tracking-tight leading-[1.08] text-[#0B192C]">
                   From Classroom <br />
-                  to <span className="inline-flex items-center tracking-tight">
+                  to Dream <span className="inline-flex items-center tracking-tight">
                     <span className="text-[#1D4ED8]">C</span>
                     <span className="text-[#F97316]">a</span>
                     <span className="text-[#F59E0B]">r</span>
@@ -124,7 +129,7 @@ export default function Home({ latestJobs = [] }) {
                 </motion.p>
 
                 {/* Action Buttons */}
-                <motion.div variants={fadeIn} className="flex flex-wrap items-center gap-4 pt-2">
+                <motion.div variants={fadeIn} className="flex flex-wrap items-center gap-4 pt-1">
                   <Link
                     href="/skill-development-programs"
                     className="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-[#1D4ED8] hover:bg-[#1E40AF] text-white font-bold text-base shadow-lg shadow-blue-500/25 transition-all hover:scale-[1.02] active:scale-95 group"
@@ -161,7 +166,7 @@ export default function Home({ latestJobs = [] }) {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8, delay: 0.1 }}
-                className="lg:col-span-6 relative mt-8 lg:mt-0 flex justify-center items-center"
+                className="lg:col-span-6 relative mt-6 lg:mt-0 flex justify-center items-center"
               >
                 {/* Backdrop Glow & Ambient Lighting */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-blue-400/20 via-sky-300/10 to-amber-300/20 rounded-[3rem] blur-2xl -z-10 transform scale-105" />
@@ -207,13 +212,13 @@ export default function Home({ latestJobs = [] }) {
 
             {/* 2. HORIZONTAL FEATURE STRIP (5 Pillars Container) */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="mt-16 md:mt-24 rounded-3xl bg-slate-50/90 border border-slate-200/80 p-6 md:p-8 shadow-sm backdrop-blur-sm"
+              className="mt-6 md:mt-8 rounded-2xl bg-white/90 border border-slate-200/80 p-4 md:p-5 shadow-sm backdrop-blur-md"
             >
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-6 divide-y md:divide-y-0 md:divide-x divide-slate-200/60">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-5 divide-y md:divide-y-0 md:divide-x divide-slate-200/60">
                 {[
                   { icon: GraduationCap, title: "Industry Mentors", desc: "Learn from Experts", color: "text-blue-600 bg-blue-100/60" },
                   { icon: FileText, title: "Live Projects", desc: "Build Real Products", color: "text-indigo-600 bg-indigo-100/60" },
@@ -221,113 +226,489 @@ export default function Home({ latestJobs = [] }) {
                   { icon: BarChart3, title: "Career Preparation", desc: "Mock Interviews & Resume", color: "text-amber-600 bg-amber-100/60" },
                   { icon: Building, title: "College Partnerships", desc: "Training & Placement Support", color: "text-blue-800 bg-blue-100/80" }
                 ].map((item, idx) => (
-                  <div key={idx} className={`flex items-center gap-3.5 ${idx !== 0 ? 'pt-4 md:pt-0 md:pl-6' : ''}`}>
-                    <div className={`w-12 h-12 rounded-2xl ${item.color} flex items-center justify-center shrink-0 shadow-sm`}>
-                      <item.icon className="w-6 h-6 stroke-[1.8]" />
+                  <div key={idx} className={`flex items-center gap-3 ${idx !== 0 ? 'pt-2.5 md:pt-0 md:pl-4' : ''}`}>
+                    <div className={`w-10 h-10 md:w-11 md:h-11 rounded-xl ${item.color} flex items-center justify-center shrink-0 shadow-sm`}>
+                      <item.icon className="w-5 h-5 stroke-[1.8]" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-sm text-[#0B192C] leading-snug">{item.title}</h4>
-                      <p className="text-xs text-slate-500 font-medium">{item.desc}</p>
+                      <h4 className="font-bold text-xs md:text-sm text-[#0B192C] leading-snug">{item.title}</h4>
+                      <p className="text-[11px] md:text-xs text-slate-500 font-medium">{item.desc}</p>
                     </div>
                   </div>
                 ))}
               </div>
             </motion.div>
 
-            {/* 3. TRUSTED BY LOGOS BAR */}
+            {/* 3. TRUSTED BY LOGOS BAR (Infinite Looping Marquee in Full Brand Colors) */}
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="mt-12 flex flex-col md:flex-row items-center justify-between gap-6 pt-6 border-t border-slate-200/60"
+              className="mt-4 md:mt-5 flex flex-col lg:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-200/60 overflow-hidden"
             >
-              <div className="text-xs sm:text-sm font-semibold text-slate-500 shrink-0 text-center md:text-left">
-                Trusted by Students, Colleges and Industry Professionals
+              <div className="text-xs sm:text-sm font-bold text-slate-600 shrink-0 text-center lg:text-left">
+                Trusted by Students, Colleges & Industry Professionals
               </div>
 
-              {/* Logos row */}
-              <div className="flex flex-wrap items-center justify-center md:justify-end gap-6 sm:gap-8 opacity-85 grayscale hover:grayscale-0 transition-all duration-300">
-                <span className="font-bold text-lg text-slate-700 tracking-tight flex items-center gap-1.5">
-                  <span className="grid grid-cols-2 gap-0.5 w-4 h-4">
-                    <span className="bg-[#F25022] w-1.5 h-1.5" />
-                    <span className="bg-[#7FBA00] w-1.5 h-1.5" />
-                    <span className="bg-[#00A4EF] w-1.5 h-1.5" />
-                    <span className="bg-[#FFB900] w-1.5 h-1.5" />
-                  </span>
-                  Microsoft
-                </span>
+              {/* Infinite Scrolling Marquee Container */}
+              <div className="relative w-full lg:max-w-3xl overflow-hidden flex items-center py-1">
+                <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[#F8FAFC] to-transparent z-10 pointer-events-none" />
+                <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#F8FAFC] to-transparent z-10 pointer-events-none" />
 
-                <span className="font-bold text-lg tracking-tight">
-                  <span className="text-[#4285F4]">G</span>
-                  <span className="text-[#EA4335]">o</span>
-                  <span className="text-[#FBBC05]">o</span>
-                  <span className="text-[#4285F4]">g</span>
-                  <span className="text-[#34A853]">l</span>
-                  <span className="text-[#EA4335]">e</span>
-                </span>
-
-                <span className="font-bold text-base text-slate-800 tracking-tighter">
-                  aws
-                </span>
-
-                <span className="font-bold text-base text-slate-900 flex items-center gap-1">
-                  <Github className="w-5 h-5 fill-slate-900" /> GitHub
-                </span>
-
-                <span className="font-bold text-base text-[#0A66C2] flex items-center gap-1">
-                  <Linkedin className="w-5 h-5 fill-[#0A66C2]" /> LinkedIn
-                </span>
-
-                <span className="font-extrabold text-base text-[#76B900] tracking-wide">
-                  NVIDIA
-                </span>
-
-                <span className="font-black text-lg text-[#052FAD] tracking-widest">
-                  IBM
-                </span>
-
-                <span className="font-bold text-base text-[#007CC3]">
-                  Infosys
-                </span>
-
-                <span className="text-xs font-semibold text-slate-400">
-                  and more...
-                </span>
+                <motion.div
+                  className="flex items-center gap-8 md:gap-12 shrink-0 min-w-full"
+                  animate={{ x: ["0%", "-50%"] }}
+                  transition={{ repeat: Infinity, ease: "linear", duration: 18 }}
+                >
+                  {[
+                    <span key="ms1" className="font-bold text-base md:text-lg text-slate-800 tracking-tight flex items-center gap-1.5 shrink-0">
+                      <span className="grid grid-cols-2 gap-0.5 w-3.5 h-3.5">
+                        <span className="bg-[#F25022] w-1.5 h-1.5" />
+                        <span className="bg-[#7FBA00] w-1.5 h-1.5" />
+                        <span className="bg-[#00A4EF] w-1.5 h-1.5" />
+                        <span className="bg-[#FFB900] w-1.5 h-1.5" />
+                      </span>
+                      Microsoft
+                    </span>,
+                    <span key="g1" className="font-bold text-base md:text-lg tracking-tight shrink-0">
+                      <span className="text-[#4285F4]">G</span>
+                      <span className="text-[#EA4335]">o</span>
+                      <span className="text-[#FBBC05]">o</span>
+                      <span className="text-[#4285F4]">g</span>
+                      <span className="text-[#34A853]">l</span>
+                      <span className="text-[#EA4335]">e</span>
+                    </span>,
+                    <span key="aws1" className="font-extrabold text-base md:text-lg text-[#FF9900] tracking-tighter shrink-0">
+                      aws
+                    </span>,
+                    <span key="gh1" className="font-bold text-base md:text-lg text-slate-900 flex items-center gap-1.5 shrink-0">
+                      <Github className="w-4 h-4 md:w-5 md:h-5 fill-slate-900 text-slate-900" /> GitHub
+                    </span>,
+                    <span key="li1" className="font-bold text-base md:text-lg text-[#0A66C2] flex items-center gap-1.5 shrink-0">
+                      <Linkedin className="w-4 h-4 md:w-5 md:h-5 fill-[#0A66C2] text-[#0A66C2]" /> LinkedIn
+                    </span>,
+                    <span key="nv1" className="font-extrabold text-base md:text-lg text-[#76B900] tracking-wide shrink-0">
+                      NVIDIA
+                    </span>,
+                    <span key="ibm1" className="font-black text-lg md:text-xl text-[#052FAD] tracking-widest shrink-0">
+                      IBM
+                    </span>,
+                    <span key="inf1" className="font-bold text-base md:text-lg text-[#007CC3] shrink-0">
+                      Infosys
+                    </span>,
+                    /* Duplicate set for seamless continuous marquee loop */
+                    <span key="ms2" className="font-bold text-base md:text-lg text-slate-800 tracking-tight flex items-center gap-1.5 shrink-0">
+                      <span className="grid grid-cols-2 gap-0.5 w-3.5 h-3.5">
+                        <span className="bg-[#F25022] w-1.5 h-1.5" />
+                        <span className="bg-[#7FBA00] w-1.5 h-1.5" />
+                        <span className="bg-[#00A4EF] w-1.5 h-1.5" />
+                        <span className="bg-[#FFB900] w-1.5 h-1.5" />
+                      </span>
+                      Microsoft
+                    </span>,
+                    <span key="g2" className="font-bold text-base md:text-lg tracking-tight shrink-0">
+                      <span className="text-[#4285F4]">G</span>
+                      <span className="text-[#EA4335]">o</span>
+                      <span className="text-[#FBBC05]">o</span>
+                      <span className="text-[#4285F4]">g</span>
+                      <span className="text-[#34A853]">l</span>
+                      <span className="text-[#EA4335]">e</span>
+                    </span>,
+                    <span key="aws2" className="font-extrabold text-base md:text-lg text-[#FF9900] tracking-tighter shrink-0">
+                      aws
+                    </span>,
+                    <span key="gh2" className="font-bold text-base md:text-lg text-slate-900 flex items-center gap-1.5 shrink-0">
+                      <Github className="w-4 h-4 md:w-5 md:h-5 fill-slate-900 text-slate-900" /> GitHub
+                    </span>,
+                    <span key="li2" className="font-bold text-base md:text-lg text-[#0A66C2] flex items-center gap-1.5 shrink-0">
+                      <Linkedin className="w-4 h-4 md:w-5 md:h-5 fill-[#0A66C2] text-[#0A66C2]" /> LinkedIn
+                    </span>,
+                    <span key="nv2" className="font-extrabold text-base md:text-lg text-[#76B900] tracking-wide shrink-0">
+                      NVIDIA
+                    </span>,
+                    <span key="ibm2" className="font-black text-lg md:text-xl text-[#052FAD] tracking-widest shrink-0">
+                      IBM
+                    </span>,
+                    <span key="inf2" className="font-bold text-base md:text-lg text-[#007CC3] shrink-0">
+                      Infosys
+                    </span>,
+                  ]}
+                </motion.div>
               </div>
             </motion.div>
 
           </section>
 
 
-          {/* 2. WHY STUDENTS CHOOSE TECHIEHELP INSTITUTE OF AI */}
-          <section className="py-24 relative bg-white">
+          {/* 2. WHY STUDENTS CHOOSE TECHIEHELP INSTITUTE OF AI (Trust Factors & Alternating Showcase Layout) */}
+          <section className="py-20 md:py-28 relative bg-gradient-to-b from-slate-50/50 via-white to-slate-50/50 border-y border-slate-200/60 overflow-hidden">
+
+            {/* Ambient Lighting Accents */}
+            <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-blue-400/10 rounded-full blur-[120px] pointer-events-none -z-10" />
+            <div className="absolute bottom-10 right-0 w-[500px] h-[500px] bg-amber-400/10 rounded-full blur-[120px] pointer-events-none -z-10" />
+
             <div className="max-w-7xl mx-auto px-4 md:px-6">
-              <div className="text-center mb-16 max-w-3xl mx-auto">
-                <h2 className="text-3xl md:text-5xl font-bold mb-6 text-slate-900 tracking-tight">Why Students Choose <span className="text-amber-500">TechieHelp Institute of AI</span></h2>
-                <p className="text-lg text-slate-600">We bridge the gap between academic learning and industry expectations with a holistic approach to career development.</p>
+
+              {/* Header Section */}
+              <div className="text-center mb-16 max-w-4xl mx-auto space-y-4">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs md:text-sm font-bold shadow-sm">
+                  <Sparkles className="w-4 h-4 text-amber-500" />
+                  <span>Verified Credentials &amp; Real Industry Exposure</span>
+                </div>
+
+                <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-[#0B192C] tracking-tight leading-tight">
+                  Why 5,000+ Students Choose <br />
+                  <span className="text-[#1D4ED8]">TechieHelp</span> <span className="text-[#F97316]">Institute</span> of AI
+                </h2>
+
+                <p className="text-base md:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+                  From offline classroom training to live AI microservices, national placement drives, and verified certificates — see what makes TechieHelp India's #1 AI Internship Portal.
+                </p>
               </div>
 
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {[
-                  { title: "Industry-Focused Training", icon: LayoutDashboard, desc: "Learn practical skills demanded by top companies.", color: "from-blue-900 to-blue-950", bg: "bg-blue-50" },
-                  { title: "Internship Opportunities", icon: Briefcase, desc: "Work on real projects and gain industry experience.", color: "from-amber-400 to-amber-500", bg: "bg-amber-50" },
-                  { title: "Professional Certifications", icon: Award, desc: "Earn certificates that strengthen your resume.", color: "from-blue-800 to-blue-900", bg: "bg-blue-50/50" },
-                  { title: "Career Support", icon: Users, desc: "Resume building, interview preparation, and guidance.", color: "from-amber-500 to-yellow-600", bg: "bg-amber-50/50" }
-                ].map((item, i) => (
-                  <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="group p-8 rounded-3xl bg-white border border-slate-100 hover:border-slate-200 transition-all shadow-sm hover:shadow-xl hover:-translate-y-1 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br opacity-5 rounded-bl-full -z-10 group-hover:opacity-10 transition-opacity" />
-                    <div className={`w-14 h-14 rounded-2xl ${item.bg} flex items-center justify-center mb-6 shadow-sm`}>
-                      <item.icon className="w-7 h-7 text-blue-950 group-hover:scale-110 transition-transform" />
+              {/* 1. TRUST FACTOR BADGES STRIP (AICTE, MSME, ISO) */}
+              <div className="mb-20">
+                <div className="grid md:grid-cols-3 gap-6">
+                  <div className="bg-white border border-slate-200/90 rounded-3xl p-6 md:p-8 shadow-sm hover:shadow-xl transition-all duration-300 relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-full group-hover:scale-110 transition-transform" />
+                    <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center font-black text-2xl mb-5 border border-blue-100 shadow-sm">
+                      🏛️
                     </div>
-                    <h3 className="text-xl font-bold mb-3 text-slate-900">{item.title}</h3>
-                    <p className="text-slate-600 leading-relaxed">{item.desc}</p>
-                    <div className="mt-6 flex items-center text-sm font-semibold text-amber-500 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
-                      Learn More <ArrowRight className="w-4 h-4 ml-1" />
+                    <span className="text-[11px] font-extrabold uppercase text-blue-600 tracking-wider bg-blue-50 px-3 py-1 rounded-full border border-blue-100 inline-block mb-3">
+                      Govt Recognized Portal
+                    </span>
+                    <h3 className="text-xl font-extrabold text-[#0B192C] mb-2 leading-snug">
+                      Listed on AICTE Internship Portal
+                    </h3>
+                    <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
+                      Officially listed on the Govt of India AICTE portal. Earn academic credits and government-verified internship credentials.
+                    </p>
+                  </div>
+
+                  <div className="bg-white border border-slate-200/90 rounded-3xl p-6 md:p-8 shadow-sm hover:shadow-xl transition-all duration-300 relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-bl-full group-hover:scale-110 transition-transform" />
+                    <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center font-black text-2xl mb-5 border border-amber-100 shadow-sm">
+                      🏢
                     </div>
-                  </motion.div>
-                ))}
+                    <span className="text-[11px] font-extrabold uppercase text-amber-600 tracking-wider bg-amber-50 px-3 py-1 rounded-full border border-amber-100 inline-block mb-3">
+                      Govt Enterprise
+                    </span>
+                    <h3 className="text-xl font-extrabold text-[#0B192C] mb-2 leading-snug">
+                      MSME Govt of India Registered
+                    </h3>
+                    <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
+                      Registered enterprise under the Ministry of Micro, Small and Medium Enterprises for official tech training &amp; development.
+                    </p>
+                  </div>
+
+                  <div className="bg-white border border-slate-200/90 rounded-3xl p-6 md:p-8 shadow-sm hover:shadow-xl transition-all duration-300 relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-bl-full group-hover:scale-110 transition-transform" />
+                    <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-black text-2xl mb-5 border border-emerald-100 shadow-sm">
+                      📜
+                    </div>
+                    <span className="text-[11px] font-extrabold uppercase text-emerald-600 tracking-wider bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100 inline-block mb-3">
+                      Quality Standard
+                    </span>
+                    <h3 className="text-xl font-extrabold text-[#0B192C] mb-2 leading-snug">
+                      ISO 9001:2015 Certified
+                    </h3>
+                    <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
+                      Internationally certified for excellence in AI curriculum delivery, hands-on project mentoring, and student career outcomes.
+                    </p>
+                  </div>
+                </div>
               </div>
+
+              {/* 2. ALTERNATING LEFT-RIGHT COMBINATION SHOWCASE BLOCKS */}
+              <div className="space-y-20">
+
+                {/* BLOCK A: OFFLINE INTERNSHIP PROGRAM */}
+                <div className="grid lg:grid-cols-12 gap-10 items-center bg-white border border-slate-200/80 rounded-[2.5rem] p-6 md:p-10 shadow-lg">
+                  {/* Left: Video Container with AutoPlay Loop */}
+                  <div className="lg:col-span-6 space-y-4">
+                    <div className="relative rounded-3xl overflow-hidden bg-slate-950 aspect-video border-2 border-slate-800 shadow-2xl group">
+                      <video
+                        src="/home.mp4"
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute top-4 left-4 z-10 bg-slate-950/85 backdrop-blur-md border border-white/10 px-3.5 py-1.5 rounded-full text-[11px] font-extrabold text-white flex items-center gap-2 shadow-lg">
+                        <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
+                        OFFLINE CLASSROOM BATCH
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right: Content */}
+                  <div className="lg:col-span-6 space-y-4">
+                    <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold border border-blue-100">
+                      🏢 In-Person Learning Hubs
+                    </div>
+                    <h3 className="text-2xl md:text-4xl font-extrabold text-[#0B192C] leading-tight">
+                      Offline Internship &amp; Classroom Training Programs
+                    </h3>
+                    <p className="text-slate-600 text-sm md:text-base leading-relaxed">
+                      Hands-on offline training with dedicated high-performance AI labs, 1-on-1 mentor guidance, physical hackathons, and real product build sessions.
+                    </p>
+
+                    <div className="space-y-2.5 pt-2">
+                      {[
+                        "Modern Tech Labs with High-Speed Internet & Development Workstations",
+                        "Direct In-Person Mentorship by Senior Software Engineers & AI Architects",
+                        "Peer Networking, Group Project Presentations & Hackathon Competitions",
+                      ].map((feat, i) => (
+                        <div key={i} className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-slate-700">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                          <span>{feat}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* BLOCK B: ONLINE INTERNSHIP & LIVE DASHBOARD PORTAL */}
+                <div className="grid lg:grid-cols-12 gap-10 items-center bg-white border border-slate-200/80 rounded-[2.5rem] p-6 md:p-10 shadow-lg">
+                  {/* Left: Content */}
+                  <div className="lg:col-span-6 space-y-4 order-2 lg:order-1">
+                    <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold border border-indigo-100">
+                      💻 Remote Access Anywhere
+                    </div>
+                    <h3 className="text-2xl md:text-4xl font-extrabold text-[#0B192C] leading-tight">
+                      Online Internship &amp; Live Student Portal Ecosystem
+                    </h3>
+                    <p className="text-slate-600 text-sm md:text-base leading-relaxed">
+                      Learn and build from anywhere in India with 24/7 access to LMS video lectures, GitHub assignment reviews, ATS resume builders, and live mentor sessions.
+                    </p>
+
+                    <div className="space-y-2.5 pt-2">
+                      {[
+                        "Interactive Student Portal with LMS Curriculum & Code Repositories",
+                        "Automated Task Submissions, Mentor Reviews & Skill Scorecard Analytics",
+                        "Instant Verified Digital Credentials, QR Certificates & Official Offer Letters",
+                      ].map((feat, i) => (
+                        <div key={i} className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-slate-700">
+                          <CheckCircle2 className="w-4 h-4 text-indigo-500 shrink-0" />
+                          <span>{feat}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Right: YouTube Embed Container */}
+                  <div className="lg:col-span-6 space-y-4 order-1 lg:order-2">
+                    <div className="relative rounded-3xl overflow-hidden bg-slate-950 aspect-video border-2 border-slate-800 shadow-2xl group">
+                      <iframe
+                        className="w-full h-full object-cover"
+                        src="https://www.youtube.com/embed/ipVC6YsvttM?autoplay=1&loop=1&playlist=ipVC6YsvttM&start=145&mute=1&controls=1&enablejsapi=1"
+                        title="TechieHelp Online Internship &amp; Student Portal Demo"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        allowFullScreen
+                      />
+                      <div className="absolute top-4 left-4 z-10 bg-slate-950/85 backdrop-blur-md border border-white/10 px-3.5 py-1.5 rounded-full text-[11px] font-extrabold text-white flex items-center gap-2 shadow-lg pointer-events-none">
+                        <span className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse" />
+                        LIVE PORTAL DEMO
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* BLOCK C: PLACEMENT RECORDS & SUCCESS STORIES */}
+                <div className="grid lg:grid-cols-12 gap-10 items-center bg-white border border-slate-200/80 rounded-[2.5rem] p-6 md:p-10 shadow-lg">
+                  {/* Left: YouTube Video Container */}
+                  <div className="lg:col-span-6 space-y-4">
+                    <div className="relative rounded-3xl overflow-hidden bg-slate-950 aspect-video border-2 border-slate-800 shadow-2xl group">
+                      <iframe
+                        className="w-full h-full object-cover"
+                        src="https://www.youtube.com/embed/opSP03NPXrU?autoplay=1&loop=1&playlist=opSP03NPXrU&mute=1&controls=1&enablejsapi=1"
+                        title="TechieHelp Placement Records &amp; Student Success Stories"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        allowFullScreen
+                      />
+                      <div className="absolute top-4 left-4 z-10 bg-slate-950/85 backdrop-blur-md border border-white/10 px-3.5 py-1.5 rounded-full text-[11px] font-extrabold text-white flex items-center gap-2 shadow-lg pointer-events-none">
+                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                        STUDENT SUCCESS STORIES
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right: Content */}
+                  <div className="lg:col-span-6 space-y-4">
+                    <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-100">
+                      📈 Proven Career Outcomes
+                    </div>
+                    <h3 className="text-2xl md:text-4xl font-extrabold text-[#0B192C] leading-tight">
+                      Placement Records &amp; Hiring Drives
+                    </h3>
+                    <p className="text-slate-600 text-sm md:text-base leading-relaxed">
+                      Our interns work at top tech companies, MNCs, and high-growth AI startups. Get direct referrals and placement support.
+                    </p>
+
+                    <div className="grid grid-cols-2 gap-4 pt-2">
+                      <div className="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl">
+                        <div className="text-2xl font-black text-[#1D4ED8]">5,000+</div>
+                        <div className="text-xs text-slate-500 font-semibold mt-1">Students Trained &amp; Placed</div>
+                      </div>
+                      <div className="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl">
+                        <div className="text-2xl font-black text-emerald-600">100+</div>
+                        <div className="text-xs text-slate-500 font-semibold mt-1">Industry Hiring Partners</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* BLOCK D: GOODIES, SWAG & WELCOME KITS */}
+                <div className="grid lg:grid-cols-12 gap-10 items-center bg-white border border-slate-200/80 rounded-[2.5rem] p-6 md:p-10 shadow-lg">
+                  {/* Left: Content */}
+                  <div className="lg:col-span-6 space-y-4 order-2 lg:order-1">
+                    <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-50 text-amber-700 text-xs font-bold border border-amber-100">
+                      🎁 Exclusive Rewards
+                    </div>
+                    <h3 className="text-2xl md:text-4xl font-extrabold text-[#0B192C] leading-tight">
+                      Welcome Kits, Goodies &amp; Swag
+                    </h3>
+                    <p className="text-slate-600 text-sm md:text-base leading-relaxed">
+                      Every offline intern and top performer receives custom TechieHelp swag, developer T-shirts, stickers, ID cards, and welcome packages.
+                    </p>
+
+                    <div className="space-y-2.5 pt-2">
+                      {[
+                        "Custom TechieHelp Developer T-Shirts & Branded Hoodies",
+                        "Official Student ID Badges, Laptop Stickers & Developer Diaries",
+                        "Certificate Framed Honors & Excellence Awards for Top Interns",
+                      ].map((feat, i) => (
+                        <div key={i} className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-slate-700">
+                          <CheckCircle2 className="w-4 h-4 text-amber-500 shrink-0" />
+                          <span>{feat}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Right: Combined 2-Grid Image Gallery Container */}
+                  <div className="lg:col-span-6 space-y-3 order-1 lg:order-2">
+                    <div className="grid grid-cols-2 gap-3">
+                      {/* Image 1: Welcome Kit Box */}
+                      <div className="relative rounded-2xl overflow-hidden bg-slate-950 aspect-[4/3] border-2 border-slate-800 shadow-xl group hover:border-amber-500/50 transition-colors">
+                        <img
+                          src="/goodies_box.png"
+                          alt="TechieHelp Welcome Kit &amp; Premium Diary Box"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+                        <div className="absolute bottom-2.5 left-2.5 right-2.5 text-white">
+                          <span className="text-[10px] font-bold text-amber-300 bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 rounded-md backdrop-blur-md inline-block">
+                            📦 Welcome Kit Box
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Image 2: Developer Polo & Hoodies Swag */}
+                      <div className="relative rounded-2xl overflow-hidden bg-slate-950 aspect-[4/3] border-2 border-slate-800 shadow-xl group hover:border-amber-500/50 transition-colors">
+                        <img
+                          src="/swag_apparel.png"
+                          alt="TechieHelp Developer Hoodies &amp; Polo T-Shirts"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+                        <div className="absolute bottom-2.5 left-2.5 right-2.5 text-white">
+                          <span className="text-[10px] font-bold text-blue-300 bg-blue-500/20 border border-blue-500/30 px-2 py-0.5 rounded-md backdrop-blur-md inline-block">
+                            👕 Hoodies &amp; Polos
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-slate-950 border border-white/10 p-3 rounded-2xl flex items-center justify-between text-xs text-slate-300 shadow-inner">
+                      <div className="flex items-center gap-2 font-bold text-white text-[11px] md:text-xs">
+                        <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
+                        <span>Includes: Diary, Pen, Smart Bottle, Hoodies &amp; Polos</span>
+                      </div>
+                      <span className="text-[10px] bg-emerald-500/20 text-emerald-400 font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/30 shrink-0">
+                        100% FREE KIT
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* BLOCK E: TEAM & INDUSTRY MENTORS */}
+                <div className="grid lg:grid-cols-12 gap-10 items-center bg-white border border-slate-200/80 rounded-[2.5rem] p-6 md:p-10 shadow-lg">
+                  {/* Left: Team Image Container */}
+                  <div className="lg:col-span-6 space-y-4">
+                    <div className="relative rounded-3xl overflow-hidden bg-slate-950 aspect-video border-2 border-slate-800 shadow-2xl group hover:border-purple-500/50 transition-colors">
+                      <img
+                        src="/team_mentors.png"
+                        alt="TechieHelp Team &amp; Industry Mentors"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+                      <div className="absolute bottom-4 left-4 right-4 z-10 flex items-center justify-between text-white">
+                        <div>
+                          <div className="font-extrabold text-sm text-slate-100">TechieHelp Core Team &amp; Mentors</div>
+                          <div className="text-[10px] text-purple-300 font-semibold">Officially Certified &amp; Registered AI Mentors</div>
+                        </div>
+                        <span className="bg-purple-500/20 border border-purple-500/40 text-purple-300 text-[10px] font-bold px-2.5 py-1 rounded-full backdrop-blur-md">
+                          👥 Industry Leadership
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right: Content */}
+                  <div className="lg:col-span-6 space-y-4">
+                    <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-purple-50 text-purple-700 text-xs font-bold border border-purple-100">
+                      👥 Expert Leadership
+                    </div>
+                    <h3 className="text-2xl md:text-4xl font-extrabold text-[#0B192C] leading-tight">
+                      Learn from Experts &amp; Dedicated Mentors
+                    </h3>
+                    <p className="text-slate-600 text-sm md:text-base leading-relaxed">
+                      Our founding team and industry instructors bring years of real-world AI, full stack development, and corporate engineering experience to guide your career path.
+                    </p>
+
+                    <div className="space-y-2.5 pt-2">
+                      {[
+                        "1-on-1 Code Reviews & Project Architecture Guidance",
+                        "Weekly Live Q&A Sessions & Interview Preparation",
+                        "Direct Referral & Placement Advocacy by Senior Engineering Leaders",
+                      ].map((feat, i) => (
+                        <div key={i} className="flex items-center gap-2.5 text-xs md:text-sm font-semibold text-slate-700">
+                          <CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0" />
+                          <span>{feat}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Bottom Callout Banner */}
+              <div className="mt-16 p-6 md:p-8 rounded-3xl bg-gradient-to-r from-blue-950 via-slate-900 to-blue-950 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 border border-blue-900/50">
+                <div className="space-y-1 text-center md:text-left">
+                  <h4 className="text-xl md:text-2xl font-bold tracking-tight text-white">
+                    Ready to Start Your Internship Journey?
+                  </h4>
+                  <p className="text-slate-300 text-xs md:text-sm">
+                    Enroll today in Offline or Online AI Internship Programs and transform your career.
+                  </p>
+                </div>
+                <Link
+                  href="/internship"
+                  className="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm shadow-lg transition-all hover:scale-[1.03] active:scale-95 shrink-0"
+                >
+                  Explore Programs
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+              </div>
+
             </div>
           </section>
 

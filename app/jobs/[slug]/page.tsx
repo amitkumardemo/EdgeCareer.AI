@@ -1,11 +1,9 @@
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { MapPin, Briefcase, IndianRupee, Clock, Share2, CheckCircle2, ChevronRight, Bookmark, ArrowRight, CheckCircle, FileText, CheckSquare } from "lucide-react";
 import { Metadata } from "next";
 import ShareJobButton from "@/components/ShareJobButton";
-
-const prisma = new PrismaClient();
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;

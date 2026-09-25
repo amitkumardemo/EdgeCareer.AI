@@ -1,8 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { PlusCircle, MoreVertical, Edit, Trash2, Eye } from "lucide-react";
-
-const prisma = new PrismaClient();
 
 export default async function AdminJobsPage() {
   const jobs = await prisma.job.findMany({

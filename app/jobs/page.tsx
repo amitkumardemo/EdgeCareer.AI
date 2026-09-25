@@ -1,10 +1,8 @@
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import JobCard from "@/components/JobCard";
 import { Briefcase } from "lucide-react";
 import JobsFilterBar from "@/components/JobsFilterBar";
 import Link from "next/link";
-
-const prisma = new PrismaClient();
 
 const CATEGORIES = [
   "All", "Internships", "Jobs", "Hackathons", "Scholarships", 
