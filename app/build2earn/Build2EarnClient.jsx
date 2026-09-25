@@ -411,6 +411,117 @@ export default function Build2EarnClient() {
           </div>
         </section>
 
+        {/* STUDENT ACHIEVEMENTS & CERTIFICATION MOMENTS (Clean White Theme Image Marquee) */}
+        <section id="build2earn-achievements" className="py-12 md:py-16 relative bg-white border-b border-slate-200/80 overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 md:px-6">
+            
+            {/* Clean White Theme Header */}
+            <div className="text-center max-w-3xl mx-auto space-y-3 mb-10">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-[#1D4ED8] text-xs font-bold uppercase tracking-wider">
+                <Trophy className="w-4 h-4 text-amber-500" />
+                <span>Verified Student Success</span>
+              </div>
+
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-[#0B192C]">
+                Student Achievements &amp; <span className="text-[#1D4ED8]">Certification Moments 🏆</span>
+              </h2>
+
+              <p className="text-slate-600 text-sm md:text-base leading-relaxed max-w-2xl mx-auto font-normal">
+                Real students. Real certificates. Real internship outcomes. A glimpse of our interns receiving verified certificates, goodies, and recognition after completing live projects.
+              </p>
+            </div>
+
+            {/* Controls Toggle */}
+            <div className="flex justify-end mb-4">
+              <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
+                <button
+                  onClick={() => setAutoScroll(true)}
+                  className={`px-3.5 py-1 rounded-lg text-xs font-bold transition-all ${autoScroll ? "bg-[#1D4ED8] text-white shadow-sm" : "text-slate-600 hover:text-slate-900"}`}
+                >
+                  Auto Scroll
+                </button>
+                <button
+                  onClick={() => setAutoScroll(false)}
+                  className={`px-3.5 py-1 rounded-lg text-xs font-bold transition-all ${!autoScroll ? "bg-[#1D4ED8] text-white shadow-sm" : "text-slate-600 hover:text-slate-900"}`}
+                >
+                  Manual Scroll
+                </button>
+              </div>
+            </div>
+
+            {/* Running Image Marquee */}
+            <div className={autoScroll ? "overflow-hidden py-2" : "overflow-x-auto py-2"}>
+              <motion.div
+                className="flex gap-4 shrink-0"
+                animate={autoScroll ? { x: ["0%", "-50%"] } : { x: "0%" }}
+                transition={
+                  autoScroll
+                    ? {
+                      x: {
+                        repeat: Infinity,
+                        repeatType: "loop",
+                        duration: 28,
+                        ease: "linear",
+                      },
+                    }
+                    : { duration: 0.3 }
+                }
+                style={{ width: "max-content" }}
+              >
+                {[
+                  "/hero-slides/goodies_kit.jpg",
+                  "/hero-slides/technocrats_certificates.jpg",
+                  "/hero-slides/single_cert_handover.jpg",
+                  "/hero-slides/thumbs_up_team.jpg",
+                  "/hero-slides/hackloop_awards.jpg",
+                  "/hero-slides/principal_trophy.jpg",
+                  "/hero-slides/certificate_handover.jpg",
+                  "/hero-slides/award_ceremony.jpg",
+                  "/hero-slides/team_celebration.jpg",
+                  "/aarshdeep_cert.jpg",
+                  "/nikhil_completion_certificate.png",
+                  "/goodies_box.png",
+                  "/swag_apparel.png"
+                ].map((imgSrc, index) => (
+                  <div key={index} className="w-64 h-48 relative rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-xl hover:scale-105 transition-all duration-300 shrink-0 bg-slate-50 group">
+                    <img
+                      src={imgSrc}
+                      alt={`TechieHelp Student Achievement ${index + 1}`}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                ))}
+
+                {/* Duplicate Loop Set */}
+                {[
+                  "/hero-slides/goodies_kit.jpg",
+                  "/hero-slides/technocrats_certificates.jpg",
+                  "/hero-slides/single_cert_handover.jpg",
+                  "/hero-slides/thumbs_up_team.jpg",
+                  "/hero-slides/hackloop_awards.jpg",
+                  "/hero-slides/principal_trophy.jpg",
+                  "/hero-slides/certificate_handover.jpg",
+                  "/hero-slides/award_ceremony.jpg",
+                  "/hero-slides/team_celebration.jpg",
+                  "/aarshdeep_cert.jpg",
+                  "/nikhil_completion_certificate.png",
+                  "/goodies_box.png",
+                  "/swag_apparel.png"
+                ].map((imgSrc, index) => (
+                  <div key={`dup-${index}`} className="w-64 h-48 relative rounded-2xl overflow-hidden shadow-lg border border-slate-200 hover:shadow-xl hover:scale-105 transition-all duration-300 shrink-0 bg-slate-50 group">
+                    <img
+                      src={imgSrc}
+                      alt={`TechieHelp Student Achievement Duplicate ${index + 1}`}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                ))}
+              </motion.div>
+            </div>
+
+          </div>
+        </section>
+
 
 
 
@@ -557,11 +668,10 @@ export default function Build2EarnClient() {
                     <button
                       key={idx}
                       onClick={() => setGallerySlideIndex(idx)}
-                      className={`relative rounded-xl overflow-hidden transition-all duration-300 group shrink-0 bg-slate-950 ${
-                        idx === gallerySlideIndex
+                      className={`relative rounded-xl overflow-hidden transition-all duration-300 group shrink-0 bg-slate-950 ${idx === gallerySlideIndex
                           ? "ring-2 ring-blue-500 scale-105 opacity-100 shadow-lg shadow-blue-500/20"
                           : "opacity-60 hover:opacity-100 hover:scale-102"
-                      }`}
+                        }`}
                     >
                       <img
                         src={photo.src}
@@ -1036,8 +1146,8 @@ export default function Build2EarnClient() {
                   key={dom.id}
                   onClick={() => setSelectedDomain(dom.id)}
                   className={`cursor-pointer rounded-3xl p-6 border-2 transition-all flex flex-col justify-between ${isSelected
-                      ? "bg-white border-[#1D4ED8] shadow-xl scale-[1.02]"
-                      : "bg-white border-slate-200 hover:border-slate-300"
+                    ? "bg-white border-[#1D4ED8] shadow-xl scale-[1.02]"
+                    : "bg-white border-slate-200 hover:border-slate-300"
                     }`}
                 >
                   <div className="space-y-4">
@@ -1076,8 +1186,8 @@ export default function Build2EarnClient() {
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
                       className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${isSelected
-                          ? "bg-[#1D4ED8] text-white shadow-md hover:bg-blue-700"
-                          : "bg-slate-100 text-slate-800 hover:bg-slate-200"
+                        ? "bg-[#1D4ED8] text-white shadow-md hover:bg-blue-700"
+                        : "bg-slate-100 text-slate-800 hover:bg-slate-200"
                         }`}
                     >
                       <span>Apply for {dom.name}</span>
@@ -1115,8 +1225,8 @@ export default function Build2EarnClient() {
                 onClick={() => setActiveRoadmapTab(tab.month)}
                 suppressHydrationWarning
                 className={`px-5 py-3 rounded-2xl text-left transition-all border ${activeRoadmapTab === tab.month
-                    ? "bg-[#1D4ED8] text-white border-[#1D4ED8] shadow-lg"
-                    : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
+                  ? "bg-[#1D4ED8] text-white border-[#1D4ED8] shadow-lg"
+                  : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
                   }`}
               >
                 <div className="text-xs font-bold opacity-80">Phase 0{tab.month}</div>

@@ -112,7 +112,7 @@ const TrustSection = () => {
             <div className="hidden md:block w-px h-12 bg-gray-100 dark:bg-white/10"></div>
             <div className="flex flex-col items-center">
               <div className="text-3xl font-bold text-orange-400 mb-1">
-                <Counter to={12} prefix="₹" suffix=" LPA" />
+                <Counter to={14} prefix="₹" suffix=" LPA" />
               </div>
               <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Highest Package</p>
             </div>

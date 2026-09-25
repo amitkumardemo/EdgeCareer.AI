@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 850" width="600" height="850">
+  <defs>
+    <linearGradient id="header-line" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1D4ED8"/>
+      <stop offset="50%" stop-color="#F97316"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- Outer Document Canvas -->
+  <rect width="600" height="850" fill="#FFFFFF"/>
+  <rect x="15" y="15" width="570" height="820" fill="none" stroke="#E2E8F0" stroke-width="2" rx="4"/>
+  <rect x="22" y="22" width="556" height="806" fill="none" stroke="#0F172A" stroke-width="8" rx="2"/>
+
+  <!-- Top Decorative Header Strip -->
+  <rect x="30" y="30" width="540" height="5" fill="url(#header-line)"/>
+
+  <!-- Header Row: Logos -->
+  <g transform="translate(45, 45)">
+    <!-- TechieHelp Logo Text/Emblem -->
+    <text x="0" y="30" font-family="'Poppins', sans-serif" font-weight="900" font-size="22" fill="#0B192C">
+      <tspan fill="#1D4ED8">TECHIE</tspan><tspan fill="#F97316">HELP</tspan>
+    </text>
+    <text x="0" y="44" font-family="'Poppins', sans-serif" font-weight="700" font-size="9" fill="#64748B" letter-spacing="1">
+      INSTITUTE OF AI
+    </text>
+
+    <!-- Contact Info (Right) -->
+    <text x="510" y="20" text-anchor="end" font-family="sans-serif" font-size="10" font-weight="600" fill="#334155">TechieHelp Services Pvt Ltd</text>
+    <text x="510" y="34" text-anchor="end" font-family="sans-serif" font-size="9" fill="#64748B">JIET Incubation Center, Jodhpur</text>
+    <text x="510" y="48" text-anchor="end" font-family="sans-serif" font-size="9" fill="#1D4ED8">support@techiehelp.in | +91-7073130165</text>
+  </g>
+
+  <line x1="45" y1="105" x2="555" y2="105" stroke="#CBD5E1" stroke-width="1.5"/>
+
+  <!-- Document Title -->
+  <text x="300" y="140" text-anchor="middle" font-family="'Poppins', sans-serif" font-weight="800" font-size="18" fill="#0F172A" letter-spacing="2">
+    INTERNSHIP OFFER LETTER
+  </text>
+  <line x1="210" y1="148" x2="390" y2="148" stroke="#1D4ED8" stroke-width="2"/>
+
+  <!-- Meta Details Row -->
+  <g transform="translate(45, 175)" font-family="sans-serif" font-size="11" fill="#334155">
+    <text x="0" y="0"><tspan font-weight="700" fill="#0F172A">Ref ID:</tspan> TECHIE/INT/2026/137042</text>
+    <text x="510" y="0" text-anchor="end"><tspan font-weight="700" fill="#0F172A">Date:</tspan> 06 May 2026</text>
+    
+    <text x="0" y="25"><tspan font-weight="700" fill="#0F172A">To,</tspan></text>
+    <text x="0" y="42" font-weight="800" font-size="14" fill="#1D4ED8">NIKHIL KUMAR</text>
+    <text x="0" y="58" font-size="10" fill="#64748B">JIET UNIVERSE, JODHPUR</text>
+
+    <text x="0" y="85" font-weight="700" font-size="12" fill="#0F172A">Subject: Internship Offer – Full Stack Developer Intern</text>
+  </g>
+
+  <!-- Body Text -->
+  <g transform="translate(45, 290)" font-family="sans-serif" font-size="11" fill="#334155" line-height="1.6">
+    <text x="0" y="0">Dear <tspan font-weight="700" fill="#0F172A">NIKHIL KUMAR</tspan>,</text>
+    <text x="0" y="22">We are pleased to offer you an internship position as <tspan font-weight="700" fill="#0F172A">Full Stack Developer Intern</tspan> at</text>
+    <text x="0" y="38">TechieHelp Institute of AI. This program provides real-world development exposure,</text>
+    <text x="0" y="54">structured AI/Web architecture training, and direct project mentorship.</text>
+  </g>
+
+  <!-- Internship Specification Box -->
+  <g transform="translate(45, 375)">
+    <rect x="0" y="0" width="510" height="110" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1" rx="8"/>
+    
+    <g font-family="sans-serif" font-size="11" fill="#1E293B">
+      <text x="20" y="30"><tspan font-weight="700" fill="#64748B">Position:</tspan> Full Stack Developer Intern</text>
+      <text x="270" y="30"><tspan font-weight="700" fill="#64748B">Duration:</tspan> 06th May 2026 to 01st Sept 2026</text>
+      
+      <text x="20" y="60"><tspan font-weight="700" fill="#64748B">Work Mode:</tspan> Remote / Hybrid AI Lab</text>
+      <text x="270" y="60"><tspan font-weight="700" fill="#64748B">Department:</tspan> Technology &amp; AI Systems</text>
+
+      <text x="20" y="90"><tspan font-weight="700" fill="#64748B">Stipend:</tspan> Performance-Based (Up to 14 LPA PPO)</text>
+      <text x="270" y="90"><tspan font-weight="700" fill="#64748B">Reporting HR:</tspan> Er. Ananya Sharma</text>
+    </g>
+  </g>
+
+  <!-- Terms & Benefits Highlights -->
+  <g transform="translate(45, 510)" font-family="sans-serif" font-size="10.5" fill="#334155">
+    <text x="0" y="0" font-weight="700" font-size="11.5" fill="#0F172A">Program Highlights &amp; Terms:</text>
+    <text x="15" y="20">• Hands-on project development replicating live enterprise client requirements.</text>
+    <text x="15" y="38">• Official QR code verified completion certificate &amp; Letter of Recommendation.</text>
+    <text x="15" y="56">• Pre-Placement Offer (PPO) opportunities based on performance evaluations.</text>
+    <text x="0" y="85">We look forward to welcoming you to the TechieHelp Engineering Team.</text>
+  </g>
+
+  <!-- Signatures & Official Badges Footer -->
+  <g transform="translate(45, 640)">
+    <!-- Signature Left -->
+    <g transform="translate(0, 30)">
+      <path d="M10,25 Q30,5 50,20 T90,15 T130,25" fill="none" stroke="#0F172A" stroke-width="2.5"/>
+      <line x1="0" y1="35" x2="160" y2="35" stroke="#64748B" stroke-width="1"/>
+      <text x="0" y="50" font-family="sans-serif" font-weight="800" font-size="12" fill="#0F172A">Amit Kumar</text>
+      <text x="0" y="64" font-family="sans-serif" font-size="10" fill="#64748B">Founder &amp; CEO, TechieHelp</text>
+    </g>
+
+    <!-- Seals & Badges Right -->
+    <g transform="translate(230, 20)">
+      <!-- Official Seal Circle -->
+      <circle cx="40" cy="40" r="32" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="2"/>
+      <circle cx="40" cy="40" r="26" fill="none" stroke="#1D4ED8" stroke-width="1" stroke-dasharray="3 2"/>
+      <text x="40" y="38" text-anchor="middle" font-family="sans-serif" font-weight="900" font-size="8" fill="#1D4ED8">OFFICIAL</text>
+      <text x="40" y="48" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="7" fill="#F97316">SEAL</text>
+
+      <!-- MSME Badge -->
+      <rect x="95" y="15" width="55" height="50" rx="6" fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.5"/>
+      <text x="122.5" y="38" text-anchor="middle" font-family="sans-serif" font-weight="900" font-size="9" fill="#B45309">MSME</text>
+      <text x="122.5" y="52" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="7" fill="#78350F">GOVT RECOG</text>
+
+      <!-- ISO Badge -->
+      <circle cx="205" cy="40" r="26" fill="#F0FDF4" stroke="#16A34A" stroke-width="2"/>
+      <text x="205" y="37" text-anchor="middle" font-family="sans-serif" font-weight="900" font-size="8" fill="#15803D">ISO</text>
+      <text x="205" y="47" text-anchor="middle" font-family="sans-serif" font-size="6.5" font-weight="700" fill="#166534">9001:2015</text>
+    </g>
+  </g>
+
+  <!-- Bottom Page Footer -->
+  <line x1="45" y1="790" x2="555" y2="790" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="300" y="812" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="700" fill="#64748B">
+    TechieHelp Institute of AI | AI &amp; IT Services | Internship &amp; Placement Support
+  </text>
+</svg>
