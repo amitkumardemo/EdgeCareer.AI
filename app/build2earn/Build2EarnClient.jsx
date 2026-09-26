@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -42,7 +42,11 @@ import {
   AlertCircle,
   Play,
   CheckSquare,
-  QrCode
+  QrCode,
+  Gift,
+  GitPullRequest,
+  Compass,
+  FileCode
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -74,38 +78,37 @@ import {
 } from "@/components/assets";
 
 export default function Build2EarnClient() {
-  const [selectedDomain, setSelectedDomain] = useState("web-dev");
+  const [selectedDomain, setSelectedDomain] = useState("frontend");
   const [activeFaqIndex, setActiveFaqIndex] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalDomain, setModalDomain] = useState("Web Development");
-  const [activeHeroTab, setActiveHeroTab] = useState("linkedin");
+  const [modalDomain, setModalDomain] = useState("Frontend Development");
   const [activeRoadmapTab, setActiveRoadmapTab] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [autoScroll, setAutoScroll] = useState(true);
 
-  // Campus Photos Gallery Slide Bar State (Manual Navigation Only)
+  // Campus Photos Gallery Slide Bar State
   const [gallerySlideIndex, setGallerySlideIndex] = useState(0);
 
   const campusPhotos = [
-    { src: "/hero-slides/goodies_kit.jpg", title: "Official TechieHelp T-Shirts, Hoodies & Welcome Goodies Kit" },
-    { src: "/hero-slides/id_cards_lanyards.jpg", title: "Official TechieHelp Employee & Intern ID Cards & Lanyards" },
-    { src: "/hero-slides/gift_box.jpg", title: "TechieHelp Executive Diary, Pen & Stainless Water Bottle Kit" },
-    { src: "/hero-slides/tshirt_gift.jpg", title: "Student Receiving Official TechieHelp Goodies & Internship Kit" },
-    { src: "/hero-slides/technocrats_certificates.jpg", title: "Technocrats Students Displaying Official TechieHelp Internship Certificates" },
-    { src: "/hero-slides/single_cert_handover.jpg", title: "TechieHelp Official Internship Completion Certificate Awarding" },
-    { src: "/hero-slides/thumbs_up_team.jpg", title: "TechieHelp Student Developers Event & Certificate Celebration" },
-    { src: "/hero-slides/hackloop_awards.jpg", title: "HackLoop Hackathon Winners & Award Ceremony Group Photo" },
-    { src: "/hero-slides/principal_trophy.jpg", title: "TechieHelp Academic Excellence & Trophy Presentation" },
-    { src: "/hero-slides/certificate_handover.jpg", title: "TechieHelp Internship Completion Certificate Awarding" },
-    { src: "/hero-slides/backbone_team.jpg", title: "Backbone of TechieHelp — The Team Behind The Vision" },
-    { src: "/hero-slides/team_steps.jpg", title: "TechieHelp Campus Team & Student Developers" },
-    { src: "/hero-slides/celebration_balloons.jpg", title: "TechieHelp Team Flag & Independence Day Celebration" },
-    { src: "/hero-slides/award_ceremony.jpg", title: "TechieHelp Performance Award & Recognition Ceremony" },
-    { src: "/hero-slides/team_celebration.jpg", title: "TechieHelp Student Developers & Interns Team" },
-    { src: "/hero-slides/slide1.jpg", title: "TechieHelp AI Office Team & MSME Certification" },
-    { src: "/hero-slides/slide2.jpg", title: "Jodhpur Institute of Engineering & Technology Campus" },
-    { src: "/hero-slides/slide3.jpg", title: "Live Mentorship & Project Evaluation Workspace" },
-    { src: "/hero-slides/slide4.jpg", title: "Student Mock Interviews & Placement Support" },
+    { src: "/hero-slides/goodies_kit.jpg", title: "TechieHelp Official Apparel, Welcome Kit & Student Goodies" },
+    { src: "/hero-slides/id_cards_lanyards.jpg", title: "Official TechieHelp Employee & Intern Credentials" },
+    { src: "/hero-slides/gift_box.jpg", title: "TechieHelp Executive Diary, Pen & Stainless Bottle Set" },
+    { src: "/hero-slides/tshirt_gift.jpg", title: "Student Receiving TechieHelp Welcome Kit & Internship Deliverables" },
+    { src: "/hero-slides/technocrats_certificates.jpg", title: "Students Presenting TechieHelp Internship Certificates" },
+    { src: "/hero-slides/single_cert_handover.jpg", title: "Official Internship Completion Certificate Presentation" },
+    { src: "/hero-slides/thumbs_up_team.jpg", title: "Student Developers & Intern Celebration Event" },
+    { src: "/hero-slides/hackloop_awards.jpg", title: "HackLoop Hackathon Winners & Award Ceremony" },
+    { src: "/hero-slides/principal_trophy.jpg", title: "Academic Excellence & Institutional Recognition" },
+    { src: "/hero-slides/certificate_handover.jpg", title: "Internship Certificate Award Ceremony" },
+    { src: "/hero-slides/backbone_team.jpg", title: "TechieHelp Leadership & Development Mentors" },
+    { src: "/hero-slides/team_steps.jpg", title: "Campus Development Team & Student Engineers" },
+    { src: "/hero-slides/celebration_balloons.jpg", title: "TechieHelp Campus Event Celebration" },
+    { src: "/hero-slides/award_ceremony.jpg", title: "Student Performance Recognition Ceremony" },
+    { src: "/hero-slides/team_celebration.jpg", title: "TechieHelp Student Developers Cohort" },
+    { src: "/hero-slides/slide1.jpg", title: "TechieHelp AI Headquarters & Government Accreditation" },
+    { src: "/hero-slides/slide2.jpg", title: "Institutional Campus Training Hub" },
+    { src: "/hero-slides/slide3.jpg", title: "Live Mentor Evaluation & Project Code Reviews" },
+    { src: "/hero-slides/slide4.jpg", title: "Mock Interview & Technical Placement Coaching" },
     { src: "/hero-slides/slide5.jpg", title: "TechieHelp AI Learning Hub & Workspaces" }
   ];
 
@@ -116,7 +119,7 @@ export default function Build2EarnClient() {
     phone: "",
     college: "",
     year: "1st Year",
-    domain: "Web Development",
+    domain: "Frontend Development",
     linkedin: "",
     github: "",
     source: "Social Media / Friend"
@@ -124,7 +127,7 @@ export default function Build2EarnClient() {
 
   const CASHFREE_PAYMENT_URL = "https://payments.cashfree.com/forms/Build2Earn";
 
-  const handleOpenModal = (domainName = "Web Development") => {
+  const handleOpenModal = (domainName = "Frontend Development") => {
     setModalDomain(domainName);
     setFormData((prev) => ({ ...prev, domain: domainName }));
     setIsSubmitted(false);
@@ -138,300 +141,386 @@ export default function Build2EarnClient() {
       return;
     }
     setIsSubmitted(true);
-    toast.success("Application details saved! Redirecting to Cashfree Payment Gateway...");
+    toast.success("Application details saved. Redirecting to Cashfree Payment Gateway...");
     setTimeout(() => {
       window.open(CASHFREE_PAYMENT_URL, "_blank");
     }, 800);
   };
 
+  // 8 INTERNSHIP DOMAINS
   const domainsList = [
     {
-      id: "web-dev",
-      name: "Web Development",
-      icon: Globe,
-      desc: "Build modern responsive web applications with React, Next.js, and API integrations.",
-      project: "Full-Stack Web App + Portfolio Integration",
-      stack: ["HTML5/CSS3", "JavaScript", "React.js", "Tailwind CSS", "Vercel"],
-      roles: ["Frontend Developer", "Web Application Developer"],
+      id: "frontend",
+      name: "Frontend Development",
+      icon: Code2,
+      desc: "Master modern HTML, CSS, JavaScript, React.js, responsive design principles, REST API consumption, Git/GitHub workflows, and production deployment on Vercel.",
+      output: "Build Responsive Web Applications",
+      stack: ["HTML5", "CSS3", "JavaScript", "React.js", "Responsive UI", "REST APIs", "Git/GitHub", "Vercel"],
       color: "from-blue-600 to-cyan-500",
-      accent: "#2563EB"
+      badgeBg: "bg-blue-50 text-blue-700 border-blue-200"
     },
     {
-      id: "aiml",
-      name: "AI & Machine Learning",
-      icon: Cpu,
-      desc: "Develop predictive AI models, clean datasets, and build data-driven intelligent apps.",
-      project: "Predictive AI Model & Interactive Dashboard",
-      stack: ["Python", "Scikit-Learn", "Pandas", "Streamlit", "Jupyter"],
-      roles: ["AI Trainee", "ML Associate"],
-      color: "from-indigo-600 to-purple-500",
-      accent: "#4F46E5"
-    },
-    {
-      id: "genai",
-      name: "Generative AI & AI Agents",
-      icon: Sparkles,
-      desc: "Leverage LLMs, RAG workflows, and build autonomous AI agents using prompt engine architecture.",
-      project: "LLM-Powered Multi-Agent AI Tool",
-      stack: ["LangChain", "OpenAI API", "Python", "Vector DBs", "Streamlit"],
-      roles: ["GenAI Developer", "AI Tooling Specialist"],
-      color: "from-cyan-500 to-[#1D4ED8]",
-      accent: "#06B6D4"
-    },
-    {
-      id: "python",
-      name: "Python Automation & Scripting",
+      id: "backend",
+      name: "Backend Development",
       icon: Terminal,
-      desc: "Master Python programming to automate workflows, build APIs, and construct data web scrapers.",
-      project: "Automated Data Scraper & Task Automation Suite",
-      stack: ["Python 3", "BeautifulSoup", "FastAPI", "Requests", "Automation"],
-      roles: ["Python Developer", "Backend Trainee"],
-      color: "from-amber-500 to-orange-600",
-      accent: "#F59E0B"
-    },
-    {
-      id: "datascience",
-      name: "Data Science & Analytics",
-      icon: BarChart3,
-      desc: "Transform raw metrics into actionable insights using statistical modeling and visual dashboards.",
-      project: "End-to-End Business Data Analytics Case Study",
-      stack: ["Python", "SQL", "PowerBI / Tableau", "Seaborn", "Excel"],
-      roles: ["Data Analyst Trainee", "Business Intelligence Associate"],
-      color: "from-blue-700 to-indigo-600",
-      accent: "#1D4ED8"
-    },
-    {
-      id: "cybersecurity",
-      name: "Cybersecurity Basics",
-      icon: ShieldCheck,
-      desc: "Understand network security fundamentals, vulnerability analysis, and security auditing.",
-      project: "Vulnerability Assessment & Security Audit Tool",
-      stack: ["Wireshark", "Nmap", "Linux CLI", "Security Auditing"],
-      roles: ["Security Analyst Trainee", "Junior Penetration Tester"],
-      color: "from-rose-600 to-red-500",
-      accent: "#E11D48"
-    },
-    {
-      id: "app-dev",
-      name: "App Development",
-      icon: Laptop,
-      desc: "Build cross-platform mobile applications with smooth native UX and API connections.",
-      project: "Cross-Platform React Native App",
-      stack: ["React Native", "Expo", "JavaScript", "Firebase API"],
-      roles: ["Mobile App Developer", "React Native Trainee"],
+      desc: "Build secure server-side applications, design RESTful APIs, implement user authentication, connect databases, handle CRUD operations, and deploy cloud microservices.",
+      output: "Build Scalable Backend APIs",
+      stack: ["Node.js", "Express.js", "REST APIs", "Authentication", "MongoDB / SQL", "CRUD", "Cloud Deployment"],
       color: "from-emerald-600 to-teal-500",
-      accent: "#059669"
+      badgeBg: "bg-emerald-50 text-emerald-700 border-emerald-200"
     },
     {
-      id: "devops",
-      name: "Cloud & DevOps",
+      id: "mern",
+      name: "MERN Stack Development",
       icon: Layers,
-      desc: "Learn Git workflows, Docker containerization, CI/CD automation, and cloud deployment.",
-      project: "Automated Docker & CI/CD Cloud Pipeline",
-      stack: ["Docker", "Git/GitHub", "AWS Basic", "Linux CLI", "GitHub Actions"],
-      roles: ["DevOps Trainee", "Cloud Support Associate"],
-      color: "from-blue-600 to-indigo-600",
-      accent: "#2563EB"
+      desc: "Engineered for end-to-end full-stack development using MongoDB, Express.js, React.js, and Node.js with JWT authentication and state management.",
+      output: "Build Full-Stack Web Applications",
+      stack: ["MongoDB", "Express.js", "React.js", "Node.js", "JWT Auth", "Full-Stack Architecture"],
+      color: "from-indigo-600 to-purple-500",
+      badgeBg: "bg-indigo-50 text-indigo-700 border-indigo-200"
+    },
+    {
+      id: "fullstack",
+      name: "Full Stack Development",
+      icon: Globe,
+      desc: "Integrate sophisticated frontend interfaces with robust backend services, manage relational databases, handle secure user sessions, and launch production products.",
+      output: "Build End-to-End Tech Products",
+      stack: ["Frontend Integration", "Backend APIs", "Database Design", "Authentication", "Deployment", "Full Products"],
+      color: "from-sky-600 to-blue-700",
+      badgeBg: "bg-sky-50 text-sky-700 border-sky-200"
     },
     {
       id: "uiux",
       name: "UI/UX & Product Design",
       icon: Award,
-      desc: "Design modern user interfaces, create high-fidelity Figma prototypes, and conduct UX research.",
-      project: "Interactive Mobile App UX Design System & Figma Prototype",
-      stack: ["Figma", "Wireframing", "Design Systems", "User Journeys"],
-      roles: ["UI/UX Designer", "Product Design Trainee"],
+      desc: "Conduct user research, design wireframes, map user journeys, create high-fidelity Figma prototypes, build design systems, and present portfolio case studies.",
+      output: "Build a Professional Design Portfolio",
+      stack: ["User Research", "Wireframing", "User Flows", "Figma", "Design Systems", "Prototypes", "Case Studies"],
       color: "from-purple-600 to-pink-500",
-      accent: "#9333EA"
+      badgeBg: "bg-purple-50 text-purple-700 border-purple-200"
+    },
+    {
+      id: "ai",
+      name: "Artificial Intelligence",
+      icon: Sparkles,
+      desc: "Understand core AI principles, build Python-powered intelligent tools, integrate LLM APIs, construct custom prompts, and develop autonomous AI agents.",
+      output: "Build AI-Powered Applications",
+      stack: ["Python", "AI Principles", "LLM APIs", "Prompt Engineering", "AI Microservices", "OpenAI / Claude"],
+      color: "from-amber-500 to-orange-600",
+      badgeBg: "bg-amber-50 text-amber-700 border-amber-200"
+    },
+    {
+      id: "ml",
+      name: "Machine Learning",
+      icon: Cpu,
+      desc: "Process complex datasets using Python, NumPy, and Pandas. Train supervised and unsupervised models, evaluate algorithm accuracy, and deploy ML models.",
+      output: "Build & Deploy Machine Learning Models",
+      stack: ["Python", "NumPy", "Pandas", "Data Preprocessing", "Supervised Learning", "Scikit-Learn", "Model Eval"],
+      color: "from-cyan-600 to-blue-600",
+      badgeBg: "bg-cyan-50 text-cyan-700 border-cyan-200"
+    },
+    {
+      id: "cybersecurity",
+      name: "Cybersecurity",
+      icon: ShieldCheck,
+      desc: "Understand network security architecture, Linux CLI operations, web application security, OWASP Top 10 vulnerabilities, and perform authorized security audits.",
+      output: "Practice in Authorized Security Labs",
+      stack: ["Networking", "Linux CLI", "Web Security", "OWASP Top 10", "Vulnerability Assessment", "Security Audits"],
+      color: "from-rose-600 to-red-500",
+      badgeBg: "bg-rose-50 text-rose-700 border-rose-200"
     }
   ];
 
+  // DELIVERABLES
+  const deliverables = [
+    {
+      icon: Code2,
+      title: "Domain-Specific Practical Training",
+      desc: "Structured learning paths, real-world assignments, practical implementation modules, and hands-on project building in your chosen domain.",
+      badge: "Skill Acceleration"
+    },
+    {
+      icon: Github,
+      title: "Production Projects & Portfolio",
+      desc: "Build, document, and deploy production projects to GitHub or Figma, establishing verifiable proof of work for recruiters.",
+      badge: "Proof of Work"
+    },
+    {
+      icon: Users,
+      title: "Mentorship & Live Feedback",
+      desc: "Interactive mentorship sessions, technical doubt resolution, code reviews, and structured task feedback throughout the program.",
+      badge: "Live Mentorship"
+    },
+    {
+      icon: Award,
+      title: "Dual Industry Credentials",
+      desc: "Earn an official Training Certificate and an Internship Completion Certificate, along with eligibility for a performance-based Letter of Recommendation (LOR).",
+      badge: "Verified Credentials"
+    },
+    {
+      icon: Gift,
+      title: "Official Welcome Goodies Kit",
+      desc: "Enrolled students receive an official welcome kit featuring a custom TechieHelp T-Shirt, Intern ID Card, Executive Diary, and Pen set.",
+      badge: "Welcome Swag"
+    }
+  ];
+
+  // FAQ LIST
   const faqList = [
     {
-      q: "Who can join Build2Earn?",
-      a: "The program is specifically tailored for 1st and 2nd year college students who want to build their professional assets, GitHub, LinkedIn, and real projects early before reaching their final year placement season."
+      q: "Who is the Build2Earn program designed for?",
+      a: "The program is specifically engineered for 1st and 2nd year college students who want to build real tech skills, production projects, and verified credentials before their final year placement season."
     },
     {
-      q: "Is this program only for coding students?",
-      a: "No! We offer technical tracks (Web Dev, AI/ML, Data Science, Python, DevOps) as well as design tracks like UI/UX & Product Design. Non-tech students can easily join UI/UX or Data Science."
+      q: "Can I choose more than one domain specialization track?",
+      a: "No. Enrolled students select one primary domain specialization track (such as Frontend, Backend, MERN, Full Stack, UI/UX, AI, ML, or Cybersecurity) to complete focused tasks, projects, and mentor evaluations."
     },
     {
-      q: "Is the program theory-based or practical?",
-      a: "100% Practical. Every module is structured around execution. You don't just watch videos—you build live GitHub repositories, an optimized LinkedIn, a personal portfolio website, and real domain projects."
+      q: "Is employment or income guaranteed after completion?",
+      a: "No employment or income is guaranteed. Build2Earn is a practical skill acceleration and portfolio program. We equip you with practical capabilities, project proof, and career resources to pursue internships, freelance clients, and job opportunities."
     },
     {
-      q: "Is any job or income guaranteed after completing Build2Earn?",
-      a: "No job placement or income outcome is guaranteed. Build2Earn is a skill-building, portfolio-building, and internship preparation program. We teach you how to create opportunities, apply for freelancing, and present proof of work."
+      q: "What certificates do students receive upon graduation?",
+      a: "Students who complete the required program milestones receive two verified credentials: a Training Certificate and an Internship Completion Certificate. High performers are eligible for a Letter of Recommendation (LOR)."
     },
     {
-      q: "Will I get certificates upon completion?",
-      a: "Yes! Eligible students who satisfy program deliverables receive two official credentials: a Training Certificate and an Internship Certificate powered by TechieHelp Institute of AI."
+      q: "What is included in the company-wise technical interview preparation?",
+      a: "Students gain access to curated practice question sets based on company technical patterns, Data Structures & Algorithms problem-solving guides, mock interview coaching, and profile reviews."
     },
     {
-      q: "How is the Letter of Recommendation (LOR) awarded?",
-      a: "The LOR is performance-based and awarded to top-performing students who complete all practical milestones, maintain attendance, and submit high-quality domain projects."
+      q: "How does the founder-led hackathon guidance work?",
+      a: "Mentors provide strategic coaching on discovering hackathons, team formation, problem statement evaluation, rapid MVP building, pitch deck creation, and demo presentations."
     },
     {
-      q: "What is the fee for the 3-month program?",
-      a: "The fee is a one-time payment of ₹4,999. It includes 3 months of training, internship tasks, live mentorship, project guidance, and credentials."
-    },
-    {
-      q: "Can I manage this along with my college classes & exams?",
-      a: "Yes! The program is designed with flexible schedules and self-paced milestone submission windows so it fits smoothly alongside your college schedule."
-    },
-    {
-      q: "Will I deploy a live personal portfolio website?",
-      a: "Yes! Month 1 explicitly guides you step-by-step to design, build, and deploy your custom live portfolio website accessible on your own URL."
-    },
-    {
-      q: "How do I clear my doubts during the program?",
-      a: "You get access to dedicated live mentorship sessions, interactive doubt-clearing blocks, and our student community workspace."
+      q: "What is the fee structure for the program?",
+      a: "The fee is a one-time investment of ₹4,999 for the full 3-month practical program with no recurring subscriptions or hidden costs."
     }
   ];
-
-  // Animation Variants
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 24 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
-  };
-
-  const staggerContainer = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans selection:bg-[#1D4ED8] selection:text-white relative overflow-x-hidden">
 
-      {/* Import Caveat Handwriting Font & Marquee Scroll Keyframes */}
-      <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap');
-        .font-handwriting {
-          font-family: 'Caveat', cursive;
-        }
-        @keyframes marqueeScroll {
-          0% { transform: translateX(0%); }
-          100% { transform: translateX(-50%); }
-        }
-        .animate-scroll {
-          display: flex !important;
-          animation: marqueeScroll 35s linear infinite !important;
-        }
-        .animate-scroll:hover {
-          animation-play-state: paused !important;
-        }
-      `}</style>
-
-      {/* Decorative Grid Mesh & Ambient Glow Header */}
+      {/* Light Theme Background Ambient Effects */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[1200px] h-[500px] bg-gradient-to-b from-[#1D4ED8]/10 via-[#0EA5E9]/5 to-transparent blur-3xl rounded-full" />
-        <div className="absolute top-[20%] right-[-5%] w-[500px] h-[500px] bg-[#1D4ED8]/5 blur-3xl rounded-full" />
-        <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(#0F172A 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[1200px] h-[500px] bg-gradient-to-b from-blue-100/60 via-sky-50/40 to-transparent blur-3xl rounded-full" />
+        <div className="absolute top-[20%] right-[-5%] w-[500px] h-[500px] bg-amber-100/40 blur-3xl rounded-full" />
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#0F172A 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
       </div>
 
       <main className="relative z-10">
 
-        {/* ==================== 1. FULL-BLEED HERO VIDEO WITH LAUNCHED TEXT OVERLAY ==================== */}
-        <section className="w-full relative bg-slate-950 overflow-hidden min-h-[65vh] lg:min-h-[85vh] flex items-center justify-center">
-          {/* Continuous Loop Background Video */}
-          <video
-            src="/home.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover block z-0 opacity-80"
-          >
-            Your browser does not support the video tag.
-          </video>
+        {/* ==================== HERO SECTION (ULTRA-PROFESSIONAL WHITE THEME) ==================== */}
+        <section className="w-full relative bg-gradient-to-b from-white via-slate-50/60 to-white overflow-hidden py-14 lg:py-20 border-b border-slate-200/80">
+          
+          {/* Ambient Lighting Gradients */}
+          <div className="absolute inset-0 pointer-events-none z-0">
+            <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[1000px] h-[400px] bg-gradient-to-b from-blue-100/70 via-sky-50/30 to-transparent blur-3xl rounded-full" />
+            <div className="absolute top-1/3 right-10 w-[450px] h-[450px] bg-amber-200/20 blur-[130px] rounded-full" />
+          </div>
 
-          {/* Premium Dark Glassmorphism Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/40 z-10 pointer-events-none" />
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+              
+              {/* Left Content Column (Ultra-Professional & High-Converting) */}
+              <div className="lg:col-span-6 space-y-6 text-left">
+                
+                {/* Pill Badge */}
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-[#1D4ED8] text-xs font-black shadow-xs tracking-wide"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                  <span>BUILD2EARN · 3-MONTH PRACTICAL CAREER PROGRAM</span>
+                </motion.div>
 
-          {/* Hero Content Overlay */}
-          <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 text-center flex flex-col items-center justify-center">
-            {/* Launched Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-600/30 text-blue-300 text-xs sm:text-sm font-extrabold border border-blue-400/40 backdrop-blur-md shadow-xl mb-6"
-            >
-              <Sparkles className="w-4 h-4 text-blue-400 animate-pulse" />
-              <span>TechieHelp Institute of AI Launched — Build2Earn Program</span>
-            </motion.div>
+                {/* Headline */}
+                <motion.h1
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                  className="text-3xl sm:text-5xl lg:text-6xl font-black text-[#0B192C] tracking-tight leading-[1.12]"
+                >
+                  Don't Just Learn. <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1D4ED8] via-blue-600 to-indigo-600">
+                    Build &amp; Prepare to Earn.
+                  </span>
+                </motion.h1>
 
-            {/* Main Headline */}
-            <motion.h1
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              className="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-white tracking-tight leading-[1.15] max-w-4xl drop-shadow-xl"
-            >
-              Build2Earn <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-indigo-400">3-Month Practical</span> Career Program
-            </motion.h1>
+                {/* Subtitle */}
+                <motion.p
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="text-sm sm:text-base lg:text-lg text-slate-600 font-medium leading-relaxed max-w-xl"
+                >
+                  A 3-month practical career accelerator for 1st &amp; 2nd year students. Master 1 primary domain, build verified portfolio projects, earn dual industry credentials, and prepare for paid opportunities.
+                </motion.p>
 
-            {/* Sub-headline */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-              className="mt-6 text-sm sm:text-lg lg:text-xl text-slate-200 font-medium max-w-2xl leading-relaxed drop-shadow-md"
-            >
-              Master In-Demand Tech Tracks, Build Production-Grade GitHub Repos, & Earn Official Industry Credentials. Tailored for 1st & 2nd Year Students.
-            </motion.p>
+                {/* Feature Chips Grid */}
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.25 }}
+                  className="grid grid-cols-2 gap-3 max-w-lg pt-1"
+                >
+                  <div className="p-3 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-blue-50 text-[#1D4ED8] flex items-center justify-center font-bold shrink-0">
+                      <Code2 className="w-4 h-4" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-xs font-black text-[#0B192C]">8 Specializations</div>
+                      <div className="text-[10px] font-semibold text-slate-500">Pick 1 Primary Domain</div>
+                    </div>
+                  </div>
 
-            {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.3 }}
-              className="mt-8 flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
-            >
-              <button
-                onClick={() => handleOpenModal("Web Development")}
-                className="w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold text-base shadow-xl shadow-blue-600/30 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
+                  <div className="p-3 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold shrink-0">
+                      <Award className="w-4 h-4" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-xs font-black text-[#0B192C]">Dual Certificates</div>
+                      <div className="text-[10px] font-semibold text-slate-500">Training + Internship</div>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold shrink-0">
+                      <Gift className="w-4 h-4" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-xs font-black text-[#0B192C]">Welcome Goodies</div>
+                      <div className="text-[10px] font-semibold text-slate-500">T-Shirt, ID &amp; Kit</div>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold shrink-0">
+                      <Users className="w-4 h-4" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-xs font-black text-[#0B192C]">Founder Guidance</div>
+                      <div className="text-[10px] font-semibold text-slate-500">Hackathons &amp; DSA</div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* CTAs */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4"
+                >
+                  <a
+                    href={CASHFREE_PAYMENT_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-8 py-4 rounded-2xl bg-[#1D4ED8] hover:bg-blue-800 text-white font-black text-base shadow-xl shadow-blue-500/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 text-center"
+                  >
+                    <span>Enroll Now — ₹4,999</span>
+                    <ArrowRight className="w-5 h-5" />
+                  </a>
+
+                  <a
+                    href="#learn-domains"
+                    className="px-6 py-4 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-extrabold text-sm border-2 border-slate-200 hover:border-slate-800 transition-all flex items-center justify-center gap-2 text-center shadow-xs"
+                  >
+                    <span>Explore Specializations</span>
+                  </a>
+                </motion.div>
+
+                {/* Guarantee / Pricing Strip */}
+                <div className="pt-3 flex flex-wrap items-center gap-4 text-xs font-bold text-slate-600 border-t border-slate-200/80">
+                  <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-600" /> ₹4,999 One-Time Fee</span>
+                  <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-[#1D4ED8]" /> 90 Days Execution</span>
+                  <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-amber-500" /> Limited Batch Seats</span>
+                </div>
+
+              </div>
+
+              {/* Right Column: Studio Showcase Video Container */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.7, delay: 0.2 }}
+                className="lg:col-span-6 relative"
               >
-                <span>Enroll Now — ₹4,999</span>
-                <ArrowRight className="w-5 h-5" />
-              </button>
-              <a
-                href="#campus-gallery"
-                className="w-full sm:w-auto px-8 py-4 rounded-full bg-slate-900/80 hover:bg-slate-900 text-slate-200 hover:text-white font-bold text-base border border-slate-700/80 backdrop-blur-md shadow-lg transition-all flex items-center justify-center gap-2"
-              >
-                <span>Explore Campus Slide Bar</span>
-                <ChevronRight className="w-4 h-4" />
-              </a>
-            </motion.div>
+                {/* Browser Studio Window Frame */}
+                <div className="relative rounded-3xl overflow-hidden bg-white border border-slate-200/90 shadow-[0_25px_60px_-15px_rgba(29,78,216,0.15)] p-2 sm:p-3 group">
+                  
+                  {/* Browser Top Dot Bar */}
+                  <div className="flex items-center justify-between px-3 py-2 bg-slate-50 rounded-2xl mb-2 border border-slate-100">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-3 h-3 rounded-full bg-red-400 inline-block" />
+                      <span className="w-3 h-3 rounded-full bg-amber-400 inline-block" />
+                      <span className="w-3 h-3 rounded-full bg-emerald-400 inline-block" />
+                    </div>
+                    <div className="text-[11px] font-bold text-slate-500 tracking-wider">
+                      TECHIEHELP AI CAMPUS SHOWCASE
+                    </div>
+                    <div className="w-12" />
+                  </div>
+
+                  {/* Video Aspect Window */}
+                  <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-slate-900 shadow-inner">
+                    <video
+                      src="/home.mp4"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover block group-hover:scale-[1.03] transition-transform duration-700"
+                    >
+                      Your browser does not support the video tag.
+                    </video>
+
+                    {/* Overlay Live Tag */}
+                    <div className="absolute top-3 left-3 z-10 bg-slate-900/85 backdrop-blur-md border border-white/20 px-3 py-1.5 rounded-full text-[10px] font-extrabold text-white flex items-center gap-2 shadow-lg">
+                      <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                      LIVE CAMPUS &amp; LAB DEMO
+                    </div>
+
+                    <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between z-10">
+                      <div className="bg-white/95 backdrop-blur-md px-3 py-1 rounded-xl border border-slate-200 text-[11px] font-bold text-slate-800 shadow-md">
+                        Practical Workstation Session
+                      </div>
+                      <a
+                        href={CASHFREE_PAYMENT_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-3.5 py-1.5 rounded-xl bg-[#1D4ED8] hover:bg-blue-800 text-white font-black text-xs shadow-md transition-colors"
+                      >
+                        Enroll ₹4,999 →
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+
+            </div>
           </div>
         </section>
 
-        {/* STUDENT ACHIEVEMENTS & CERTIFICATION MOMENTS (Clean White Theme Image Marquee) */}
+        {/* VERIFIED STUDENT ACHIEVEMENTS SHOWCASE */}
         <section id="build2earn-achievements" className="py-12 md:py-16 relative bg-white border-b border-slate-200/80 overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 md:px-6">
-            
-            {/* Clean White Theme Header */}
             <div className="text-center max-w-3xl mx-auto space-y-3 mb-10">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-[#1D4ED8] text-xs font-bold uppercase tracking-wider">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-[#1D4ED8] text-xs font-extrabold uppercase tracking-wider">
                 <Trophy className="w-4 h-4 text-amber-500" />
                 <span>Verified Student Success</span>
               </div>
 
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-[#0B192C]">
-                Student Achievements &amp; <span className="text-[#1D4ED8]">Certification Moments 🏆</span>
+                Student Achievements &amp; Certification Moments
               </h2>
 
               <p className="text-slate-600 text-sm md:text-base leading-relaxed max-w-2xl mx-auto font-normal">
-                Real students. Real certificates. Real internship outcomes. A glimpse of our interns receiving verified certificates, goodies, and recognition after completing live projects.
+                Real student outcomes and verified certification moments. A glimpse of our interns receiving official certificates, goodies, and project recognition.
               </p>
             </div>
 
-            {/* Controls Toggle */}
             <div className="flex justify-end mb-4">
               <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
                 <button
@@ -449,7 +538,6 @@ export default function Build2EarnClient() {
               </div>
             </div>
 
-            {/* Running Image Marquee */}
             <div className={autoScroll ? "overflow-hidden py-2" : "overflow-x-auto py-2"}>
               <motion.div
                 className="flex gap-4 shrink-0"
@@ -491,8 +579,6 @@ export default function Build2EarnClient() {
                     />
                   </div>
                 ))}
-
-                {/* Duplicate Loop Set */}
                 {[
                   "/hero-slides/goodies_kit.jpg",
                   "/hero-slides/technocrats_certificates.jpg",
@@ -522,15 +608,10 @@ export default function Build2EarnClient() {
           </div>
         </section>
 
-
-
-
-
-        {/* ==================== 2. QUICK VALUE TICKER BAR ==================== */}
+        {/* QUICK VALUE TICKER BAR */}
         <section className="bg-white border-y border-slate-200 py-6 shadow-xs">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-5 gap-6 divide-y md:divide-y-0 md:divide-x divide-slate-200">
-
               <div className="pt-2 md:pt-0 md:pl-2 flex items-center gap-3 justify-center md:justify-start">
                 <div className="w-10 h-10 rounded-full bg-blue-50 text-[#2563EB] flex items-center justify-center font-bold shrink-0">
                   <Clock className="w-5 h-5" />
@@ -547,7 +628,7 @@ export default function Build2EarnClient() {
                 </div>
                 <div>
                   <div className="text-base font-black text-slate-900">₹4,999</div>
-                  <div className="text-[11px] font-semibold text-slate-500">Complete Program</div>
+                  <div className="text-[11px] font-semibold text-slate-500">One-Time Fee</div>
                 </div>
               </div>
 
@@ -556,8 +637,8 @@ export default function Build2EarnClient() {
                   <Award className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="text-base font-black text-slate-900">2 CERTIFICATES</div>
-                  <div className="text-[11px] font-semibold text-slate-500">Training + Internship</div>
+                  <div className="text-base font-black text-slate-900">DUAL CREDENTIALS</div>
+                  <div className="text-[11px] font-semibold text-slate-500">Training &amp; Internship</div>
                 </div>
               </div>
 
@@ -566,7 +647,7 @@ export default function Build2EarnClient() {
                   <FileText className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="text-base font-black text-slate-900">LOR</div>
+                  <div className="text-base font-black text-slate-900">LOR &amp; SWAG KIT</div>
                   <div className="text-[11px] font-semibold text-slate-500">Performance-Based</div>
                 </div>
               </div>
@@ -576,34 +657,31 @@ export default function Build2EarnClient() {
                   <Users className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="text-base font-black text-slate-900">LIVE MENTORSHIP</div>
-                  <div className="text-[11px] font-semibold text-slate-500">Practical Guidance</div>
+                  <div className="text-base font-black text-slate-900">FOUNDER MENTORSHIP</div>
+                  <div className="text-[11px] font-semibold text-slate-500">Hackathons &amp; DSA</div>
                 </div>
               </div>
-
             </div>
           </div>
         </section>
 
-        {/* ==================== 2.5. CAMPUS & STUDENT GALLERY (MANUAL SLIDE BAR TRACK) ==================== */}
-        <section id="campus-gallery" className="bg-slate-950 text-white py-12 md:py-16 border-y border-slate-800 relative overflow-hidden">
+        {/* CAMPUS & STUDENT GALLERY (WHITE THEME CONTAINER) */}
+        <section id="campus-gallery" className="bg-slate-50 text-slate-900 py-12 md:py-16 border-y border-slate-200 relative overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Header */}
             <div className="text-center max-w-3xl mx-auto mb-8 space-y-3">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 font-extrabold text-xs uppercase tracking-wider">
-                <Sparkles className="w-3.5 h-3.5" /> Campus Life & Student Moments
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100 border border-blue-200 text-[#1D4ED8] font-extrabold text-xs uppercase tracking-wider">
+                <Sparkles className="w-3.5 h-3.5" /> Campus Life &amp; Development Hub
               </div>
-              <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
-                TechieHelp AI <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Campus Gallery</span>
+              <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
+                TechieHelp AI <span className="text-[#1D4ED8]">Campus Gallery</span>
               </h2>
-              <p className="text-slate-400 text-xs sm:text-base font-medium">
-                Use the interactive slide bar below to explore photos from our campus development hub, mentorship sessions, and student evaluations.
+              <p className="text-slate-600 text-xs sm:text-base font-medium">
+                Explore photos from our campus development hub, mentorship sessions, project evaluations, and student events.
               </p>
             </div>
 
-            {/* Main Interactive Display Window */}
-            <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl border border-slate-800/80 bg-slate-950 group">
-              <div className="relative w-full h-[50vh] sm:h-[65vh] md:h-[75vh] lg:h-[80vh] flex items-center justify-center bg-slate-950 p-2 sm:p-4">
+            <div className="relative w-full rounded-2xl overflow-hidden shadow-xl border border-slate-200 bg-white group">
+              <div className="relative w-full h-[50vh] sm:h-[65vh] md:h-[75vh] lg:h-[80vh] flex items-center justify-center bg-slate-900 p-2 sm:p-4">
                 <AnimatePresence mode="wait">
                   <motion.img
                     key={gallerySlideIndex}
@@ -617,20 +695,17 @@ export default function Build2EarnClient() {
                   />
                 </AnimatePresence>
 
-                {/* Subtle Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-slate-950/20 pointer-events-none" />
 
-                {/* Photo Title & Slide Counter */}
                 <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 flex flex-wrap items-center justify-between gap-3 z-10">
-                  <div className="bg-slate-950/85 backdrop-blur-md px-4 py-2 rounded-xl border border-white/15 text-white text-xs sm:text-sm font-semibold shadow-lg max-w-lg">
+                  <div className="bg-white/95 backdrop-blur-md px-4 py-2 rounded-xl border border-slate-200 text-slate-900 text-xs sm:text-sm font-bold shadow-lg max-w-lg">
                     {campusPhotos[gallerySlideIndex].title}
                   </div>
-                  <div className="bg-blue-600/90 backdrop-blur-md px-3.5 py-1.5 rounded-full text-white text-xs font-extrabold shadow-md">
-                    Photo {gallerySlideIndex + 1} of {campusPhotos.length}
+                  <div className="bg-[#1D4ED8] text-white px-3.5 py-1.5 rounded-full text-xs font-extrabold shadow-md">
+                    Campus Gallery Highlight
                   </div>
                 </div>
 
-                {/* Manual Navigation Buttons */}
                 <button
                   onClick={() =>
                     setGallerySlideIndex(
@@ -638,7 +713,7 @@ export default function Build2EarnClient() {
                     )
                   }
                   aria-label="Previous Photo"
-                  className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-slate-950/70 hover:bg-slate-900 text-white flex items-center justify-center backdrop-blur-md border border-white/20 transition-all z-20 shadow-xl"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 hover:bg-white text-slate-900 flex items-center justify-center backdrop-blur-md border border-slate-200 transition-all z-20 shadow-xl"
                 >
                   <ChevronLeft className="w-6 h-6" />
                 </button>
@@ -647,29 +722,27 @@ export default function Build2EarnClient() {
                     setGallerySlideIndex((prev) => (prev + 1) % campusPhotos.length)
                   }
                   aria-label="Next Photo"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-slate-950/70 hover:bg-slate-900 text-white flex items-center justify-center backdrop-blur-md border border-white/20 transition-all z-20 shadow-xl"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 hover:bg-white text-slate-900 flex items-center justify-center backdrop-blur-md border border-slate-200 transition-all z-20 shadow-xl"
                 >
                   <ChevronRight className="w-6 h-6" />
                 </button>
               </div>
             </div>
 
-            {/* INTERACTIVE MANUAL SLIDE BAR TRACK WITH THUMBNAILS */}
-            <div className="mt-6 pt-4 border-t border-slate-800/80 flex flex-col items-center gap-3">
-              <div className="flex items-center justify-between w-full text-xs text-slate-400 font-bold px-1">
+            <div className="mt-6 pt-4 border-t border-slate-200 flex flex-col items-center gap-3">
+              <div className="flex items-center justify-between w-full text-xs text-slate-500 font-bold px-1">
                 <span>SLIDE BAR TRACK</span>
-                <span>Click any slide to jump</span>
+                <span>Click any thumbnail to view</span>
               </div>
 
-              {/* Horizontal Scrollable Slide Bar */}
-              <div className="w-full overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-blue-600 scrollbar-track-slate-800">
+              <div className="w-full overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-blue-600 scrollbar-track-slate-200">
                 <div className="flex items-center gap-3 min-w-max mx-auto px-1">
                   {campusPhotos.map((photo, idx) => (
                     <button
                       key={idx}
                       onClick={() => setGallerySlideIndex(idx)}
-                      className={`relative rounded-xl overflow-hidden transition-all duration-300 group shrink-0 bg-slate-950 ${idx === gallerySlideIndex
-                          ? "ring-2 ring-blue-500 scale-105 opacity-100 shadow-lg shadow-blue-500/20"
+                      className={`relative rounded-xl overflow-hidden transition-all duration-300 group shrink-0 bg-white ${idx === gallerySlideIndex
+                          ? "ring-2 ring-[#1D4ED8] scale-105 opacity-100 shadow-md"
                           : "opacity-60 hover:opacity-100 hover:scale-102"
                         }`}
                     >
@@ -678,10 +751,6 @@ export default function Build2EarnClient() {
                         alt={`Thumbnail ${idx + 1}`}
                         className="w-20 sm:w-28 md:w-36 h-16 sm:h-20 md:h-24 object-contain bg-slate-900 p-1 block"
                       />
-                      <div className="absolute inset-0 bg-slate-950/20 group-hover:bg-transparent transition-colors" />
-                      <div className="absolute bottom-1 right-1 bg-slate-950/80 text-[10px] text-white px-1.5 py-0.5 rounded font-bold">
-                        #{idx + 1}
-                      </div>
                     </button>
                   ))}
                 </div>
@@ -690,508 +759,71 @@ export default function Build2EarnClient() {
           </div>
         </section>
 
-
-        {/* ==================== 3. PROCESS AFTER REGISTRATION (STEP-BY-STEP JOURNEY) ==================== */}
-        <section id="process" className="py-10 sm:py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-
-          {/* Section Header */}
-          <div className="text-center max-w-3xl mx-auto mb-8 space-y-2.5 relative">
-
-            {/* Top Pill Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-blue-100/90 border border-blue-200 text-[#2563EB] font-black text-xs uppercase tracking-wider shadow-2xs">
-              <FileText className="w-3.5 h-3.5 text-[#2563EB]" /> PROCESS AFTER REGISTRATION
+        {/* ==================== SPECIALIZED INTERNSHIP TRACKS ==================== */}
+        <section id="learn-domains" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200 scroll-mt-16">
+          <div className="text-center max-w-4xl mx-auto mb-12 space-y-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-[#1D4ED8] text-xs font-bold uppercase tracking-wider">
+              <Code2 className="w-4 h-4 text-blue-600" /> Internship Specialization Tracks
             </div>
-
-            {/* Headline with Yellow Accent Sparks */}
-            <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight relative inline-block">
-              Your Journey to Success <span className="text-[#2563EB] relative">Starts Here</span>
-              {/* Decorative Yellow Sparks Accent SVG */}
-              <svg className="absolute -top-4 -right-8 w-8 h-8 text-amber-400 stroke-current hidden sm:block" fill="none" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 3v3m0 12v3m9-9h-3M6 12H3m15.364-6.364l-2.121 2.121M7.757 16.243l-2.121 2.121m12.728 0l-2.121-2.121M7.757 7.757L5.636 5.636" />
-              </svg>
+            <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
+              Choose Your Specialization Track
             </h2>
-
-            {/* Subtitle */}
-            <p className="text-xs sm:text-base text-slate-600 font-medium max-w-2xl mx-auto">
-              Follow these simple steps after completing your <strong className="text-slate-900">Build2Earn registration</strong> to activate your account and start your career journey with TechieHelp.
+            <p className="text-base sm:text-lg text-slate-600 font-medium max-w-3xl mx-auto">
+              Select one primary specialization track tailored to your career goals. Experience structured project assignments, code reviews, and direct mentor coaching.
             </p>
           </div>
 
-          {/* Side-by-Side Main Container (Left: Laptop Visual, Right: Timeline Card) */}
-          <div className="relative">
-            <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-center">
-
-              {/* LEFT COLUMN: LAPTOP GRAPHIC WITH ANNOTATION */}
-              <div className="lg:col-span-6 relative">
-
-                {/* Handwritten Callout on Top Left */}
-                <div className="absolute -top-6 -left-4 z-20 font-handwriting text-lg sm:text-xl font-bold text-blue-600 -rotate-12 hidden sm:flex items-center gap-1.5">
-                  <span>Create your account in seconds</span>
-                  <svg className="w-6 h-6 text-blue-600 stroke-current" fill="none" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </div>
-
-                {/* MacBook Laptop Container Mockup */}
-                <div className="relative mx-auto max-w-[560px]">
-                  {/* Laptop Screen Bezel */}
-                  <div className="relative bg-slate-900 p-2 sm:p-3 rounded-t-3xl border-t-2 border-x-2 border-slate-700 shadow-2xl">
-                    <div className="relative rounded-xl overflow-hidden border border-slate-800 bg-slate-950">
-                      <Image
-                        src="/registration_step_1.jpg"
-                        alt="Step 1: Login to your account"
-                        width={900}
-                        height={520}
-                        className="w-full h-auto object-cover rounded-xl"
-                        priority
-                      />
-                    </div>
-                  </div>
-                  {/* Laptop Base Stand */}
-                  <div className="relative bg-slate-300 h-4 rounded-b-2xl border-t border-slate-400 shadow-md flex items-center justify-center">
-                    <div className="w-16 h-1 bg-slate-400 rounded-full" />
-                  </div>
-                </div>
-
-              </div>
-
-              {/* RIGHT COLUMN: STEP 1 TIMELINE CARD */}
-              <div className="lg:col-span-6">
-
-                <div className="bg-white/95 backdrop-blur-md border border-blue-100 rounded-3xl p-6 sm:p-7 shadow-lg shadow-blue-500/5 space-y-4">
-
-                  {/* Card Header & Badges */}
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <span className="px-3.5 py-1 rounded-full bg-[#2563EB] text-white font-extrabold text-xs shadow-xs uppercase tracking-wider">
-                        STEP 1
-                      </span>
-                      <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-600 font-extrabold text-xs">
-                        Onboarding
-                      </span>
-                    </div>
-
-                    <h3 className="text-2xl sm:text-3xl font-black text-slate-900 flex items-center gap-2">
-                      Login to <span className="text-[#2563EB]">your account</span> ✨
-                    </h3>
-
-                    <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
-                      Create your TechieHelp account using Google or your email to access all career tools, internships, projects and opportunities.
-                    </p>
-                  </div>
-
-                  {/* Vertical Timeline Steps */}
-                  <div className="relative pl-3 space-y-4 pt-1">
-
-                    {/* Dashed Connecting Vertical Line */}
-                    <div className="absolute left-[27px] top-6 bottom-6 w-0.5 border-l-2 border-dashed border-blue-200 pointer-events-none" />
-
-                    {/* Step Item 1 */}
-                    <div className="relative flex items-start gap-4 z-10">
-                      <div className="w-10 h-10 rounded-full bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center font-black text-base shrink-0 shadow-2xs">
-                        <span className="text-sm font-black text-blue-600">G</span>
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-extrabold text-slate-900">Continue with Google</h4>
-                        <p className="text-xs text-slate-500 font-medium">Click on "Continue with Google" for quick and easy access.</p>
-                      </div>
-                    </div>
-
-                    {/* Step Item 2 */}
-                    <div className="relative flex items-start gap-4 z-10">
-                      <div className="w-10 h-10 rounded-full bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center shrink-0 shadow-2xs">
-                        <MessageSquare className="w-4 h-4 text-blue-600" />
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-extrabold text-slate-900">Or use Email & Password</h4>
-                        <p className="text-xs text-slate-500 font-medium">Enter your registered email and password manually.</p>
-                      </div>
-                    </div>
-
-                    {/* Step Item 3 */}
-                    <div className="relative flex items-start gap-4 z-10">
-                      <div className="w-10 h-10 rounded-full bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center shrink-0 shadow-2xs">
-                        <ArrowRight className="w-4 h-4 text-blue-600" />
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-extrabold text-slate-900">Click on Sign In</h4>
-                        <p className="text-xs text-slate-500 font-medium">After entering details, click "Sign In" to open your dashboard.</p>
-                      </div>
-                    </div>
-
-                  </div>
-
-                  {/* Primary CTA Row + Annotation */}
-                  <div className="pt-2 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                    <a
-                      href={CASHFREE_PAYMENT_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-8 py-3.5 rounded-2xl bg-[#2563EB] hover:bg-blue-700 text-white font-extrabold text-sm shadow-md shadow-blue-500/20 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2 group min-w-[210px]"
-                    >
-                      <span>Create Your Account</span>
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </a>
-
-                    <div className="font-handwriting text-base font-bold text-blue-600 flex items-center gap-1.5">
-                      <svg className="w-5 h-5 text-blue-600 stroke-current -scale-x-100" fill="none" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                      </svg>
-                      <span>It takes less than 1 minute!</span>
-                    </div>
-                  </div>
-
-                </div>
-
-              </div>
-
+          <div className="mb-10 p-5 rounded-2xl bg-blue-50/90 border border-blue-200 text-blue-950 text-xs sm:text-sm font-semibold flex items-start gap-3 shadow-xs max-w-4xl mx-auto">
+            <AlertCircle className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+            <div>
+              <strong className="font-extrabold text-blue-900 block mb-0.5">Domain Focus Policy:</strong>
+              Enrolled students select one primary domain track for specialized tasks, production projects, and dedicated mentor reviews.
             </div>
           </div>
 
-          {/* BOTTOM STEPPER PROGRESS BAR (STEPS 1 TO 7) */}
-          <div className="mt-10 bg-white/80 backdrop-blur-md border border-slate-200 rounded-3xl p-4 sm:p-5 shadow-xs overflow-x-auto">
-            <div className="flex items-center justify-between min-w-[850px] gap-2">
-
-              {/* Step 1 (Active) */}
-              <div className="flex items-center gap-3 bg-blue-50/80 border border-blue-200 px-4 py-2.5 rounded-2xl shrink-0">
-                <span className="w-7 h-7 rounded-full bg-[#2563EB] text-white font-black text-xs flex items-center justify-center shadow-2xs">1</span>
-                <div>
-                  <div className="text-xs font-black text-blue-600">Login</div>
-                  <div className="text-[10px] font-semibold text-slate-500">Create your account</div>
-                </div>
-              </div>
-
-              <span className="text-slate-300 font-bold">➔</span>
-
-              {/* Step 2 */}
-              <div className="flex items-center gap-3 px-3 py-2 shrink-0">
-                <span className="w-7 h-7 rounded-full bg-slate-100 border border-slate-300 text-slate-500 font-black text-xs flex items-center justify-center">2</span>
-                <div>
-                  <div className="text-xs font-bold text-slate-700">Complete Profile</div>
-                  <div className="text-[10px] font-semibold text-slate-400">Add your details</div>
-                </div>
-              </div>
-
-              <span className="text-slate-300 font-bold">➔</span>
-
-              {/* Step 3 */}
-              <div className="flex items-center gap-3 px-3 py-2 shrink-0">
-                <span className="w-7 h-7 rounded-full bg-slate-100 border border-slate-300 text-slate-500 font-black text-xs flex items-center justify-center">3</span>
-                <div>
-                  <div className="text-xs font-bold text-slate-700">AI Assessment</div>
-                  <div className="text-[10px] font-semibold text-slate-400">Know your strengths</div>
-                </div>
-              </div>
-
-              <span className="text-slate-300 font-bold">➔</span>
-
-              {/* Step 4 */}
-              <div className="flex items-center gap-3 px-3 py-2 shrink-0">
-                <span className="w-7 h-7 rounded-full bg-slate-100 border border-slate-300 text-slate-500 font-black text-xs flex items-center justify-center">4</span>
-                <div>
-                  <div className="text-xs font-bold text-slate-700">Build Skills</div>
-                  <div className="text-[10px] font-semibold text-slate-400">Learn & practice</div>
-                </div>
-              </div>
-
-              <span className="text-slate-300 font-bold">➔</span>
-
-              {/* Step 5 */}
-              <div className="flex items-center gap-3 px-3 py-2 shrink-0">
-                <span className="w-7 h-7 rounded-full bg-slate-100 border border-slate-300 text-slate-500 font-black text-xs flex items-center justify-center">5</span>
-                <div>
-                  <div className="text-xs font-bold text-slate-700">Gain Experience</div>
-                  <div className="text-[10px] font-semibold text-slate-400">Internships & projects</div>
-                </div>
-              </div>
-
-              <span className="text-slate-300 font-bold">➔</span>
-
-              {/* Step 6 */}
-              <div className="flex items-center gap-3 px-3 py-2 shrink-0">
-                <span className="w-7 h-7 rounded-full bg-slate-100 border border-slate-300 text-slate-500 font-black text-xs flex items-center justify-center">6</span>
-                <div>
-                  <div className="text-xs font-bold text-slate-700">Get Career Ready</div>
-                  <div className="text-[10px] font-semibold text-slate-400">Mock interviews & resume</div>
-                </div>
-              </div>
-
-              <span className="text-slate-300 font-bold">➔</span>
-
-              {/* Step 7 */}
-              <div className="flex items-center gap-3 px-3 py-2 shrink-0">
-                <span className="w-7 h-7 rounded-full bg-slate-100 border border-slate-300 text-slate-500 font-black text-xs flex items-center justify-center">7</span>
-                <div>
-                  <div className="text-xs font-bold text-slate-700">Explore Opportunities</div>
-                  <div className="text-[10px] font-semibold text-slate-400">Apply & grow</div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-        </section>
-
-
-        {/* ==================== 4. PHILOSOPHY / 4-STEP ENGINE ==================== */}
-        <section id="program" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-            <div className="text-xs font-bold uppercase tracking-widest text-[#1D4ED8]">The 4-Step Framework</div>
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-              Learn Less Theory. <span className="text-[#1D4ED8]">Build More Assets.</span>
-            </h2>
-            <p className="text-base text-slate-600">
-              Build2Earn follows a practical 4-step execution framework designed for immediate impact.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { num: "01", title: "LEARN", text: "Master core practical concepts and AI workflows without spending months on passive video tutorials.", color: "bg-blue-600", icon: Terminal },
-              { num: "02", title: "BUILD", text: "Apply your skills directly by constructing real, functional domain projects with clean documentation.", color: "bg-purple-600", icon: Code2 },
-              { num: "03", title: "SHOWCASE", text: "Publish your work publicly on LinkedIn, GitHub, and your personal portfolio website to build social proof.", color: "bg-sky-600", icon: Globe },
-              { num: "04", title: "EARN", text: "Learn how to monetize tech skills through freelancing gigs, open source bento, and client projects.", color: "bg-emerald-600", icon: Zap }
-            ].map((step, idx) => {
-              const StepIcon = step.icon;
-              return (
-                <div key={idx} className="bg-white border border-slate-200 rounded-3xl p-6 space-y-4 hover:border-blue-400 transition-all hover:shadow-lg group">
-                  <div className="flex items-center justify-between">
-                    <span className={`w-10 h-10 rounded-xl ${step.color} text-white flex items-center justify-center font-bold text-sm shadow-md`}>
-                      {step.num}
-                    </span>
-                    <StepIcon className="w-5 h-5 text-slate-400 group-hover:text-blue-600 transition-colors" />
-                  </div>
-                  <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">{step.title}</h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">{step.text}</p>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-
-
-        {/* ==================== 5. WHAT WILL YOU BUILD (8 CORE DELIVERABLE ASSETS - BENTO GRID) ==================== */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-            <div className="text-xs font-bold uppercase tracking-widest text-[#1D4ED8]">Practical Outputs</div>
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-              8 Tangible Assets You Will Build in 90 Days
-            </h2>
-            <p className="text-base text-slate-600">
-              When you complete Build2Earn, you won't just have certificates—you'll have an entire ecosystem of career proof.
-            </p>
-          </div>
-
-          {/* Bento Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-
-            {/* Card 1: LinkedIn Profile */}
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 space-y-4 hover:shadow-xl transition-all flex flex-col justify-between border-t-4 border-t-blue-600">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold text-blue-600 uppercase tracking-widest bg-blue-50 px-2.5 py-1 rounded-full">ASSET #1</span>
-                  <Linkedin className="w-6 h-6 text-blue-600" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900">LinkedIn Career Profile</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Optimized bio, headline, banner, project showcases, and connection strategy to attract recruiters early.
-                </p>
-              </div>
-              <div className="pt-4 border-t border-slate-100 text-xs font-bold text-emerald-600 flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4" /> Recruiter-Ready Profile
-              </div>
-            </div>
-
-            {/* Card 2: GitHub Proof of Work */}
-            <div className="bg-[#0F172A] text-white rounded-3xl p-6 space-y-4 hover:shadow-xl transition-all flex flex-col justify-between border-t-4 border-t-purple-500">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold text-purple-400 uppercase tracking-widest bg-purple-950 px-2.5 py-1 rounded-full border border-purple-800">ASSET #2</span>
-                  <Github className="w-6 h-6 text-purple-400" />
-                </div>
-                <h3 className="text-lg font-bold text-white">GitHub Proof of Work</h3>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  Clean repositories, customized READMEs, green contribution matrix, and proper Git commit practices.
-                </p>
-              </div>
-              <div className="pt-4 border-t border-slate-800 text-xs font-bold text-emerald-400 flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4" /> Active GitHub Matrix
-              </div>
-            </div>
-
-            {/* Card 3: Live Personal Portfolio Website */}
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 space-y-4 hover:shadow-xl transition-all flex flex-col justify-between border-t-4 border-t-cyan-500">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold text-cyan-700 uppercase tracking-widest bg-cyan-50 px-2.5 py-1 rounded-full">ASSET #3</span>
-                  <Globe className="w-6 h-6 text-cyan-600" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900">Live Portfolio Website</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Your custom personal website deployed live on Vercel/Netlify displaying your bio, projects, and contact links.
-                </p>
-              </div>
-              <div className="pt-4 border-t border-slate-100 text-xs font-bold text-emerald-600 flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4" /> Deployed Live Website
-              </div>
-            </div>
-
-            {/* Card 4: Domain Projects */}
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 space-y-4 hover:shadow-xl transition-all flex flex-col justify-between border-t-4 border-t-amber-500">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold text-amber-700 uppercase tracking-widest bg-amber-50 px-2.5 py-1 rounded-full">ASSET #4</span>
-                  <Code2 className="w-6 h-6 text-amber-600" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900">Real Domain Projects</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Projects built in Web Dev, AI/ML, Data Science, or Python with live links and clean codebases.
-                </p>
-              </div>
-              <div className="pt-4 border-t border-slate-100 text-xs font-bold text-emerald-600 flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4" /> Published Domain Code
-              </div>
-            </div>
-
-            {/* Card 5: Hackathon Readiness */}
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 space-y-4 hover:shadow-xl transition-all flex flex-col justify-between border-t-4 border-t-rose-500">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold text-rose-700 uppercase tracking-widest bg-rose-50 px-2.5 py-1 rounded-full">ASSET #5</span>
-                  <Trophy className="w-6 h-6 text-rose-600" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900">Hackathon Pitch Kit</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Team setup, fast MVP building, demo pitching skills, and registering for national student hackathons.
-                </p>
-              </div>
-              <div className="pt-4 border-t border-slate-100 text-xs font-bold text-emerald-600 flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4" /> Hackathon-Ready MVP
-              </div>
-            </div>
-
-            {/* Card 6: Open Source Contribution */}
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 space-y-4 hover:shadow-xl transition-all flex flex-col justify-between border-t-4 border-t-teal-500">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold text-teal-700 uppercase tracking-widest bg-teal-50 px-2.5 py-1 rounded-full">ASSET #6</span>
-                  <Users className="w-6 h-6 text-teal-600" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900">Open Source Pathway</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  How to find beginner open-source issues, create pull requests, and contribute to public repositories.
-                </p>
-              </div>
-              <div className="pt-4 border-t border-slate-100 text-xs font-bold text-emerald-600 flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4" /> First PR Contribution
-              </div>
-            </div>
-
-            {/* Card 7: Freelancing Foundation */}
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 space-y-4 hover:shadow-xl transition-all flex flex-col justify-between border-t-4 border-t-indigo-500">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold text-indigo-700 uppercase tracking-widest bg-indigo-50 px-2.5 py-1 rounded-full">ASSET #7</span>
-                  <Briefcase className="w-6 h-6 text-indigo-600" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900">Freelancing Service Pack</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Packaging your skill into a freelancing service, proposal templates, pricing strategy, and client communication.
-                </p>
-              </div>
-              <div className="pt-4 border-t border-slate-100 text-xs font-bold text-emerald-600 flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4" /> Service Offer Blueprint
-              </div>
-            </div>
-
-            {/* Card 8: AI Productivity Stack */}
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 space-y-4 hover:shadow-xl transition-all flex flex-col justify-between border-t-4 border-t-emerald-500">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-widest bg-emerald-50 px-2.5 py-1 rounded-full">ASSET #8</span>
-                  <Cpu className="w-6 h-6 text-emerald-600" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900">AI Productivity Workflow</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Using ChatGPT, Claude, and GitHub Copilot for code assistance, debugging, research, and faster development.
-                </p>
-              </div>
-              <div className="pt-4 border-t border-slate-100 text-xs font-bold text-emerald-600 flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4" /> 5x AI Coding Workflow
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-
-        {/* ==================== 6. DOMAIN TRACKS SELECTOR ==================== */}
-        <section id="domains" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-            <div className="text-xs font-bold uppercase tracking-widest text-[#1D4ED8]">Specializations</div>
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-              Choose Your Practical Domain Track
-            </h2>
-            <p className="text-base text-slate-600">
-              Pick a domain based on your interest. You'll master the fundamentals and build a live domain project.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {domainsList.map((dom) => {
               const DomIcon = dom.icon;
-              const isSelected = selectedDomain === dom.id;
               return (
                 <div
                   key={dom.id}
-                  onClick={() => setSelectedDomain(dom.id)}
-                  className={`cursor-pointer rounded-3xl p-6 border-2 transition-all flex flex-col justify-between ${isSelected
-                    ? "bg-white border-[#1D4ED8] shadow-xl scale-[1.02]"
-                    : "bg-white border-slate-200 hover:border-slate-300"
-                    }`}
+                  className="bg-white border border-slate-200 hover:border-blue-500 rounded-3xl p-6 transition-all duration-300 hover:shadow-xl flex flex-col justify-between group relative overflow-hidden"
                 >
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <div className={`w-11 h-11 rounded-2xl bg-gradient-to-tr ${dom.color} text-white flex items-center justify-center shadow-md`}>
-                        <DomIcon className="w-6 h-6" />
+                      <div className={`w-11 h-11 rounded-2xl bg-gradient-to-tr ${dom.color} text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform`}>
+                        <DomIcon className="w-5 h-5" />
                       </div>
-                      <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">
-                        90-Day Track
-                      </span>
                     </div>
 
                     <div>
-                      <h3 className="text-lg font-bold text-slate-900">{dom.name}</h3>
-                      <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">{dom.desc}</p>
+                      <h3 className="text-lg font-black text-slate-900 group-hover:text-blue-600 transition-colors">{dom.name}</h3>
+                      <p className="text-xs text-slate-600 mt-2 leading-relaxed">{dom.desc}</p>
                     </div>
 
-                    {/* Tech Stack Tags */}
-                    <div className="flex flex-wrap gap-1.5 pt-2">
+                    <div className={`p-2.5 rounded-xl text-xs font-extrabold border flex items-center gap-2 ${dom.badgeBg}`}>
+                      <CheckCircle2 className="w-4 h-4 shrink-0" />
+                      <span>{dom.output}</span>
+                    </div>
+
+                    <div className="flex flex-wrap gap-1.5 pt-1">
                       {dom.stack.map((tech, idx) => (
-                        <span key={idx} className="text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-700">
+                        <span key={idx} className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700">
                           {tech}
                         </span>
                       ))}
                     </div>
                   </div>
 
-                  <div className="pt-4 mt-6 border-t border-slate-100 space-y-3">
-                    <div>
-                      <div className="text-[10px] font-bold text-slate-400 uppercase">Target Project Output</div>
-                      <div className="text-xs font-bold text-[#1D4ED8] mt-0.5">{dom.project}</div>
-                    </div>
+                  <div className="pt-4 mt-6 border-t border-slate-100">
                     <a
                       href={CASHFREE_PAYMENT_URL}
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${isSelected
-                        ? "bg-[#1D4ED8] text-white shadow-md hover:bg-blue-700"
-                        : "bg-slate-100 text-slate-800 hover:bg-slate-200"
-                        }`}
+                      className="w-full py-2.5 rounded-xl bg-[#1D4ED8] hover:bg-blue-800 text-white text-xs font-bold transition-colors flex items-center justify-center gap-1.5 shadow-md shadow-blue-500/10 text-center"
                     >
-                      <span>Apply for {dom.name}</span>
-                      <ExternalLink className="w-4 h-4" />
+                      <span>Direct Payment — {dom.name}</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </a>
                   </div>
                 </div>
@@ -1200,216 +832,510 @@ export default function Build2EarnClient() {
           </div>
         </section>
 
-
-        {/* ==================== 7. 90-DAY ROADMAP TABS ==================== */}
-        <section id="roadmap" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
-          <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
-            <div className="text-xs font-bold uppercase tracking-widest text-[#1D4ED8]">Curriculum Blueprint</div>
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-              The 90-Day Step-by-Step Execution Plan
+        {/* ==================== PROGRAM DELIVERABLES & PACKAGE ==================== */}
+        <section id="whats-included" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200 bg-white/50 scroll-mt-16">
+          <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold uppercase tracking-wider">
+              <Gift className="w-4 h-4 text-emerald-600" /> Program Deliverables Package
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
+              Program Deliverables &amp; Student Package
             </h2>
-            <p className="text-base text-slate-600">
-              Clear weekly objectives so you never feel lost or overwhelmed.
+            <p className="text-base text-slate-600 font-medium">
+              Everything included in your ₹4,999 one-time enrollment fee:
             </p>
           </div>
 
-          {/* Month Tabs Switcher */}
-          <div className="flex justify-center gap-3 mb-10">
-            {[
-              { month: 1, title: "MONTH 1: Digital Foundation", subtitle: "LinkedIn, GitHub & Live Portfolio" },
-              { month: 2, title: "MONTH 2: Domain Masterclass", subtitle: "Deep Practical Project Building" },
-              { month: 3, title: "MONTH 3: Career Launchpad", subtitle: "Freelancing, Open Source & Bounties" }
-            ].map((tab) => (
-              <button
-                key={tab.month}
-                onClick={() => setActiveRoadmapTab(tab.month)}
-                suppressHydrationWarning
-                className={`px-5 py-3 rounded-2xl text-left transition-all border ${activeRoadmapTab === tab.month
-                  ? "bg-[#1D4ED8] text-white border-[#1D4ED8] shadow-lg"
-                  : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
-                  }`}
-              >
-                <div className="text-xs font-bold opacity-80">Phase 0{tab.month}</div>
-                <div className="text-sm font-black">{tab.title}</div>
-              </button>
-            ))}
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {deliverables.map((item, idx) => {
+              const ItemIcon = item.icon;
+              return (
+                <div key={idx} className="bg-white border border-slate-200/90 rounded-3xl p-7 space-y-4 hover:shadow-xl hover:border-blue-400 transition-all flex flex-col justify-between group">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#1D4ED8] flex items-center justify-center font-bold shadow-sm group-hover:scale-110 transition-transform">
+                        <ItemIcon className="w-6 h-6" />
+                      </div>
+                      <span className="text-[10px] font-black px-2.5 py-1 rounded-full bg-blue-100/70 text-blue-800 uppercase tracking-wider">
+                        {item.badge}
+                      </span>
+                    </div>
 
-          {/* Tab Content Display */}
-          <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
-            {activeRoadmapTab === 1 && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-                <div className="border-b border-slate-100 pb-4">
-                  <span className="text-xs font-bold px-3 py-1 rounded-full bg-blue-50 text-[#1D4ED8] border border-blue-200">
-                    WEEKS 1 TO 4
+                    <h3 className="text-xl font-black text-slate-900 tracking-tight">{item.title}</h3>
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{item.desc}</p>
+                  </div>
+
+                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-emerald-600">
+                    <span className="flex items-center gap-1.5">
+                      <CheckCircle2 className="w-4 h-4" /> Included in Program Fee
+                    </span>
+                    <a
+                      href={CASHFREE_PAYMENT_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 underline font-extrabold"
+                    >
+                      Pay ₹4,999 →
+                    </a>
+                  </div>
+                </div>
+              );
+            })}
+
+            <div className="bg-gradient-to-br from-slate-900 to-slate-950 text-white rounded-3xl p-7 space-y-4 shadow-xl flex flex-col justify-between border border-slate-800">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold border border-amber-500/30">
+                    <Sparkles className="w-6 h-6" />
+                  </div>
+                  <span className="text-[10px] font-black px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-wider">
+                    WELCOME SWAG
                   </span>
-                  <h3 className="text-2xl font-black text-slate-900 mt-2">Building Your Digital Brand & Proof of Work</h3>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                    <div className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                      <span className="w-6 h-6 rounded-full bg-[#1D4ED8] text-white flex items-center justify-center text-xs">1</span>
-                      Week 1: Mindset & Career Positioning
-                    </div>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      Setting up your developer roadmap, choosing your primary domain track, and understanding AI-assisted learning.
-                    </p>
-                  </div>
+                <h3 className="text-xl font-black text-white">Official Welcome Kit</h3>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Enrolled students receive an official TechieHelp welcome kit including custom apparel, intern ID card, executive diary, and pen set.
+                </p>
+              </div>
 
-                  <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                    <div className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                      <span className="w-6 h-6 rounded-full bg-[#1D4ED8] text-white flex items-center justify-center text-xs">2</span>
-                      Week 2: Recruiter-Ready LinkedIn Profile
-                    </div>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      Writing high-converting headlines, optimizing your About section, adding featured projects, and networking with tech creators.
-                    </p>
-                  </div>
-
-                  <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                    <div className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                      <span className="w-6 h-6 rounded-full bg-[#1D4ED8] text-white flex items-center justify-center text-xs">3</span>
-                      Week 3: GitHub & Git Version Control
-                    </div>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      Mastering Git CLI commands, creating clean repository README files, customized GitHub profile README, and commit habits.
-                    </p>
-                  </div>
-
-                  <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                    <div className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                      <span className="w-6 h-6 rounded-full bg-[#1D4ED8] text-white flex items-center justify-center text-xs">4</span>
-                      Week 4: Deploying Live Portfolio Website
-                    </div>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      Designing and building your personal portfolio website. Deploying live to Vercel/Netlify with custom domain integration.
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-            {activeRoadmapTab === 2 && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-                <div className="border-b border-slate-100 pb-4">
-                  <span className="text-xs font-bold px-3 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200">
-                    WEEKS 5 TO 8
-                  </span>
-                  <h3 className="text-2xl font-black text-slate-900 mt-2">Deep Domain Execution & Real Projects</h3>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                    <div className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                      <span className="w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs">5</span>
-                      Week 5: Core Domain Architecture
-                    </div>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      Deep dive into selected domain concepts (React/Next.js for Web Dev, Scikit-Learn/Python for AI/ML, Figma for UI/UX).
-                    </p>
-                  </div>
-
-                  <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                    <div className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                      <span className="w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs">6</span>
-                      Week 6: AI-Assisted Development Workflow
-                    </div>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      Integrating Claude & Cursor AI tools into your daily workflow to write code faster, fix bugs, and design architectures.
-                    </p>
-                  </div>
-
-                  <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                    <div className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                      <span className="w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs">7</span>
-                      Week 7: Building Capstone Project MVP
-                    </div>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      Hands-on execution of your domain project. Implementing APIs, database connections, UI components, or AI models.
-                    </p>
-                  </div>
-
-                  <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                    <div className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                      <span className="w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs">8</span>
-                      Week 8: Project Polishing & Documentation
-                    </div>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      Writing comprehensive project README documentation, recording demo videos, and publishing code on GitHub.
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-            {activeRoadmapTab === 3 && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-                <div className="border-b border-slate-100 pb-4">
-                  <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                    WEEKS 9 TO 12
-                  </span>
-                  <h3 className="text-2xl font-black text-slate-900 mt-2">Monetization, Hackathons & Open Source</h3>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                    <div className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                      <span className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs">9</span>
-                      Week 9: Hackathon Strategy & Team Pitch
-                    </div>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      Finding national & global hackathons (Devpost, Unstop), forming teams, rapid ideation, and pitch presentation tricks.
-                    </p>
-                  </div>
-
-                  <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                    <div className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                      <span className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs">10</span>
-                      Week 10: Open Source Contributions
-                    </div>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      Discovering "Good First Issue" tags on GitHub open-source repositories and submitting your first Pull Request (PR).
-                    </p>
-                  </div>
-
-                  <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                    <div className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                      <span className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs">11</span>
-                      Week 11: Freelancing Setup & Client Pitching
-                    </div>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      Packaging your skills into freelance services (e.g. Website Building, Data Cleaning, UI Design), proposal templates, and pricing.
-                    </p>
-                  </div>
-
-                  <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                    <div className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                      <span className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs">12</span>
-                      Week 12: Certification & Future Placement Prep
-                    </div>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      Final evaluation, awarding Training & Internship Certificates, performance-based LOR review, and long-term career planning.
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            )}
+              <div className="pt-4 border-t border-slate-800 flex items-center justify-between text-xs font-bold text-amber-400">
+                <span className="flex items-center gap-1.5">
+                  <Trophy className="w-4 h-4" /> Performance Recommendation
+                </span>
+                <a
+                  href={CASHFREE_PAYMENT_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-amber-300 hover:text-white underline font-extrabold"
+                >
+                  Direct Payment →
+                </a>
+              </div>
+            </div>
           </div>
         </section>
 
+        {/* ==================== DATA STRUCTURES & INTERVIEW MASTERY ==================== */}
+        <section id="dsa-interview-prep" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200 scroll-mt-16">
+          <div className="grid lg:grid-cols-12 gap-10 items-center">
+            
+            <div className="lg:col-span-5 space-y-6">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold uppercase tracking-wider">
+                <BarChart3 className="w-4 h-4 text-indigo-600" /> Technical Interview Acceleration
+              </div>
 
-        {/* ==================== 7.1 STUDENT REVIEWS & SUCCESS STORIES ==================== */}
+              <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+                Data Structures &amp; <br />
+                <span className="text-[#1D4ED8]">Interview Mastery</span>
+              </h2>
+
+              <blockquote className="p-4 rounded-2xl bg-blue-50 border-l-4 border-blue-600 text-xs sm:text-sm font-semibold text-slate-800 italic">
+                “Prepare for competitive technical interviews, campus placement drives, and coding rounds with dedicated DSA resources and profile audits.”
+              </blockquote>
+
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Combining Data Structures &amp; Algorithms preparation with domain internships provides students with a competitive advantage during recruiter evaluations.
+              </p>
+
+              <div className="pt-2">
+                <a
+                  href={CASHFREE_PAYMENT_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-[#1D4ED8] hover:bg-blue-700 text-white font-extrabold text-xs shadow-md transition-all"
+                >
+                  <span>Enroll for DSA &amp; Technical Prep — ₹4,999</span>
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+
+            <div className="lg:col-span-7 grid sm:grid-cols-2 gap-4">
+              <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2 hover:border-blue-400 transition-colors">
+                <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+                  <Code2 className="w-5 h-5" />
+                </div>
+                <h4 className="font-extrabold text-slate-900 text-sm">Core Data Structures</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Arrays, strings, searching, sorting, recursion, trees, graphs, and algorithmic problem-solving.
+                </p>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2 hover:border-blue-400 transition-colors">
+                <div className="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
+                  <Cpu className="w-5 h-5" />
+                </div>
+                <h4 className="font-extrabold text-slate-900 text-sm">Problem-Solving Approach</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Time and space complexity analysis, optimization techniques, and coding practice routines.
+                </p>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2 hover:border-blue-400 transition-colors">
+                <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+                  <FileText className="w-5 h-5" />
+                </div>
+                <h4 className="font-extrabold text-slate-900 text-sm">Company Practice Collections</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Curated company-wise practice question banks and previous interview pattern analysis.
+                </p>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2 hover:border-blue-400 transition-colors">
+                <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
+                  <Users className="w-5 h-5" />
+                </div>
+                <h4 className="font-extrabold text-slate-900 text-sm">Technical Mock Interviews</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Technical interview strategies, coding assessment preparation, and mock interview guidance.
+                </p>
+              </div>
+
+              <div className="sm:col-span-2 p-5 rounded-2xl bg-gradient-to-r from-blue-900 to-slate-900 text-white shadow-md space-y-2">
+                <div className="flex items-center gap-2 text-xs font-bold text-cyan-300 uppercase tracking-wider">
+                  <UserCheck className="w-4 h-4" /> Professional Profile Optimization
+                </div>
+                <h4 className="font-extrabold text-white text-base">Resume, LinkedIn &amp; GitHub Profile Reviews</h4>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Professional resume formatting, LinkedIn profile optimization, and GitHub repository reviews to improve recruiter response rates.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        {/* ==================== HACKATHONS & OPEN SOURCE ==================== */}
+        <section id="hackathon-opensource" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200 scroll-mt-16">
+          <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-50 border border-purple-200 text-purple-700 text-xs font-bold uppercase tracking-wider">
+              <Trophy className="w-4 h-4 text-purple-600" /> Practical Industry Proof
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
+              Founder Mentorship &amp; Open Source
+            </h2>
+            <p className="text-base text-slate-600 font-medium">
+              Build minimum viable products for national hackathons and contribute to public open-source codebases.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            
+            <div className="bg-white border border-slate-200 rounded-3xl p-8 space-y-6 shadow-lg hover:shadow-2xl transition-all relative overflow-hidden flex flex-col justify-between">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="w-12 h-12 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
+                    <Trophy className="w-6 h-6" />
+                  </div>
+                  <span className="text-[10px] font-black px-3 py-1 rounded-full bg-purple-50 text-purple-800 border border-purple-200 uppercase tracking-wider">
+                    FOUNDER-LED
+                  </span>
+                </div>
+
+                <h3 className="text-2xl font-black text-slate-900">Founder-Led Hackathon Guidance</h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  Strategic coaching from tech founders to help you build and win hackathons:
+                </p>
+
+                <div className="space-y-3 pt-2 text-xs font-semibold text-slate-700">
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-purple-600 shrink-0 mt-0.5" />
+                    <span>Discover high-impact national and global hackathons matching your skill level.</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-purple-600 shrink-0 mt-0.5" />
+                    <span>Master team formation, problem statement evaluation, and rapid idea validation.</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-purple-600 shrink-0 mt-0.5" />
+                    <span>Plan and execute minimum viable products (MVPs) under submission deadlines.</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-purple-600 shrink-0 mt-0.5" />
+                    <span>Create compelling pitch decks and master live demo presentations for judges.</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-[11px] text-slate-500 font-medium">Strategic mentorship provided</span>
+                <a
+                  href={CASHFREE_PAYMENT_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-extrabold text-xs"
+                >
+                  Pay ₹4,999 →
+                </a>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-emerald-50 via-white to-slate-50 text-slate-900 rounded-3xl p-8 space-y-6 shadow-xl hover:shadow-2xl transition-all relative overflow-hidden flex flex-col justify-between border border-emerald-200/80">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold border border-emerald-200">
+                    <GitPullRequest className="w-6 h-6" />
+                  </div>
+                  <span className="text-[10px] font-black px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 uppercase tracking-wider">
+                    OPEN SOURCE
+                  </span>
+                </div>
+
+                <div className="text-xs font-extrabold text-emerald-700 uppercase tracking-wider">
+                  Your First Open-Source Contribution Starts Here
+                </div>
+                <h3 className="text-2xl font-black text-slate-900">Open Source Contribution Support</h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  Master public developer collaboration and build a green GitHub contribution history:
+                </p>
+
+                <div className="space-y-3 pt-2 text-xs font-semibold text-slate-700">
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <span>Master Git &amp; GitHub CLI workflows, branch management, and commit etiquette.</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <span>Identify beginner-friendly repositories and navigate 'Good First Issue' labels.</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <span>Create clean feature branches, submit pull requests (PRs), and address code reviews.</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-slate-200 flex items-center justify-between">
+                <span className="text-[11px] text-slate-500 font-medium">Verified GitHub workflow coaching</span>
+                <a
+                  href={CASHFREE_PAYMENT_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs transition-colors shadow-sm"
+                >
+                  Pay ₹4,999 →
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        {/* ==================== 90-DAY EXECUTION ROADMAP ==================== */}
+        <section id="roadmap" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200 scroll-mt-16">
+          <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-[#1D4ED8] text-xs font-bold uppercase tracking-wider">
+              <Clock className="w-4 h-4 text-blue-600" /> Curriculum Blueprint
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
+              90-Day Execution Roadmap
+            </h2>
+            <p className="text-base text-slate-600 font-medium">
+              A milestone-driven curriculum designed to take you from foundational concepts to career-ready outputs.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            
+            <div className="bg-white border-2 border-blue-100 rounded-3xl p-7 space-y-6 shadow-md hover:shadow-xl transition-all flex flex-col justify-between">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <span className="px-3.5 py-1 rounded-full bg-blue-600 text-white font-black text-xs">
+                    MONTH 1
+                  </span>
+                  <span className="text-xs font-bold text-blue-600">WEEKS 1 - 4</span>
+                </div>
+
+                <h3 className="text-xl font-black text-slate-900">Foundation &amp; Profile Setup</h3>
+
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Domain fundamentals, Git/GitHub setup, coding best practices, LinkedIn profile optimization, career roadmap, and initial practical project.
+                </p>
+
+                <div className="space-y-2 pt-2 text-xs font-semibold text-slate-700">
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-blue-600" /> Domain Core Fundamentals
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-blue-600" /> Git/GitHub Workflow Setup
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-blue-600" /> LinkedIn Profile Optimization
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-blue-50 border border-blue-200 text-xs font-extrabold text-[#1D4ED8]">
+                Output: Recruiter-Ready Profile &amp; Initial Project
+              </div>
+            </div>
+
+            <div className="bg-white border-2 border-purple-100 rounded-3xl p-7 space-y-6 shadow-md hover:shadow-xl transition-all flex flex-col justify-between">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <span className="px-3.5 py-1 rounded-full bg-purple-600 text-white font-black text-xs">
+                    MONTH 2
+                  </span>
+                  <span className="text-xs font-bold text-purple-600">WEEKS 5 - 8</span>
+                </div>
+
+                <h3 className="text-xl font-black text-slate-900">Project Build &amp; Practical Experience</h3>
+
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Domain capstone project execution, mentor feedback loops, portfolio integration, open-source PR submission, and hackathon MVP planning.
+                </p>
+
+                <div className="space-y-2 pt-2 text-xs font-semibold text-slate-700">
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-purple-600" /> Structured Internship Tasks
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-purple-600" /> Domain Capstone Development
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-purple-600" /> Open Source PR Submission
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-purple-50 border border-purple-200 text-xs font-extrabold text-purple-800">
+                Output: Deployed Project Portfolio &amp; Practical Work
+              </div>
+            </div>
+
+            <div className="bg-white border-2 border-emerald-100 rounded-3xl p-7 space-y-6 shadow-md hover:shadow-xl transition-all flex flex-col justify-between">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <span className="px-3.5 py-1 rounded-full bg-emerald-600 text-white font-black text-xs">
+                    MONTH 3
+                  </span>
+                  <span className="text-xs font-bold text-emerald-600">WEEKS 9 - 12</span>
+                </div>
+
+                <h3 className="text-xl font-black text-slate-900">Career Launch &amp; Opportunity Exploration</h3>
+
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Final capstone refinement, technical interview prep, company-wise DSA practice, freelancing proposal frameworks, and opportunity outreach.
+                </p>
+
+                <div className="space-y-2 pt-2 text-xs font-semibold text-slate-700">
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-emerald-600" /> Company Practice Question Sets
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-emerald-600" /> Resume &amp; Interview Coaching
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-emerald-600" /> Certification &amp; LOR Evaluation
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs font-extrabold text-emerald-800">
+                Output: Career-Ready Portfolio &amp; Opportunity Action Plan
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        {/* ==================== POST-PROGRAM CAREER READINESS ==================== */}
+        <section id="earning-outcomes" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200 scroll-mt-16">
+          <div className="bg-gradient-to-br from-[#0B192C] via-slate-900 to-blue-950 text-white rounded-[2.5rem] p-8 sm:p-12 shadow-2xl relative overflow-hidden border border-slate-800 space-y-8">
+            
+            <div className="text-center max-w-3xl mx-auto space-y-4">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-extrabold uppercase tracking-wider">
+                <TrendingUp className="w-4 h-4 text-emerald-400" /> Career Readiness Outcomes
+              </div>
+
+              <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                Post-Program Career Readiness
+              </h2>
+
+              <p className="text-base sm:text-lg text-emerald-400 font-extrabold max-w-2xl mx-auto">
+                “Graduate with the skills, portfolio, and confidence to start pursuing paid opportunities within 90 days.”
+              </p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
+              
+              <div className="p-5 rounded-2xl bg-white/5 border border-white/10 space-y-2 backdrop-blur-sm">
+                <h4 className="font-extrabold text-white text-base">Apply for Internships &amp; Jobs</h4>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Target entry-level positions and internships backed by a verified portfolio of real-world projects.
+                </p>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-white/5 border border-white/10 space-y-2 backdrop-blur-sm">
+                <h4 className="font-extrabold text-white text-base">Pursue Freelance Projects</h4>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Pitch clients, build tailored proposals, and deliver commercial freelance tech services.
+                </p>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-white/5 border border-white/10 space-y-2 backdrop-blur-sm">
+                <h4 className="font-extrabold text-white text-base">Showcase Public Proof of Work</h4>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Present recruiters with live project URLs, active GitHub repositories, and structured case studies.
+                </p>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-white/5 border border-white/10 space-y-2 backdrop-blur-sm">
+                <h4 className="font-extrabold text-white text-base">Compete in Hackathons &amp; Open Source</h4>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Contribute to global repositories and participate in national hackathons with confidence.
+                </p>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-white/5 border border-white/10 space-y-2 backdrop-blur-sm sm:col-span-2 lg:col-span-2 flex flex-col justify-between">
+                <div>
+                  <h4 className="font-extrabold text-white text-base">Excel in Technical Interviews</h4>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    Leverage structured DSA practice, polished resumes, and interview preparation to clear technical rounds.
+                  </p>
+                </div>
+                <div className="pt-3">
+                  <a
+                    href={CASHFREE_PAYMENT_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#1D4ED8] hover:bg-blue-700 text-white font-black text-xs shadow-md hover:opacity-95 transition-opacity"
+                  >
+                    <span>Enroll Now — ₹4,999 →</span>
+                  </a>
+                </div>
+              </div>
+
+            </div>
+
+            <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200 text-center text-xs sm:text-sm font-black text-[#1D4ED8] shadow-sm">
+              Program Objective: Shift from passive learning to demonstrating capability and actively pursuing paid career opportunities.
+            </div>
+
+            <div className="p-5 rounded-2xl bg-amber-50/70 border border-amber-200 text-xs text-slate-700 space-y-1.5 leading-relaxed shadow-sm">
+              <div className="font-bold text-amber-900 flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-amber-600" /> Professional Disclaimer:
+              </div>
+              <div>
+                Freelance clients, internship selection, job offers, and income depend on individual performance, market demand, and employer evaluation. Build2Earn provides training, tools, and mentorship—not contractual income guarantees.
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        {/* ==================== STUDENT REVIEWS & STORIES ==================== */}
         <section id="student-reviews" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 border border-blue-200 text-[#2563EB] font-bold text-xs uppercase tracking-wider">
-              <Star className="w-4 h-4 text-amber-500 fill-amber-400" /> PROOF OF SUCCESS
+              <Star className="w-4 h-4 text-amber-500 fill-amber-400" /> Student Verification
             </div>
             <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
-              Student Reviews & <span className="text-[#2563EB]">Success Stories</span>
+              Student Testimonials &amp; Reviews
             </h2>
             <p className="text-base sm:text-lg text-slate-600 font-medium">
-              Hear directly from our students about their learning experience, live projects, and career growth with TechieHelp.
+              Hear directly from our students about their learning experience, live projects, and career growth.
             </p>
           </div>
 
@@ -1468,12 +1394,10 @@ export default function Build2EarnClient() {
           </div>
         </section>
 
-
-        {/* ==================== 7.2 COMPLETION CERTIFICATE ==================== */}
+        {/* ==================== CERTIFICATION & CREDENTIAL SHOWCASE ==================== */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
           <div className="grid lg:grid-cols-12 gap-12 items-center">
-
-            {/* Left: Certificate Image */}
+            
             <div className="lg:col-span-5 relative">
               <div className="relative rounded-3xl overflow-hidden border-4 border-white shadow-2xl bg-slate-100 group">
                 <Image
@@ -1485,7 +1409,7 @@ export default function Build2EarnClient() {
                 />
                 <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md p-3 rounded-2xl border border-white/80 shadow-lg flex items-center justify-between text-xs font-bold text-slate-800">
                   <span className="flex items-center gap-2 text-blue-600">
-                    <QrCode className="w-4 h-4" /> QR Code Verified
+                    <QrCode className="w-4 h-4" /> QR Code Verification
                   </span>
                   <span className="bg-emerald-500 text-white px-2.5 py-1 rounded-lg text-[10px] font-black uppercase">
                     OFFICIAL CREDENTIAL
@@ -1494,423 +1418,152 @@ export default function Build2EarnClient() {
               </div>
             </div>
 
-            {/* Right: Certificate Info & Verification Points */}
             <div className="lg:col-span-7 space-y-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-[#2563EB] font-bold text-xs uppercase">
-                <Award className="w-4 h-4 text-[#2563EB]" /> Official Recognition
+                <Award className="w-4 h-4 text-[#2563EB]" /> Official Credentials
               </div>
 
               <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                Completion Certificate
+                Training &amp; Internship Credentials
               </h2>
 
               <p className="text-base text-slate-600 leading-relaxed font-medium">
-                We provide an industry-recognized certification that validates your skills, internship experience, and project work through verified and trusted channels.
+                Students who complete the required milestones receive official credentials powered by TechieHelp Institute of AI to enhance their professional profiles:
               </p>
 
-              <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-100 space-y-1">
-                <h3 className="text-lg font-extrabold text-slate-900">TechieHelp Career & Internship Completion Certificate</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Issued after successful completion of training, projects, and milestone assessments. Designed to validate real skills for recruiters and institutions.
-                </p>
-              </div>
+              <div className="space-y-3">
+                <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-100 flex items-start justify-between">
+                  <div className="flex items-start gap-3">
+                    <Award className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="text-sm font-extrabold text-slate-900">Training Certificate</h4>
+                      <p className="text-xs text-slate-600">Validates your 3-month practical domain learning and skill development.</p>
+                    </div>
+                  </div>
+                </div>
 
-              {/* Trust Points */}
-              <div className="space-y-3 pt-2">
-                <h4 className="text-sm font-black text-slate-900 uppercase tracking-wider text-[#2563EB]">Trust & Verification Points</h4>
-                <div className="grid sm:grid-cols-2 gap-3 text-xs font-bold text-slate-700">
-                  <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200">
-                    <CheckCircle2 className="w-4.5 h-4.5 text-emerald-600 shrink-0" />
-                    <span>National Internship Portal Listed</span>
+                <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-100 flex items-start justify-between">
+                  <div className="flex items-start gap-3">
+                    <Briefcase className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="text-sm font-extrabold text-slate-900">Internship Completion Certificate</h4>
+                      <p className="text-xs text-slate-600">Recognizes your practical work execution, domain tasks, and project submissions.</p>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200">
-                    <CheckCircle2 className="w-4.5 h-4.5 text-emerald-600 shrink-0" />
-                    <span>AICTE-Recognized Internship Program</span>
-                  </div>
-                  <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200">
-                    <QrCode className="w-4.5 h-4.5 text-blue-600 shrink-0" />
-                    <span>QR Code Scanner Verification</span>
-                  </div>
-                  <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200">
-                    <ShieldCheck className="w-4.5 h-4.5 text-sky-600 shrink-0" />
-                    <span>Public Profile TechieHelp Verification</span>
-                  </div>
-                  <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200">
-                    <Award className="w-4.5 h-4.5 text-amber-500 shrink-0" />
-                    <span>Unique Certificate ID for Every Intern</span>
-                  </div>
-                  <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200">
-                    <Clock className="w-4.5 h-4.5 text-purple-600 shrink-0" />
-                    <span>Linked to Duration & Projects Completed</span>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-100 flex items-start justify-between">
+                  <div className="flex items-start gap-3">
+                    <Trophy className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="text-sm font-extrabold text-slate-900">Performance Letter of Recommendation</h4>
+                      <p className="text-xs text-slate-600">Letter of Recommendation awarded to top-performing students based on project evaluation.</p>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Notice Box */}
-              <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-xs font-bold text-amber-900 flex items-center gap-3">
-                <span className="w-8 h-8 rounded-full bg-amber-400 text-amber-950 flex items-center justify-center shrink-0 font-black text-sm">
-                  💡
-                </span>
-                <span>Every certificate can be instantly verified by scanning the QR code or visiting the intern's public profile on TechieHelp.</span>
+              <div className="pt-2">
+                <a
+                  href={CASHFREE_PAYMENT_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-7 py-3 rounded-2xl bg-[#1D4ED8] hover:bg-blue-700 text-white font-extrabold text-sm shadow-md transition-all"
+                >
+                  <span>Get Started &amp; Enroll — ₹4,999</span>
+                  <ExternalLink className="w-4 h-4" />
+                </a>
               </div>
             </div>
 
           </div>
         </section>
 
-
-        {/* ==================== 7.3 RECOMMENDATION LETTER (PLACEMENT SUPPORT) ==================== */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
-          <div className="grid lg:grid-cols-12 gap-12 items-center">
-
-            {/* Left: Recommendation Letter Info */}
-            <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-bold text-xs uppercase">
-                <FileCheck className="w-4 h-4 text-emerald-600" /> Placement Acceleration
-              </div>
-
-              <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                Recommendation Letter <span className="text-[#2563EB]">(Placement Support)</span>
-              </h2>
-
-              <p className="text-base text-slate-600 leading-relaxed font-medium">
-                This recommendation letter strengthens your resume and supports internship-to-placement transitions by highlighting your performance, skills, and project contributions.
-              </p>
-
-              <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-100 space-y-1">
-                <h3 className="text-lg font-extrabold text-slate-900">TechieHelp Internship Letter of Recommendation (LOR)</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Awarded based on student project execution, code quality, and active participation during the 3-month program.
-                </p>
-              </div>
-
-              {/* Placement Points */}
-              <div className="space-y-3 pt-2">
-                <h4 className="text-sm font-black text-slate-900 uppercase tracking-wider text-emerald-600">Placement-Focused Trust Points</h4>
-                <div className="grid sm:grid-cols-2 gap-3 text-xs font-bold text-slate-700">
-                  <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200">
-                    <CheckCircle2 className="w-4.5 h-4.5 text-emerald-600 shrink-0" />
-                    <span>Performance & Project Based Award</span>
-                  </div>
-                  <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200">
-                    <CheckCircle2 className="w-4.5 h-4.5 text-emerald-600 shrink-0" />
-                    <span>Boosts Resume Shortlisting in HR Rounds</span>
-                  </div>
-                  <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200">
-                    <ShieldCheck className="w-4.5 h-4.5 text-sky-600 shrink-0" />
-                    <span>Linked to Public TechieHelp Profile</span>
-                  </div>
-                  <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200">
-                    <QrCode className="w-4.5 h-4.5 text-blue-600 shrink-0" />
-                    <span>QR Code Verification for Recruiters</span>
-                  </div>
-                  <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200">
-                    <Award className="w-4.5 h-4.5 text-amber-500 shrink-0" />
-                    <span>Valid for Jobs, Internships & Higher Studies</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Verification Box */}
-              <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200 text-xs font-bold text-blue-900 flex items-center gap-3">
-                <span className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center shrink-0 font-black text-sm">
-                  ✓
-                </span>
-                <span>Recruiters & HRs can directly verify this recommendation letter via QR Code or the intern's public profile link.</span>
-              </div>
-            </div>
-
-            {/* Right: Recommendation Image */}
-            <div className="lg:col-span-5 relative">
-              <div className="relative rounded-3xl overflow-hidden border-4 border-white shadow-2xl bg-slate-100 group">
-                <Image
-                  src={recommendation?.src || recommendation}
-                  alt="Recommendation Letter"
-                  width={600}
-                  height={420}
-                  className="w-full h-auto object-cover rounded-2xl transition-transform duration-500 group-hover:scale-105"
-                />
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-
-        {/* ==================== 7.4 STUDENT ACHIEVEMENTS & CERTIFICATION MOMENTS ==================== */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
-          <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-50 border border-purple-200 text-purple-700 font-bold text-xs uppercase tracking-wider">
-              <Trophy className="w-4 h-4 text-purple-600" /> Real Outcomes
+        {/* ==================== FINAL SUMMARY & ENROLLMENT ==================== */}
+        <section id="pricing-enrollment" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200 scroll-mt-16">
+          <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1D4ED8] text-white font-extrabold text-xs uppercase tracking-widest shadow-md">
+              BUILD2EARN · POWERED BY TECHIEHELP INSTITUTE OF AI
             </div>
             <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
-              Student Achievements & <span className="text-[#2563EB]">Certification Moments</span>
+              Everything You Need to Build Your Career
             </h2>
             <p className="text-base sm:text-lg text-slate-600 font-medium">
-              Real students. Real certificates. Real internship outcomes. A glimpse of our interns receiving verified certificates, goodies, and recognition after completing live projects.
+              One program. Three months. Practical skills, internship experience, mentorship, production projects, and a clear career roadmap.
             </p>
           </div>
 
-          {/* Gallery Controls Toggle */}
-          <div className="flex justify-end mb-6">
-            <div className="flex bg-slate-100 p-1 rounded-2xl border border-slate-200">
-              <button
-                onClick={() => setAutoScroll(true)}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${autoScroll ? "bg-[#2563EB] text-white shadow-md" : "text-slate-600 hover:text-slate-900"
-                  }`}
-                suppressHydrationWarning
-              >
-                Auto Scroll
-              </button>
-              <button
-                onClick={() => setAutoScroll(false)}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${!autoScroll ? "bg-[#2563EB] text-white shadow-md" : "text-slate-600 hover:text-slate-900"
-                  }`}
-                suppressHydrationWarning
-              >
-                Manual Scroll
-              </button>
-            </div>
-          </div>
-
-          {/* Marquee Image Gallery */}
-          <div className={autoScroll ? "overflow-hidden py-4" : "overflow-x-auto py-4"}>
-            <motion.div
-              className="flex gap-5 shrink-0"
-              animate={autoScroll ? { x: ["0%", "-50%"] } : { x: "0%" }}
-              transition={
-                autoScroll
-                  ? {
-                    x: {
-                      repeat: Infinity,
-                      repeatType: "loop",
-                      duration: 35,
-                      ease: "linear",
-                    },
-                  }
-                  : { duration: 0.3 }
-              }
-              style={{ width: "max-content" }}
-            >
-              {[
-                aryan1, aryan2, sixty, coreTeam, amazad, tit, delhiJudge, recon, kitInt, kit, kitNodha, kitCert,
-                aarshdeepcertificate, aarshdeepdiary, aarshdeeptrophy, groups, hod, rohitdiary, rohittrophy,
-                simrancertificate, simrandiary, simrantrophy, simrantshirt
-              ].map((img, index) => (
-                <div key={index} className="w-64 h-64 relative rounded-2xl overflow-hidden shadow-lg border border-slate-200 hover:shadow-2xl hover:scale-105 transition-all duration-300 shrink-0 bg-slate-100">
-                  <Image
-                    src={img?.src || img}
-                    alt={`Student Achievement ${index + 1}`}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              ))}
-              {[
-                aryan1, aryan2, sixty, coreTeam, amazad, tit, delhiJudge, recon, kitInt, kit, kitNodha, kitCert,
-                aarshdeepcertificate, aarshdeepdiary, aarshdeeptrophy, groups, hod, rohitdiary, rohittrophy,
-                simrancertificate, simrandiary, simrantrophy, simrantshirt
-              ].map((img, index) => (
-                <div key={`dup-${index}`} className="w-64 h-64 relative rounded-2xl overflow-hidden shadow-lg border border-slate-200 hover:shadow-2xl hover:scale-105 transition-all duration-300 shrink-0 bg-slate-100">
-                  <Image
-                    src={img?.src || img}
-                    alt={`Student Achievement Duplicate ${index + 1}`}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              ))}
-            </motion.div>
-          </div>
-
-          <div className="text-center mt-8 text-xs font-bold text-slate-500">
-            All certificates and recognitions are awarded after successful completion of real internship projects and milestones.
-          </div>
-        </section>
-
-
-        {/* ==================== 8. MENTORSHIP & OFFICIAL CERTIFICATES ==================== */}
-        <section id="outcomes" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-
-            {/* Left Column: Certifications Showcase */}
-            <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-[#1D4ED8] font-bold text-xs uppercase">
-                Official Credentials
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                Earn Industry Credentials Powered by TechieHelp
-              </h2>
-              <p className="text-base text-slate-600 leading-relaxed">
-                Upon successful completion of the Build2Earn program deliverables, students receive 2 official credentials to add directly to their resume and LinkedIn:
-              </p>
-
-              <div className="space-y-4">
-                <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-blue-100 text-[#1D4ED8] flex items-center justify-center shrink-0 font-bold">
-                    <Award className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-bold text-slate-900">01. Training Certificate</h3>
-                    <p className="text-xs text-slate-600 mt-1">
-                      Validates your 3-month structured skill mastery, practical hands-on training, and project development.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 font-bold">
-                    <Briefcase className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-bold text-slate-900">02. Internship Certificate</h3>
-                    <p className="text-xs text-slate-600 mt-1">
-                      Recognizes your practical work execution, domain project submission, and internship task completion.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-transparent border border-amber-200 flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 font-bold">
-                    <Trophy className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-bold text-slate-900">Performance Letter of Recommendation (LOR)</h3>
-                    <p className="text-xs text-slate-600 mt-1">
-                      Performance-based credential awarded to top performers who demonstrate exceptional project output and commitment.
-                    </p>
-                  </div>
-                </div>
-              </div>
+          <div className="max-w-2xl mx-auto bg-white border-4 border-[#1D4ED8] rounded-[2.5rem] p-8 sm:p-10 shadow-2xl space-y-8 relative">
+            
+            <div className="absolute -top-5 left-1/2 -translate-x-1/2 px-6 py-1.5 rounded-full bg-gradient-to-r from-[#1D4ED8] to-indigo-600 text-white font-black text-xs uppercase tracking-widest shadow-lg">
+              3-MONTH PRACTICAL PROGRAM
             </div>
 
-            {/* Right Column: Live Mentorship Card */}
-            <div className="bg-[#0F172A] text-white rounded-3xl p-8 border border-slate-800 shadow-2xl space-y-6">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-                <span className="text-xs font-mono text-cyan-400 font-bold uppercase">LIVE MENTORSHIP ENGINE</span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                  ACTIVE SUPPORT
-                </span>
-              </div>
-
-              <h3 className="text-2xl font-black text-white">Direct Guidance. Zero Doubt Blockers.</h3>
-
-              <p className="text-sm text-slate-300 leading-relaxed">
-                Building alone can be confusing. With Build2Earn, you get direct access to experienced mentors who review your GitHub commits, check your LinkedIn profile, and help resolve technical errors.
-              </p>
-
-              <div className="space-y-3 pt-2">
-                <div className="flex items-center gap-3 text-xs text-slate-200">
-                  <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
-                  <span>Weekly Live Interactive Q&A & Project Review Sessions</span>
-                </div>
-                <div className="flex items-center gap-3 text-xs text-slate-200">
-                  <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
-                  <span>GitHub Repository & Code Quality Reviews</span>
-                </div>
-                <div className="flex items-center gap-3 text-xs text-slate-200">
-                  <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
-                  <span>Personal Portfolio Review before public deployment</span>
-                </div>
-                <div className="flex items-center gap-3 text-xs text-slate-200">
-                  <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
-                  <span>Peer Community Access for team building & networking</span>
-                </div>
-              </div>
-
-              <a
-                href={CASHFREE_PAYMENT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#1D4ED8] to-[#0EA5E9] text-white font-extrabold text-sm shadow-lg hover:opacity-95 transition-opacity flex items-center justify-center gap-2"
-              >
-                <span>Join Mentored Cohort — ₹4,999</span>
-                <ExternalLink className="w-4 h-4" />
-              </a>
-            </div>
-
-          </div>
-        </section>
-
-
-        {/* ==================== 9. PRICING STACK & VALUE BREAKDOWN ==================== */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200">
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-            <div className="text-xs font-bold uppercase tracking-widest text-[#1D4ED8]">Investment</div>
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-              Simple, Transparent Pricing
-            </h2>
-            <p className="text-base text-slate-600">
-              One price for the complete 3-month practical program. No hidden fees or recurring subscriptions.
-            </p>
-          </div>
-
-          <div className="max-w-xl mx-auto bg-white border-2 border-[#1D4ED8] rounded-3xl p-8 sm:p-10 shadow-2xl space-y-8 relative">
-
-            {/* Top Badge */}
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-[#1D4ED8] text-white font-black text-xs uppercase tracking-widest shadow-md">
-              COMPLETE 3-MONTH COHORT
-            </div>
-
-            {/* Price Stack */}
             <div className="text-center space-y-2 pt-2">
-              <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">Enrollment Fee</div>
+              <div className="text-xs font-extrabold text-slate-400 uppercase tracking-widest">Program Investment</div>
               <div className="flex items-baseline justify-center gap-3">
-                <span className="text-5xl font-black text-slate-900">₹4,999</span>
-                <span className="text-slate-400 line-through text-lg font-bold">₹12,000</span>
+                <span className="text-5xl sm:text-6xl font-black text-slate-900">₹4,999</span>
+                <span className="text-slate-400 line-through text-xl font-bold">₹12,000</span>
               </div>
-              <p className="text-xs text-emerald-600 font-bold">Includes Training + Internship + 2 Certificates</p>
+              <div className="text-xs text-emerald-600 font-extrabold">3-month program · One-time fee · No hidden charges</div>
             </div>
 
-            {/* Checklist */}
-            <div className="space-y-3.5 text-sm text-slate-700 border-t border-b border-slate-100 py-6">
+            <div className="space-y-3 text-xs sm:text-sm text-slate-800 border-t border-b border-slate-100 py-6">
+              <div className="font-extrabold text-slate-900 uppercase tracking-wider text-xs mb-3 text-[#1D4ED8]">
+                Program Package &amp; Deliverables:
+              </div>
               {[
-                "3 Months Practical Training & Work Execution",
-                "LinkedIn Profile & Digital Brand Optimization",
-                "GitHub Proof of Work Setup & Repository Building",
-                "Live Personal Portfolio Website Deployment",
-                "Domain-Specific Capstone Project",
-                "AI Tools & Workflow Integration (Claude, ChatGPT, Copilot)",
-                "Hackathon Readiness & Pitching Framework",
-                "Open Source Contribution Guidance",
-                "Freelancing Services Setup & Proposal Training",
-                "2 Official Credentials (Training + Internship Certificates)",
-                "Eligibility for Performance-Based Letter of Recommendation (LOR)"
+                "Select 1 of 8 primary internship domains (Frontend, Backend, MERN, Full Stack, UI/UX, AI, ML, Cybersecurity)",
+                "3-month practical training & domain-specific internship tasks",
+                "Production-grade project development & live deployment",
+                "Direct mentorship & technical feedback sessions",
+                "DSA & company-wise interview practice resources",
+                "Founder-led hackathon guidance & pitch frameworks",
+                "Open-source contribution guidance & GitHub workflows",
+                "LinkedIn, GitHub & resume profile reviews",
+                "Official welcome goodies kit",
+                "Training & Internship completion certificates*",
+                "Performance-based Letter of Recommendation (LOR) eligibility*"
               ].map((item, idx) => (
                 <div key={idx} className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                  <span className="text-xs font-semibold">{item}</span>
+                  <span className="font-semibold leading-snug">{item}</span>
                 </div>
               ))}
             </div>
 
-            {/* Enrollment Action */}
-            <div className="space-y-3">
+            <div className="space-y-4">
               <a
                 href={CASHFREE_PAYMENT_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#1D4ED8] via-[#0EA5E9] to-[#0284C7] hover:from-blue-700 hover:to-sky-600 text-white font-extrabold text-base shadow-xl shadow-blue-500/25 transition-all hover:scale-[1.01] active:scale-95 flex items-center justify-center gap-2 group"
+                className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#1D4ED8] via-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black text-base shadow-xl shadow-blue-500/25 transition-all hover:scale-[1.01] active:scale-95 flex items-center justify-center gap-3 group text-center"
               >
-                <Sparkles className="w-5 h-5 text-amber-300" />
-                <span>PAY & ENROLL NOW — ₹4,999</span>
-                <ExternalLink className="w-5 h-5" />
+                <span>Direct Cashfree Payment → ₹4,999</span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </a>
-              <p className="text-[11px] text-center text-slate-500 font-medium">
-                Disclaimer: Build2Earn is a skill-building program. We do not guarantee jobs or passive income; outcomes depend on student effort and execution.
+
+              <button
+                onClick={() => handleOpenModal("Frontend Development")}
+                className="w-full py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors flex items-center justify-center gap-1.5"
+              >
+                <span>Need to Submit Contact Details First? Click Here</span>
+              </button>
+
+              <p className="text-[11px] text-center text-slate-500 font-medium leading-relaxed">
+                *Certificates are subject to program milestone completion. LOR is performance-based. Freelance projects, job selection, and income depend on individual performance and market demand.
               </p>
             </div>
 
           </div>
         </section>
 
-
-        {/* ==================== 10. FAQ ACCORDION ==================== */}
+        {/* ==================== FAQ ACCORDION ==================== */}
         <section id="faq" className="py-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto border-t border-slate-200">
           <div className="text-center mb-16 space-y-4">
-            <div className="text-xs font-bold uppercase tracking-widest text-[#1D4ED8]">Got Questions?</div>
+            <div className="text-xs font-bold uppercase tracking-widest text-[#1D4ED8]">Frequently Asked Questions</div>
             <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-              Frequently Asked Questions
+              Program Inquiries &amp; Information
             </h2>
           </div>
 
@@ -1924,7 +1577,6 @@ export default function Build2EarnClient() {
                 >
                   <button
                     onClick={() => setActiveFaqIndex(isOpen ? null : idx)}
-                    suppressHydrationWarning
                     className="w-full p-5 text-left font-bold text-slate-900 flex items-center justify-between gap-4 text-base hover:text-[#1D4ED8] transition-colors"
                   >
                     <span>{faq.q}</span>
@@ -1935,7 +1587,7 @@ export default function Build2EarnClient() {
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0 }}
-                      className="px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3"
+                      className="px-5 pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3"
                     >
                       {faq.a}
                     </motion.div>
@@ -1946,57 +1598,52 @@ export default function Build2EarnClient() {
           </div>
         </section>
 
-
-        {/* ==================== 11. LEAD REGISTRATION MODAL ==================== */}
+        {/* ==================== LEAD REGISTRATION MODAL ==================== */}
         <AnimatePresence>
           {isModalOpen && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm">
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
                 className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-lg w-full overflow-hidden relative"
               >
-                {/* Modal Header */}
                 <div className="bg-[#0F172A] text-white p-6 relative">
                   <button
                     onClick={() => setIsModalOpen(false)}
-                    suppressHydrationWarning
                     className="absolute top-5 right-5 p-1.5 rounded-full bg-slate-800 text-slate-400 hover:text-white transition-colors"
                   >
                     <X className="w-5 h-5" />
                   </button>
-                  <span className="text-[10px] font-bold text-sky-400 uppercase tracking-widest">APPLICATION FORM</span>
+                  <span className="text-[10px] font-bold text-sky-400 uppercase tracking-widest">ENROLLMENT FORM</span>
                   <h3 className="text-2xl font-black text-white mt-1">Apply for Build2Earn</h3>
                   <p className="text-xs text-slate-300 mt-1">
-                    Selected Track: <strong className="text-emerald-400">{modalDomain}</strong> | Fee: ₹4,999
+                    Selected Track: <strong className="text-emerald-400">{modalDomain}</strong> | Fee: ₹4,999 (3 Months)
                   </p>
                 </div>
 
-                {/* Modal Content */}
                 <div className="p-6">
                   {isSubmitted ? (
                     <div className="text-center py-8 space-y-4">
                       <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 mx-auto flex items-center justify-center">
                         <CheckCircle2 className="w-10 h-10" />
                       </div>
-                      <h4 className="text-2xl font-black text-slate-900">Application Submitted!</h4>
+                      <h4 className="text-2xl font-black text-slate-900">Application Saved</h4>
                       <p className="text-xs text-slate-600 max-w-xs mx-auto">
-                        Thank you, <strong>{formData.fullName}</strong>. Click below to complete your registration payment on Cashfree.
+                        Thank you, <strong>{formData.fullName}</strong>. Click below to complete your ₹4,999 program payment on Cashfree.
                       </p>
                       <div className="pt-2 flex flex-col gap-2">
                         <a
                           href={CASHFREE_PAYMENT_URL}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#1D4ED8] to-[#0EA5E9] text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 hover:scale-[1.01] transition-transform"
+                          className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#1D4ED8] to-[#0EA5E9] text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 hover:scale-[1.01] transition-transform text-center"
                         >
                           <span>PROCEED TO CASHFREE PAYMENT — ₹4,999</span>
                           <ExternalLink className="w-4 h-4" />
                         </a>
                         <button
                           onClick={() => setIsModalOpen(false)}
-                          suppressHydrationWarning
                           className="py-2 text-slate-400 font-bold text-xs hover:text-slate-600"
                         >
                           Close Window
@@ -2012,7 +1659,7 @@ export default function Build2EarnClient() {
                           required
                           value={formData.fullName}
                           onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                          placeholder="e.g. Rahul Sharma"
+                          placeholder="Full Name"
                           className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#1D4ED8]"
                         />
                       </div>
@@ -2025,13 +1672,13 @@ export default function Build2EarnClient() {
                             required
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            placeholder="rahul@gmail.com"
+                            placeholder="email@domain.com"
                             className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#1D4ED8]"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-xs font-bold text-slate-700 mb-1">WhatsApp Phone *</label>
+                          <label className="block text-xs font-bold text-slate-700 mb-1">Phone Number *</label>
                           <input
                             type="tel"
                             required
@@ -2051,7 +1698,7 @@ export default function Build2EarnClient() {
                             required
                             value={formData.college}
                             onChange={(e) => setFormData({ ...formData, college: e.target.value })}
-                            placeholder="e.g. MBM University"
+                            placeholder="College Name"
                             className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#1D4ED8]"
                           />
                         </div>
@@ -2072,7 +1719,7 @@ export default function Build2EarnClient() {
                       </div>
 
                       <div>
-                        <label className="block text-xs font-bold text-slate-700 mb-1">Selected Domain Track</label>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">Primary Domain Specialization</label>
                         <select
                           value={formData.domain}
                           onChange={(e) => setFormData({ ...formData, domain: e.target.value })}
@@ -2086,10 +1733,9 @@ export default function Build2EarnClient() {
 
                       <button
                         type="submit"
-                        suppressHydrationWarning
                         className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#1D4ED8] to-[#0EA5E9] text-white font-extrabold text-xs shadow-lg shadow-blue-500/25 transition-all hover:scale-[1.01] active:scale-95 flex items-center justify-center gap-2 uppercase tracking-wider"
                       >
-                        <span>PROCEED TO PAYMENT — ₹4,999</span>
+                        <span>PROCEED TO CASHFREE PAYMENT — ₹4,999</span>
                         <ExternalLink className="w-4 h-4" />
                       </button>
                     </form>
@@ -2101,7 +1747,6 @@ export default function Build2EarnClient() {
         </AnimatePresence>
 
       </main>
-
     </div>
   );
 }

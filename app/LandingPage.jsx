@@ -430,7 +430,7 @@ export default function Home({ latestJobs = [] }) {
                 </div>
 
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-[#0B192C]">
-                  Student Achievements &amp; <span className="text-[#1D4ED8]">Certification Moments 🏆</span>
+                  Student Achievements &amp; <span className="text-[#1D4ED8]">Certification Moments</span>
                 </h2>
 
                 <p className="text-slate-600 text-sm md:text-base leading-relaxed max-w-2xl mx-auto font-normal">
@@ -540,23 +540,23 @@ export default function Home({ latestJobs = [] }) {
                 <div className="space-y-4 max-w-3xl z-10 text-left">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-bold text-xs uppercase tracking-wider">
                     <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>Flagship 3-Month Program</span>
+                    <span>3-Month Practical Career Program · ₹4,999</span>
                   </div>
 
                   <h2 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tight leading-snug">
-                    Build2Earn: <span className="text-[#2563EB]">Build Live Projects & Earn Proof of Work</span> 
+                    BUILD2EARN: <span className="text-[#2563EB]">Don't Just Learn Skills. Build Something You Can Earn From.</span> 
                   </h2>
 
                   <p className="text-sm md:text-base text-slate-600 leading-relaxed font-medium">
-                    Designed for 1st & 2nd year students. Transform zero experience into a deployed portfolio website, verified internship certificate, top 1% GitHub & LinkedIn profile in 12 structured weeks.
+                    For 1st &amp; 2nd year college students. Select 1 of 8 primary internship domains (Frontend, Backend, MERN, Full Stack, UI/UX, AI, ML, Cybersecurity), get practical tasks, live projects, DSA support, founder hackathon guidance, open source contributions, welcome goodies &amp; dual certificates.
                   </p>
 
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
                     {[
-                      { label: "12-Week Roadmap", desc: "Step-by-step practical" },
-                      { label: "Dual Credentials", desc: "Training & Internship" },
-                      { label: "Live Portfolio", desc: "Custom deployed URL" },
-                      { label: "Stipend & Freelance", desc: "Monetization guidance" }
+                      { label: "8 Primary Domains", desc: "Choose 1 specialization" },
+                      { label: "Dual Credentials", desc: "Training + Internship" },
+                      { label: "DSA & Interviews", desc: "Company practice papers" },
+                      { label: "Founder Mentorship", desc: "Hackathons & Open Source" }
                     ].map((feat, i) => (
                       <div key={i} className="p-3 rounded-xl bg-white border border-slate-200/80 shadow-xs">
                         <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900">
@@ -571,19 +571,21 @@ export default function Home({ latestJobs = [] }) {
 
                 {/* CTAs with explicit path links */}
                 <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0 z-10 w-full lg:w-auto">
-                  <Link
-                    href="/build2earn"
-                    className="px-7 py-3.5 rounded-2xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 group"
+                  <a
+                    href="https://payments.cashfree.com/forms/Build2Earn"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-7 py-3.5 rounded-2xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 group text-center"
                   >
-                    <span>Join Build2Earn</span>
+                    <span>Direct Payment — ₹4,999</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Link>
+                  </a>
 
                   <Link
-                    href="/internship#build2earn"
-                    className="px-7 py-3.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-700 font-bold text-sm border border-slate-200 shadow-xs hover:border-slate-300 transition-all flex items-center justify-center gap-2"
+                    href="/build2earn#learn-domains"
+                    className="px-7 py-3.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-700 font-bold text-sm border border-slate-200 shadow-xs hover:border-slate-300 transition-all flex items-center justify-center gap-2 text-center"
                   >
-                    <span>View 12-Week Curriculum</span>
+                    <span>Explore Domains &amp; Overview</span>
                   </Link>
                 </div>
 
