@@ -8,8 +8,16 @@ export const metadata = {
   title: "Performance Evaluations | Admin Portal",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminEvaluationsPage() {
-  const evaluations = await getEvaluationsForAdmin();
+  let evaluations = [];
+  try {
+    evaluations = await getEvaluationsForAdmin();
+  } catch (err) {
+    console.error("AdminEvaluationsPage fetch error:", err);
+    evaluations = [];
+  }
 
   const getScoreMap = (evalObj) => {
     let score = 0;

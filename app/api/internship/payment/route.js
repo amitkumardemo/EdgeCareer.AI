@@ -93,6 +93,22 @@ export async function POST(req) {
 
   } catch (error) {
     console.error("Payment initialization error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    const isDbIssue = 
+      error?.name === "PrismaClientInitializationError" ||
+      error?.message?.includes("quota") ||
+      error?.message?.includes("connection pool") ||
+      error?.code?.startsWith("P1");
+
+    if (isDbIssue) {
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: "Payment service is temporarily unavailable due to database maintenance. Please retry in a few moments.", 
+          code: "DATABASE_UNAVAILABLE" 
+        }, 
+        { status: 503 }
+      );
+    }
+    return NextResponse.json({ success: false, error: "Internal Server Error" }, { status: 500 });
   }
 }

@@ -4,10 +4,18 @@ import Link from "next/link";
 import CertificateActions from "./CertificateActions";
 import IssueCertificateButton from "./IssueCertificateButton";
 
+export const dynamic = "force-dynamic";
+
 export default async function CertificatesPage() {
-  const selected = await getCertificatePipelineApps();
-  const completed = selected.filter((a) => a.progress?.completed);
-  const pending = selected.filter((a) => !a.progress?.completed);
+  let selected = [];
+  try {
+    selected = await getCertificatePipelineApps();
+  } catch (err) {
+    console.error("CertificatesPage fetch error:", err);
+    selected = [];
+  }
+  const completed = (selected || []).filter((a) => a.progress?.completed);
+  const pending = (selected || []).filter((a) => !a.progress?.completed);
 
   return (
     <div className="space-y-6">

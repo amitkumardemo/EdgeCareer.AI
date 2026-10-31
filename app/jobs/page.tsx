@@ -10,6 +10,8 @@ const CATEGORIES = [
   "Competitions", "Workshops", "Conferences"
 ];
 
+export const dynamic = "force-dynamic";
+
 export default async function JobsPage({
   searchParams,
 }: {
@@ -25,27 +27,36 @@ export default async function JobsPage({
   // Split query into terms for better matching
   const searchTerms = query.split(/\s+/).filter(Boolean);
 
-  const jobs = await prisma.job.findMany({
-    where: {
-      status: "PUBLISHED",
-      ...(searchTerms.length > 0 && {
-        AND: searchTerms.map(term => ({
-          OR: [
-            { title: { contains: term, mode: "insensitive" } },
-            { skills: { contains: term, mode: "insensitive" } },
-            { company: { name: { contains: term, mode: "insensitive" } } },
-          ],
-        }))
-      }),
-      ...(location && { locationId: { contains: location, mode: "insensitive" } }),
-      ...(type && { employmentType: { equals: type } }),
-      ...(mode && { workMode: { equals: mode } }),
-    },
-    include: {
-      company: true,
-    },
-    orderBy: { createdAt: "desc" },
-  });
+  let jobs: any[] = [];
+  let isDbUnavailable = false;
+
+  try {
+    jobs = await prisma.job.findMany({
+      where: {
+        status: "PUBLISHED",
+        ...(searchTerms.length > 0 && {
+          AND: searchTerms.map(term => ({
+            OR: [
+              { title: { contains: term, mode: "insensitive" } },
+              { skills: { contains: term, mode: "insensitive" } },
+              { company: { name: { contains: term, mode: "insensitive" } } },
+            ],
+          }))
+        }),
+        ...(location && { locationId: { contains: location, mode: "insensitive" } }),
+        ...(type && { employmentType: { equals: type } }),
+        ...(mode && { workMode: { equals: mode } }),
+      },
+      include: {
+        company: true,
+      },
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (error: any) {
+    console.error("JobsPage database query failed (rendering fallback):", error?.message || error);
+    isDbUnavailable = true;
+    jobs = [];
+  }
 
   return (
     <div className="bg-slate-50 min-h-screen font-sans">
@@ -102,8 +113,14 @@ export default async function JobsPage({
         {jobs.length === 0 && (
           <div className="text-center py-20 bg-white rounded-2xl border border-slate-200 shadow-sm mt-6">
             <Briefcase size={48} className="mx-auto text-slate-300 mb-4" />
-            <h3 className="text-xl font-bold text-slate-800 mb-2">No opportunities match your search</h3>
-            <p className="text-slate-500 max-w-sm mx-auto font-medium">Try adjusting your filters or search terms to find more opportunities.</p>
+            <h3 className="text-xl font-bold text-slate-800 mb-2">
+              {isDbUnavailable ? "Opportunities Temporarily Updating" : "No opportunities match your search"}
+            </h3>
+            <p className="text-slate-500 max-w-sm mx-auto font-medium">
+              {isDbUnavailable
+                ? "Our job board is currently syncing with partner databases. Please check back in a few moments."
+                : "Try adjusting your filters or search terms to find more opportunities."}
+            </p>
           </div>
         )}
       </div>

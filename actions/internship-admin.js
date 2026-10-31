@@ -32,11 +32,16 @@ export async function createInternshipProgram(data) {
 }
 
 export async function getInternshipPrograms() {
-  return prisma.internshipProgram.findMany({
-    where: { isActive: true },
-    include: { batches: { select: { id: true, status: true } } },
-    orderBy: { createdAt: "desc" },
-  });
+  try {
+    return await prisma.internshipProgram.findMany({
+      where: { isActive: true },
+      include: { batches: { select: { id: true, status: true } } },
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (err) {
+    console.error("getInternshipPrograms failed:", err?.message || err);
+    return [];
+  }
 }
 
 // ── Batches ───────────────────────────────────────────────────────────────────
@@ -88,13 +93,18 @@ export async function createBatch(data) {
 }
 
 export async function getBatches() {
-  return prisma.internshipBatch.findMany({
-    include: {
-      program: { select: { title: true, domain: true } },
-      _count: { select: { applications: true, tasks: true } },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+  try {
+    return await prisma.internshipBatch.findMany({
+      include: {
+        program: { select: { title: true, domain: true } },
+        _count: { select: { applications: true, tasks: true } },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (err) {
+    console.error("getBatches failed:", err?.message || err);
+    return [];
+  }
 }
 
 export async function getBatchDetail(batchId) {

@@ -1,14 +1,32 @@
 import { getTpoDashboardStats } from "@/actions/internship-tpo";
 import { Users, FileText, Award, Calendar, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import prisma from "@/lib/prisma";
+
+export const dynamic = "force-dynamic";
 
 export default async function TpoStudentsPage() {
-  const stats = await getTpoDashboardStats();
+  let stats = null;
+  try {
+    stats = await getTpoDashboardStats();
+  } catch (err) {
+    console.error("Failed to load TPO dashboard stats:", err);
+  }
+
+  if (!stats) {
+    stats = {
+      tpoName: "Coordinator",
+      collegeName: "Partner College",
+      totalStudents: 0,
+      totalApplied: 0,
+      activeInterns: 0,
+      completedInternships: 0,
+      applications: [],
+    };
+  }
   
   // Create a map to link students to their applications
   const studentAppMap = new Map();
-  stats.applications.forEach(app => {
+  (stats.applications || []).forEach(app => {
     if (!studentAppMap.has(app.userId)) {
       studentAppMap.set(app.userId, []);
     }

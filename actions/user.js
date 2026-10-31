@@ -73,32 +73,38 @@ export async function updateUser(data) {
 }
 
 export async function getUserOnboardingStatus() {
-  const firebaseUser = await getFirebaseUser();
-  if (!firebaseUser) redirect("/sign-in");
-  const userId = firebaseUser.uid;
-
   try {
-    let user = await db.user.findUnique({
-      where: { uid: userId },
-    });
+    const firebaseUser = await getFirebaseUser();
+    if (!firebaseUser) redirect("/sign-in");
+    const userId = firebaseUser.uid;
 
-    // If user doesn't exist, create them
-    if (!user) {
-      user = await db.user.create({
-        data: {
-          uid: userId,
-          email: firebaseUser.email,
-          name: firebaseUser.name || "User",
-        },
+    let user = null;
+    try {
+      user = await db.user.findUnique({
+        where: { uid: userId },
       });
+
+      // If user doesn't exist, attempt creation
+      if (!user) {
+        user = await db.user.create({
+          data: {
+            uid: userId,
+            email: firebaseUser.email,
+            name: firebaseUser.name || "User",
+          },
+        });
+      }
+    } catch (dbErr) {
+      console.warn("Database unavailable during getUserOnboardingStatus (defaulting to onboarded):", dbErr?.message || dbErr);
+      return { isOnboarded: true, isDbDown: true };
     }
 
     return {
       isOnboarded: !!user?.industry,
     };
   } catch (error) {
-    console.error("Error checking onboarding status:", error);
-    throw new Error("Failed to check onboarding status");
+    console.error("Error in getUserOnboardingStatus:", error);
+    return { isOnboarded: true, isDbDown: true };
   }
 }
 

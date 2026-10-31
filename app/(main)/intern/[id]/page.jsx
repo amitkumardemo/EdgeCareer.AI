@@ -3,31 +3,55 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Award, Briefcase, Calendar, CheckCircle2, TrendingUp, Github, FileText } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function PublicInternProfilePage({ params }) {
   const { id } = params;
   
   const decodedId = decodeURIComponent(id);
   const potentialName = decodedId.replace(/-/g, " ");
 
-  // Search by either user ID or name (for flexibility)
-  const user = await prisma.user.findFirst({
-    where: {
-      OR: [
-        { id: decodedId },
-        { name: { equals: potentialName, mode: 'insensitive' } }
-      ]
-    },
-    include: {
-      college: true,
-      internApplications: {
-        where: { status: "SELECTED" },
-        include: {
-          batch: { include: { program: true } },
-          progress: { include: { certificate: true } },
+  let user = null;
+  let isDbError = false;
+
+  try {
+    // Search by either user ID or name (for flexibility)
+    user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { id: decodedId },
+          { name: { equals: potentialName, mode: 'insensitive' } }
+        ]
+      },
+      include: {
+        college: true,
+        internApplications: {
+          where: { status: "SELECTED" },
+          include: {
+            batch: { include: { program: true } },
+            progress: { include: { certificate: true } },
+          },
         },
       },
-    },
-  });
+    });
+  } catch (error) {
+    console.error("Public intern profile fetch failed:", error);
+    isDbError = true;
+  }
+
+  if (isDbError) {
+    return (
+      <div className="min-h-screen bg-[#030712] py-24 px-4 flex items-center justify-center">
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-8 max-w-md text-center">
+          <Briefcase className="h-10 w-10 text-primary mx-auto mb-3 opacity-60" />
+          <h2 className="text-xl font-bold text-white mb-2">Profile Temporarily Unavailable</h2>
+          <p className="text-gray-400 text-sm">
+            Student records database is currently synchronizing. Please check back in a few minutes.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (!user) {
     notFound();

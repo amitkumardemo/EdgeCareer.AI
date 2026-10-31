@@ -3,112 +3,148 @@
 import db from "@/lib/prisma";
 import { getFirebaseUser } from "@/lib/auth-utils";
 import { checkUser } from "@/lib/checkUser";
+import { safeDb, isCircuitBreakerOpen } from "@/lib/db-guard";
 
 export async function updateUserStreak() {
-  const firebaseUser = await getFirebaseUser();
-  if (!firebaseUser) throw new Error("Unauthorized");
-  const userId = firebaseUser.uid;
+  try {
+    if (isCircuitBreakerOpen()) {
+      return { streak: 0, isNewDay: false, error: "Database offline" };
+    }
 
-  let user = await db.user.findUnique({
-    where: { uid: userId },
-  });
+    const firebaseUser = await getFirebaseUser();
+    if (!firebaseUser) throw new Error("Unauthorized");
+    const userId = firebaseUser.uid;
 
-  if (!user) {
-    user = await checkUser();
-  }
+    let user = await safeDb(
+      () => db.user.findUnique({ where: { uid: userId } }),
+      null,
+      "updateUserStreak.findUser"
+    );
 
-  if (!user) throw new Error("User not found");
+    if (!user) {
+      user = await checkUser();
+    }
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+    if (!user) return { streak: 0, isNewDay: false };
 
-  const lastStreakDate = user.lastStreakDate ? new Date(user.lastStreakDate) : null;
-  const streakStartDate = user.streakStartDate ? new Date(user.streakStartDate) : null;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-  let newStreak = user.streak;
-  let newLastStreakDate = user.lastStreakDate;
-  let newStreakStartDate = user.streakStartDate;
+    const lastStreakDate = user.lastStreakDate ? new Date(user.lastStreakDate) : null;
+    const streakStartDate = user.streakStartDate ? new Date(user.streakStartDate) : null;
 
-  if (!lastStreakDate) {
-    // First time activity
-    newStreak = 1;
-    newLastStreakDate = today;
-    newStreakStartDate = today;
-  } else {
-    const daysSinceLastActivity = Math.floor((today - lastStreakDate) / (1000 * 60 * 60 * 24));
+    let newStreak = user.streak;
+    let newLastStreakDate = user.lastStreakDate;
+    let newStreakStartDate = user.streakStartDate;
 
-    if (daysSinceLastActivity === 1) {
-      // Consecutive day
-      newStreak = user.streak + 1;
-      newLastStreakDate = today;
-    } else if (daysSinceLastActivity === 0) {
-      // Same day, no change
-      return { streak: user.streak, isNewDay: false };
-    } else {
-      // Streak broken
+    if (!lastStreakDate) {
+      // First time activity
       newStreak = 1;
       newLastStreakDate = today;
       newStreakStartDate = today;
+    } else {
+      const daysSinceLastActivity = Math.floor((today - lastStreakDate) / (1000 * 60 * 60 * 24));
+
+      if (daysSinceLastActivity === 1) {
+        // Consecutive day
+        newStreak = user.streak + 1;
+        newLastStreakDate = today;
+      } else if (daysSinceLastActivity === 0) {
+        // Same day, no change
+        return { streak: user.streak, isNewDay: false };
+      } else {
+        // Streak broken
+        newStreak = 1;
+        newLastStreakDate = today;
+        newStreakStartDate = today;
+      }
     }
+
+    await db.user.update({
+      where: { id: user.id },
+      data: {
+        streak: newStreak,
+        lastStreakDate: newLastStreakDate,
+        streakStartDate: newStreakStartDate,
+        lastActivity: new Date(),
+      },
+    });
+
+    return { streak: newStreak, isNewDay: true };
+  } catch (error) {
+    return { streak: 0, isNewDay: false, error: "Streak update temporarily unavailable" };
   }
-
-  await db.user.update({
-    where: { id: user.id },
-    data: {
-      streak: newStreak,
-      lastStreakDate: newLastStreakDate,
-      streakStartDate: newStreakStartDate,
-      lastActivity: new Date(),
-    },
-  });
-
-  // Note: revalidatePath removed - caller should handle revalidation if needed
-  return { streak: newStreak, isNewDay: true };
 }
 
 export async function getUserStreak() {
-  const firebaseUser = await getFirebaseUser();
-  if (!firebaseUser) return { streak: 0, lastStreakDate: null };
-  const userId = firebaseUser.uid;
+  try {
+    if (isCircuitBreakerOpen()) {
+      return { streak: 0, lastStreakDate: null, streakStartDate: null };
+    }
 
-  const user = await db.user.findUnique({
-    where: { uid: userId },
-    select: {
-      streak: true,
-      lastStreakDate: true,
-      streakStartDate: true,
-    },
-  });
+    const firebaseUser = await getFirebaseUser();
+    if (!firebaseUser) return { streak: 0, lastStreakDate: null, streakStartDate: null };
+    const userId = firebaseUser.uid;
 
-  return user || { streak: 0, lastStreakDate: null, streakStartDate: null };
+    const user = await safeDb(
+      () =>
+        db.user.findUnique({
+          where: { uid: userId },
+          select: {
+            streak: true,
+            lastStreakDate: true,
+            streakStartDate: true,
+          },
+        }),
+      null,
+      "getUserStreak"
+    );
+
+    return user || { streak: 0, lastStreakDate: null, streakStartDate: null };
+  } catch (error) {
+    return { streak: 0, lastStreakDate: null, streakStartDate: null };
+  }
 }
 
 export async function getStreakCalendar() {
-  const firebaseUser = await getFirebaseUser();
-  if (!firebaseUser) return [];
-  const userId = firebaseUser.uid;
+  try {
+    if (isCircuitBreakerOpen()) {
+      return [];
+    }
 
-  const user = await db.user.findUnique({
-    where: { uid: userId },
-    select: {
-      streakStartDate: true,
-      lastStreakDate: true,
-      streak: true,
-    },
-  });
+    const firebaseUser = await getFirebaseUser();
+    if (!firebaseUser) return [];
+    const userId = firebaseUser.uid;
 
-  if (!user || !user.streakStartDate) return [];
+    const user = await safeDb(
+      () =>
+        db.user.findUnique({
+          where: { uid: userId },
+          select: {
+            streakStartDate: true,
+            lastStreakDate: true,
+            streak: true,
+          },
+        }),
+      null,
+      "getStreakCalendar"
+    );
 
-  const startDate = new Date(user.streakStartDate);
-  const endDate = new Date(user.lastStreakDate || startDate);
-  const calendar = [];
+    if (!user || !user.streakStartDate) return [];
 
-  for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-    calendar.push({
-      date: new Date(d),
-      active: true,
-    });
+    const startDate = new Date(user.streakStartDate);
+    const endDate = new Date(user.lastStreakDate || startDate);
+    const calendar = [];
+
+    for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+      calendar.push({
+        date: new Date(d),
+        active: true,
+      });
+    }
+
+    return calendar;
+  } catch (error) {
+    return [];
   }
-
-  return calendar;
 }

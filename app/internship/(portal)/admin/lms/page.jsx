@@ -6,8 +6,16 @@ export const metadata = {
   title: "LMS Management | Admin Portal",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminLmsPage() {
-  const batches = await getBatches();
+  let batches = [];
+  try {
+    batches = await getBatches();
+  } catch (err) {
+    console.error("AdminLmsPage failed to fetch batches:", err);
+    batches = [];
+  }
 
   return (
     <div className="space-y-6">

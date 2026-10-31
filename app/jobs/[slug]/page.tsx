@@ -5,50 +5,93 @@ import { MapPin, Briefcase, IndianRupee, Clock, Share2, CheckCircle2, ChevronRig
 import { Metadata } from "next";
 import ShareJobButton from "@/components/ShareJobButton";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params;
-  const job = await prisma.job.findFirst({
-    where: { slug },
-    include: { company: true },
-  });
+  try {
+    const { slug } = await params;
+    const job = await prisma.job.findFirst({
+      where: { slug },
+      include: { company: true },
+    });
 
-  if (!job) return { title: "Opportunity Not Found" };
+    if (!job) return { title: "Opportunity Details | TechieHelp" };
 
-  return {
-    title: `${job.title} at ${job.company.name}`,
-    description: job.seoDescription || (job.description || "").substring(0, 160).replace(/<[^>]*>?/gm, ''),
-    openGraph: {
-      images: job.bannerUrl || job.thumbnailUrl ? [job.bannerUrl || job.thumbnailUrl || ""] : [],
-    },
-  };
+    return {
+      title: `${job.title} at ${job.company?.name || "TechieHelp Partner"}`,
+      description: job.seoDescription || (job.description || "").substring(0, 160).replace(/<[^>]*>?/gm, ''),
+      openGraph: {
+        images: job.bannerUrl || job.thumbnailUrl ? [job.bannerUrl || job.thumbnailUrl || ""] : [],
+      },
+    };
+  } catch (err) {
+    console.error("Job details metadata error:", err);
+    return { title: "Opportunity Details | TechieHelp Institute of AI" };
+  }
 }
 
 export default async function JobDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const job = await prisma.job.findFirst({
-    where: { slug },
-    include: { company: true },
-  });
+
+  let job: any = null;
+  let relatedJobs: any[] = [];
+  let isDbError = false;
+
+  try {
+    job = await prisma.job.findFirst({
+      where: { slug },
+      include: { company: true },
+    });
+
+    if (job) {
+      try {
+        relatedJobs = await prisma.job.findMany({
+          where: { 
+            status: "PUBLISHED", 
+            id: { not: job.id },
+            employmentType: job.employmentType 
+          },
+          include: { company: true },
+          orderBy: { createdAt: "desc" },
+          take: 3,
+        });
+      } catch (relErr) {
+        console.error("Failed to fetch related jobs:", relErr);
+        relatedJobs = [];
+      }
+
+      // Increment views silently in background
+      prisma.job.update({
+        where: { id: job.id },
+        data: { views: { increment: 1 } }
+      }).catch(() => {});
+    }
+  } catch (error) {
+    console.error("Failed to fetch job details:", error);
+    isDbError = true;
+  }
+
+  if (isDbError) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
+        <div className="bg-white rounded-3xl border border-slate-200 p-8 md:p-12 max-w-lg text-center shadow-sm">
+          <Briefcase className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-slate-900 mb-2">Opportunity Details Temporarily Offline</h1>
+          <p className="text-slate-500 text-sm mb-6 leading-relaxed">
+            We are experiencing temporary database synchronization delays. Please try again shortly or view all opportunities.
+          </p>
+          <Link
+            href="/jobs"
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-blue-950 text-white text-sm font-semibold hover:bg-blue-900 transition-colors"
+          >
+            Explore Openings <ArrowRight className="w-4 h-4 text-amber-400" />
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   if (!job) notFound();
-
-  // Fetch related jobs
-  const relatedJobs = await prisma.job.findMany({
-    where: { 
-      status: "PUBLISHED", 
-      id: { not: job.id },
-      employmentType: job.employmentType 
-    },
-    include: { company: true },
-    orderBy: { createdAt: "desc" },
-    take: 3,
-  });
-
-  // Increment views silently in background
-  prisma.job.update({
-    where: { id: job.id },
-    data: { views: { increment: 1 } }
-  }).catch(console.error);
 
   // Parse skills from JSON string or default to empty
   let skillsList = [];

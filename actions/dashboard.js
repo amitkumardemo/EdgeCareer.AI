@@ -164,47 +164,52 @@ const isValidJSON = (str) => {
 };
 
 export async function getIndustryInsights() {
-  const firebaseUser = await getFirebaseUser();
-  if (!firebaseUser) throw new Error("Unauthorized");
-  const userId = firebaseUser.uid;
+  try {
+    const firebaseUser = await getFirebaseUser();
+    if (!firebaseUser) return null;
+    const userId = firebaseUser.uid;
 
-  const user = await db.user.findUnique({
-    where: { uid: userId },
-    include: {
-      industryInsight: true,
-    },
-  });
-
-  if (!user) throw new Error("User not found");
-
-  // Check if insights exist and are valid
-  const hasValidInsights = user.industryInsight && 
-    isValidJSON(user.industryInsight.salaryRanges) &&
-    isValidJSON(user.industryInsight.topSkills) &&
-    isValidJSON(user.industryInsight.keyTrends) &&
-    isValidJSON(user.industryInsight.recommendedSkills);
-
-  // If no insights exist or they're corrupted, regenerate them
-  if (!hasValidInsights) {
-    // Delete corrupted data if it exists
-    if (user.industryInsight) {
-      await db.industryInsight.delete({
-        where: { id: user.industryInsight.id },
-      });
-    }
-
-    const insights = await generateAIInsights(user.industry);
-
-    const industryInsight = await db.industryInsight.create({
-      data: {
-        industry: user.industry,
-        ...insights,
-        nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    const user = await db.user.findUnique({
+      where: { uid: userId },
+      include: {
+        industryInsight: true,
       },
     });
 
-    return industryInsight;
-  }
+    if (!user) return null;
 
-  return user.industryInsight;
+    // Check if insights exist and are valid
+    const hasValidInsights = user.industryInsight && 
+      isValidJSON(user.industryInsight.salaryRanges) &&
+      isValidJSON(user.industryInsight.topSkills) &&
+      isValidJSON(user.industryInsight.keyTrends) &&
+      isValidJSON(user.industryInsight.recommendedSkills);
+
+    // If no insights exist or they're corrupted, regenerate them
+    if (!hasValidInsights) {
+      // Delete corrupted data if it exists
+      if (user.industryInsight) {
+        await db.industryInsight.delete({
+          where: { id: user.industryInsight.id },
+        }).catch(() => {});
+      }
+
+      const insights = await generateAIInsights(user.industry);
+
+      const industryInsight = await db.industryInsight.create({
+        data: {
+          industry: user.industry,
+          ...insights,
+          nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        },
+      });
+
+      return industryInsight;
+    }
+
+    return user.industryInsight;
+  } catch (error) {
+    console.error("getIndustryInsights error (database unavailable):", error?.message || error);
+    return null;
+  }
 }

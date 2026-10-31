@@ -24,41 +24,94 @@ import { PublicProfileLink } from "./_components/PublicProfileLink";
 import { ProfessionalProfile } from "./_components/ProfessionalProfile";
 import { ReportsSection } from "./_components/ReportsSection";
 
+export const dynamic = "force-dynamic";
+
 export default async function StudentDashboardPage() {
-  const firebaseUser = await getFirebaseUser();
+  let firebaseUser = null;
+  try {
+    firebaseUser = await getFirebaseUser();
+  } catch (authErr) {
+    console.error("Dashboard auth check failed:", authErr);
+  }
+
   if (!firebaseUser) redirect("/sign-in?redirect_url=/internship/student/dashboard");
 
-  // Ensure user is onboarded
-  const { isOnboarded } = await getUserOnboardingStatus();
+  // Ensure user is onboarded with safe fallback
+  let isOnboarded = true;
+  try {
+    const status = await getUserOnboardingStatus();
+    isOnboarded = status?.isOnboarded ?? true;
+  } catch (onboardingErr) {
+    console.warn("Failed to check onboarding status (continuing):", onboardingErr?.message || onboardingErr);
+    isOnboarded = true;
+  }
+
   if (!isOnboarded) {
     redirect("/onboarding");
   }
 
-  // Ensure user exists in DB & Sync
-  await checkUser();
+  // Ensure user exists in DB & Sync safely
+  try {
+    await checkUser();
+  } catch (checkErr) {
+    console.warn("checkUser in student dashboard failed:", checkErr?.message || checkErr);
+  }
 
-  const dbUser = await prisma.user.findUnique({
-    where: { uid: firebaseUser.uid },
-    include: { college: true }
-  });
+  let dbUser = null;
+  try {
+    dbUser = await prisma.user.findUnique({
+      where: { uid: firebaseUser.uid },
+      include: { college: true }
+    });
+  } catch (userDbErr) {
+    console.error("Student dashboard user fetch failed:", userDbErr?.message || userDbErr);
+  }
 
-  const [applications, openBatches, notifications] = await Promise.all([
-    getMyApplications(),
-    getOpenBatches(),
-    getMyNotifications(dbUser?.id)
-  ]);
+  if (!dbUser) {
+    dbUser = {
+      id: firebaseUser.uid,
+      name: firebaseUser.name || firebaseUser.email?.split("@")[0] || "Student",
+      email: firebaseUser.email || "",
+      role: "STUDENT",
+      imageUrl: firebaseUser.picture || null,
+      college: null,
+    };
+  }
+
+  let applications = [];
+  let openBatches = [];
+  let notifications = [];
+
+  try {
+    const results = await Promise.allSettled([
+      getMyApplications(),
+      getOpenBatches(),
+      getMyNotifications(dbUser?.id)
+    ]);
+    applications = results[0].status === "fulfilled" && Array.isArray(results[0].value) ? results[0].value : [];
+    openBatches = results[1].status === "fulfilled" && Array.isArray(results[1].value) ? results[1].value : [];
+    notifications = results[2].status === "fulfilled" && Array.isArray(results[2].value) ? results[2].value : [];
+  } catch (batchErr) {
+    console.error("Failed to load dashboard data:", batchErr);
+  }
 
   const selectedApp = applications.find((a) => a.status === "SELECTED");
   const progress = selectedApp?.progress;
 
-  // Fetch contextual data based on active internship
+  // Fetch contextual data based on active internship safely
   let tasks = [];
   let leaderboard = [];
   if (selectedApp) {
-    [tasks, leaderboard] = await Promise.all([
-      getMyTasks(selectedApp.id),
-      getLeaderboard(selectedApp.batchId)
-    ]);
+    try {
+      const contextualResults = await Promise.allSettled([
+        getMyTasks(selectedApp.id),
+        getLeaderboard(selectedApp.batchId)
+      ]);
+      tasks = contextualResults[0].status === "fulfilled" && Array.isArray(contextualResults[0].value) ? contextualResults[0].value : [];
+      leaderboard = contextualResults[1].status === "fulfilled" && Array.isArray(contextualResults[1].value) ? contextualResults[1].value : [];
+    } catch (contextErr) {
+      console.error("Failed to load task/leaderboard data:", contextErr);
+    }
   }
 
   return (

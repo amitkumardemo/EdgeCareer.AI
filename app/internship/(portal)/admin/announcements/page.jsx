@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { getBatches, createAnnouncement, getAdminAnnouncements } from "@/actions/internship-admin";
-import prisma from "@/lib/prisma";
 import { toast } from "sonner";
 import { Plus, Megaphone, Globe, X } from "lucide-react";
 import { Button } from "@/components/ui/button";

@@ -12,9 +12,16 @@ const STATUS_COLORS = {
   REJECTED: "text-red-400 bg-red-400/10",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function BatchDetailPage({ params }) {
   const { id } = await params;
-  const batch = await getBatchDetail(id);
+  let batch = null;
+  try {
+    batch = await getBatchDetail(id);
+  } catch (err) {
+    console.error("BatchDetailPage error:", err);
+  }
   if (!batch) notFound();
 
   const selected = batch.applications.filter(a => a.status === "SELECTED").length;

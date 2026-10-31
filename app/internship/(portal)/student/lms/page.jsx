@@ -9,21 +9,46 @@ export const metadata = {
   title: "LMS Dashboard | TechieHelp",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function StudentLmsDashboardPage() {
   const firebaseUser = await getFirebaseUser();
   if (!firebaseUser) redirect("/sign-in");
 
-  const dbUser = await prisma.user.findUnique({
-    where: { uid: firebaseUser.uid }
-  });
-  if (!dbUser) redirect("/sign-in");
+  let dbUser = null;
+  let application = null;
+  let isDbError = false;
 
-  // Get active application
-  const application = await prisma.internshipApplication.findFirst({
-    where: { userId: dbUser.id, status: "SELECTED" },
-    include: { batch: { include: { mentor: true } } },
-    orderBy: { appliedAt: "desc" },
-  });
+  try {
+    dbUser = await prisma.user.findUnique({
+      where: { uid: firebaseUser.uid }
+    });
+
+    if (dbUser) {
+      application = await prisma.internshipApplication.findFirst({
+        where: { userId: dbUser.id, status: "SELECTED" },
+        include: { batch: { include: { mentor: true } } },
+        orderBy: { appliedAt: "desc" },
+      });
+    }
+  } catch (dbErr) {
+    console.error("Student LMS dashboard query failed:", dbErr);
+    isDbError = true;
+  }
+
+  if (isDbError) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+        <div className="text-center bg-white border border-slate-200 shadow-sm rounded-3xl p-10 max-w-md w-full">
+          <BookOpen className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-slate-900 mb-2">LMS Portal Syncing</h2>
+          <p className="text-slate-500 text-sm">Course database is currently undergoing synchronization. Please check back shortly.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!dbUser) redirect("/sign-in");
 
   if (!application) {
     return (
@@ -37,7 +62,12 @@ export default async function StudentLmsDashboardPage() {
     );
   }
 
-  const progressData = await getStudentLmsProgress(application.id);
+  let progressData = { progressPercentage: 0, completedVideos: 0, totalVideos: 0 };
+  try {
+    progressData = await getStudentLmsProgress(application.id);
+  } catch (progressErr) {
+    console.error("Failed to fetch LMS progress:", progressErr);
+  }
 
   return (
     <div className="min-h-[calc(100vh-4rem)] p-6 md:p-12 max-w-6xl mx-auto space-y-8">

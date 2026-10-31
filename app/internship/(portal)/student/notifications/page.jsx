@@ -8,21 +8,30 @@ export const metadata = {
   title: "Notifications | TechieHelp",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function NotificationsPage() {
   const firebaseUser = await getFirebaseUser();
   if (!firebaseUser) redirect("/sign-in");
 
-  const dbUser = await prisma.user.findUnique({
-    where: { uid: firebaseUser.uid },
-  });
-  if (!dbUser) redirect("/sign-in");
+  let notifications = [];
 
-  // Fetch all notifications for this user, not just unread, for the dedicated page
-  const notifications = await prisma.notification.findMany({
-    where: { userId: dbUser.id },
-    orderBy: { createdAt: "desc" },
-    take: 50,
-  });
+  try {
+    const dbUser = await prisma.user.findUnique({
+      where: { uid: firebaseUser.uid },
+    });
+
+    if (dbUser) {
+      notifications = await prisma.notification.findMany({
+        where: { userId: dbUser.id },
+        orderBy: { createdAt: "desc" },
+        take: 50,
+      });
+    }
+  } catch (error) {
+    console.error("Notifications fetch failed:", error);
+    notifications = [];
+  }
 
   return (
     <div className="min-h-screen bg-[#030712] pb-20">

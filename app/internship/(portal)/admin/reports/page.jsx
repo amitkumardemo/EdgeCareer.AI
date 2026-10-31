@@ -3,8 +3,16 @@ import { FileText, Eye, User, Calendar, Award } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminReportsPage() {
-  const completedInternships = await getCompletedInternshipsForReports();
+  let completedInternships = [];
+  try {
+    completedInternships = await getCompletedInternshipsForReports();
+  } catch (err) {
+    console.error("AdminReportsPage fetch error:", err);
+    completedInternships = [];
+  }
 
   return (
     <div className="space-y-6">

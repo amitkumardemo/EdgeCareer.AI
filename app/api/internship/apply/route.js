@@ -89,8 +89,24 @@ export async function POST(req) {
     console.error("Error applying for internship:", error);
     // Unique constraint failed for application (User already applied to this batch)
     if (error.code === 'P2002') {
-      return NextResponse.json({ error: "You have already applied for this internship." }, { status: 400 });
+      return NextResponse.json({ success: false, error: "You have already applied for this internship." }, { status: 400 });
     }
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    const isDbIssue = 
+      error?.name === "PrismaClientInitializationError" ||
+      error?.message?.includes("quota") ||
+      error?.message?.includes("connection pool") ||
+      error?.code?.startsWith("P1");
+
+    if (isDbIssue) {
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: "Application service is temporarily experiencing high load. Please retry in a few moments.", 
+          code: "DATABASE_UNAVAILABLE" 
+        }, 
+        { status: 503 }
+      );
+    }
+    return NextResponse.json({ success: false, error: "Internal Server Error" }, { status: 500 });
   }
 }

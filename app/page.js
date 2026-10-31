@@ -21,22 +21,31 @@ export const metadata = {
   ],
 };
 
+import { safeDb } from "@/lib/db-guard";
+
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
-  const latestJobs = await db.job.findMany({
-    take: 3,
-    orderBy: { createdAt: "desc" },
-    select: {
-      id: true,
-      title: true,
-      slug: true,
-      employmentType: true,
-      salary: true,
-      skills: true,
-      applyBefore: true,
-      company: { select: { name: true, logoUrl: true } },
-      location: { select: { name: true } },
-    }
-  });
+  const latestJobs = await safeDb(
+    () =>
+      db.job.findMany({
+        take: 3,
+        orderBy: { createdAt: "desc" },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          employmentType: true,
+          salary: true,
+          skills: true,
+          applyBefore: true,
+          company: { select: { name: true, logoUrl: true } },
+          location: { select: { name: true } },
+        },
+      }),
+    [],
+    "Homepage jobs"
+  );
 
   return (
     <>

@@ -2,16 +2,24 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { PlusCircle, MoreVertical, Edit, Trash2, Eye } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminJobsPage() {
-  const jobs = await prisma.job.findMany({
-    orderBy: { createdAt: "desc" },
-    include: {
-      company: true,
-      _count: {
-        select: { applications: true },
+  let jobs: any[] = [];
+  try {
+    jobs = await prisma.job.findMany({
+      orderBy: { createdAt: "desc" },
+      include: {
+        company: true,
+        _count: {
+          select: { applications: true },
+        },
       },
-    },
-  });
+    });
+  } catch (error) {
+    console.error("AdminJobsPage database query failed:", error);
+    jobs = [];
+  }
 
   return (
     <div className="max-w-6xl mx-auto py-8 px-4">

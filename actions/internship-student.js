@@ -99,47 +99,55 @@ export async function applyToInternship(batchId, studentDetails) {
 }
 
 export async function getMyApplications() {
-  const user = await getStudentApp();
-  return prisma.internshipApplication.findMany({
-    where: { userId: user.id },
-    include: {
-      batch: {
-        include: {
-          program: { select: { title: true, domain: true, duration: true } },
+  try {
+    const user = await getStudentApp();
+    return await prisma.internshipApplication.findMany({
+      where: { userId: user.id },
+      include: {
+        batch: {
+          include: {
+            program: { select: { title: true, domain: true, duration: true } },
+          },
+        },
+        user: { select: { name: true } },
+        progress: { include: { certificate: true } },
+        offerLetter: {
+          select: {
+            id: true,
+            applicationId: true,
+            generatedAt: true,
+            validUntil: true,
+            downloadCount: true,
+          },
         },
       },
-      user: { select: { name: true } },
-      progress: { include: { certificate: true } },
-      offerLetter: {
-        select: {
-          id: true,
-          applicationId: true,
-          generatedAt: true,
-          validUntil: true,
-          downloadCount: true,
-          // pdfUrl excluded — it's a large base64; fetch separately when needed
-        },
-      },
-    },
-    orderBy: { appliedAt: "desc" },
-  });
+      orderBy: { appliedAt: "desc" },
+    });
+  } catch (err) {
+    console.error("getMyApplications failed (database or auth unavailable):", err?.message || err);
+    return [];
+  }
 }
 
 export async function getMyTasks(applicationId) {
-  const user = await getStudentApp();
-  const app = await prisma.internshipApplication.findFirst({
-    where: { id: applicationId, userId: user.id },
-  });
-  if (!app) throw new Error("Application not found");
+  try {
+    const user = await getStudentApp();
+    const app = await prisma.internshipApplication.findFirst({
+      where: { id: applicationId, userId: user.id },
+    });
+    if (!app) return [];
 
-  const tasks = await prisma.internshipTask.findMany({
-    where: { batchId: app.batchId },
-    include: {
-      submissions: { where: { applicationId }, take: 1 },
-    },
-    orderBy: { dueDate: "asc" },
-  });
-  return tasks;
+    return await prisma.internshipTask.findMany({
+      where: { batchId: app.batchId },
+      include: {
+        submissions: { where: { applicationId }, take: 1 },
+      },
+      orderBy: { dueDate: "asc" },
+    });
+  } catch (err) {
+    console.error("getMyTasks failed (database or auth unavailable):", err?.message || err);
+    return [];
+  }
 }
 
 export async function submitTask(applicationId, taskId, fileUrl, notes) {
@@ -198,69 +206,84 @@ export async function getMyAttendanceFull() {
 }
 
 export async function getLeaderboard(batchId) {
-  return prisma.internProgress.findMany({
-    where: {
-      application: { batchId, status: "SELECTED" },
-    },
-    include: {
-      application: {
-        include: {
-          user: { select: { id: true, name: true, imageUrl: true, branch: true } },
+  try {
+    return await prisma.internProgress.findMany({
+      where: {
+        application: { batchId, status: "SELECTED" },
+      },
+      include: {
+        application: {
+          include: {
+            user: { select: { id: true, name: true, imageUrl: true, branch: true } },
+          },
         },
       },
-    },
-    orderBy: { performScore: "desc" },
-    take: 50,
-  });
+      orderBy: { performScore: "desc" },
+      take: 50,
+    });
+  } catch (err) {
+    console.error("getLeaderboard failed:", err?.message || err);
+    return [];
+  }
 }
 
 export async function getOpenBatches() {
-  let user = null;
   try {
-    user = await getStudentApp();
-  } catch (e) {
-    // Ignore error if not logged in
+    let user = null;
+    try {
+      user = await getStudentApp();
+    } catch (e) {
+      // Ignore error if not logged in
+    }
+
+    const batches = await prisma.internshipBatch.findMany({
+      where: { status: { in: ["UPCOMING", "ACTIVE"] } },
+      include: {
+        program: { select: { title: true, domain: true, duration: true, stipend: true } },
+        _count: { select: { applications: true } },
+      },
+      orderBy: { startDate: "asc" },
+    });
+
+    if (!user) {
+      return batches.map(b => ({ ...b, hasApplied: false }));
+    }
+
+    const myApps = await prisma.internshipApplication.findMany({
+      where: { userId: user.id },
+      select: { batchId: true },
+    });
+    const appliedBatchIds = new Set(myApps.map(a => a.batchId));
+
+    return batches.map(b => ({
+      ...b,
+      hasApplied: appliedBatchIds.has(b.id)
+    }));
+  } catch (err) {
+    console.error("getOpenBatches failed (database unavailable):", err?.message || err);
+    return [];
   }
-
-  const batches = await prisma.internshipBatch.findMany({
-    where: { status: { in: ["UPCOMING", "ACTIVE"] } },
-    include: {
-      program: { select: { title: true, domain: true, duration: true, stipend: true } },
-      _count: { select: { applications: true } },
-    },
-    orderBy: { startDate: "asc" },
-  });
-
-  if (!user) {
-    return batches.map(b => ({ ...b, hasApplied: false }));
-  }
-
-  const myApps = await prisma.internshipApplication.findMany({
-    where: { userId: user.id },
-    select: { batchId: true },
-  });
-  const appliedBatchIds = new Set(myApps.map(a => a.batchId));
-
-  return batches.map(b => ({
-    ...b,
-    hasApplied: appliedBatchIds.has(b.id)
-  }));
 }
 
 export async function getMyNotifications(userId) {
-  const user = await getStudentApp();
-  const myBatchIds = (
-    await prisma.internshipApplication.findMany({
-      where: { userId: user.id },
-      select: { batchId: true },
-    })
-  ).map((a) => a.batchId);
+  try {
+    const user = await getStudentApp();
+    const myBatchIds = (
+      await prisma.internshipApplication.findMany({
+        where: { userId: user.id },
+        select: { batchId: true },
+      })
+    ).map((a) => a.batchId);
 
-  return prisma.announcement.findMany({
-    where: {
-      OR: [{ isGlobal: true }, { batchId: { in: myBatchIds } }],
-    },
-    orderBy: { createdAt: "desc" },
-    take: 20,
-  });
+    return await prisma.announcement.findMany({
+      where: {
+        OR: [{ isGlobal: true }, { batchId: { in: myBatchIds } }],
+      },
+      orderBy: { createdAt: "desc" },
+      take: 20,
+    });
+  } catch (err) {
+    console.error("getMyNotifications failed:", err?.message || err);
+    return [];
+  }
 }
