@@ -8,7 +8,8 @@ import {
   ChevronRight, Code2, FileText, Github, LineChart,
   Sparkles, Target, Trophy, Users, Zap, Building, LayoutDashboard, MonitorPlay, Presentation, XCircle,
   Sun, Moon, Menu, X, GraduationCap, Award, Star, TrendingUp, Cpu, Database, Code, Smartphone, Shield, Cloud, Layout, Megaphone, Video, Terminal, Linkedin, Map, Play,
-  Mail, Phone, ArrowUpRight, HeartHandshake, MapPin, Settings, Clock, Banknote, Bell, Calendar
+  Mail, Phone, ArrowUpRight, HeartHandshake, MapPin, Settings, Clock, Banknote, Bell, Calendar,
+  ShieldCheck, Laptop, Rocket
 } from "lucide-react";
 import CareerServicesSection from "@/components/CareerServicesSection";
 
@@ -1337,6 +1338,163 @@ export default function Home({ latestJobs = [] }) {
 
 
 
+          {/* TECHIEHELP CAMPUS INNOVATION CLUB SHOWCASE SECTION - Exact Match to Screenshot 2 */}
+          <section id="campus-innovation-club-home" className="relative w-full overflow-hidden bg-white border-y border-slate-200/70">
+            {/* Subtle Ambient Glows on Left Side */}
+            <div className="absolute top-1/4 -left-20 w-80 h-80 bg-blue-100/40 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute bottom-10 left-1/4 w-72 h-72 bg-amber-100/30 rounded-full blur-3xl pointer-events-none" />
+
+            <div className="w-full flex flex-col lg:flex-row items-stretch justify-between min-h-[auto] lg:h-[500px] xl:h-[520px]">
+              
+              {/* Left Column: ~55% width on desktop */}
+              <div className="w-full lg:w-[54%] xl:w-[55%] 2xl:w-[56%] flex flex-col justify-center h-full z-20 pl-6 sm:pl-10 md:pl-14 lg:pl-12 xl:pl-20 2xl:pl-28 pr-6 lg:pr-8 py-8 lg:py-4 text-left">
+                {/* Top Light Blue Pill Badge with Sparkle */}
+                <div className="inline-flex items-center gap-2 self-start bg-gradient-to-r from-blue-50/90 via-sky-50 to-amber-50/70 text-[#087BEA] border border-blue-200/90 text-[11px] sm:text-[12px] font-black px-4 py-1.5 rounded-full tracking-wider uppercase mb-3 sm:mb-4 shadow-2xs">
+                  <Sparkles className="w-3.5 h-3.5 text-[#FFB800] shrink-0" />
+                  <span>POWERED BY TECHIEHELP INSTITUTE OF AI</span>
+                </div>
+
+                {/* Main Headline: EXACTLY TWO LINES ON DESKTOP */}
+                <h2 className="text-3xl sm:text-4xl lg:text-[38px] xl:text-[44px] 2xl:text-[48px] font-black text-[#0B1F42] tracking-tight leading-[1.08]">
+                  <span className="block whitespace-normal lg:whitespace-nowrap">Transform Your Campus</span>
+                  <span className="block whitespace-normal lg:whitespace-nowrap mt-1">
+                    Into a Hub of{" "}
+                    <span className="relative inline-block text-[#FFB800]">
+                      Innovation.
+                      {/* Sleek brand accent swoosh under Innovation */}
+                      <svg
+                        className="absolute -bottom-1.5 sm:-bottom-2 left-0 w-full h-3 sm:h-3.5 text-[#087BEA] overflow-visible"
+                        viewBox="0 0 160 18"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M2 14C45 3 115 3 158 13"
+                          stroke="url(#swooshGradientHome)"
+                          strokeWidth="4"
+                          strokeLinecap="round"
+                        />
+                        <defs>
+                          <linearGradient id="swooshGradientHome" x1="0" y1="0" x2="160" y2="0" gradientUnits="userSpaceOnUse">
+                            <stop stopColor="#087BEA" />
+                            <stop offset="0.65" stopColor="#087BEA" />
+                            <stop offset="1" stopColor="#FFB800" />
+                          </linearGradient>
+                        </defs>
+                      </svg>
+                    </span>
+                  </span>
+                </h2>
+
+                {/* Description (max 3 lines on desktop) */}
+                <p className="text-sm sm:text-[15px] xl:text-[16px] text-slate-600 font-normal leading-relaxed max-w-[500px] my-3 sm:my-4">
+                  Join a growing campus innovation ecosystem where students learn emerging technologies, build real-world projects, participate in hackathons, develop leadership skills and prepare for successful careers.
+                </p>
+
+                {/* Both CTAs side by side on the same horizontal line */}
+                <div className="flex flex-row items-center gap-3 sm:gap-4 pt-1 sm:pt-2">
+                  <Link
+                    href="/campus-innovation-club#partner-form"
+                    className="group relative inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 rounded-full bg-[#FFB800] hover:bg-[#FFA800] text-[#0B1F42] font-black text-xs sm:text-sm shadow-md hover:shadow-lg hover:shadow-amber-400/30 hover:-translate-y-0.5 active:translate-y-0 transition-all whitespace-nowrap cursor-pointer"
+                  >
+                    <span>Establish a Club in Your College</span>
+                    <ArrowRight className="w-4 h-4 text-[#0B1F42] group-hover:translate-x-1 transition-transform duration-200" />
+                  </Link>
+
+                  <Link
+                    href="/campus-innovation-club#membership"
+                    className="group inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 rounded-full bg-white hover:bg-slate-50 border-2 border-[#0B1F42] text-[#0B1F42] hover:border-[#087BEA] hover:text-[#087BEA] font-extrabold text-xs sm:text-sm shadow-xs transition-all whitespace-nowrap cursor-pointer"
+                  >
+                    <Users className="w-4 h-4 text-slate-500 group-hover:text-[#087BEA] transition-colors" />
+                    <span>Join Our Community</span>
+                  </Link>
+                </div>
+
+                {/* Feature Indicator Row with Subtle Divider */}
+                <div className="pt-4 sm:pt-5 mt-4 sm:mt-5 border-t border-slate-100 flex items-center gap-5 sm:gap-7 xl:gap-9 max-w-[520px]">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#EAF3FD] to-sky-100 border border-blue-200/70 flex items-center justify-center text-[#087BEA] shrink-0 shadow-2xs">
+                      <Building className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-[#087BEA]" />
+                    </div>
+                    <div className="text-[11px] sm:text-xs font-black text-[#0B1F42] leading-tight">
+                      College<br />
+                      <span className="font-semibold text-slate-500 text-[10px] sm:text-[11px]">Collaboration</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#EAF3FD] to-sky-100 border border-blue-200/70 flex items-center justify-center text-[#087BEA] shrink-0 shadow-2xs">
+                      <Calendar className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-[#087BEA]" />
+                    </div>
+                    <div className="text-[11px] sm:text-xs font-black text-[#0B1F42] leading-tight">
+                      Weekly Tech<br />
+                      <span className="font-semibold text-slate-500 text-[10px] sm:text-[11px]">Activities</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#EAF3FD] to-sky-100 border border-blue-200/70 flex items-center justify-center text-[#087BEA] shrink-0 shadow-2xs">
+                      <GraduationCap className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-[#087BEA]" />
+                    </div>
+                    <div className="text-[11px] sm:text-xs font-black text-[#0B1F42] leading-tight">
+                      Learning Beyond<br />
+                      <span className="font-semibold text-slate-500 text-[10px] sm:text-[11px]">Classrooms</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Visual: ~45% width on desktop, naturally scaled & perfectly proportioned */}
+              <div className="w-full lg:w-[46%] xl:w-[45%] 2xl:w-[44%] h-[340px] sm:h-[420px] lg:h-full relative overflow-hidden flex items-stretch">
+                {/* The Award Ceremony Visual Banner */}
+                <div className="relative w-full h-full min-h-[340px] lg:min-h-full">
+                  <Image
+                    src="/hero-slides/award_ceremony.jpg"
+                    alt="TechieHelp Campus Innovation Club Award Ceremony & Student Recognition"
+                    fill
+                    quality={95}
+                    sizes="(max-width: 1024px) 100vw, 45vw"
+                    className="object-cover object-[center_18%]"
+                    priority
+                  />
+
+                  {/* Floating Tag / Badge on Right Top */}
+                  <div className="hidden sm:flex absolute top-4 right-4 xl:top-5 xl:right-5 z-10 items-center gap-2 bg-[#0B1F42]/85 backdrop-blur-md text-white px-3.5 py-1.5 rounded-full border border-white/20 shadow-md">
+                    <span className="w-2 h-2 rounded-full bg-[#FFB800] animate-pulse" />
+                    <span className="text-[11px] xl:text-xs font-bold tracking-wide">Learn • Build • Compete • Innovate</span>
+                  </div>
+
+                  {/* Floating Achievement Card on Bottom Right */}
+                  <div className="hidden sm:flex absolute bottom-4 right-4 sm:bottom-5 sm:right-6 xl:bottom-6 xl:right-8 z-10 items-center gap-2.5 bg-white/95 backdrop-blur-md text-[#0B1F42] px-3.5 py-2 rounded-xl border border-slate-100 shadow-lg">
+                    <div className="w-7 h-7 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600">
+                      <Trophy className="w-3.5 h-3.5 text-amber-500" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-[11px] font-black text-[#0B1F42]">Campus Excellence</div>
+                      <div className="text-[9px] text-slate-500 font-medium">Recognizing Top Performers</div>
+                    </div>
+                  </div>
+
+                  {/* Diagonal Transition Accent Overlay (Clean Geometric Edge) */}
+                  <div className="hidden lg:block absolute inset-y-0 -left-1 w-14 sm:w-16 xl:w-20 h-full z-10 pointer-events-none">
+                    <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-full">
+                      {/* Large Diagonal White Mask */}
+                      <polygon points="0,0 48,0 10,100 0,100" fill="#FFFFFF" />
+                      {/* Blue Accent Diagonal Stripe */}
+                      <polygon points="48,0 53,0 15,100 10,100" fill="#087BEA" opacity="0.9" />
+                      {/* Subtle Yellow Accent Stripe */}
+                      <polygon points="53,0 56,0 18,100 15,100" fill="#FFB800" opacity="0.95" />
+                    </svg>
+                  </div>
+
+                  {/* Mobile top fade to smoothly blend stacked mobile view */}
+                  <div className="block lg:hidden absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-white to-transparent pointer-events-none" />
+                </div>
+              </div>
+
+            </div>
+          </section>
+
           {/* 8. COLLEGE PARTNERSHIP SECTION */}
           <section id="tpo" className="py-24 relative bg-slate-50 overflow-hidden rounded-t-[3rem]">
             <div className="absolute inset-0 opacity-[0.02] bg-center" style={{ backgroundImage: 'linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
@@ -1359,11 +1517,18 @@ export default function Home({ latestJobs = [] }) {
                     ))}
                   </div>
 
-                  <Link href="/campus-partnership">
-                    <button suppressHydrationWarning className="px-8 py-4 rounded-full bg-amber-500 text-blue-950 font-bold hover:bg-amber-600 hover:scale-105 transition-all shadow-xl">
-                      Request Partnership
-                    </button>
-                  </Link>
+                  <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
+                    <Link href="/campus-partnership">
+                      <button suppressHydrationWarning className="px-8 py-4 rounded-full bg-amber-500 text-blue-950 font-bold hover:bg-amber-600 hover:scale-105 transition-all shadow-xl">
+                        Request Partnership
+                      </button>
+                    </Link>
+                    <Link href="/campus-innovation-club">
+                      <button suppressHydrationWarning className="px-7 py-4 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold border border-white/20 hover:scale-105 transition-all">
+                        Campus Innovation Club
+                      </button>
+                    </Link>
+                  </div>
                 </div>
 
                 <div className="hidden lg:block w-full max-w-md relative p-8">

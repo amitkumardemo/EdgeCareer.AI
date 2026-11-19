@@ -25,7 +25,9 @@ export default function Footer() {
     "/internship/college",
     "/tpo",
     "/sign-in",
-    "/sign-up"
+    "/sign-up",
+    "/campus-innovation-club",
+    "/club"
   ];
 
   const shouldHideFooter = excludedPrefixes.some(prefix => 
