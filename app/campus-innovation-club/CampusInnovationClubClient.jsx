@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import TypingHeadlineWord from "@/components/TypingHeadlineWord";
 import {
   Sparkles,
   Award,
@@ -52,7 +53,8 @@ import {
   Share2,
   Activity,
   UserCheck,
-  Laptop
+  Laptop,
+  TrendingUp
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -1100,37 +1102,14 @@ export default function CampusInnovationClubClient() {
               <span>POWERED BY TECHIEHELP INSTITUTE OF AI</span>
             </div>
 
-            {/* Main Headline: EXACTLY TWO LINES ON DESKTOP, BOLD & ATTRACTIVE */}
-            <h1 className="text-3xl sm:text-4xl lg:text-[40px] xl:text-[46px] 2xl:text-[50px] font-black text-[#0B1F42] tracking-tight leading-[1.08]">
+            {/* Main Headline: Static prefix + Premium dynamic rotating typed keyword */}
+            <h1 className="text-3xl sm:text-4xl lg:text-[36px] xl:text-[42px] 2xl:text-[48px] font-black text-[#0B1F42] tracking-tight leading-[1.12]">
               <span className="block whitespace-normal lg:whitespace-nowrap">
                 Transform Your Campus
               </span>
               <span className="block whitespace-normal lg:whitespace-nowrap mt-1">
                 Into a Hub of{" "}
-                <span className="relative inline-block text-[#FFB800]">
-                  Innovation.
-                  {/* Sleek brand accent swoosh under Innovation */}
-                  <svg
-                    className="absolute -bottom-2 sm:-bottom-2.5 left-0 w-full h-3 sm:h-3.5 text-[#087BEA] overflow-visible"
-                    viewBox="0 0 160 18"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M2 14C45 3 115 3 158 13"
-                      stroke="url(#swooshGradientHero)"
-                      strokeWidth="4"
-                      strokeLinecap="round"
-                    />
-                    <defs>
-                      <linearGradient id="swooshGradientHero" x1="0" y1="0" x2="160" y2="0" gradientUnits="userSpaceOnUse">
-                        <stop stopColor="#087BEA" />
-                        <stop offset="0.65" stopColor="#087BEA" />
-                        <stop offset="1" stopColor="#FFB800" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
-                </span>
+                <TypingHeadlineWord />
               </span>
             </h1>
 
@@ -1243,84 +1222,330 @@ export default function CampusInnovationClubClient() {
       </section>
 
       {/* =========================================================================
-          SECTION 5: ABOUT THE CLUB
+          SECTION 5: ABOUT THE CLUB — Premium 3D Animated UI (Exact Match to Reference)
       ========================================================================= */}
-      <section id="about" className="py-20 bg-slate-50/60 border-y border-slate-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
-            <span className="text-xs font-black tracking-widest text-cyan-600 uppercase bg-cyan-50 border border-cyan-200/80 px-3 py-1 rounded-full">
-              About The Club
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-950 tracking-tight">
-              More Than a College Club. A Complete Innovation Ecosystem.
-            </h2>
-            <p className="text-base text-slate-600 leading-relaxed">
-              TechieHelp Campus Innovation Club is designed to bridge the gap between academic learning and real-world opportunities. We collaborate with colleges to establish student-led innovation communities that encourage students to explore technology, develop practical skills, collaborate with peers, participate in competitions and prepare for their professional journeys.
-            </p>
+      <section id="about" className="py-20 lg:py-28 bg-[#F7FAFF] relative overflow-hidden border-y border-slate-200/70">
+        {/* Soft Ambient Depth Glows */}
+        <div className="absolute top-1/4 -left-24 w-96 h-96 bg-blue-100/40 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-12 -right-24 w-96 h-96 bg-amber-100/30 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          
+          {/* ==========================================
+              TOP: INTRODUCTION SPLIT TWO-COLUMN LAYOUT
+          ========================================== */}
+          <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center mb-16 lg:mb-20">
+            
+            {/* Left Column: ~55% content on desktop */}
+            <motion.div
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="lg:col-span-7 flex flex-col justify-center text-left"
+            >
+              {/* Badge Pill */}
+              <div className="inline-flex items-center gap-2 self-start px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-[#087BEA] text-xs font-black uppercase tracking-wider mb-5 shadow-2xs">
+                <Users className="w-3.5 h-3.5 text-[#087BEA]" />
+                <span>ABOUT THE CLUB</span>
+              </div>
+
+              {/* Main Headline with Innovation Highlight & Gradient Swoosh */}
+              <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-black text-[#0B1F42] tracking-tight leading-[1.14]">
+                More Than a College Club.{" "}
+                <span className="block mt-1">
+                  A Complete{" "}
+                  <span className="relative inline-block text-[#FFB800]">
+                    Innovation
+                    {/* Brand gradient swoosh accent */}
+                    <svg
+                      className="absolute -bottom-2 sm:-bottom-2.5 left-0 w-full h-3 sm:h-3.5 text-[#087BEA] overflow-visible"
+                      viewBox="0 0 160 18"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M2 14C45 3 115 3 158 13"
+                        stroke="url(#swooshAboutInnovation)"
+                        strokeWidth="4"
+                        strokeLinecap="round"
+                      />
+                      <defs>
+                        <linearGradient id="swooshAboutInnovation" x1="0" y1="0" x2="160" y2="0" gradientUnits="userSpaceOnUse">
+                          <stop stopColor="#087BEA" />
+                          <stop offset="0.65" stopColor="#087BEA" />
+                          <stop offset="1" stopColor="#FFB800" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                  </span>{" "}
+                  Ecosystem.
+                </span>
+              </h2>
+
+              {/* Description */}
+              <p className="text-base text-slate-600 leading-relaxed font-normal max-w-xl my-6">
+                TechieHelp Campus Innovation Club is designed to bridge the gap between academic learning and real-world opportunities. We collaborate with colleges to establish student-led innovation communities where students explore technology, develop practical skills and prepare for their professional journeys.
+              </p>
+
+              {/* Three Horizontal Benefit Indicators */}
+              <div className="pt-2 flex flex-wrap sm:flex-nowrap items-center gap-5 sm:gap-7 xl:gap-8 border-t border-slate-200/80">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#EAF3FD] to-sky-100 border border-blue-200/80 flex items-center justify-center text-[#087BEA] shrink-0 shadow-2xs">
+                    <Building className="w-5 h-5 text-[#087BEA]" />
+                  </div>
+                  <div className="text-xs sm:text-[13px] font-black text-[#0B1F42] leading-tight">
+                    College<br />
+                    <span className="font-semibold text-slate-500 text-[11px] sm:text-xs">Collaboration</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#EAF3FD] to-sky-100 border border-blue-200/80 flex items-center justify-center text-[#087BEA] shrink-0 shadow-2xs">
+                    <Calendar className="w-5 h-5 text-[#087BEA]" />
+                  </div>
+                  <div className="text-xs sm:text-[13px] font-black text-[#0B1F42] leading-tight">
+                    Weekly Tech<br />
+                    <span className="font-semibold text-slate-500 text-[11px] sm:text-xs">Activities</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#EAF3FD] to-sky-100 border border-blue-200/80 flex items-center justify-center text-[#087BEA] shrink-0 shadow-2xs">
+                    <GraduationCap className="w-5 h-5 text-[#087BEA]" />
+                  </div>
+                  <div className="text-xs sm:text-[13px] font-black text-[#0B1F42] leading-tight">
+                    Learning Beyond<br />
+                    <span className="font-semibold text-slate-500 text-[11px] sm:text-xs">Classrooms</span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Right Column: ~45% Premium 3D-Style Visual with Organic Geometric Frame */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
+              className="lg:col-span-5 relative flex items-center justify-center"
+            >
+              {/* Back Accent Yellow Crescent / Blob */}
+              <div className="absolute -left-6 top-1/4 w-28 h-28 sm:w-36 sm:h-36 bg-[#FFB800] rounded-full blur-[1px] -z-10 opacity-95 transform -translate-x-3" />
+
+              {/* Top-Right Yellow Celebratory Sparks (\\|/) */}
+              <div className="absolute -top-6 -right-3 sm:-top-8 sm:-right-4 text-[#FFB800] pointer-events-none select-none z-20">
+                <svg className="w-10 h-10 sm:w-12 sm:h-12" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M24 4V14M10 10L17 17M38 10L31 17" stroke="#FFB800" strokeWidth="4.5" strokeLinecap="round" />
+                </svg>
+              </div>
+
+              {/* Organic Curved Outer Wrapper with Electric Blue/Cyan Gradient Border */}
+              <div className="relative w-full max-w-[480px] sm:max-w-[500px] aspect-[16/11] sm:aspect-[16/10.5] p-1.5 sm:p-2 rounded-[2.5rem] sm:rounded-[3rem] bg-gradient-to-tr from-[#087BEA] via-[#16BDE0] to-[#087BEA] shadow-2xl shadow-blue-500/20 overflow-hidden group">
+                
+                {/* Inner Image Container */}
+                <div className="relative w-full h-full rounded-[2.2rem] sm:rounded-[2.7rem] overflow-hidden bg-slate-900">
+                  <Image
+                    src="/about-students-collaboration.jpg"
+                    alt="Students Collaborating at TechieHelp Campus Innovation Club"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 45vw"
+                    quality={95}
+                    className="object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+
+                  {/* Subtle glass gradient overlay for depth */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F42]/40 via-transparent to-transparent pointer-events-none" />
+
+                  {/* Floating AI Chip Badge — Top Left */}
+                  <div className="absolute top-4 left-4 z-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#0B1F42]/80 backdrop-blur-md text-white border border-white/20 text-[11px] font-bold shadow-lg">
+                    <Cpu className="w-3.5 h-3.5 text-[#16BDE0]" />
+                    <span>AI & Web Tracks</span>
+                  </div>
+
+                  {/* Floating Lightbulb Project Badge — Bottom Right */}
+                  <div className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl bg-white/95 backdrop-blur-md text-[#0B1F42] border border-slate-200/80 text-[11px] font-black shadow-xl">
+                    <Lightbulb className="w-3.5 h-3.5 text-[#FFB800]" />
+                    <span>Real-World Projects</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Small Floating Innovation Spark */}
+              <div className="absolute -bottom-3 -left-3 z-20 w-10 h-10 rounded-2xl bg-white border border-slate-200/80 shadow-lg flex items-center justify-center text-amber-500 transform -rotate-12 hover:rotate-0 transition-transform">
+                <Sparkles className="w-5 h-5 text-[#FFB800]" />
+              </div>
+            </motion.div>
           </div>
 
-          {/* 4 Feature Cards: Learn, Build, Compete, Grow */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Learn */}
-            <div className="group bg-white p-7 rounded-3xl border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-cyan-300 transition-all duration-300">
-              <div className="w-13 h-13 w-12 h-12 rounded-2xl bg-cyan-50 border border-cyan-100 flex items-center justify-center text-cyan-600 mb-6 group-hover:scale-110 transition-transform">
-                <BookOpen className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-2">Learn</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Explore AI, programming, emerging technologies and industry-relevant skills through structured, hands-on masterclasses.
-              </p>
-              <div className="mt-5 pt-4 border-t border-slate-100 flex items-center text-xs font-bold text-cyan-600">
-                <span>AI, Web & Cloud Tracks</span>
-                <ChevronRight className="w-3.5 h-3.5 ml-1" />
-              </div>
-            </div>
 
-            {/* Build */}
-            <div className="group bg-white p-7 rounded-3xl border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-blue-300 transition-all duration-300">
-              <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 mb-6 group-hover:scale-110 transition-transform">
-                <Code2 className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-2">Build</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Work on practical projects, solve real-world problems and build your portfolio with guidance from seasoned tech mentors.
-              </p>
-              <div className="mt-5 pt-4 border-t border-slate-100 flex items-center text-xs font-bold text-blue-600">
-                <span>Production Portfolio</span>
-                <ChevronRight className="w-3.5 h-3.5 ml-1" />
-              </div>
-            </div>
+          {/* ==========================================
+              BOTTOM: FOUR INTERACTIVE 3D FEATURE CARDS
+          ========================================== */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            {/* 1. LEARN */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5, delay: 0.05 }}
+              whileHover={{ y: -8, transition: { duration: 0.25, ease: "easeOut" } }}
+              onClick={() => scrollTo("programs")}
+              className="group relative bg-white/95 rounded-[1.75rem] p-7 border border-slate-200/90 shadow-sm hover:shadow-2xl hover:border-blue-300 transition-all duration-300 flex flex-col justify-between cursor-pointer overflow-hidden"
+            >
+              {/* Top-Right Soft Colored Corner Accent */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-blue-500/15 via-cyan-400/10 to-transparent rounded-bl-[4.5rem] pointer-events-none transition-transform duration-500 group-hover:scale-110" />
 
-            {/* Compete */}
-            <div className="group bg-white p-7 rounded-3xl border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-amber-300 transition-all duration-300">
-              <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600 mb-6 group-hover:scale-110 transition-transform">
-                <Trophy className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-2">Compete</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Participate in coding contests, hackathons, innovation challenges and technical events across campus and national stages.
-              </p>
-              <div className="mt-5 pt-4 border-t border-slate-100 flex items-center text-xs font-bold text-amber-600">
-                <span>Hackathons & Contests</span>
-                <ChevronRight className="w-3.5 h-3.5 ml-1" />
-              </div>
-            </div>
+              <div className="relative z-10">
+                {/* 3D-Style Icon Tile */}
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#087BEA] via-[#0D87F2] to-[#16BDE0] text-white flex items-center justify-center shadow-lg shadow-blue-500/25 mb-6 transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-300 relative">
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-transparent via-white/20 to-white/40 pointer-events-none" />
+                  <BookOpen className="w-7 h-7 text-white stroke-[2.2] relative z-10" />
+                </div>
 
-            {/* Grow */}
-            <div className="group bg-white p-7 rounded-3xl border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-orange-300 transition-all duration-300">
-              <div className="w-12 h-12 rounded-2xl bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-600 mb-6 group-hover:scale-110 transition-transform">
-                <TrendingUpIcon className="w-6 h-6" />
+                <h3 className="text-2xl font-black text-[#0B1F42] mb-3 tracking-tight">
+                  Learn
+                </h3>
+
+                <p className="text-sm text-slate-600 leading-relaxed font-normal mb-8">
+                  Explore AI, programming, emerging technologies and industry-relevant skills through structured, hands-on masterclasses.
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-2">Grow</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Develop leadership, communication, networking and career-readiness skills that distinguish you in campus hiring drives.
-              </p>
-              <div className="mt-5 pt-4 border-t border-slate-100 flex items-center text-xs font-bold text-orange-600">
-                <span>Career & Leadership</span>
-                <ChevronRight className="w-3.5 h-3.5 ml-1" />
+
+              {/* Footer */}
+              <div className="relative z-10 pt-4 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-[13px] font-bold text-[#087BEA]">
+                  AI, Web & Cloud Tracks
+                </span>
+                <div className="w-8 h-8 rounded-full bg-[#087BEA] text-white flex items-center justify-center shadow-sm group-hover:translate-x-1.5 transition-transform duration-200">
+                  <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                </div>
               </div>
-            </div>
+            </motion.div>
+
+            {/* 2. BUILD */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5, delay: 0.12 }}
+              whileHover={{ y: -8, transition: { duration: 0.25, ease: "easeOut" } }}
+              onClick={() => scrollTo("activities")}
+              className="group relative bg-white/95 rounded-[1.75rem] p-7 border border-slate-200/90 shadow-sm hover:shadow-2xl hover:border-amber-300 transition-all duration-300 flex flex-col justify-between cursor-pointer overflow-hidden"
+            >
+              {/* Top-Right Soft Colored Corner Accent */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-amber-400/20 via-yellow-300/10 to-transparent rounded-bl-[4.5rem] pointer-events-none transition-transform duration-500 group-hover:scale-110" />
+
+              <div className="relative z-10">
+                {/* 3D-Style Icon Tile */}
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#FFB800] via-[#F59E0B] to-[#EA580C] text-white flex items-center justify-center shadow-lg shadow-amber-500/25 mb-6 transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-300 relative">
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-transparent via-white/20 to-white/40 pointer-events-none" />
+                  <Code2 className="w-7 h-7 text-white stroke-[2.2] relative z-10" />
+                </div>
+
+                <h3 className="text-2xl font-black text-[#0B1F42] mb-3 tracking-tight">
+                  Build
+                </h3>
+
+                <p className="text-sm text-slate-600 leading-relaxed font-normal mb-8">
+                  Work on practical projects, solve real-world problems and build your portfolio with guidance from seasoned tech mentors.
+                </p>
+              </div>
+
+              {/* Footer */}
+              <div className="relative z-10 pt-4 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-[13px] font-bold text-[#D97706]">
+                  Production Portfolio
+                </span>
+                <div className="w-8 h-8 rounded-full bg-[#FFB800] text-[#0B1F42] flex items-center justify-center shadow-sm group-hover:translate-x-1.5 transition-transform duration-200">
+                  <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                </div>
+              </div>
+            </motion.div>
+
+            {/* 3. COMPETE */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5, delay: 0.19 }}
+              whileHover={{ y: -8, transition: { duration: 0.25, ease: "easeOut" } }}
+              onClick={() => scrollTo("activities")}
+              className="group relative bg-white/95 rounded-[1.75rem] p-7 border border-slate-200/90 shadow-sm hover:shadow-2xl hover:border-purple-300 transition-all duration-300 flex flex-col justify-between cursor-pointer overflow-hidden"
+            >
+              {/* Top-Right Soft Colored Corner Accent */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-purple-500/20 via-indigo-300/10 to-transparent rounded-bl-[4.5rem] pointer-events-none transition-transform duration-500 group-hover:scale-110" />
+
+              <div className="relative z-10">
+                {/* 3D-Style Icon Tile */}
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#8B5CF6] via-[#7C3AED] to-[#4F46E5] text-white flex items-center justify-center shadow-lg shadow-purple-500/25 mb-6 transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-300 relative">
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-transparent via-white/20 to-white/40 pointer-events-none" />
+                  <Trophy className="w-7 h-7 text-white stroke-[2.2] relative z-10" />
+                </div>
+
+                <h3 className="text-2xl font-black text-[#0B1F42] mb-3 tracking-tight">
+                  Compete
+                </h3>
+
+                <p className="text-sm text-slate-600 leading-relaxed font-normal mb-8">
+                  Participate in coding contests, hackathons, innovation challenges and technical events across campus and national stages.
+                </p>
+              </div>
+
+              {/* Footer */}
+              <div className="relative z-10 pt-4 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-[13px] font-bold text-[#7C3AED]">
+                  Hackathons & Contests
+                </span>
+                <div className="w-8 h-8 rounded-full bg-[#8B5CF6] text-white flex items-center justify-center shadow-sm group-hover:translate-x-1.5 transition-transform duration-200">
+                  <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                </div>
+              </div>
+            </motion.div>
+
+            {/* 4. GROW */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5, delay: 0.26 }}
+              whileHover={{ y: -8, transition: { duration: 0.25, ease: "easeOut" } }}
+              onClick={() => scrollTo("membership")}
+              className="group relative bg-white/95 rounded-[1.75rem] p-7 border border-slate-200/90 shadow-sm hover:shadow-2xl hover:border-emerald-300 transition-all duration-300 flex flex-col justify-between cursor-pointer overflow-hidden"
+            >
+              {/* Top-Right Soft Colored Corner Accent */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-emerald-500/20 via-teal-300/10 to-transparent rounded-bl-[4.5rem] pointer-events-none transition-transform duration-500 group-hover:scale-110" />
+
+              <div className="relative z-10">
+                {/* 3D-Style Icon Tile */}
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#10B981] via-[#059669] to-[#047857] text-white flex items-center justify-center shadow-lg shadow-emerald-500/25 mb-6 transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-300 relative">
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-transparent via-white/20 to-white/40 pointer-events-none" />
+                  <TrendingUp className="w-7 h-7 text-white stroke-[2.2] relative z-10" />
+                </div>
+
+                <h3 className="text-2xl font-black text-[#0B1F42] mb-3 tracking-tight">
+                  Grow
+                </h3>
+
+                <p className="text-sm text-slate-600 leading-relaxed font-normal mb-8">
+                  Develop leadership, communication, networking and career-readiness skills that distinguish you in campus hiring drives.
+                </p>
+              </div>
+
+              {/* Footer */}
+              <div className="relative z-10 pt-4 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-[13px] font-bold text-[#059669]">
+                  Career & Leadership
+                </span>
+                <div className="w-8 h-8 rounded-full bg-[#10B981] text-white flex items-center justify-center shadow-sm group-hover:translate-x-1.5 transition-transform duration-200">
+                  <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                </div>
+              </div>
+            </motion.div>
+
           </div>
+
         </div>
       </section>
 

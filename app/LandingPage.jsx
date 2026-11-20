@@ -12,6 +12,7 @@ import {
   ShieldCheck, Laptop, Rocket
 } from "lucide-react";
 import CareerServicesSection from "@/components/CareerServicesSection";
+import TypingHeadlineWord from "@/components/TypingHeadlineWord";
 
 // Animations
 const fadeIn = {
@@ -1354,35 +1355,12 @@ export default function Home({ latestJobs = [] }) {
                   <span>POWERED BY TECHIEHELP INSTITUTE OF AI</span>
                 </div>
 
-                {/* Main Headline: EXACTLY TWO LINES ON DESKTOP */}
-                <h2 className="text-3xl sm:text-4xl lg:text-[38px] xl:text-[44px] 2xl:text-[48px] font-black text-[#0B1F42] tracking-tight leading-[1.08]">
+                {/* Main Headline: Static prefix + Premium dynamic rotating typed keyword */}
+                <h2 className="text-3xl sm:text-4xl lg:text-[34px] xl:text-[40px] 2xl:text-[44px] font-black text-[#0B1F42] tracking-tight leading-[1.12]">
                   <span className="block whitespace-normal lg:whitespace-nowrap">Transform Your Campus</span>
                   <span className="block whitespace-normal lg:whitespace-nowrap mt-1">
                     Into a Hub of{" "}
-                    <span className="relative inline-block text-[#FFB800]">
-                      Innovation.
-                      {/* Sleek brand accent swoosh under Innovation */}
-                      <svg
-                        className="absolute -bottom-1.5 sm:-bottom-2 left-0 w-full h-3 sm:h-3.5 text-[#087BEA] overflow-visible"
-                        viewBox="0 0 160 18"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M2 14C45 3 115 3 158 13"
-                          stroke="url(#swooshGradientHome)"
-                          strokeWidth="4"
-                          strokeLinecap="round"
-                        />
-                        <defs>
-                          <linearGradient id="swooshGradientHome" x1="0" y1="0" x2="160" y2="0" gradientUnits="userSpaceOnUse">
-                            <stop stopColor="#087BEA" />
-                            <stop offset="0.65" stopColor="#087BEA" />
-                            <stop offset="1" stopColor="#FFB800" />
-                          </linearGradient>
-                        </defs>
-                      </svg>
-                    </span>
+                    <TypingHeadlineWord />
                   </span>
                 </h2>
 
