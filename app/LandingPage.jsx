@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import CareerServicesSection from "@/components/CareerServicesSection";
 import TypingHeadlineWord from "@/components/TypingHeadlineWord";
+import HeroTypingUSP from "@/components/HeroTypingUSP";
 
 // Animations
 const fadeIn = {
@@ -109,78 +110,71 @@ export default function Home({ latestJobs = [] }) {
               <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="lg:col-span-6 z-10 space-y-5">
 
 
-                {/* Main Hero Headline */}
-                <motion.h1 variants={fadeIn} className="text-4xl sm:text-5xl lg:text-[62px] xl:text-[70px] font-black tracking-tight leading-[1.08] text-[#0B192C]">
-                  From Classroom <br />
-                  to Dream <span className="inline-flex items-center tracking-tight">
-                    <span className="text-[#1D4ED8]">C</span>
-                    <span className="text-[#F97316]">a</span>
-                    <span className="text-[#F59E0B]">r</span>
-                    <span className="text-[#EAB308]">e</span>
-                    <span className="text-[#F97316]">e</span>
-                    <span className="text-[#EF4444]">r</span>
-                    <span className="text-slate-400">.</span>
+                {/* Main Hero Headline with 12-USP Typing Animation */}
+                <motion.h1 variants={fadeIn} className="text-3xl sm:text-4xl md:text-5xl lg:text-[46px] xl:text-[52px] font-black tracking-tight leading-[1.15] text-[#0B192C]">
+                  <span className="block text-[#0B192C]">Your Future Starts with</span>
+                  <span className="block mt-1 sm:mt-1.5 text-[#1D4ED8]">
+                    <HeroTypingUSP />
                   </span>
                 </motion.h1>
 
                 {/* Tagline Headline */}
-                <motion.h2 variants={fadeIn} className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#0B192C] tracking-tight">
+                <motion.h2 variants={fadeIn} className="text-xl sm:text-2xl lg:text-[26px] font-extrabold text-[#0B192C] tracking-tight">
                   Learn. Build. Intern. Get Industry Ready.
                 </motion.h2>
 
                 {/* Description */}
                 <motion.p variants={fadeIn} className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl font-normal">
-                  TechieHelp Institute of AI helps students turn academic knowledge into real-world skills through industry-led training, live projects, internships, mentorship and career preparation.
+                  TechieHelp Institute of AI empowers students to turn academic knowledge into real-world skills through industry-oriented training, practical projects, internships, expert mentorship, campus communities and career development.
                 </motion.p>
 
-                {/* Action Buttons */}
-                <motion.div variants={fadeIn} className="flex flex-wrap items-center gap-4 pt-1">
-                  <Link
-                    href="/skill-development-programs"
-                    className="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-[#1D4ED8] hover:bg-[#1E40AF] text-white font-bold text-base shadow-lg shadow-blue-500/25 transition-all hover:scale-[1.02] active:scale-95 group"
-                  >
-                    Explore Programs
-                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </Link>
+                {/* Main CTAs & Secondary Actions */}
+                <motion.div variants={fadeIn} className="space-y-4 pt-1">
+                  {/* Primary & Secondary Action Buttons */}
+                  <div className="flex flex-wrap items-center gap-3.5 sm:gap-4">
+                    <Link
+                      href="/internship"
+                      className="inline-flex items-center justify-center px-6 sm:px-7 py-3.5 rounded-full bg-[#1D4ED8] hover:bg-[#1E40AF] text-white font-bold text-sm sm:text-base shadow-lg shadow-blue-500/25 transition-all hover:scale-[1.02] active:scale-95 group cursor-pointer"
+                    >
+                      <span>Explore Training & Internships</span>
+                      <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </Link>
 
-                  <Link
-                    href="/internship"
-                    className="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-white hover:bg-slate-50 text-[#0B192C] font-bold border-2 border-slate-200 hover:border-slate-800 transition-all text-base shadow-sm hover:scale-[1.02] active:scale-95"
-                  >
-                    Start Your Career Journey
-                  </Link>
+                    <Link
+                      href="/campus-innovation-club#partner-form"
+                      className="inline-flex items-center justify-center px-6 sm:px-7 py-3.5 rounded-full bg-white hover:bg-slate-50 text-[#0B192C] font-bold border-2 border-slate-200 hover:border-slate-800 transition-all text-sm sm:text-base shadow-sm hover:scale-[1.02] active:scale-95 group cursor-pointer"
+                    >
+                      <span>Bring Campus Club to Your College</span>
+                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform text-[#1D4ED8]" />
+                    </Link>
+                  </div>
 
-                  <button
-                    onClick={() => setVideoModalOpen(true)}
-                    className="inline-flex items-center gap-3 px-3 py-2 text-slate-800 hover:text-blue-700 font-semibold transition-all group"
-                  >
-                    <div className="w-11 h-11 rounded-full bg-[#1D4ED8] text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
-                      <Play className="w-5 h-5 fill-white ml-0.5" />
-                    </div>
-                    <div className="text-left">
-                      <div className="text-sm font-bold text-[#0B192C] group-hover:text-blue-700">Watch Video</div>
-                      <div className="text-xs text-slate-500 font-medium">(1 min)</div>
-                    </div>
-                  </button>
-
-                  {/* Free Mentorship CTA (Topmate) */}
-                  <a
-                    href="https://topmate.io/amit_kumar_ceo_techiehelp/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-3 px-3 py-2 text-slate-800 hover:text-rose-600 font-semibold transition-all group"
-                  >
-                    <div className="w-11 h-11 rounded-full bg-white border-2 border-rose-100 shadow-md group-hover:scale-110 group-hover:border-rose-500 transition-all flex items-center justify-center p-0.5 overflow-hidden shrink-0">
-                      <img src="/topmate.png" alt="Topmate Free Mentorship" className="w-full h-full object-cover rounded-full" />
-                    </div>
-                    <div className="text-left">
-                      <div className="text-sm font-bold text-[#0B192C] group-hover:text-rose-600 flex items-center gap-1">
-                        Free Mentorship
-                        <ArrowUpRight className="w-3.5 h-3.5 text-rose-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  {/* Secondary Actions (Watch Intro Video & Book Free Mentorship) */}
+                  <div className="flex flex-wrap items-center gap-5 sm:gap-7 pt-1">
+                    <button
+                      onClick={() => setVideoModalOpen(true)}
+                      className="inline-flex items-center gap-2.5 text-slate-700 hover:text-blue-700 font-semibold text-xs sm:text-sm transition-all group cursor-pointer"
+                    >
+                      <div className="w-8 h-8 rounded-full bg-[#1D4ED8] text-white flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                        <Play className="w-3.5 h-3.5 fill-white ml-0.5" />
                       </div>
-                      <div className="text-xs text-rose-600 font-bold bg-rose-50 px-2 py-0.2 rounded-full border border-rose-100 inline-block">Book 1-on-1</div>
-                    </div>
-                  </a>
+                      <span>Watch Intro Video</span>
+                      <span className="text-xs text-slate-400 font-medium">(1 min)</span>
+                    </button>
+
+                    <a
+                      href="https://topmate.io/amit_kumar_ceo_techiehelp/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2.5 text-slate-700 hover:text-rose-600 font-semibold text-xs sm:text-sm transition-all group"
+                    >
+                      <div className="w-8 h-8 rounded-full bg-white border border-rose-200 shadow-xs group-hover:scale-110 group-hover:border-rose-500 transition-all flex items-center justify-center p-0.5 overflow-hidden shrink-0">
+                        <img src="/topmate.png" alt="Topmate Free Mentorship" className="w-full h-full object-cover rounded-full" />
+                      </div>
+                      <span>Book Free Mentorship</span>
+                      <ArrowUpRight className="w-3.5 h-3.5 text-rose-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    </a>
+                  </div>
                 </motion.div>
 
               </motion.div>
@@ -247,8 +241,8 @@ export default function Home({ latestJobs = [] }) {
                   { icon: GraduationCap, title: "Industry Mentors", desc: "Learn from Experts", color: "text-blue-600 bg-blue-100/60" },
                   { icon: FileText, title: "Live Projects", desc: "Build Real Products", color: "text-indigo-600 bg-indigo-100/60" },
                   { icon: Users, title: "Internships", desc: "Gain Experience", color: "text-[#0284C7] bg-sky-100/60" },
-                  { icon: BarChart3, title: "Career Preparation", desc: "Mock Interviews & Resume", color: "text-amber-600 bg-amber-100/60" },
-                  { icon: Building, title: "College Partnerships", desc: "Training & Placement Support", color: "text-blue-800 bg-blue-100/80" }
+                  { icon: BarChart3, title: "Career Preparation", desc: "Resume & Mock Interviews", color: "text-amber-600 bg-amber-100/60" },
+                  { icon: Building, title: "College Partnerships", desc: "Campus Innovation Clubs", color: "text-blue-800 bg-blue-100/80" }
                 ].map((item, idx) => (
                   <div key={idx} className={`flex items-center gap-3 ${idx !== 0 ? 'pt-2.5 md:pt-0 md:pl-4' : ''}`}>
                     <div className={`w-10 h-10 md:w-11 md:h-11 rounded-xl ${item.color} flex items-center justify-center shrink-0 shadow-sm`}>
