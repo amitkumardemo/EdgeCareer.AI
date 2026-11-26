@@ -557,21 +557,29 @@ const ROW_2_IMAGES = [
 
 function MarqueeCard({ item }) {
   return (
-    <div className="group relative w-[270px] sm:w-[320px] md:w-[360px] h-[180px] sm:h-[215px] md:h-[240px] rounded-2xl overflow-hidden bg-slate-100 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-blue-300 transition-all duration-300 shrink-0 cursor-pointer select-none">
-      {/* 100% Clean Authentic Photograph (No text displayed by default, face-protected framing) */}
+    <div className="group relative w-[270px] sm:w-[320px] md:w-[360px] h-[180px] sm:h-[215px] md:h-[240px] rounded-2xl overflow-hidden bg-slate-50 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-blue-300 transition-all duration-300 shrink-0 cursor-pointer select-none">
+      {/* Ambient Soft Blurred Backdrop (Fills any letterbox/pillarbox space with matching image colors) */}
+      <img
+        src={item.src}
+        alt=""
+        aria-hidden="true"
+        className="absolute inset-0 w-full h-full object-cover blur-xl scale-125 opacity-30 pointer-events-none"
+      />
+      <div className="absolute inset-0 bg-white/40 pointer-events-none" />
+
+      {/* Actual Aspect Ratio Uncropped Photograph (Contained 100% inside the card box, zero face cropping) */}
       <img
         src={item.src}
         alt={item.title}
         loading="lazy"
-        style={{ objectPosition: item.position || "center 16%" }}
-        className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-104"
+        className="relative z-10 w-full h-full object-contain p-1.5 sm:p-2 transition-transform duration-500 ease-out group-hover:scale-104 drop-shadow-xs"
       />
 
       {/* Subtle Inner Ring */}
-      <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-black/5 group-hover:ring-blue-500/30 transition-all duration-300 pointer-events-none" />
+      <div className="absolute inset-0 z-20 rounded-2xl ring-1 ring-inset ring-black/5 group-hover:ring-blue-500/30 transition-all duration-300 pointer-events-none" />
 
       {/* Modern Hover Details Overlay (Hidden by default, reveals only on cursor hover) */}
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-slate-950/20 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out flex flex-col justify-between p-3.5 sm:p-4 pointer-events-none backdrop-blur-[2px]">
+      <div className="absolute inset-0 z-30 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-slate-950/20 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out flex flex-col justify-between p-3.5 sm:p-4 pointer-events-none backdrop-blur-[2px]">
         {/* Top Tag Pill (Smooth slide-in on hover) */}
         <div className="flex justify-start transform -translate-y-2 group-hover:translate-y-0 transition-transform duration-300 ease-out">
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-bold tracking-wide uppercase bg-white/95 text-[#1D4ED8] shadow-md border border-white/80">
