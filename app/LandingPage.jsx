@@ -14,6 +14,7 @@ import {
 import CareerServicesSection from "@/components/CareerServicesSection";
 import TypingHeadlineWord from "@/components/TypingHeadlineWord";
 import HeroTypingUSP from "@/components/HeroTypingUSP";
+import LifeAtTechieHelpMarquee from "@/components/LifeAtTechieHelpMarquee";
 
 // Animations
 const fadeIn = {
@@ -71,7 +72,6 @@ export default function Home({ latestJobs = [] }) {
   const [activeStep, setActiveStep] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [activeCertTab, setActiveCertTab] = useState(0);
-  const [autoScroll, setAutoScroll] = useState(true);
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
 
@@ -415,122 +415,35 @@ export default function Home({ latestJobs = [] }) {
 
           </section>
 
-          {/* STUDENT ACHIEVEMENTS & CERTIFICATION MOMENTS (Clean White Theme Image Marquee) */}
-          <section id="our-interns-achievements" className="py-12 md:py-16 relative bg-white border-y border-slate-200/80 overflow-hidden">
-            <div className="max-w-7xl mx-auto px-4 md:px-6">
-              
-              {/* Clean White Theme Header */}
-              <div className="text-center max-w-3xl mx-auto space-y-3 mb-10">
+          {/* STUDENT ACHIEVEMENTS & CERTIFICATION MOMENTS (Premium Two-Way Infinite Image Marquee) */}
+          <section id="life-at-techiehelp" className="py-14 md:py-20 relative bg-white border-y border-slate-200/80 overflow-hidden">
+            <div className="max-w-7xl mx-auto px-4 md:px-6 mb-8 md:mb-12">
+              {/* Life at TechieHelp - Premium White Theme Header */}
+              <div className="text-center max-w-3xl mx-auto space-y-3">
                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-[#1D4ED8] text-xs font-bold uppercase tracking-wider">
                   <Trophy className="w-4 h-4 text-amber-500" />
-                  <span>Verified Student Success</span>
+                  <span>Life Beyond Learning</span>
                 </div>
 
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-[#0B192C]">
-                  Student Achievements &amp; <span className="text-[#1D4ED8]">Certification Moments</span>
+                  Life at <span className="text-[#1D4ED8]">TechieHelp Institute of AI</span>
                 </h2>
 
                 <p className="text-slate-600 text-sm md:text-base leading-relaxed max-w-2xl mx-auto font-normal">
-                  Real students. Real certificates. Real internship outcomes. A glimpse of our interns receiving verified certificates, goodies, and recognition after completing live projects.
+                  More than just learning, it&apos;s about building, creating, collaborating, and growing together. Explore the moments, experiences, achievements, and memories that make our community special.
                 </p>
               </div>
-
-              {/* Controls Toggle */}
-              <div className="flex justify-end mb-4">
-                <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
-                  <button
-                    onClick={() => setAutoScroll(true)}
-                    className={`px-3.5 py-1 rounded-lg text-xs font-bold transition-all ${autoScroll ? "bg-[#1D4ED8] text-white shadow-sm" : "text-slate-600 hover:text-slate-900"}`}
-                  >
-                    Auto Scroll
-                  </button>
-                  <button
-                    onClick={() => setAutoScroll(false)}
-                    className={`px-3.5 py-1 rounded-lg text-xs font-bold transition-all ${!autoScroll ? "bg-[#1D4ED8] text-white shadow-sm" : "text-slate-600 hover:text-slate-900"}`}
-                  >
-                    Manual Scroll
-                  </button>
-                </div>
-              </div>
-
-              {/* Running Image Marquee */}
-              <div className={autoScroll ? "overflow-hidden py-2" : "overflow-x-auto py-2"}>
-                <motion.div
-                  className="flex gap-4 shrink-0"
-                  animate={autoScroll ? { x: ["0%", "-50%"] } : { x: "0%" }}
-                  transition={
-                    autoScroll
-                      ? {
-                        x: {
-                          repeat: Infinity,
-                          repeatType: "loop",
-                          duration: 28,
-                          ease: "linear",
-                        },
-                      }
-                      : { duration: 0.3 }
-                  }
-                  style={{ width: "max-content" }}
-                >
-                  {[
-                    "/hero-slides/goodies_kit.jpg",
-                    "/hero-slides/technocrats_certificates.jpg",
-                    "/hero-slides/single_cert_handover.jpg",
-                    "/hero-slides/thumbs_up_team.jpg",
-                    "/hero-slides/hackloop_awards.jpg",
-                    "/hero-slides/principal_trophy.jpg",
-                    "/hero-slides/certificate_handover.jpg",
-                    "/hero-slides/award_ceremony.jpg",
-                    "/hero-slides/team_celebration.jpg",
-                    "/aarshdeep_cert.jpg",
-                    "/nikhil_completion_certificate.png",
-                    "/goodies_box.png",
-                    "/swag_apparel.png"
-                  ].map((imgSrc, index) => (
-                    <div key={index} className="w-64 h-48 relative rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-xl hover:scale-105 transition-all duration-300 shrink-0 bg-slate-50 group">
-                      <img
-                        src={imgSrc}
-                        alt={`TechieHelp Student Achievement ${index + 1}`}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
-                  ))}
-
-                  {/* Duplicate Loop Set */}
-                  {[
-                    "/hero-slides/goodies_kit.jpg",
-                    "/hero-slides/technocrats_certificates.jpg",
-                    "/hero-slides/single_cert_handover.jpg",
-                    "/hero-slides/thumbs_up_team.jpg",
-                    "/hero-slides/hackloop_awards.jpg",
-                    "/hero-slides/principal_trophy.jpg",
-                    "/hero-slides/certificate_handover.jpg",
-                    "/hero-slides/award_ceremony.jpg",
-                    "/hero-slides/team_celebration.jpg",
-                    "/aarshdeep_cert.jpg",
-                    "/nikhil_completion_certificate.png",
-                    "/goodies_box.png",
-                    "/swag_apparel.png"
-                  ].map((imgSrc, index) => (
-                    <div key={`dup-${index}`} className="w-64 h-48 relative rounded-2xl overflow-hidden shadow-lg border border-slate-200 hover:shadow-xl hover:scale-105 transition-all duration-300 shrink-0 bg-slate-50 group">
-                      <img
-                        src={imgSrc}
-                        alt={`TechieHelp Student Achievement Duplicate ${index + 1}`}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
-                  ))}
-                </motion.div>
-              </div>
-
             </div>
+
+            {/* Premium Two-Way Infinite Marquee (Top: Left-to-Right, Bottom: Right-to-Left) */}
+            <LifeAtTechieHelpMarquee />
           </section>
 
           {/* BUILD2EARN COMPACT PROMO SECTION (WHITE THEME) */}
           <section id="build2earn-promo" className="py-12 md:py-16 relative bg-white border-b border-slate-200/60">
             <div className="max-w-7xl mx-auto px-4 md:px-6">
               <div className="bg-gradient-to-r from-slate-50 via-white to-blue-50/50 rounded-3xl p-6 md:p-10 border border-slate-200 shadow-md hover:shadow-xl transition-all relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8">
-                
+
                 {/* Decorative Pill & Glow */}
                 <div className="absolute top-0 right-0 w-96 h-96 bg-blue-400/10 blur-[90px] rounded-full pointer-events-none" />
 
@@ -541,7 +454,7 @@ export default function Home({ latestJobs = [] }) {
                   </div>
 
                   <h2 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tight leading-snug">
-                    BUILD2EARN: <span className="text-[#2563EB]">Don't Just Learn Skills. Build Something You Can Earn From.</span> 
+                    BUILD2EARN: <span className="text-[#2563EB]">Don't Just Learn Skills. Build Something You Can Earn From.</span>
                   </h2>
 
                   <p className="text-sm md:text-base text-slate-600 leading-relaxed font-medium">
@@ -1340,7 +1253,7 @@ export default function Home({ latestJobs = [] }) {
             <div className="absolute bottom-10 left-1/4 w-72 h-72 bg-amber-100/30 rounded-full blur-3xl pointer-events-none" />
 
             <div className="w-full flex flex-col lg:flex-row items-stretch justify-between min-h-[auto] lg:h-[500px] xl:h-[520px]">
-              
+
               {/* Left Column: ~55% width on desktop */}
               <div className="w-full lg:w-[54%] xl:w-[55%] 2xl:w-[56%] flex flex-col justify-center h-full z-20 pl-6 sm:pl-10 md:pl-14 lg:pl-12 xl:pl-20 2xl:pl-28 pr-6 lg:pr-8 py-8 lg:py-4 text-left">
                 {/* Top Light Blue Pill Badge with Sparkle */}

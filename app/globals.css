@@ -264,3 +264,50 @@ body {
   color: #f59e0b !important; /* amber accent for branding */
 }
 
+/* =========================================================================
+   Life at TechieHelp Two-Way Infinite Marquee Animations
+   ========================================================================= */
+@keyframes marquee-ltr {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes marquee-rtl {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee-ltr {
+  animation: marquee-ltr 42s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-rtl {
+  animation: marquee-rtl 50s linear infinite;
+  will-change: transform;
+}
+
+/* Pause animation on hover */
+.marquee-track-row:hover .animate-marquee-ltr,
+.marquee-track-row:hover .animate-marquee-rtl {
+  animation-play-state: paused;
+}
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee-ltr,
+  .animate-marquee-rtl {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+

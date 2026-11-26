@@ -145,3 +145,4 @@ export default function HeroTypingUSP() {
     </span>
   );
 }
+
