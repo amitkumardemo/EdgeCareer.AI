@@ -12,6 +12,13 @@ const ROW_1_IMAGES = [
     position: "center 10%",
   },
   {
+    src: "/hero-slides/class1.jpeg",
+    title: "Campus Classroom & Interactive Masterclass",
+    desc: "Live practical workshop on emerging technologies and AI tools",
+    tag: "Training",
+    position: "center 20%",
+  },
+  {
     src: "/hero-slides/goodies_kit.jpg",
     title: "Internship Welcome Kits & Swag",
     desc: "Official TechieHelp backpack, journal, badge and goodies package",
@@ -19,11 +26,25 @@ const ROW_1_IMAGES = [
     position: "center 8%",
   },
   {
+    src: "/hero-slides/team_hack.jpg",
+    title: "Hackathon Innovation Team",
+    desc: "Student developers building real-world software during campus hackathon",
+    tag: "Hackathon",
+    position: "center 15%",
+  },
+  {
     src: "/hero-slides/hackloop_awards.jpg",
     title: "Hackloop Hackathon Winners",
     desc: "Top performing team awarded with trophies, certificates & recognitions",
     tag: "Hackathon",
     position: "center 14%",
+  },
+  {
+    src: "/hero-slides/charchita_photo.jpeg",
+    title: "Student Excellence Felicitation",
+    desc: "Honoring top-performing student intern for outstanding project work",
+    tag: "Recognition",
+    position: "center 12%",
   },
   {
     src: "/hero-slides/celebration_balloons.jpg",
@@ -47,11 +68,25 @@ const ROW_1_IMAGES = [
     position: "center 15%",
   },
   {
+    src: "/hero-slides/kit_nodha.jpeg",
+    title: "Internship Goodies & Kit Handover",
+    desc: "Presenting official TechieHelp welcome kit, bag and goodies to student",
+    tag: "Welcome Kit",
+    position: "center 22%",
+  },
+  {
     src: "/hero-slides/team_celebration.jpg",
     title: "Team & Cohort Achievement Party",
     desc: "Students and mentorship team celebrating milestone achievements",
     tag: "Celebration",
     position: "center 16%",
+  },
+  {
+    src: "/hero-slides/25.jpeg",
+    title: "Campus Felicitation & Award Handover",
+    desc: "Honoring student achievements and practical project milestones",
+    tag: "Felicitation",
+    position: "center 8%",
   },
   {
     src: "/hero-slides/tshirt_gift.jpg",
@@ -68,10 +103,24 @@ const ROW_1_IMAGES = [
     position: "center 12%",
   },
   {
+    src: "/hero-slides/29.jpeg",
+    title: "Campus Innovation Club Gathering",
+    desc: "Students gathered on campus for hands-on tech initiatives and workshops",
+    tag: "Campus Life",
+    position: "center 15%",
+  },
+  {
     src: "/hero-slides/team_steps.jpg",
     title: "Campus Cohort Meetup",
     desc: "Student cohort gathering on campus steps for offline networking",
     tag: "Campus Life",
+    position: "center 20%",
+  },
+  {
+    src: "/hero-slides/30.jpeg",
+    title: "Project Demo Day Celebration",
+    desc: "Celebrating successful demo day presentations with students and mentors",
+    tag: "Celebration",
     position: "center 20%",
   },
   {
@@ -99,11 +148,25 @@ const ROW_2_IMAGES = [
     position: "center 8%",
   },
   {
+    src: "/hero-slides/27.jpeg",
+    title: "Student Certificate Felicitation",
+    desc: "Formal certificate presentation celebrating practical AI project success",
+    tag: "Certification",
+    position: "center 8%",
+  },
+  {
     src: "/goodies_box.png",
     title: "Deluxe Internship Welcome Box",
     desc: "Curated student kit including custom gear, stickers and stationery",
     tag: "Welcome Kit",
     position: "center",
+  },
+  {
+    src: "/hero-slides/kitt_1.jpeg",
+    title: "Student Welcome Pack Felicitation",
+    desc: "Intern receiving official credentials and TechieHelp welcome pack",
+    tag: "Welcome Kit",
+    position: "center 20%",
   },
   {
     src: "/hero-slides/thumbs_up_team.jpg",
@@ -113,11 +176,25 @@ const ROW_2_IMAGES = [
     position: "center 18%",
   },
   {
+    src: "/hero-slides/aryan2.jpeg",
+    title: "Certificate of Completion Handover",
+    desc: "Recognizing student intern for successful completion of practical track",
+    tag: "Certification",
+    position: "center 25%",
+  },
+  {
     src: "/hero-slides/principal_trophy.jpg",
     title: "College Director & Principal Memento",
     desc: "Institutional collaboration felicitation and memento presentation",
     tag: "Felicitation",
     position: "center 18%",
+  },
+  {
+    src: "/hero-slides/rss_6714.jpeg",
+    title: "Campus Tech Community Meetup",
+    desc: "Students and mentors networking and discussing emerging AI projects",
+    tag: "Community",
+    position: "center 12%",
   },
   {
     src: "/hero-slides/certificate_handover.jpg",
@@ -127,11 +204,25 @@ const ROW_2_IMAGES = [
     position: "center 6%",
   },
   {
+    src: "/hero-slides/32.jpeg",
+    title: "Student Swag & Kit Recognition",
+    desc: "Delivering official merchandise and goodies packages to active interns",
+    tag: "Goodies",
+    position: "center 18%",
+  },
+  {
     src: "/hero-slides/backbone_team.jpg",
     title: "TechieHelp Core Mentors & Team",
     desc: "Senior engineering and academic mentors behind the curriculum",
     tag: "Mentors",
     position: "center 8%",
+  },
+  {
+    src: "/hero-slides/56.jpeg",
+    title: "Campus Innovation Ceremony",
+    desc: "College leadership and students celebrating institutional partnership",
+    tag: "Leadership",
+    position: "center 20%",
   },
   {
     src: "/swag_apparel.png",
@@ -225,7 +316,7 @@ export default function LifeAtTechieHelpMarquee() {
 
       {/* Marquee Tracks Container */}
       <div className="space-y-4 md:space-y-5">
-        {/* ROW 1: TOP TRACK (Continuous Left to Right Movement, 42s loop) */}
+        {/* ROW 1: TOP TRACK (Continuous Left to Right Movement, smooth 68s loop) */}
         <div className="marquee-track-row overflow-hidden flex w-full">
           <div className="flex w-max animate-marquee-ltr">
             {/* Primary Track */}
@@ -243,7 +334,7 @@ export default function LifeAtTechieHelpMarquee() {
           </div>
         </div>
 
-        {/* ROW 2: BOTTOM TRACK (Continuous Right to Left Movement, 50s loop - different speed) */}
+        {/* ROW 2: BOTTOM TRACK (Continuous Right to Left Movement, smooth 78s loop - different speed) */}
         <div className="marquee-track-row overflow-hidden flex w-full">
           <div className="flex w-max animate-marquee-rtl">
             {/* Primary Track */}
