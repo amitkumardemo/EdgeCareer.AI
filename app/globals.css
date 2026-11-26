@@ -286,12 +286,12 @@ body {
 }
 
 .animate-marquee-ltr {
-  animation: marquee-ltr 68s linear infinite;
+  animation: marquee-ltr 140s linear infinite;
   will-change: transform;
 }
 
 .animate-marquee-rtl {
-  animation: marquee-rtl 78s linear infinite;
+  animation: marquee-rtl 160s linear infinite;
   will-change: transform;
 }
 

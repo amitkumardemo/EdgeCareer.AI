@@ -12,11 +12,25 @@ const ROW_1_IMAGES = [
     position: "center 10%",
   },
   {
+    src: "/hero-slides/techiehelp_life_01.jpeg",
+    title: "Student Certificate Felicitation",
+    desc: "Campus certification ceremony honoring student technical achievements",
+    tag: "Certification",
+    position: "center 10%",
+  },
+  {
     src: "/hero-slides/class1.jpeg",
     title: "Campus Classroom & Interactive Masterclass",
     desc: "Live practical workshop on emerging technologies and AI tools",
     tag: "Training",
     position: "center 20%",
+  },
+  {
+    src: "/hero-slides/techiehelp_life_02.jpeg",
+    title: "TechieHelp Student Kit Handover",
+    desc: "Presenting official welcome kit and student goodies package",
+    tag: "Welcome Kit",
+    position: "center 10%",
   },
   {
     src: "/hero-slides/goodies_kit.jpg",
@@ -26,11 +40,25 @@ const ROW_1_IMAGES = [
     position: "center 8%",
   },
   {
+    src: "/hero-slides/techiehelp_life_03.jpeg",
+    title: "Intern Recognition & Swag",
+    desc: "Interns receiving official TechieHelp apparel and welcome swag",
+    tag: "Goodies",
+    position: "center 10%",
+  },
+  {
     src: "/hero-slides/team_hack.jpg",
     title: "Hackathon Innovation Team",
     desc: "Student developers building real-world software during campus hackathon",
     tag: "Hackathon",
     position: "center 15%",
+  },
+  {
+    src: "/hero-slides/techiehelp_life_04.jpeg",
+    title: "Excellence in Innovation Award",
+    desc: "Honoring top student developer for outstanding live project work",
+    tag: "Recognition",
+    position: "center 10%",
   },
   {
     src: "/hero-slides/hackloop_awards.jpg",
@@ -40,11 +68,25 @@ const ROW_1_IMAGES = [
     position: "center 14%",
   },
   {
+    src: "/hero-slides/techiehelp_life_05.jpeg",
+    title: "Hands-on Tech Masterclass",
+    desc: "Interactive technical workshop on real-world software engineering",
+    tag: "Training",
+    position: "center 20%",
+  },
+  {
     src: "/hero-slides/charchita_photo.jpeg",
     title: "Student Excellence Felicitation",
     desc: "Honoring top-performing student intern for outstanding project work",
     tag: "Recognition",
     position: "center 12%",
+  },
+  {
+    src: "/hero-slides/techiehelp_life_06.jpeg",
+    title: "Institutional Partner Felicitation",
+    desc: "Director and college faculty presenting collaborative awards",
+    tag: "Leadership",
+    position: "center 10%",
   },
   {
     src: "/hero-slides/celebration_balloons.jpg",
@@ -54,11 +96,25 @@ const ROW_1_IMAGES = [
     position: "center 16%",
   },
   {
+    src: "/hero-slides/techiehelp_life_07.jpeg",
+    title: "Verified Internship Credentials",
+    desc: "Handing over verified certificate of completion and performance letter",
+    tag: "Credentials",
+    position: "center 10%",
+  },
+  {
     src: "/hero-slides/single_cert_handover.jpg",
     title: "Student Achievement Felicitation",
     desc: "Honoring top student intern for exceptional project contribution",
     tag: "Recognition",
     position: "center 6%",
+  },
+  {
+    src: "/hero-slides/techiehelp_life_08.jpeg",
+    title: "Campus Graduation & Felicitation",
+    desc: "Formal graduation ceremony honoring practical project milestones",
+    tag: "Certification",
+    position: "center 10%",
   },
   {
     src: "/about-students-collaboration.jpg",
@@ -68,11 +124,25 @@ const ROW_1_IMAGES = [
     position: "center 15%",
   },
   {
+    src: "/hero-slides/techiehelp_life_09.jpeg",
+    title: "Student Project Accomplishment",
+    desc: "Recognizing successful project delivery and deployment",
+    tag: "Achievement",
+    position: "center 10%",
+  },
+  {
     src: "/hero-slides/kit_nodha.jpeg",
     title: "Internship Goodies & Kit Handover",
     desc: "Presenting official TechieHelp welcome kit, bag and goodies to student",
     tag: "Welcome Kit",
     position: "center 22%",
+  },
+  {
+    src: "/hero-slides/techiehelp_life_10.jpeg",
+    title: "Internship Onboarding Kit",
+    desc: "Welcome merchandise and badges presented to incoming student cohort",
+    tag: "Welcome Kit",
+    position: "center 10%",
   },
   {
     src: "/hero-slides/team_celebration.jpg",
@@ -82,11 +152,25 @@ const ROW_1_IMAGES = [
     position: "center 16%",
   },
   {
+    src: "/hero-slides/techiehelp_life_11.jpeg",
+    title: "Campus TechieHelp Cohort",
+    desc: "Active student interns building collaborative technical solutions",
+    tag: "Community",
+    position: "center 10%",
+  },
+  {
     src: "/hero-slides/25.jpeg",
     title: "Campus Felicitation & Award Handover",
     desc: "Honoring student achievements and practical project milestones",
     tag: "Felicitation",
     position: "center 8%",
+  },
+  {
+    src: "/hero-slides/techiehelp_life_12.jpeg",
+    title: "Hackathon Problem Solving",
+    desc: "Student teams pitching real-world solutions during technical contest",
+    tag: "Hackathon",
+    position: "center 20%",
   },
   {
     src: "/hero-slides/tshirt_gift.jpg",
@@ -96,11 +180,25 @@ const ROW_1_IMAGES = [
     position: "center 32%",
   },
   {
+    src: "/hero-slides/techiehelp_life_13.jpeg",
+    title: "Student Merit Recognition",
+    desc: "Rewarding high-performing students with exclusive TechieHelp gifts",
+    tag: "Goodies",
+    position: "center 22%",
+  },
+  {
     src: "/aarshdeep_cert.jpg",
     title: "Verified AI Internship Certificate",
     desc: "Industry-recognized certificate of accomplishment and skill mastery",
     tag: "Credentials",
     position: "center 12%",
+  },
+  {
+    src: "/hero-slides/techiehelp_life_14.jpeg",
+    title: "Welcome Package Distribution",
+    desc: "Official TechieHelp goodies package and student stationery kit",
+    tag: "Welcome Kit",
+    position: "center 22%",
   },
   {
     src: "/hero-slides/29.jpeg",
@@ -110,11 +208,25 @@ const ROW_1_IMAGES = [
     position: "center 15%",
   },
   {
+    src: "/hero-slides/techiehelp_life_15.jpeg",
+    title: "Special Achievement Token",
+    desc: "Token of appreciation presented for exceptional teamwork",
+    tag: "Recognition",
+    position: "center 22%",
+  },
+  {
     src: "/hero-slides/team_steps.jpg",
     title: "Campus Cohort Meetup",
     desc: "Student cohort gathering on campus steps for offline networking",
     tag: "Campus Life",
     position: "center 20%",
+  },
+  {
+    src: "/hero-slides/techiehelp_life_16.jpeg",
+    title: "Dual Credential Felicitation",
+    desc: "Students receiving training and internship dual certificates",
+    tag: "Certification",
+    position: "center 10%",
   },
   {
     src: "/hero-slides/30.jpeg",
@@ -124,6 +236,13 @@ const ROW_1_IMAGES = [
     position: "center 20%",
   },
   {
+    src: "/hero-slides/techiehelp_life_17.jpeg",
+    title: "Student Innovation Team",
+    desc: "Campus innovation club members collaborating on tech initiatives",
+    tag: "Campus Life",
+    position: "center 10%",
+  },
+  {
     src: "/hero-slides/slide1.jpg",
     title: "Hands-on Learning Masterclass",
     desc: "Practical interactive masterclass on modern emerging technologies",
@@ -131,11 +250,39 @@ const ROW_1_IMAGES = [
     position: "center 20%",
   },
   {
+    src: "/hero-slides/techiehelp_life_18.jpeg",
+    title: "1-on-1 Mentorship Session",
+    desc: "Guidance from senior engineers on software architecture",
+    tag: "Mentorship",
+    position: "center 10%",
+  },
+  {
     src: "/hero-slides/slide3.jpg",
     title: "Real-World Project Mentorship",
     desc: "1-on-1 guidance from industry mentors on live production codebase",
     tag: "Mentorship",
     position: "center 20%",
+  },
+  {
+    src: "/hero-slides/techiehelp_life_19.jpeg",
+    title: "Interactive Classroom Session",
+    desc: "Live coding demonstrations and technical concept breakdowns",
+    tag: "Masterclass",
+    position: "center 20%",
+  },
+  {
+    src: "/hero-slides/techiehelp_life_20.jpeg",
+    title: "Full Stack Workshop",
+    desc: "Hands-on training session on web and cloud technologies",
+    tag: "Training",
+    position: "center 20%",
+  },
+  {
+    src: "/hero-slides/techiehelp_life_21.jpeg",
+    title: "Milestone Celebration Day",
+    desc: "Celebrating cohort completion and production deployments",
+    tag: "Celebration",
+    position: "center 10%",
   },
 ];
 
@@ -148,11 +295,25 @@ const ROW_2_IMAGES = [
     position: "center 8%",
   },
   {
+    src: "/hero-slides/techiehelp_life_22.jpeg",
+    title: "Campus Technical Drive",
+    desc: "College placement preparation and technical screening session",
+    tag: "Training",
+    position: "center 20%",
+  },
+  {
     src: "/hero-slides/27.jpeg",
     title: "Student Certificate Felicitation",
     desc: "Formal certificate presentation celebrating practical AI project success",
     tag: "Certification",
     position: "center 8%",
+  },
+  {
+    src: "/hero-slides/techiehelp_life_23.jpeg",
+    title: "Live Coding Deep-Dive",
+    desc: "Students working through algorithmic and architectural challenges",
+    tag: "Masterclass",
+    position: "center 20%",
   },
   {
     src: "/goodies_box.png",
@@ -162,10 +323,24 @@ const ROW_2_IMAGES = [
     position: "center",
   },
   {
+    src: "/hero-slides/techiehelp_life_24.jpeg",
+    title: "Emerging Tech Masterclass",
+    desc: "Interactive lecture on artificial intelligence and practical tooling",
+    tag: "Workshop",
+    position: "center 20%",
+  },
+  {
     src: "/hero-slides/kitt_1.jpeg",
     title: "Student Welcome Pack Felicitation",
     desc: "Intern receiving official credentials and TechieHelp welcome pack",
     tag: "Welcome Kit",
+    position: "center 20%",
+  },
+  {
+    src: "/hero-slides/techiehelp_life_25.jpeg",
+    title: "Campus Hackathon Challenge",
+    desc: "Building innovative software prototypes under mentorship",
+    tag: "Innovation",
     position: "center 20%",
   },
   {
@@ -176,11 +351,25 @@ const ROW_2_IMAGES = [
     position: "center 18%",
   },
   {
+    src: "/hero-slides/techiehelp_life_26.jpeg",
+    title: "Project Showcase & Pitch",
+    desc: "Teams demonstrating working software prototypes to judges",
+    tag: "Hackathon",
+    position: "center 20%",
+  },
+  {
     src: "/hero-slides/aryan2.jpeg",
     title: "Certificate of Completion Handover",
     desc: "Recognizing student intern for successful completion of practical track",
     tag: "Certification",
     position: "center 25%",
+  },
+  {
+    src: "/hero-slides/techiehelp_life_27.jpeg",
+    title: "Official Certificate Handover",
+    desc: "Awarding verified internship certificates of excellence",
+    tag: "Certification",
+    position: "center 10%",
   },
   {
     src: "/hero-slides/principal_trophy.jpg",
@@ -190,11 +379,25 @@ const ROW_2_IMAGES = [
     position: "center 18%",
   },
   {
+    src: "/hero-slides/techiehelp_life_28.jpeg",
+    title: "College Leadership Felicitation",
+    desc: "Honoring institutional collaboration and tech mentorship success",
+    tag: "Leadership",
+    position: "center 10%",
+  },
+  {
     src: "/hero-slides/rss_6714.jpeg",
     title: "Campus Tech Community Meetup",
     desc: "Students and mentors networking and discussing emerging AI projects",
     tag: "Community",
     position: "center 12%",
+  },
+  {
+    src: "/hero-slides/techiehelp_life_29.jpeg",
+    title: "Outstanding Intern Recognition",
+    desc: "Acknowledging high-impact contributions in engineering tracks",
+    tag: "Recognition",
+    position: "center 10%",
   },
   {
     src: "/hero-slides/certificate_handover.jpg",
@@ -204,11 +407,25 @@ const ROW_2_IMAGES = [
     position: "center 6%",
   },
   {
+    src: "/hero-slides/techiehelp_life_30.jpeg",
+    title: "Graduation Felicitation Ceremony",
+    desc: "Formal certificate ceremony celebrating practical engineering mastery",
+    tag: "Certification",
+    position: "center 10%",
+  },
+  {
     src: "/hero-slides/32.jpeg",
     title: "Student Swag & Kit Recognition",
     desc: "Delivering official merchandise and goodies packages to active interns",
     tag: "Goodies",
     position: "center 18%",
+  },
+  {
+    src: "/hero-slides/techiehelp_life_31.jpeg",
+    title: "Student Achievement Felicitation",
+    desc: "Handing over verified credentials to graduating student leaders",
+    tag: "Credentials",
+    position: "center 10%",
   },
   {
     src: "/hero-slides/backbone_team.jpg",
@@ -218,11 +435,25 @@ const ROW_2_IMAGES = [
     position: "center 8%",
   },
   {
+    src: "/hero-slides/techiehelp_life_32.jpeg",
+    title: "Cohort Demo Day",
+    desc: "Interns celebrating project launches and successful deliveries",
+    tag: "Community",
+    position: "center 20%",
+  },
+  {
     src: "/hero-slides/56.jpeg",
     title: "Campus Innovation Ceremony",
     desc: "College leadership and students celebrating institutional partnership",
     tag: "Leadership",
     position: "center 20%",
+  },
+  {
+    src: "/hero-slides/techiehelp_life_33.jpeg",
+    title: "Student Swag Kit Handover",
+    desc: "Intern receiving TechieHelp branded student kit and merchandise",
+    tag: "Goodies",
+    position: "center 22%",
   },
   {
     src: "/swag_apparel.png",
@@ -232,11 +463,25 @@ const ROW_2_IMAGES = [
     position: "center",
   },
   {
+    src: "/hero-slides/techiehelp_life_34.jpeg",
+    title: "Welcome Package Distribution",
+    desc: "Branded backpack, badge and welcome goodies for top performers",
+    tag: "Welcome Kit",
+    position: "center 22%",
+  },
+  {
     src: "/nikhil_completion_certificate.png",
     title: "Student Internship Completion Letter",
     desc: "Official verification letter confirming production project delivery",
     tag: "Achievement",
     position: "center 12%",
+  },
+  {
+    src: "/hero-slides/techiehelp_life_35.jpeg",
+    title: "Campus Milestone Celebration",
+    desc: "Panoramic campus gathering celebrating student achievements",
+    tag: "Celebration",
+    position: "center 20%",
   },
   {
     src: "/hero-slides/gift_box.jpg",
@@ -246,11 +491,25 @@ const ROW_2_IMAGES = [
     position: "center",
   },
   {
+    src: "/hero-slides/techiehelp_life_36.jpeg",
+    title: "Official Goodies Handover",
+    desc: "Delivering welcome kits and official credentials to interns",
+    tag: "Welcome Kit",
+    position: "center 22%",
+  },
+  {
     src: "/campus_collaboration.png",
     title: "Live Project Collaboration Session",
     desc: "Student teams solving real-world challenges through collaborative coding",
     tag: "Innovation",
     position: "center 15%",
+  },
+  {
+    src: "/hero-slides/techiehelp_life_37.jpeg",
+    title: "Student Swag Delivery",
+    desc: "Presenting custom merchandise and goodies to active interns",
+    tag: "Merchandise",
+    position: "center 22%",
   },
   {
     src: "/placement_drive_1.jpg",
@@ -260,10 +519,38 @@ const ROW_2_IMAGES = [
     position: "center 18%",
   },
   {
+    src: "/hero-slides/techiehelp_life_38.jpeg",
+    title: "TechieHelp Community Meetup",
+    desc: "Students and alumni networking and sharing industry journeys",
+    tag: "Community",
+    position: "center 20%",
+  },
+  {
     src: "/hero-slides/slide2.jpg",
     title: "Live Coding & Problem Solving",
     desc: "Hands-on coding session solving real architectural challenges",
     tag: "Live Projects",
+    position: "center 20%",
+  },
+  {
+    src: "/hero-slides/techiehelp_life_39.jpeg",
+    title: "Intern Welcome Kit Recognition",
+    desc: "Honoring incoming student intern with official goodies kit",
+    tag: "Welcome Kit",
+    position: "center 10%",
+  },
+  {
+    src: "/hero-slides/techiehelp_life_40.jpeg",
+    title: "Student Recognition Package",
+    desc: "Delivering TechieHelp merchandise and student gear",
+    tag: "Goodies",
+    position: "center 10%",
+  },
+  {
+    src: "/hero-slides/techiehelp_life_41.jpeg",
+    title: "Campus Recruitment & Placement Drive",
+    desc: "On-campus technical interview coaching and career placement",
+    tag: "Placement",
     position: "center 20%",
   },
 ];
@@ -316,7 +603,7 @@ export default function LifeAtTechieHelpMarquee() {
 
       {/* Marquee Tracks Container */}
       <div className="space-y-4 md:space-y-5">
-        {/* ROW 1: TOP TRACK (Continuous Left to Right Movement, smooth 68s loop) */}
+        {/* ROW 1: TOP TRACK (Continuous Left to Right Movement, smooth loop) */}
         <div className="marquee-track-row overflow-hidden flex w-full">
           <div className="flex w-max animate-marquee-ltr">
             {/* Primary Track */}
@@ -334,7 +621,7 @@ export default function LifeAtTechieHelpMarquee() {
           </div>
         </div>
 
-        {/* ROW 2: BOTTOM TRACK (Continuous Right to Left Movement, smooth 78s loop - different speed) */}
+        {/* ROW 2: BOTTOM TRACK (Continuous Right to Left Movement, smooth loop - different speed) */}
         <div className="marquee-track-row overflow-hidden flex w-full">
           <div className="flex w-max animate-marquee-rtl">
             {/* Primary Track */}
