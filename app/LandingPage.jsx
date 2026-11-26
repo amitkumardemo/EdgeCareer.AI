@@ -15,6 +15,7 @@ import CareerServicesSection from "@/components/CareerServicesSection";
 import TypingHeadlineWord from "@/components/TypingHeadlineWord";
 import HeroTypingUSP from "@/components/HeroTypingUSP";
 import LifeAtTechieHelpMarquee from "@/components/LifeAtTechieHelpMarquee";
+import TrustRecognitionSection from "@/components/TrustRecognitionSection";
 
 // Animations
 const fadeIn = {
@@ -641,57 +642,9 @@ export default function Home({ latestJobs = [] }) {
                 </p>
               </div>
 
-              {/* 1. TRUST FACTOR BADGES STRIP (AICTE, MSME, ISO) */}
+              {/* 1. TRUST FACTOR BADGES STRIP (AICTE, MSME, ISO, RECRUITER VERIFICATION) */}
               <div className="mb-20">
-                <div className="grid md:grid-cols-3 gap-6">
-                  <div className="bg-white border border-slate-200/90 rounded-3xl p-6 md:p-8 shadow-sm hover:shadow-xl transition-all duration-300 relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-full group-hover:scale-110 transition-transform" />
-                    <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center font-black text-2xl mb-5 border border-blue-100 shadow-sm">
-                      🏛️
-                    </div>
-                    <span className="text-[11px] font-extrabold uppercase text-blue-600 tracking-wider bg-blue-50 px-3 py-1 rounded-full border border-blue-100 inline-block mb-3">
-                      Govt Recognized Portal
-                    </span>
-                    <h3 className="text-xl font-extrabold text-[#0B192C] mb-2 leading-snug">
-                      Listed on AICTE Internship Portal
-                    </h3>
-                    <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
-                      Officially listed on the Govt of India AICTE portal. Earn academic credits and government-verified internship credentials.
-                    </p>
-                  </div>
-
-                  <div className="bg-white border border-slate-200/90 rounded-3xl p-6 md:p-8 shadow-sm hover:shadow-xl transition-all duration-300 relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-bl-full group-hover:scale-110 transition-transform" />
-                    <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center font-black text-2xl mb-5 border border-amber-100 shadow-sm">
-                      🏢
-                    </div>
-                    <span className="text-[11px] font-extrabold uppercase text-amber-600 tracking-wider bg-amber-50 px-3 py-1 rounded-full border border-amber-100 inline-block mb-3">
-                      Govt Enterprise
-                    </span>
-                    <h3 className="text-xl font-extrabold text-[#0B192C] mb-2 leading-snug">
-                      MSME Govt of India Registered
-                    </h3>
-                    <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
-                      Registered enterprise under the Ministry of Micro, Small and Medium Enterprises for official tech training &amp; development.
-                    </p>
-                  </div>
-
-                  <div className="bg-white border border-slate-200/90 rounded-3xl p-6 md:p-8 shadow-sm hover:shadow-xl transition-all duration-300 relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-bl-full group-hover:scale-110 transition-transform" />
-                    <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-black text-2xl mb-5 border border-emerald-100 shadow-sm">
-                      📜
-                    </div>
-                    <span className="text-[11px] font-extrabold uppercase text-emerald-600 tracking-wider bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100 inline-block mb-3">
-                      Quality Standard
-                    </span>
-                    <h3 className="text-xl font-extrabold text-[#0B192C] mb-2 leading-snug">
-                      ISO 9001:2015 Certified
-                    </h3>
-                    <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
-                      Internationally certified for excellence in AI curriculum delivery, hands-on project mentoring, and student career outcomes.
-                    </p>
-                  </div>
-                </div>
+                <TrustRecognitionSection />
               </div>
 
               {/* 2. ALTERNATING LEFT-RIGHT COMBINATION SHOWCASE BLOCKS */}
