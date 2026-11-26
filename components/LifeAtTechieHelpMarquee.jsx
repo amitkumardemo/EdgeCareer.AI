@@ -2,79 +2,91 @@
 
 import React from "react";
 
-// Curated authentic TechieHelp Institute of AI photographs with hover details
+// Curated authentic TechieHelp Institute of AI photographs with face-preserving focal framing
 const ROW_1_IMAGES = [
   {
     src: "/hero-slides/technocrats_certificates.jpg",
     title: "Student Group Receiving Certificates",
     desc: "Campus certification ceremony at Technocrats Institute of Technology",
     tag: "Certification",
+    position: "center 10%",
   },
   {
     src: "/hero-slides/goodies_kit.jpg",
     title: "Internship Welcome Kits & Swag",
     desc: "Official TechieHelp backpack, journal, badge and goodies package",
     tag: "Welcome Kit",
+    position: "center 8%",
   },
   {
     src: "/hero-slides/hackloop_awards.jpg",
     title: "Hackloop Hackathon Winners",
     desc: "Top performing team awarded with trophies, certificates & recognitions",
     tag: "Hackathon",
+    position: "center 14%",
   },
   {
     src: "/hero-slides/celebration_balloons.jpg",
     title: "Community Milestone Celebration",
     desc: "Celebrating cohort completion and live product launches together",
     tag: "Celebration",
+    position: "center 16%",
   },
   {
     src: "/hero-slides/single_cert_handover.jpg",
     title: "Student Achievement Felicitation",
     desc: "Honoring top student intern for exceptional project contribution",
     tag: "Recognition",
+    position: "center 6%",
   },
   {
-    src: "/hero-slides/id_cards_lanyards.jpg",
-    title: "Official Badges & TechieHelp Lanyards",
-    desc: "Official verified intern credentials and onboarding welcome pack",
-    tag: "Community",
+    src: "/about-students-collaboration.jpg",
+    title: "Campus Innovation & Live Projects",
+    desc: "Student teams collaborating on emerging AI and technology prototypes",
+    tag: "Innovation",
+    position: "center 15%",
   },
   {
     src: "/hero-slides/team_celebration.jpg",
     title: "Team & Cohort Achievement Party",
     desc: "Students and mentorship team celebrating milestone achievements",
     tag: "Celebration",
+    position: "center 16%",
   },
   {
     src: "/hero-slides/tshirt_gift.jpg",
     title: "TechieHelp Merchandise & Swag Gifts",
     desc: "Interns receiving official TechieHelp apparel and merchandise gifts",
     tag: "Swag",
+    position: "center 32%",
   },
   {
     src: "/aarshdeep_cert.jpg",
     title: "Verified AI Internship Certificate",
     desc: "Industry-recognized certificate of accomplishment and skill mastery",
     tag: "Credentials",
+    position: "center 12%",
   },
   {
     src: "/hero-slides/team_steps.jpg",
     title: "Campus Cohort Meetup",
     desc: "Student cohort gathering on campus steps for offline networking",
     tag: "Campus Life",
+    position: "center 20%",
   },
   {
     src: "/hero-slides/slide1.jpg",
     title: "Hands-on Learning Masterclass",
     desc: "Practical interactive masterclass on modern emerging technologies",
     tag: "Masterclass",
+    position: "center 20%",
   },
   {
     src: "/hero-slides/slide3.jpg",
     title: "Real-World Project Mentorship",
     desc: "1-on-1 guidance from industry mentors on live production codebase",
     tag: "Mentorship",
+    position: "center 20%",
   },
 ];
 
@@ -84,84 +96,97 @@ const ROW_2_IMAGES = [
     title: "Award Ceremony with Leadership",
     desc: "College director and leadership presenting mementos to TechieHelp",
     tag: "Leadership",
+    position: "center 8%",
   },
   {
     src: "/goodies_box.png",
     title: "Deluxe Internship Welcome Box",
     desc: "Curated student kit including custom gear, stickers and stationery",
     tag: "Welcome Kit",
+    position: "center",
   },
   {
     src: "/hero-slides/thumbs_up_team.jpg",
     title: "Interns & Mentorship Celebration",
     desc: "Student cohort celebration after successful live project presentations",
     tag: "Community",
+    position: "center 18%",
   },
   {
     src: "/hero-slides/principal_trophy.jpg",
     title: "College Director & Principal Memento",
     desc: "Institutional collaboration felicitation and memento presentation",
     tag: "Felicitation",
+    position: "center 18%",
   },
   {
     src: "/hero-slides/certificate_handover.jpg",
     title: "College Felicitation & Certificate Handover",
     desc: "Formal graduation ceremony handing over verified credentials",
     tag: "Certification",
+    position: "center 6%",
   },
   {
     src: "/hero-slides/backbone_team.jpg",
     title: "TechieHelp Core Mentors & Team",
     desc: "Senior engineering and academic mentors behind the curriculum",
     tag: "Mentors",
+    position: "center 8%",
   },
   {
     src: "/swag_apparel.png",
     title: "Official Branded Apparel & Swag",
     desc: "TechieHelp Institute of AI custom hoodies, t-shirts and student merch",
     tag: "Merchandise",
+    position: "center",
   },
   {
     src: "/nikhil_completion_certificate.png",
     title: "Student Internship Completion Letter",
     desc: "Official verification letter confirming production project delivery",
     tag: "Achievement",
+    position: "center 12%",
   },
   {
     src: "/hero-slides/gift_box.jpg",
     title: "Student Recognition & Milestone Gift",
     desc: "Token of appreciation presented to top-performing student leaders",
     tag: "Goodies",
+    position: "center",
   },
   {
     src: "/campus_collaboration.png",
     title: "Live Project Collaboration Session",
     desc: "Student teams solving real-world challenges through collaborative coding",
     tag: "Innovation",
+    position: "center 15%",
   },
   {
     src: "/placement_drive_1.jpg",
     title: "Campus Placement Drive & Technical Session",
     desc: "On-campus placement preparation and interview screening drive",
     tag: "Placement",
+    position: "center 18%",
   },
   {
     src: "/hero-slides/slide2.jpg",
     title: "Live Coding & Problem Solving",
     desc: "Hands-on coding session solving real architectural challenges",
     tag: "Live Projects",
+    position: "center 20%",
   },
 ];
 
 function MarqueeCard({ item }) {
   return (
-    <div className="group relative w-[260px] sm:w-[310px] md:w-[350px] h-[160px] sm:h-[190px] md:h-[215px] rounded-2xl overflow-hidden bg-slate-100 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-blue-300 transition-all duration-300 shrink-0 cursor-pointer select-none">
-      {/* 100% Clean Authentic Photograph (No text displayed by default) */}
+    <div className="group relative w-[270px] sm:w-[320px] md:w-[360px] h-[180px] sm:h-[215px] md:h-[240px] rounded-2xl overflow-hidden bg-slate-100 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-blue-300 transition-all duration-300 shrink-0 cursor-pointer select-none">
+      {/* 100% Clean Authentic Photograph (No text displayed by default, face-protected framing) */}
       <img
         src={item.src}
         alt={item.title}
         loading="lazy"
-        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+        style={{ objectPosition: item.position || "center 16%" }}
+        className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-104"
       />
 
       {/* Subtle Inner Ring */}
