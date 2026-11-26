@@ -2,6 +2,15 @@
 
 import React from "react";
 
+// Natural Aspect Ratio Width Classes (Fixed Row Height: h-[185px] sm:h-[215px] md:h-[240px])
+const WIDTH_CLASSES = {
+  tall: "w-[115px] sm:w-[130px] md:w-[145px]", // 9:16 vertical awards & trophies
+  portrait: "w-[145px] sm:w-[170px] md:w-[190px]", // 3:4 certificate handovers & portraits
+  square: "w-[185px] sm:w-[215px] md:w-[240px]", // 1:1 square collabs
+  landscape: "w-[250px] sm:w-[290px] md:w-[325px]", // 4:3 / 3:2 student groups
+  wide: "w-[290px] sm:w-[340px] md:w-[385px]", // 16:9 classrooms & wide stages
+};
+
 // Curated authentic TechieHelp Institute of AI photographs with face-preserving focal framing
 const ROW_1_IMAGES = [
   {
@@ -10,6 +19,7 @@ const ROW_1_IMAGES = [
     desc: "Campus certification ceremony at Technocrats Institute of Technology",
     tag: "Certification",
     position: "center 10%",
+    aspect: "landscape",
   },
   {
     src: "/hero-slides/techiehelp_life_01.jpeg",
@@ -17,6 +27,7 @@ const ROW_1_IMAGES = [
     desc: "Campus certification ceremony honoring student technical achievements",
     tag: "Certification",
     position: "center 10%",
+    aspect: "portrait",
   },
   {
     src: "/hero-slides/class1.jpeg",
@@ -24,6 +35,7 @@ const ROW_1_IMAGES = [
     desc: "Live practical workshop on emerging technologies and AI tools",
     tag: "Training",
     position: "center 20%",
+    aspect: "wide",
   },
   {
     src: "/hero-slides/techiehelp_life_02.jpeg",
@@ -31,6 +43,7 @@ const ROW_1_IMAGES = [
     desc: "Presenting official welcome kit and student goodies package",
     tag: "Welcome Kit",
     position: "center 10%",
+    aspect: "tall",
   },
   {
     src: "/hero-slides/goodies_kit.jpg",
@@ -38,6 +51,7 @@ const ROW_1_IMAGES = [
     desc: "Official TechieHelp backpack, journal, badge and goodies package",
     tag: "Welcome Kit",
     position: "center 8%",
+    aspect: "tall",
   },
   {
     src: "/hero-slides/techiehelp_life_03.jpeg",
@@ -45,6 +59,7 @@ const ROW_1_IMAGES = [
     desc: "Interns receiving official TechieHelp apparel and welcome swag",
     tag: "Goodies",
     position: "center 10%",
+    aspect: "tall",
   },
   {
     src: "/hero-slides/team_hack.jpg",
@@ -52,6 +67,7 @@ const ROW_1_IMAGES = [
     desc: "Student developers building real-world software during campus hackathon",
     tag: "Hackathon",
     position: "center 15%",
+    aspect: "landscape",
   },
   {
     src: "/hero-slides/techiehelp_life_04.jpeg",
@@ -59,6 +75,7 @@ const ROW_1_IMAGES = [
     desc: "Honoring top student developer for outstanding live project work",
     tag: "Recognition",
     position: "center 10%",
+    aspect: "portrait",
   },
   {
     src: "/hero-slides/hackloop_awards.jpg",
@@ -66,6 +83,7 @@ const ROW_1_IMAGES = [
     desc: "Top performing team awarded with trophies, certificates & recognitions",
     tag: "Hackathon",
     position: "center 14%",
+    aspect: "landscape",
   },
   {
     src: "/hero-slides/techiehelp_life_05.jpeg",
@@ -73,6 +91,7 @@ const ROW_1_IMAGES = [
     desc: "Interactive technical workshop on real-world software engineering",
     tag: "Training",
     position: "center 20%",
+    aspect: "wide",
   },
   {
     src: "/hero-slides/charchita_photo.jpeg",
@@ -80,6 +99,7 @@ const ROW_1_IMAGES = [
     desc: "Honoring top-performing student intern for outstanding project work",
     tag: "Recognition",
     position: "center 12%",
+    aspect: "portrait",
   },
   {
     src: "/hero-slides/techiehelp_life_06.jpeg",
@@ -87,6 +107,7 @@ const ROW_1_IMAGES = [
     desc: "Director and college faculty presenting collaborative awards",
     tag: "Leadership",
     position: "center 10%",
+    aspect: "portrait",
   },
   {
     src: "/hero-slides/celebration_balloons.jpg",
@@ -94,6 +115,7 @@ const ROW_1_IMAGES = [
     desc: "Celebrating cohort completion and live product launches together",
     tag: "Celebration",
     position: "center 16%",
+    aspect: "wide",
   },
   {
     src: "/hero-slides/techiehelp_life_07.jpeg",
@@ -101,6 +123,7 @@ const ROW_1_IMAGES = [
     desc: "Handing over verified certificate of completion and performance letter",
     tag: "Credentials",
     position: "center 10%",
+    aspect: "portrait",
   },
   {
     src: "/hero-slides/single_cert_handover.jpg",
@@ -108,6 +131,7 @@ const ROW_1_IMAGES = [
     desc: "Honoring top student intern for exceptional project contribution",
     tag: "Recognition",
     position: "center 6%",
+    aspect: "portrait",
   },
   {
     src: "/hero-slides/techiehelp_life_08.jpeg",
@@ -115,6 +139,7 @@ const ROW_1_IMAGES = [
     desc: "Formal graduation ceremony honoring practical project milestones",
     tag: "Certification",
     position: "center 10%",
+    aspect: "portrait",
   },
   {
     src: "/about-students-collaboration.jpg",
@@ -122,6 +147,7 @@ const ROW_1_IMAGES = [
     desc: "Student teams collaborating on emerging AI and technology prototypes",
     tag: "Innovation",
     position: "center 15%",
+    aspect: "landscape",
   },
   {
     src: "/hero-slides/techiehelp_life_09.jpeg",
@@ -129,6 +155,7 @@ const ROW_1_IMAGES = [
     desc: "Recognizing successful project delivery and deployment",
     tag: "Achievement",
     position: "center 10%",
+    aspect: "portrait",
   },
   {
     src: "/hero-slides/kit_nodha.jpeg",
@@ -136,6 +163,7 @@ const ROW_1_IMAGES = [
     desc: "Presenting official TechieHelp welcome kit, bag and goodies to student",
     tag: "Welcome Kit",
     position: "center 22%",
+    aspect: "tall",
   },
   {
     src: "/hero-slides/techiehelp_life_10.jpeg",
@@ -143,6 +171,7 @@ const ROW_1_IMAGES = [
     desc: "Welcome merchandise and badges presented to incoming student cohort",
     tag: "Welcome Kit",
     position: "center 10%",
+    aspect: "tall",
   },
   {
     src: "/hero-slides/team_celebration.jpg",
@@ -150,6 +179,7 @@ const ROW_1_IMAGES = [
     desc: "Students and mentorship team celebrating milestone achievements",
     tag: "Celebration",
     position: "center 16%",
+    aspect: "wide",
   },
   {
     src: "/hero-slides/techiehelp_life_11.jpeg",
@@ -157,6 +187,7 @@ const ROW_1_IMAGES = [
     desc: "Active student interns building collaborative technical solutions",
     tag: "Community",
     position: "center 10%",
+    aspect: "tall",
   },
   {
     src: "/hero-slides/25.jpeg",
@@ -164,6 +195,7 @@ const ROW_1_IMAGES = [
     desc: "Honoring student achievements and practical project milestones",
     tag: "Felicitation",
     position: "center 8%",
+    aspect: "portrait",
   },
   {
     src: "/hero-slides/techiehelp_life_12.jpeg",
@@ -171,6 +203,7 @@ const ROW_1_IMAGES = [
     desc: "Student teams pitching real-world solutions during technical contest",
     tag: "Hackathon",
     position: "center 20%",
+    aspect: "wide",
   },
   {
     src: "/hero-slides/tshirt_gift.jpg",
@@ -178,6 +211,7 @@ const ROW_1_IMAGES = [
     desc: "Interns receiving official TechieHelp apparel and merchandise gifts",
     tag: "Swag",
     position: "center 32%",
+    aspect: "tall",
   },
   {
     src: "/hero-slides/techiehelp_life_13.jpeg",
@@ -185,6 +219,7 @@ const ROW_1_IMAGES = [
     desc: "Rewarding high-performing students with exclusive TechieHelp gifts",
     tag: "Goodies",
     position: "center 22%",
+    aspect: "tall",
   },
   {
     src: "/aarshdeep_cert.jpg",
@@ -192,6 +227,7 @@ const ROW_1_IMAGES = [
     desc: "Industry-recognized certificate of accomplishment and skill mastery",
     tag: "Credentials",
     position: "center 12%",
+    aspect: "portrait",
   },
   {
     src: "/hero-slides/techiehelp_life_14.jpeg",
@@ -199,6 +235,7 @@ const ROW_1_IMAGES = [
     desc: "Official TechieHelp goodies package and student stationery kit",
     tag: "Welcome Kit",
     position: "center 22%",
+    aspect: "tall",
   },
   {
     src: "/hero-slides/29.jpeg",
@@ -206,6 +243,7 @@ const ROW_1_IMAGES = [
     desc: "Students gathered on campus for hands-on tech initiatives and workshops",
     tag: "Campus Life",
     position: "center 15%",
+    aspect: "landscape",
   },
   {
     src: "/hero-slides/techiehelp_life_15.jpeg",
@@ -213,6 +251,7 @@ const ROW_1_IMAGES = [
     desc: "Token of appreciation presented for exceptional teamwork",
     tag: "Recognition",
     position: "center 22%",
+    aspect: "tall",
   },
   {
     src: "/hero-slides/team_steps.jpg",
@@ -220,6 +259,7 @@ const ROW_1_IMAGES = [
     desc: "Student cohort gathering on campus steps for offline networking",
     tag: "Campus Life",
     position: "center 20%",
+    aspect: "tall",
   },
   {
     src: "/hero-slides/techiehelp_life_16.jpeg",
@@ -227,6 +267,7 @@ const ROW_1_IMAGES = [
     desc: "Students receiving training and internship dual certificates",
     tag: "Certification",
     position: "center 10%",
+    aspect: "portrait",
   },
   {
     src: "/hero-slides/30.jpeg",
@@ -234,6 +275,7 @@ const ROW_1_IMAGES = [
     desc: "Celebrating successful demo day presentations with students and mentors",
     tag: "Celebration",
     position: "center 20%",
+    aspect: "wide",
   },
   {
     src: "/hero-slides/techiehelp_life_17.jpeg",
@@ -241,6 +283,7 @@ const ROW_1_IMAGES = [
     desc: "Campus innovation club members collaborating on tech initiatives",
     tag: "Campus Life",
     position: "center 10%",
+    aspect: "portrait",
   },
   {
     src: "/hero-slides/slide1.jpg",
@@ -248,6 +291,7 @@ const ROW_1_IMAGES = [
     desc: "Practical interactive masterclass on modern emerging technologies",
     tag: "Masterclass",
     position: "center 20%",
+    aspect: "wide",
   },
   {
     src: "/hero-slides/techiehelp_life_18.jpeg",
@@ -255,6 +299,7 @@ const ROW_1_IMAGES = [
     desc: "Guidance from senior engineers on software architecture",
     tag: "Mentorship",
     position: "center 10%",
+    aspect: "tall",
   },
   {
     src: "/hero-slides/slide3.jpg",
@@ -262,6 +307,7 @@ const ROW_1_IMAGES = [
     desc: "1-on-1 guidance from industry mentors on live production codebase",
     tag: "Mentorship",
     position: "center 20%",
+    aspect: "wide",
   },
   {
     src: "/hero-slides/techiehelp_life_19.jpeg",
@@ -269,6 +315,7 @@ const ROW_1_IMAGES = [
     desc: "Live coding demonstrations and technical concept breakdowns",
     tag: "Masterclass",
     position: "center 20%",
+    aspect: "wide",
   },
   {
     src: "/hero-slides/techiehelp_life_20.jpeg",
@@ -276,6 +323,7 @@ const ROW_1_IMAGES = [
     desc: "Hands-on training session on web and cloud technologies",
     tag: "Training",
     position: "center 20%",
+    aspect: "wide",
   },
   {
     src: "/hero-slides/techiehelp_life_21.jpeg",
@@ -283,6 +331,7 @@ const ROW_1_IMAGES = [
     desc: "Celebrating cohort completion and production deployments",
     tag: "Celebration",
     position: "center 10%",
+    aspect: "tall",
   },
 ];
 
@@ -293,6 +342,7 @@ const ROW_2_IMAGES = [
     desc: "College director and leadership presenting mementos to TechieHelp",
     tag: "Leadership",
     position: "center 8%",
+    aspect: "portrait",
   },
   {
     src: "/hero-slides/techiehelp_life_22.jpeg",
@@ -300,6 +350,7 @@ const ROW_2_IMAGES = [
     desc: "College placement preparation and technical screening session",
     tag: "Training",
     position: "center 20%",
+    aspect: "wide",
   },
   {
     src: "/hero-slides/27.jpeg",
@@ -307,6 +358,7 @@ const ROW_2_IMAGES = [
     desc: "Formal certificate presentation celebrating practical AI project success",
     tag: "Certification",
     position: "center 8%",
+    aspect: "portrait",
   },
   {
     src: "/hero-slides/techiehelp_life_23.jpeg",
@@ -314,6 +366,7 @@ const ROW_2_IMAGES = [
     desc: "Students working through algorithmic and architectural challenges",
     tag: "Masterclass",
     position: "center 20%",
+    aspect: "wide",
   },
   {
     src: "/goodies_box.png",
@@ -321,6 +374,7 @@ const ROW_2_IMAGES = [
     desc: "Curated student kit including custom gear, stickers and stationery",
     tag: "Welcome Kit",
     position: "center",
+    aspect: "wide",
   },
   {
     src: "/hero-slides/techiehelp_life_24.jpeg",
@@ -328,6 +382,7 @@ const ROW_2_IMAGES = [
     desc: "Interactive lecture on artificial intelligence and practical tooling",
     tag: "Workshop",
     position: "center 20%",
+    aspect: "wide",
   },
   {
     src: "/hero-slides/kitt_1.jpeg",
@@ -335,6 +390,7 @@ const ROW_2_IMAGES = [
     desc: "Intern receiving official credentials and TechieHelp welcome pack",
     tag: "Welcome Kit",
     position: "center 20%",
+    aspect: "tall",
   },
   {
     src: "/hero-slides/techiehelp_life_25.jpeg",
@@ -342,6 +398,7 @@ const ROW_2_IMAGES = [
     desc: "Building innovative software prototypes under mentorship",
     tag: "Innovation",
     position: "center 20%",
+    aspect: "wide",
   },
   {
     src: "/hero-slides/thumbs_up_team.jpg",
@@ -349,6 +406,7 @@ const ROW_2_IMAGES = [
     desc: "Student cohort celebration after successful live project presentations",
     tag: "Community",
     position: "center 18%",
+    aspect: "wide",
   },
   {
     src: "/hero-slides/techiehelp_life_26.jpeg",
@@ -356,6 +414,7 @@ const ROW_2_IMAGES = [
     desc: "Teams demonstrating working software prototypes to judges",
     tag: "Hackathon",
     position: "center 20%",
+    aspect: "wide",
   },
   {
     src: "/hero-slides/aryan2.jpeg",
@@ -363,6 +422,7 @@ const ROW_2_IMAGES = [
     desc: "Recognizing student intern for successful completion of practical track",
     tag: "Certification",
     position: "center 25%",
+    aspect: "tall",
   },
   {
     src: "/hero-slides/techiehelp_life_27.jpeg",
@@ -370,6 +430,7 @@ const ROW_2_IMAGES = [
     desc: "Awarding verified internship certificates of excellence",
     tag: "Certification",
     position: "center 10%",
+    aspect: "portrait",
   },
   {
     src: "/hero-slides/principal_trophy.jpg",
@@ -377,6 +438,7 @@ const ROW_2_IMAGES = [
     desc: "Institutional collaboration felicitation and memento presentation",
     tag: "Felicitation",
     position: "center 18%",
+    aspect: "wide",
   },
   {
     src: "/hero-slides/techiehelp_life_28.jpeg",
@@ -384,6 +446,7 @@ const ROW_2_IMAGES = [
     desc: "Honoring institutional collaboration and tech mentorship success",
     tag: "Leadership",
     position: "center 10%",
+    aspect: "portrait",
   },
   {
     src: "/hero-slides/rss_6714.jpeg",
@@ -391,6 +454,7 @@ const ROW_2_IMAGES = [
     desc: "Students and mentors networking and discussing emerging AI projects",
     tag: "Community",
     position: "center 12%",
+    aspect: "square",
   },
   {
     src: "/hero-slides/techiehelp_life_29.jpeg",
@@ -398,6 +462,7 @@ const ROW_2_IMAGES = [
     desc: "Acknowledging high-impact contributions in engineering tracks",
     tag: "Recognition",
     position: "center 10%",
+    aspect: "portrait",
   },
   {
     src: "/hero-slides/certificate_handover.jpg",
@@ -405,6 +470,7 @@ const ROW_2_IMAGES = [
     desc: "Formal graduation ceremony handing over verified credentials",
     tag: "Certification",
     position: "center 6%",
+    aspect: "portrait",
   },
   {
     src: "/hero-slides/techiehelp_life_30.jpeg",
@@ -412,6 +478,7 @@ const ROW_2_IMAGES = [
     desc: "Formal certificate ceremony celebrating practical engineering mastery",
     tag: "Certification",
     position: "center 10%",
+    aspect: "portrait",
   },
   {
     src: "/hero-slides/32.jpeg",
@@ -419,6 +486,7 @@ const ROW_2_IMAGES = [
     desc: "Delivering official merchandise and goodies packages to active interns",
     tag: "Goodies",
     position: "center 18%",
+    aspect: "tall",
   },
   {
     src: "/hero-slides/techiehelp_life_31.jpeg",
@@ -426,6 +494,7 @@ const ROW_2_IMAGES = [
     desc: "Handing over verified credentials to graduating student leaders",
     tag: "Credentials",
     position: "center 10%",
+    aspect: "portrait",
   },
   {
     src: "/hero-slides/backbone_team.jpg",
@@ -433,6 +502,7 @@ const ROW_2_IMAGES = [
     desc: "Senior engineering and academic mentors behind the curriculum",
     tag: "Mentors",
     position: "center 8%",
+    aspect: "tall",
   },
   {
     src: "/hero-slides/techiehelp_life_32.jpeg",
@@ -440,6 +510,7 @@ const ROW_2_IMAGES = [
     desc: "Interns celebrating project launches and successful deliveries",
     tag: "Community",
     position: "center 20%",
+    aspect: "landscape",
   },
   {
     src: "/hero-slides/56.jpeg",
@@ -447,6 +518,7 @@ const ROW_2_IMAGES = [
     desc: "College leadership and students celebrating institutional partnership",
     tag: "Leadership",
     position: "center 20%",
+    aspect: "wide",
   },
   {
     src: "/hero-slides/techiehelp_life_33.jpeg",
@@ -454,6 +526,7 @@ const ROW_2_IMAGES = [
     desc: "Intern receiving TechieHelp branded student kit and merchandise",
     tag: "Goodies",
     position: "center 22%",
+    aspect: "tall",
   },
   {
     src: "/swag_apparel.png",
@@ -461,6 +534,7 @@ const ROW_2_IMAGES = [
     desc: "TechieHelp Institute of AI custom hoodies, t-shirts and student merch",
     tag: "Merchandise",
     position: "center",
+    aspect: "tall",
   },
   {
     src: "/hero-slides/techiehelp_life_34.jpeg",
@@ -468,6 +542,7 @@ const ROW_2_IMAGES = [
     desc: "Branded backpack, badge and welcome goodies for top performers",
     tag: "Welcome Kit",
     position: "center 22%",
+    aspect: "tall",
   },
   {
     src: "/nikhil_completion_certificate.png",
@@ -475,6 +550,7 @@ const ROW_2_IMAGES = [
     desc: "Official verification letter confirming production project delivery",
     tag: "Achievement",
     position: "center 12%",
+    aspect: "landscape",
   },
   {
     src: "/hero-slides/techiehelp_life_35.jpeg",
@@ -482,6 +558,7 @@ const ROW_2_IMAGES = [
     desc: "Panoramic campus gathering celebrating student achievements",
     tag: "Celebration",
     position: "center 20%",
+    aspect: "wide",
   },
   {
     src: "/hero-slides/gift_box.jpg",
@@ -489,6 +566,7 @@ const ROW_2_IMAGES = [
     desc: "Token of appreciation presented to top-performing student leaders",
     tag: "Goodies",
     position: "center",
+    aspect: "wide",
   },
   {
     src: "/hero-slides/techiehelp_life_36.jpeg",
@@ -496,6 +574,7 @@ const ROW_2_IMAGES = [
     desc: "Delivering welcome kits and official credentials to interns",
     tag: "Welcome Kit",
     position: "center 22%",
+    aspect: "tall",
   },
   {
     src: "/campus_collaboration.png",
@@ -503,6 +582,7 @@ const ROW_2_IMAGES = [
     desc: "Student teams solving real-world challenges through collaborative coding",
     tag: "Innovation",
     position: "center 15%",
+    aspect: "square",
   },
   {
     src: "/hero-slides/techiehelp_life_37.jpeg",
@@ -510,6 +590,7 @@ const ROW_2_IMAGES = [
     desc: "Presenting custom merchandise and goodies to active interns",
     tag: "Merchandise",
     position: "center 22%",
+    aspect: "tall",
   },
   {
     src: "/placement_drive_1.jpg",
@@ -517,6 +598,7 @@ const ROW_2_IMAGES = [
     desc: "On-campus placement preparation and interview screening drive",
     tag: "Placement",
     position: "center 18%",
+    aspect: "wide",
   },
   {
     src: "/hero-slides/techiehelp_life_38.jpeg",
@@ -524,6 +606,7 @@ const ROW_2_IMAGES = [
     desc: "Students and alumni networking and sharing industry journeys",
     tag: "Community",
     position: "center 20%",
+    aspect: "square",
   },
   {
     src: "/hero-slides/slide2.jpg",
@@ -531,6 +614,7 @@ const ROW_2_IMAGES = [
     desc: "Hands-on coding session solving real architectural challenges",
     tag: "Live Projects",
     position: "center 20%",
+    aspect: "wide",
   },
   {
     src: "/hero-slides/techiehelp_life_39.jpeg",
@@ -538,6 +622,7 @@ const ROW_2_IMAGES = [
     desc: "Honoring incoming student intern with official goodies kit",
     tag: "Welcome Kit",
     position: "center 10%",
+    aspect: "tall",
   },
   {
     src: "/hero-slides/techiehelp_life_40.jpeg",
@@ -545,6 +630,7 @@ const ROW_2_IMAGES = [
     desc: "Delivering TechieHelp merchandise and student gear",
     tag: "Goodies",
     position: "center 10%",
+    aspect: "tall",
   },
   {
     src: "/hero-slides/techiehelp_life_41.jpeg",
@@ -552,13 +638,19 @@ const ROW_2_IMAGES = [
     desc: "On-campus technical interview coaching and career placement",
     tag: "Placement",
     position: "center 20%",
+    aspect: "wide",
   },
 ];
 
 function MarqueeCard({ item }) {
+  const widthClass = WIDTH_CLASSES[item.aspect] || "w-[250px] sm:w-[290px] md:w-[325px]";
+  const isCompact = item.aspect === "tall" || item.aspect === "portrait";
+
   return (
-    <div className="group relative w-[270px] sm:w-[320px] md:w-[360px] h-[180px] sm:h-[215px] md:h-[240px] rounded-2xl overflow-hidden bg-slate-100 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-blue-300 transition-all duration-300 shrink-0 cursor-pointer select-none">
-      {/* 100% Clean Authentic Photograph (No text displayed by default, face-protected framing) */}
+    <div
+      className={`group relative ${widthClass} h-[185px] sm:h-[215px] md:h-[240px] rounded-2xl overflow-hidden bg-slate-100 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-blue-300 transition-all duration-300 shrink-0 cursor-pointer select-none`}
+    >
+      {/* 100% Clean Authentic Photograph (Uncropped natural aspect ratio framing) */}
       <img
         src={item.src}
         alt={item.title}
@@ -571,10 +663,14 @@ function MarqueeCard({ item }) {
       <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-black/5 group-hover:ring-blue-500/30 transition-all duration-300 pointer-events-none" />
 
       {/* Modern Hover Details Overlay (Hidden by default, reveals only on cursor hover) */}
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-slate-950/20 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out flex flex-col justify-between p-3.5 sm:p-4 pointer-events-none backdrop-blur-[2px]">
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-slate-950/20 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out flex flex-col justify-between p-3 sm:p-3.5 pointer-events-none backdrop-blur-[2px]">
         {/* Top Tag Pill (Smooth slide-in on hover) */}
         <div className="flex justify-start transform -translate-y-2 group-hover:translate-y-0 transition-transform duration-300 ease-out">
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-bold tracking-wide uppercase bg-white/95 text-[#1D4ED8] shadow-md border border-white/80">
+          <span
+            className={`inline-flex items-center gap-1.5 rounded-full font-bold tracking-wide uppercase bg-white/95 text-[#1D4ED8] shadow-md border border-white/80 ${
+              isCompact ? "px-2 py-0.5 text-[9px] sm:text-[10px]" : "px-2.5 py-1 text-[10px] sm:text-[11px]"
+            }`}
+          >
             <span className="w-1.5 h-1.5 rounded-full bg-[#1D4ED8]" />
             <span>{item.tag}</span>
           </span>
@@ -582,12 +678,18 @@ function MarqueeCard({ item }) {
 
         {/* Bottom Details Content (Smooth slide-up on hover) */}
         <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 ease-out space-y-0.5">
-          <h4 className="text-white font-bold text-xs sm:text-sm leading-snug drop-shadow-md">
+          <h4
+            className={`text-white font-bold leading-snug drop-shadow-md ${
+              isCompact ? "text-[11px] sm:text-xs line-clamp-2" : "text-xs sm:text-sm line-clamp-1"
+            }`}
+          >
             {item.title}
           </h4>
-          <p className="text-slate-200 text-[11px] sm:text-xs leading-tight line-clamp-2 drop-shadow-xs font-normal">
-            {item.desc}
-          </p>
+          {!isCompact && (
+            <p className="text-slate-200 text-[11px] sm:text-xs leading-tight line-clamp-2 drop-shadow-xs font-normal">
+              {item.desc}
+            </p>
+          )}
         </div>
       </div>
     </div>
@@ -603,7 +705,7 @@ export default function LifeAtTechieHelpMarquee() {
 
       {/* Marquee Tracks Container */}
       <div className="space-y-4 md:space-y-5">
-        {/* ROW 1: TOP TRACK (Continuous Left to Right Movement, smooth loop) */}
+        {/* ROW 1: TOP TRACK (Continuous Left to Right Movement) */}
         <div className="marquee-track-row overflow-hidden flex w-full">
           <div className="flex w-max animate-marquee-ltr">
             {/* Primary Track */}
@@ -621,7 +723,7 @@ export default function LifeAtTechieHelpMarquee() {
           </div>
         </div>
 
-        {/* ROW 2: BOTTOM TRACK (Continuous Right to Left Movement, smooth loop - different speed) */}
+        {/* ROW 2: BOTTOM TRACK (Continuous Right to Left Movement - different speed) */}
         <div className="marquee-track-row overflow-hidden flex w-full">
           <div className="flex w-max animate-marquee-rtl">
             {/* Primary Track */}
