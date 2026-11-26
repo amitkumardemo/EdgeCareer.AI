@@ -910,28 +910,28 @@ export default function CampusInnovationClubClient() {
       ========================================================================= */}
       <header className="sticky top-0 z-50 bg-white border-b border-slate-100 shadow-[0_2px_10px_rgba(0,0,0,0.03)] transition-all duration-200">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-[74px]">
+          <div className="flex items-center justify-between h-[76px] md:h-[82px]">
             {/* Left: Brand Logo & Title */}
             <div className="flex items-center">
-              <Link href="/campus-innovation-club" className="flex items-center gap-3 group">
-                <div className="relative w-11 h-11 flex items-center justify-center shrink-0">
+              <Link href="/campus-innovation-club" className="flex items-center gap-3 sm:gap-3.5 group">
+                <div className="relative w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105">
                   <Image
                     src="/campus-club-logo-ref.png"
                     alt="Campus Innovation Club Emblem"
-                    width={44}
-                    height={44}
+                    width={56}
+                    height={56}
                     className="object-contain"
                     priority
                   />
                 </div>
                 <div className="flex flex-col text-left">
-                  <span className="font-black text-sm sm:text-[15px] text-[#0B1F42] uppercase tracking-tight leading-[1.05]">
+                  <span className="font-black text-sm sm:text-base text-[#0B1F42] uppercase tracking-tight leading-[1.05]">
                     CAMPUS
                   </span>
-                  <span className="font-black text-sm sm:text-[15px] text-[#0B1F42] uppercase tracking-tight leading-[1.05]">
+                  <span className="font-black text-sm sm:text-base text-[#0B1F42] uppercase tracking-tight leading-[1.05]">
                     INNOVATION CLUB
                   </span>
-                  <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">
+                  <span className="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">
                     POWERED BY TECHIEHELP INSTITUTE OF AI
                   </span>
                 </div>

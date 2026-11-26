@@ -235,16 +235,16 @@ export default function HeaderClient({ user, streakData }) {
       }`}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="max-w-7xl mx-auto px-4 lg:px-6 h-16 md:h-[72px] flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 lg:px-6 h-[70px] md:h-[78px] lg:h-[84px] flex items-center justify-between">
         {/* Left: Logo */}
-        <Link href="/" onClick={clearMenu} className="flex items-center gap-2 group shrink-0">
+        <Link href="/" onClick={clearMenu} className="flex items-center gap-2 group shrink-0 py-1">
           <div className="flex items-center justify-center transition-transform duration-300 group-hover:scale-102 origin-left">
             <Image
-              src="/thp logo.png"
-              alt="TechieHelp Logo"
-              width={520}
-              height={150}
-              className="h-10 sm:h-11 md:h-12 w-auto object-contain drop-shadow-xs"
+              src="/thp-logo-clean.png"
+              alt="TechieHelp Institute of AI Logo"
+              width={567}
+              height={228}
+              className="h-11 sm:h-12 md:h-14 lg:h-[58px] xl:h-[64px] w-auto object-contain drop-shadow-xs"
               priority
             />
           </div>
