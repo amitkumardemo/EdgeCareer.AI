@@ -648,6 +648,7 @@ function MarqueeCard({ item }) {
 
   return (
     <div
+      data-cursor="gallery"
       className={`group relative ${widthClass} h-[185px] sm:h-[215px] md:h-[240px] rounded-2xl overflow-hidden bg-slate-100 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-blue-300 transition-all duration-300 shrink-0 cursor-pointer select-none`}
     >
       {/* 100% Clean Authentic Photograph (Uncropped natural aspect ratio framing) */}

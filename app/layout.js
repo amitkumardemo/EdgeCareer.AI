@@ -4,6 +4,7 @@ import { Toaster } from "sonner";
 import Script from "next/script";
 import Footer from "@/components/Footer";
 import Chatbot from "@/components/Chatbot";
+import CustomCursor from "@/components/CustomCursor";
 import { Providers } from "@/components/providers";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -102,6 +103,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className={`${inter.className}`} >
         <Providers>
+          <CustomCursor />
           <main className="min-h-screen">{children}</main>
           <Footer />
           <Chatbot />

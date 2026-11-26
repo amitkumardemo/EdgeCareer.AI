@@ -1003,7 +1003,7 @@ export default function Home({ latestJobs = [] }) {
                   { role: "Data Science Intern", tech: ["Pandas", "PowerBI"], spots: "Open", icon: Database, link: "/internship/datascience" },
                   { role: "Full Stack Intern", tech: ["MERN", "Next.js"], spots: "Hot", icon: Code, link: "/internship/fullstack" },
                 ].map((internship, i) => (
-                  <motion.div key={i} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="group bg-white border border-slate-200 rounded-3xl p-6 hover:shadow-xl hover:-translate-y-2 transition-all relative overflow-hidden flex flex-col h-full">
+                  <motion.div key={i} data-cursor="project" initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="group bg-white border border-slate-200 rounded-3xl p-6 hover:shadow-xl hover:-translate-y-2 transition-all relative overflow-hidden flex flex-col h-full cursor-pointer">
                     <div className="flex justify-between items-start mb-6">
                       <div className="w-12 h-12 rounded-xl bg-blue-950 flex items-center justify-center text-amber-500">
                         <internship.icon className="w-6 h-6" />
